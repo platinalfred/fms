@@ -18,7 +18,7 @@ class Db{
 	   $this->server = "localhost";
 	   $this->user = "root";
 	   $this->password = "";
-	   $this->database = "loans";
+	   $this->database = "fms";
 	   //Connects to the database;
 	   $this->connectDB();
 	   
@@ -40,6 +40,9 @@ class Db{
 			return $cnt;
 		}
 	}
+	function isValidMd5($md5 =''){
+		return preg_match('/^[a-f0-9]{32}$/i', $md5);
+	}
 	function count($table, $where) {
 		if ($where != "") 	$sel = "SELECT COUNT(*) AS cnt FROM ".$table." WHERE ".$where;
 		else $sel = "SELECT COUNT(*) AS cnt FROM ".$table;
@@ -54,10 +57,11 @@ class Db{
 	function prepareStatement($query){
 		$statement = $this->conn->prepare($query);
 		if($statement === false) {
-			trigger_error('Wrong SQL: ' . $query . ' Error: ' . $this->conn->errno . ' ' . $this->conn->error, E_USER_ERROR);
+			trigger_error('SQL Error: ' . $this->conn->errno . ' ' . $this->conn->error, E_USER_ERROR);
 		}
 		return $statement;
 	}
+	
 	function bindParam($preparedStatement, $a_params){
 		/* $preparedStatement->bind_param($data_type, $a_params);
 		
@@ -97,9 +101,9 @@ class Db{
 		if(!isset($_SESSION)) {
 			session_start();
 		}
-		$to_add = array("id","username","access_level", "branch_number", "person_number");
+		$to_add = array("id","username","access_level", "branch_id", "person_id");
 		$password = md5($password);
-		$results = $this->getfrec("staff", "id, username, access_level, branch_number, person_number", "username='$username' AND password='$password'", "", "");
+		$results = $this->getfrec("staff", implode(",",$to_add), "username='$username' AND password='$password'", "", "");
 		if(count($results) > 0){
 		   $_SESSION['Logged'] = true;
 		   foreach($results as $key => $value){
@@ -110,11 +114,9 @@ class Db{
 			  }
 		   }
 		  $this->setSessions("user_id", $results['id']);
+		  return $_SESSION;
 		}
-
-
-
-		return $_SESSION;
+		return false;
 	}
 	function generateAddFields($fields = array(), $data = array()){
         $array = array();
@@ -151,6 +153,7 @@ class Db{
 		$myyear=$mydate[2];
 		return ($myyear."-".$mymonth."-".$myday);
 	}
+	
 	function formatSlashedDate($date) {
 		$mydate = explode('/', $date);
 		$mymonth = "";
@@ -169,6 +172,7 @@ class Db{
 		$myyear=$mydate[2];
 		return ($myyear."-".$mymonth."-".$myday);
 	}
+	
 	function Password($password_length = 9){
         srand(make_seed());
 
@@ -179,7 +183,8 @@ class Db{
         }
         return md5($token);
     }
-	function loadList($query, $name, $value_field,$display_field,$field_id="", $add_link = "", $roles = array(1, 2, 3, 4), $select = "single"){
+	
+	function loadList($query, $name, $value_field,$display_field,$field_id="",$selected_id="", $add_link = "", $roles = array(1, 2, 3, 4), $select = "single", $selected=""){
        //  $result = mysql_query($query) or die(mysql_error());
 		$results = $this->queryData($query);
 		
@@ -191,7 +196,7 @@ class Db{
 					<?php
 					foreach($results as $result){ 
 						?>
-                        <option <?php if($result[$display_field] == "Uganda"){ ?> selected="selected" <?php } ?> value="<?php echo $result[$value_field]; ?>"><?php echo $result[$display_field]; ?></option>
+                        <option <?php if($result[$display_field] == "Uganda"){ ?> selected="selected" <?php }elseif($result[$value_field] == $selected_id){?> selected="selected" <?php } ?> value="<?php echo $result[$value_field]; ?>"><?php echo $result[$display_field]; ?></option>
 						<?php
 					}
 					?>
@@ -475,7 +480,7 @@ class Db{
 			if ($i < (count($fields) - 1)) $va = $va.",";
 		}
 		$upd = "UPDATE ".$table. " SET ".$va." WHERE ".$where;
-		
+		//echo $upd;
 		if($this->conn->query($upd)){
 			return true;
 		}else {
@@ -488,7 +493,7 @@ class Db{
 		else $sel = "SELECT * FROM ".$table;
 		if ($ordby != "") $sel = $sel." ORDER BY ".$ordby;
 		if ($limit != "") $sel = $sel." LIMIT ".$limit;
-		
+		//echo $sel;
 		$q = $this->conn->query($sel);
 		if($q){
 			$res = $q->fetch_array();

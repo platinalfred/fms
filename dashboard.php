@@ -1,4 +1,6 @@
 <?php 
+$show_table_js = false;
+$page_title = "Dashboard";
 include("includes/header.php"); 
 ?>
 	<div id="page-wrapper" class="gray-bg">
@@ -135,13 +137,13 @@ include("includes/header.php");
 				<div class="col-lg-2">
 					<div class="ibox float-e-margins">
 						<div class="ibox-title">
-							<span class="label label-success pull-right">Monthly</span>
-							<h5>Views</h5>
+							<span class="label label-success pull-right">Current</span>
+							<h5>Members</h5>
 						</div>
 						<div class="ibox-content">
-							<h1 class="no-margins">386,200</h1>
-							<div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
-							<small>Total views</small>
+							<h1 class="no-margins"><a href="view_members.php" title="Details" id="no_members">386,200</a></h1>
+							<div class="stat-percent font-bold text-success" id="members_percent">98% <i class="fa fa-bolt"></i></div>
+							<small>Total members</small>
 						</div>
 					</div>
 				</div>
@@ -149,12 +151,12 @@ include("includes/header.php");
 					<div class="ibox float-e-margins">
 						<div class="ibox-title">
 							<span class="label label-info pull-right">Annual</span>
-							<h5>Orders</h5>
+							<h5>Subscriptions</h5>
 						</div>
 						<div class="ibox-content">
-							<h1 class="no-margins">80,800</h1>
-							<div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>
-							<small>New orders</small>
+							<h1 class="no-margins"><a href="view_subscriptions.php" title="Details" id="total_scptions">80,800</a></h1>
+							<div class="stat-percent font-bold text-info" id="scptions_percent">20% <i class="fa fa-level-up"></i></div>
+							<small>New subscriptions</small>
 						</div>
 					</div>
 				</div>
@@ -163,18 +165,18 @@ include("includes/header.php");
 					<div class="ibox float-e-margins">
 						<div class="ibox-title">
 							<span class="label label-primary pull-right">Today</span>
-							<h5>Vistits</h5>
+							<h5>Loans</h5>
 						</div>
 						<div class="ibox-content">
 
 							<div class="row">
 								<div class="col-md-6">
-									<h1 class="no-margins">406,42</h1>
-									<div class="font-bold text-navy">44% <i class="fa fa-level-up"></i> <small>Rapid pace</small></div>
+									<h1 class="no-margins"><a href="view_loan_payments.php" title="Details" id="loan_payments">406,42</a></h1>
+									<div class="font-bold text-navy"> <span id="loan_payments_percent">44%</span> <i class="fa fa-level-up" id="loan_payments_percent"></i> <small>Payments</small></div>
 								</div>
 								<div class="col-md-6">
-									<h1 class="no-margins">206,12</h1>
-									<div class="font-bold text-navy">22% <i class="fa fa-level-up"></i> <small>Slow pace</small></div>
+									<h1 class="no-margins"><a href="view_loans.php?type=4" title="Details" id="due_loans">206,12</a></h1>
+									<div class="font-bold text-navy"><span id="due_loans_percent">22%</span> <i class="fa fa-level-up" id="due_loans_percent"></i> <small>Due Loans</small></div>
 								</div>
 							</div>
 
@@ -365,7 +367,6 @@ include("includes/header.php");
 								<table class="table table-striped">
 									<thead>
 										<tr>
-
 											<th>#</th>
 											<th>Project </th>
 											<th>Name </th>
