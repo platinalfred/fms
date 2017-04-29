@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2017 at 08:58 PM
+-- Generation Time: Apr 29, 2017 at 02:27 PM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.5.35
 
@@ -258,9 +258,13 @@ INSERT INTO `districts` (`id`, `name`, `country_id`) VALUES
 CREATE TABLE `employment` (
   `id` int(11) NOT NULL,
   `employer` varchar(100) NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date DEFAULT NULL,
-  `monthly_salary` decimal(12,2) NOT NULL
+  `startDate` date NOT NULL,
+  `endDate` date DEFAULT NULL,
+  `monthlySalary` decimal(15,2) NOT NULL,
+  `dateCreated` int(11) NOT NULL COMMENT 'Creation timestamp',
+  `createdBy` int(11) NOT NULL COMMENT 'ID for user adding the record',
+  `dateModified` int(11) NOT NULL COMMENT 'modification timestamp',
+  `modifiedBy` int(11) NOT NULL COMMENT 'ID for user modifying the record'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -271,11 +275,13 @@ CREATE TABLE `employment` (
 
 CREATE TABLE `expense` (
   `id` int(11) NOT NULL,
-  `expense_type` int(11) NOT NULL,
-  `staff` int(11) NOT NULL,
-  `amount_used` text NOT NULL,
-  `amount_description` text NOT NULL,
-  `date_of_expense` date NOT NULL
+  `expenseType` tinyint(4) NOT NULL,
+  `amountUsed` decimal(15,2) NOT NULL,
+  `amountDescription` text NOT NULL,
+  `createdBy` int(11) NOT NULL COMMENT 'ID of staff who added the record',
+  `expenseDate` int(11) NOT NULL COMMENT 'Timestamp for when this record was added',
+  `dateModified` int(11) NOT NULL COMMENT 'Timestamp for when this record was added',
+  `modifiedBy` int(11) NOT NULL COMMENT 'Staff who modified the record'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -286,7 +292,7 @@ CREATE TABLE `expense` (
 
 CREATE TABLE `expensetypes` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
+  `expenseName` varchar(50) NOT NULL,
   `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -406,21 +412,22 @@ CREATE TABLE `id_card_types` (
 
 CREATE TABLE `income` (
   `id` int(11) NOT NULL,
-  `income_type` int(11) NOT NULL,
-  `amount` int(11) NOT NULL,
-  `date_added` date NOT NULL,
-  `added_by` int(11) NOT NULL,
+  `incomeType` int(11) NOT NULL COMMENT 'ID for the income type',
+  `amount` decimal(15,2) NOT NULL,
+  `dateAdded` int(11) NOT NULL COMMENT 'Timestamp for when record was captured',
+  `addedBy` int(11) NOT NULL COMMENT 'ID of the staff who added the income',
   `description` text NOT NULL,
-  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `dateModified` int(11) NOT NULL COMMENT 'Timestamp for when this record was modified',
+  `modifiedBy` int(11) NOT NULL COMMENT 'ID of staff who modified the record'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `income`
 --
 
-INSERT INTO `income` (`id`, `income_type`, `amount`, `date_added`, `added_by`, `description`, `date_modified`) VALUES
-(1, 1, 20000, '2016-11-24', 1, 'Annual subscription paid by Cissy  Ge for year 2016', '2016-11-24 10:19:52'),
-(2, 1, 20000, '2017-01-08', 1, 'Annual subscription paid by Ronald  Matovu for year 2017', '2017-01-08 17:50:19');
+INSERT INTO `income` (`id`, `incomeType`, `amount`, `dateAdded`, `addedBy`, `description`, `dateModified`, `modifiedBy`) VALUES
+(1, 1, '20000.00', 20161124, 1, 'Annual subscription paid by Cissy  Ge for year 2016', 2147483647, 0),
+(2, 1, '20000.00', 20170108, 1, 'Annual subscription paid by Ronald  Matovu for year 2017', 2147483647, 0);
 
 -- --------------------------------------------------------
 
@@ -473,9 +480,10 @@ CREATE TABLE `loan_account` (
   `personNo` int(11) NOT NULL,
   `loanNo` varchar(45) NOT NULL,
   `branchId` int(11) NOT NULL COMMENT 'Branch id the loan was taken out from',
-  `active` tinyint(1) NOT NULL DEFAULT '1',
-  `loanType` int(11) NOT NULL,
-  `disbursementDate` int(11) NOT NULL COMMENT 'Date loan was disbursed',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1-Pending Approval, 2-Partial_Application, 3-Approved',
+  `loanProductId` int(11) NOT NULL COMMENT 'Reference to the loan product',
+  `applicationDate` int(11) NOT NULL COMMENT 'Date loan was applied for',
+  `disbursementDate` int(11) DEFAULT NULL COMMENT 'Date loan was disbursed',
   `offSetPeriod` tinyint(4) NOT NULL COMMENT 'Time unit to offset the loan',
   `loanPeriod` tinyint(4) NOT NULL COMMENT 'Period the loan will take',
   `loanAmount` decimal(15,2) NOT NULL,
@@ -491,13 +499,13 @@ CREATE TABLE `loan_account` (
 -- Dumping data for table `loan_account`
 --
 
-INSERT INTO `loan_account` (`id`, `personNo`, `loanNo`, `branchId`, `active`, `loanType`, `disbursementDate`, `offSetPeriod`, `loanPeriod`, `loanAmount`, `interestRate`, `expectedPayback`, `dailyDefaultAmount`, `approvedBy`, `repaymentsMadeEvery`, `comments`) VALUES
-(1, 2, 'MUGANZIRWAZA-1611240015', 0, 1, 1, 2147483647, 0, 0, '8900000.00', '13.00', '10057000.00', '9.99', 1, 1, 'pending approval'),
-(2, 2, 'MUGANZIRWAZA-1611241124', 0, 1, 1, 2147483647, 0, 0, '560000.00', '12.00', '627200.00', '9.99', 1, 4, 'Pending confirmation'),
-(3, 2, 'MUGANZIRWAZA-1611242200', 0, 1, 1, 2147483647, 0, 0, '5600000.00', '12.00', '6272000.00', '9.99', 1, 1, 'Provided security'),
-(4, 2, 'MUGANZIRWAZA-1611242200', 0, 1, 1, 2147483647, 0, 0, '1200000.00', '10.00', '1320000.00', '9.99', 1, 1, 'Yours truly'),
-(5, 2, 'MUGANZIRWAZA-1611240919', 0, 1, 1, 2147483647, 0, 0, '650000.00', '12.00', '728000.00', '19.99', 1, 1, 'Please avail yourself'),
-(6, 7, 'MUGANZIRWAZA-1701080338', 0, 1, 1, 2147483647, 0, 127, '300000.00', '15.00', '345000.00', '2.00', 1, 60, 'a');
+INSERT INTO `loan_account` (`id`, `personNo`, `loanNo`, `branchId`, `status`, `loanProductId`, `applicationDate`, `disbursementDate`, `offSetPeriod`, `loanPeriod`, `loanAmount`, `interestRate`, `expectedPayback`, `dailyDefaultAmount`, `approvedBy`, `repaymentsMadeEvery`, `comments`) VALUES
+(1, 2, 'MUGANZIRWAZA-1611240015', 0, 1, 1, 0, 2147483647, 0, 0, '8900000.00', '13.00', '10057000.00', '9.99', 1, 1, 'pending approval'),
+(2, 2, 'MUGANZIRWAZA-1611241124', 0, 1, 1, 0, 2147483647, 0, 0, '560000.00', '12.00', '627200.00', '9.99', 1, 4, 'Pending confirmation'),
+(3, 2, 'MUGANZIRWAZA-1611242200', 0, 1, 1, 0, 2147483647, 0, 0, '5600000.00', '12.00', '6272000.00', '9.99', 1, 1, 'Provided security'),
+(4, 2, 'MUGANZIRWAZA-1611242200', 0, 1, 1, 0, 2147483647, 0, 0, '1200000.00', '10.00', '1320000.00', '9.99', 1, 1, 'Yours truly'),
+(5, 2, 'MUGANZIRWAZA-1611240919', 0, 1, 1, 0, 2147483647, 0, 0, '650000.00', '12.00', '728000.00', '19.99', 1, 1, 'Please avail yourself'),
+(6, 7, 'MUGANZIRWAZA-1701080338', 0, 1, 1, 0, 2147483647, 0, 127, '300000.00', '15.00', '345000.00', '2.00', 1, 60, 'a');
 
 -- --------------------------------------------------------
 
@@ -542,7 +550,7 @@ CREATE TABLE `loan_penalty` (
   `dateCreated` int(11) NOT NULL,
   `dateModified` int(11) NOT NULL,
   `modifiedBy` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Penalties that loan products can be subjected to';
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Penalties that loan accounts are be subjected to';
 
 -- --------------------------------------------------------
 
@@ -555,29 +563,64 @@ CREATE TABLE `loan_products` (
   `name` varchar(50) NOT NULL,
   `description` text NOT NULL,
   `productType` tinyint(4) NOT NULL COMMENT 'Type of the loan product',
+  `availableTo` tinyint(4) NOT NULL COMMENT '1 - Clients, 2 - Groups or 3 - Both',
+  `defAmount` decimal(15,2) NOT NULL COMMENT 'Default amount that can be disbursed for this product',
   `minAmount` decimal(12,2) NOT NULL COMMENT 'Min Amount that can be loaned for this produc',
   `maxAmount` decimal(12,2) NOT NULL COMMENT 'Max Amount that can be loan for this product',
+  `maxTranches` tinyint(2) DEFAULT NULL COMMENT 'maximum number of disbursements for thisproduct',
+  `defInterest` decimal(4,2) DEFAULT NULL COMMENT 'Default interest amount',
   `minInterest` decimal(4,2) NOT NULL COMMENT 'min interest rate',
   `maxInterest` decimal(4,2) NOT NULL COMMENT 'maximum interest rate',
   `repaymentsMadeEvery` tinyint(1) NOT NULL COMMENT '1 - Day, 2-Week, 3 - Month',
-  `daysOfYear` tinyint(2) NOT NULL COMMENT 'Days of the year 1 - 360, 2 - 360',
-  `defLoanAccountState` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1-Pending Approval, 2-PARTIAL_APPLICATION',
-  `gracePeriod` tinyint(4) NOT NULL COMMENT 'gracePeriod for this product',
+  `repaymentsFrequency` tinyint(4) NOT NULL COMMENT 'Number of repayments in a schedule',
+  `minRepaymentFrequency` tinyint(4) NOT NULL COMMENT 'minimum frequency in which the loan can be repaid',
+  `maxRepaymentFrequency` tinyint(4) NOT NULL COMMENT 'maximum frequency in which the loan can be repaid',
+  `daysOfYear` tinyint(2) NOT NULL COMMENT 'Days of the year 1 - 360, 2 - 365',
+  `intialAccountState` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1-Pending Approval, 2-Partial_Application',
+  `defGracePeriod` tinyint(4) NOT NULL COMMENT 'Default grace period for this product',
+  `minGracePeriod` tinyint(4) NOT NULL COMMENT 'Minimum grace period for the loan',
+  `maxGracePeriod` tinyint(4) NOT NULL COMMENT 'Maximum grace period for the loan',
   `minCollateralRequired` decimal(6,2) NOT NULL COMMENT 'Percentage of the loan required as collateral',
   `minGuarantorsRequired` tinyint(1) NOT NULL COMMENT 'Minimum number of guarantors required',
-  `minOffSet` tinyint(4) NOT NULL COMMENT 'minimum time offset for loan payments',
-  `maxOffSet` tinyint(4) NOT NULL COMMENT 'maximum time offset for loan payments'
+  `defaultOffSet` tinyint(4) NOT NULL COMMENT 'Default Offset for first repayment date',
+  `minOffSet` tinyint(4) NOT NULL COMMENT 'minimum offset for repayment date',
+  `maxOffSet` tinyint(4) NOT NULL COMMENT 'maximum offset for repayment date',
+  `penaltyApplicable` tinyint(4) NOT NULL COMMENT '1 - Yes, 0 - No',
+  `taxRateSource` tinyint(4) NOT NULL COMMENT 'Reference to the tax rate source',
+  `taxCalculationMethod` tinyint(4) NOT NULL COMMENT '1-Inclusive, 2- Exclusive',
+  `linkToDepositAccount` tinyint(1) DEFAULT NULL COMMENT '0-No, 1-Yes'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `loan_products`
 --
 
-INSERT INTO `loan_products` (`id`, `name`, `description`, `productType`, `minAmount`, `maxAmount`, `minInterest`, `maxInterest`, `repaymentsMadeEvery`, `daysOfYear`, `defLoanAccountState`, `gracePeriod`, `minCollateralRequired`, `minGuarantorsRequired`, `minOffSet`, `maxOffSet`) VALUES
-(1, 'Development Loan', '', 0, '0.00', '0.00', '0.00', '0.00', 0, 0, 0, 0, '0.00', 0, 0, 0),
-(2, 'Land Acquisition', '', 0, '0.00', '0.00', '0.00', '0.00', 0, 0, 0, 0, '0.00', 0, 0, 0),
-(3, 'Quick Loan', '', 0, '0.00', '0.00', '0.00', '0.00', 0, 0, 0, 0, '0.00', 0, 0, 0),
-(4, 'Land Title Acquisition', '', 0, '0.00', '0.00', '0.00', '0.00', 0, 0, 0, 0, '0.00', 0, 0, 0);
+INSERT INTO `loan_products` (`id`, `name`, `description`, `productType`, `availableTo`, `defAmount`, `minAmount`, `maxAmount`, `maxTranches`, `defInterest`, `minInterest`, `maxInterest`, `repaymentsMadeEvery`, `repaymentsFrequency`, `minRepaymentFrequency`, `maxRepaymentFrequency`, `daysOfYear`, `intialAccountState`, `defGracePeriod`, `minGracePeriod`, `maxGracePeriod`, `minCollateralRequired`, `minGuarantorsRequired`, `defaultOffSet`, `minOffSet`, `maxOffSet`, `penaltyApplicable`, `taxRateSource`, `taxCalculationMethod`, `linkToDepositAccount`) VALUES
+(1, 'Development Loan', '', 0, 0, '0.00', '0.00', '0.00', NULL, NULL, '0.00', '0.00', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 0, 0, 0),
+(2, 'Land Acquisition', '', 0, 0, '0.00', '0.00', '0.00', NULL, NULL, '0.00', '0.00', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 0, 0, 0),
+(3, 'Quick Loan', '', 0, 0, '0.00', '0.00', '0.00', NULL, NULL, '0.00', '0.00', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 0, 0, 0),
+(4, 'Land Title Acquisition', '', 0, 0, '0.00', '0.00', '0.00', NULL, NULL, '0.00', '0.00', 0, 0, 0, 0, 0, 0, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `loan_products_penalty`
+--
+
+CREATE TABLE `loan_products_penalty` (
+  `id` int(11) NOT NULL,
+  `description` varchar(100) NOT NULL,
+  `penaltyCalculationMethodId` tinyint(4) NOT NULL COMMENT 'Ref to the penalty calculation method',
+  `penaltyChargedAs` tinyint(1) NOT NULL,
+  `penaltyTolerancePeriod` int(11) NOT NULL COMMENT 'Days before which no penalties will be applied to an account even if there is a late repayment',
+  `defaultAmount` decimal(12,2) NOT NULL,
+  `minAmount` decimal(12,2) NOT NULL,
+  `maxAmount` decimal(12,2) NOT NULL,
+  `dateCreated` int(11) NOT NULL,
+  `createBy` int(11) NOT NULL,
+  `dateModified` int(11) NOT NULL,
+  `modifiedBy` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Penalties that loan products can be subjected to';
 
 -- --------------------------------------------------------
 
@@ -587,12 +630,24 @@ INSERT INTO `loan_products` (`id`, `name`, `description`, `productType`, `minAmo
 
 CREATE TABLE `loan_product_type` (
   `id` int(11) NOT NULL,
-  `description` varchar(100) NOT NULL COMMENT 'Description',
+  `typeName` varchar(50) NOT NULL COMMENT 'Name of the product type',
+  `description` varchar(250) NOT NULL COMMENT 'Description',
   `dateCreated` int(11) NOT NULL COMMENT 'Timestamp record was entered',
   `dateModified` int(11) NOT NULL COMMENT 'Record modification date',
   `createdBy` int(11) NOT NULL COMMENT 'staff that entered record',
   `modifiedBy` int(11) NOT NULL COMMENT 'User modifying entry'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `loan_product_type`
+--
+
+INSERT INTO `loan_product_type` (`id`, `typeName`, `description`, `dateCreated`, `dateModified`, `createdBy`, `modifiedBy`) VALUES
+(1, 'Fixed Term Loan', 'A type of product with Fixed interest rate', 280092020, 280092020, 1, 1),
+(2, 'Dynamic Term Loan', 'A type of product with Dynamic interest rate', 280092020, 280092020, 1, 1),
+(3, 'Revolving Credit', 'A type of product that allows multiple disbursements and repayments on the account, similar to an overdraft, except that it has a payment plan associated with it in which some amount of principal and interest may be paid', 280092020, 280092020, 1, 1),
+(4, 'Payment Plan', 'A type of product with no interest charged', 280092020, 280092020, 1, 1),
+(5, 'Tranched Loan', 'A type of product that allows for loan disbursement in tranches', 280092020, 280092020, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -602,36 +657,24 @@ CREATE TABLE `loan_product_type` (
 
 CREATE TABLE `loan_repayment` (
   `id` int(11) NOT NULL,
-  `transaction_id` int(11) NOT NULL,
-  `branch_number` int(11) NOT NULL,
-  `client_number` int(11) NOT NULL,
-  `loan_id` int(11) NOT NULL COMMENT 'Loan ID',
+  `transactionId` int(11) NOT NULL,
+  `branchId` int(11) NOT NULL,
+  `loanId` int(11) NOT NULL COMMENT 'Loan ID',
   `amount` decimal(15,2) NOT NULL,
-  `transaction_type` tinyint(1) NOT NULL,
-  `transaction_date` date NOT NULL,
+  `transactionType` tinyint(1) NOT NULL,
+  `transactionDate` int(11) NOT NULL,
   `comments` text NOT NULL,
-  `recieving_staff` int(11) NOT NULL,
-  `added_by` int(11) NOT NULL
+  `recievedBy` int(11) NOT NULL,
+  `addedBy` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `loan_repayment`
 --
 
-INSERT INTO `loan_repayment` (`id`, `transaction_id`, `branch_number`, `client_number`, `loan_id`, `amount`, `transaction_type`, `transaction_date`, `comments`, `recieving_staff`, `added_by`) VALUES
-(1, 43, 1, 2, 1, '10200000.00', 1, '2017-01-29', 'Fully paid up', 1, 0),
-(2, 2443, 23, 1, 4, '50000.00', 1, '2017-01-24', 'Paid by cheque', 1, 54);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `loan_type`
---
-
-CREATE TABLE `loan_type` (
-  `id` int(11) NOT NULL,
-  `title` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='This will hold loan type say as individual or groups';
+INSERT INTO `loan_repayment` (`id`, `transactionId`, `branchId`, `loanId`, `amount`, `transactionType`, `transactionDate`, `comments`, `recievedBy`, `addedBy`) VALUES
+(1, 43, 1, 1, '10200000.00', 1, 20170129, 'Fully paid up', 1, 0),
+(2, 2443, 23, 4, '50000.00', 1, 20170124, 'Paid by cheque', 1, 54);
 
 -- --------------------------------------------------------
 
@@ -659,24 +702,26 @@ CREATE TABLE `mdtransfer` (
 
 CREATE TABLE `member` (
   `id` int(11) NOT NULL,
-  `person_id` int(11) NOT NULL,
+  `personId` int(11) NOT NULL,
   `active` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT 'Whether member active or not',
-  `branch_number` varchar(45) NOT NULL,
-  `member_type` int(11) NOT NULL,
-  `date_added` date NOT NULL,
+  `branchId` int(11) NOT NULL COMMENT 'Ref to branch member registered from from',
+  `memberType` int(11) NOT NULL,
+  `dateAdded` int(11) NOT NULL COMMENT 'Timestamp of the moment the member was added',
   `added_by` int(11) NOT NULL,
-  `comment` text
+  `comment` text,
+  `dateModified` int(11) NOT NULL COMMENT 'Timestamp of the moment the member was modified',
+  `modifiedBy` int(11) NOT NULL COMMENT 'Reference to staff who modified the record'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `member`
 --
 
-INSERT INTO `member` (`id`, `person_id`, `active`, `branch_number`, `member_type`, `date_added`, `added_by`, `comment`) VALUES
-(1, 2, 1, 'BR00001', 1, '2016-11-16', 1, 'New member'),
-(2, 3, 0, 'BR00001', 0, '2016-11-24', 1, 'Comments from here'),
-(3, 4, 1, 'BR00001', 0, '2016-11-24', 1, 'Cissy buladde sacco'),
-(4, 7, 1, 'BR00001', 0, '2017-01-08', 1, 'Registered from muganzirwaza');
+INSERT INTO `member` (`id`, `personId`, `active`, `branchId`, `memberType`, `dateAdded`, `added_by`, `comment`, `dateModified`, `modifiedBy`) VALUES
+(1, 2, 1, 0, 1, 20161116, 1, 'New member', 0, 0),
+(2, 3, 0, 0, 0, 20161124, 1, 'Comments from here', 0, 0),
+(3, 4, 1, 0, 0, 20161124, 1, 'Cissy buladde sacco', 0, 0),
+(4, 7, 1, 0, 0, 20170108, 1, 'Registered from muganzirwaza', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -732,26 +777,6 @@ INSERT INTO `parish` (`id`, `name`, `subcounty_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `penalty`
---
-
-CREATE TABLE `penalty` (
-  `id` int(11) NOT NULL,
-  `description` varchar(100) NOT NULL,
-  `penaltyChargedAs` tinyint(1) NOT NULL,
-  `penaltyTolerancePeriod` int(11) NOT NULL COMMENT 'Days before which no penalties will be applied to an account even if there is a late repayment',
-  `defaultAmount` decimal(12,2) NOT NULL,
-  `minAmount` decimal(12,2) NOT NULL,
-  `maxAmount` decimal(12,2) NOT NULL,
-  `dateCreated` int(11) NOT NULL,
-  `createBy` int(11) NOT NULL,
-  `dateModified` int(11) NOT NULL,
-  `modifiedBy` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `penalty_calculation_method`
 --
 
@@ -763,6 +788,16 @@ CREATE TABLE `penalty_calculation_method` (
   `dateModified` int(11) NOT NULL,
   `modifiedBy` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Methods for calculating penalities';
+
+--
+-- Dumping data for table `penalty_calculation_method`
+--
+
+INSERT INTO `penalty_calculation_method` (`id`, `methodDescription`, `dateAdded`, `createdBy`, `dateModified`, `modifiedBy`) VALUES
+(1, 'No penalty', 280209228, 1, 280209228, 1),
+(2, 'Overdue Principal * # of Late Days * Penalty Rate', 280209228, 1, 280209228, 1),
+(3, '(Overdue Principal + Overdue Interest) * # of Late Days * Penalty Rate', 280209228, 1, 280209228, 1),
+(4, 'Outstanding Principal * # of Late Days * Penalty Rate', 280209228, 1, 280209228, 1);
 
 -- --------------------------------------------------------
 
@@ -1088,22 +1123,23 @@ INSERT INTO `subcounty` (`id`, `name`, `county_id`) VALUES
 
 CREATE TABLE `subscription` (
   `id` int(11) NOT NULL,
-  `person_id` int(11) NOT NULL,
-  `amount` bigint(20) NOT NULL,
-  `subscription_year` year(4) NOT NULL,
-  `paid_by` varchar(100) NOT NULL,
-  `received_by` int(11) NOT NULL,
-  `date_paid` date NOT NULL,
-  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `personId` int(11) NOT NULL,
+  `amount` decimal(15,2) NOT NULL,
+  `subscriptionYear` year(4) NOT NULL,
+  `paidBy` int(11) NOT NULL,
+  `receivedBy` int(11) NOT NULL,
+  `datePaid` int(11) NOT NULL,
+  `dateModified` int(11) NOT NULL,
+  `modifiedBy` int(11) NOT NULL COMMENT 'Reference to the staff modifying the entry'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `subscription`
 --
 
-INSERT INTO `subscription` (`id`, `person_id`, `amount`, `subscription_year`, `paid_by`, `received_by`, `date_paid`, `date_modified`) VALUES
-(1, 4, 20000, 2016, 'Alfred', 1, '2016-11-24', '2016-11-24 10:19:52'),
-(2, 7, 20000, 2017, 'Allan', 1, '2017-01-08', '2017-01-08 17:50:19');
+INSERT INTO `subscription` (`id`, `personId`, `amount`, `subscriptionYear`, `paidBy`, `receivedBy`, `datePaid`, `dateModified`, `modifiedBy`) VALUES
+(1, 4, '20000.00', 2016, 0, 1, 20161124, 2147483647, 0),
+(2, 7, '20000.00', 2017, 0, 1, 20170108, 2147483647, 0);
 
 -- --------------------------------------------------------
 
@@ -1116,6 +1152,22 @@ CREATE TABLE `systemaccesslogs` (
   `user_id` int(11) NOT NULL,
   `date_logged_in` datetime NOT NULL,
   `date_logged_out` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tax_rate_source`
+--
+
+CREATE TABLE `tax_rate_source` (
+  `id` int(11) NOT NULL,
+  `description` varchar(100) NOT NULL,
+  `taxRate` decimal(4,2) NOT NULL,
+  `dateCreated` int(11) NOT NULL COMMENT 'Unix timestamp for the datetime of addition',
+  `createdBy` int(11) NOT NULL COMMENT 'Reference to the staff that added this entry',
+  `dateModified` int(11) NOT NULL COMMENT 'Unix timestamp for the datetime modified',
+  `modifiedBy` int(11) NOT NULL COMMENT 'Reference to the staff that modified this entry'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -1285,7 +1337,7 @@ ALTER TABLE `employment`
 --
 ALTER TABLE `expense`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `expense_type` (`expense_type`);
+  ADD KEY `expense_type` (`expenseType`);
 
 --
 -- Indexes for table `expensetypes`
@@ -1361,7 +1413,8 @@ ALTER TABLE `loan_account`
   ADD PRIMARY KEY (`id`),
   ADD KEY `loan_end_date` (`loanPeriod`),
   ADD KEY `loan_date` (`disbursementDate`),
-  ADD KEY `loan_type` (`loanType`);
+  ADD KEY `loan_type` (`loanProductId`),
+  ADD KEY `loanProductId` (`loanProductId`);
 
 --
 -- Indexes for table `loan_documents`
@@ -1389,7 +1442,21 @@ ALTER TABLE `loan_penalty`
 -- Indexes for table `loan_products`
 --
 ALTER TABLE `loan_products`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fkAvailableTO` (`availableTo`),
+  ADD KEY `fkTaxRateSource` (`taxRateSource`),
+  ADD KEY `fkTaxCalculationMethod` (`taxCalculationMethod`),
+  ADD KEY `fkLinkToDepositAccount` (`linkToDepositAccount`) USING BTREE;
+
+--
+-- Indexes for table `loan_products_penalty`
+--
+ALTER TABLE `loan_products_penalty`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fkModifiedBy` (`modifiedBy`),
+  ADD KEY `fkCreatedBy` (`createBy`),
+  ADD KEY `penaltyChargedAs` (`penaltyChargedAs`),
+  ADD KEY `fkPenaltyCalcMethod` (`penaltyCalculationMethodId`);
 
 --
 -- Indexes for table `loan_product_type`
@@ -1402,15 +1469,9 @@ ALTER TABLE `loan_product_type`
 --
 ALTER TABLE `loan_repayment`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `loan_id` (`loan_id`),
-  ADD KEY `transaction_date` (`transaction_date`),
-  ADD KEY `recieving_staff` (`recieving_staff`);
-
---
--- Indexes for table `loan_type`
---
-ALTER TABLE `loan_type`
-  ADD PRIMARY KEY (`id`);
+  ADD KEY `loan_id` (`loanId`),
+  ADD KEY `transaction_date` (`transactionDate`),
+  ADD KEY `recieving_staff` (`recievedBy`);
 
 --
 -- Indexes for table `mdtransfer`
@@ -1424,7 +1485,7 @@ ALTER TABLE `mdtransfer`
 ALTER TABLE `member`
   ADD PRIMARY KEY (`id`),
   ADD KEY `added_by` (`added_by`),
-  ADD KEY `person_id` (`person_id`);
+  ADD KEY `person_id` (`personId`);
 
 --
 -- Indexes for table `member_loan`
@@ -1445,15 +1506,6 @@ ALTER TABLE `other_settings`
 --
 ALTER TABLE `parish`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `penalty`
---
-ALTER TABLE `penalty`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fkModifiedBy` (`modifiedBy`),
-  ADD KEY `fkCreatedBy` (`createBy`),
-  ADD KEY `penaltyChargedAs` (`penaltyChargedAs`);
 
 --
 -- Indexes for table `penalty_calculation_method`
@@ -1558,12 +1610,18 @@ ALTER TABLE `subcounty`
 --
 ALTER TABLE `subscription`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `person_id` (`person_id`);
+  ADD KEY `person_id` (`personId`);
 
 --
 -- Indexes for table `systemaccesslogs`
 --
 ALTER TABLE `systemaccesslogs`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tax_rate_source`
+--
+ALTER TABLE `tax_rate_source`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1716,20 +1774,20 @@ ALTER TABLE `loan_penalty`
 ALTER TABLE `loan_products`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
+-- AUTO_INCREMENT for table `loan_products_penalty`
+--
+ALTER TABLE `loan_products_penalty`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `loan_product_type`
 --
 ALTER TABLE `loan_product_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `loan_repayment`
 --
 ALTER TABLE `loan_repayment`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `loan_type`
---
-ALTER TABLE `loan_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `mdtransfer`
 --
@@ -1751,15 +1809,10 @@ ALTER TABLE `other_settings`
 ALTER TABLE `parish`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
--- AUTO_INCREMENT for table `penalty`
---
-ALTER TABLE `penalty`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT for table `penalty_calculation_method`
 --
 ALTER TABLE `penalty_calculation_method`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `person`
 --
@@ -1834,6 +1887,11 @@ ALTER TABLE `subscription`
 -- AUTO_INCREMENT for table `systemaccesslogs`
 --
 ALTER TABLE `systemaccesslogs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tax_rate_source`
+--
+ALTER TABLE `tax_rate_source`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `transaction`

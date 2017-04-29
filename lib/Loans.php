@@ -2,7 +2,7 @@
 $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Loans extends Db {
-	protected static $table_name  = "loan";
+	protected static $table_name  = "loan_account";
 	protected static $db_fields = array("id", "person_id", "loan_number","branch_number", "loan_type", "loan_date","loan_amount", "loan_amount_word", "interest_rate", "daily_default_amount", "expected_payback", "approved_by", "loan_duration", "comments","loan_agreement_path");
 	
 	public function findById($id){

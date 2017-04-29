@@ -3,8 +3,8 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Income extends Db {
 	protected static $table_name  = "income";
-	protected static $table_name2  = "income JOIN income_sources ON income_type = income_sources.id";
-	protected static $db_fields = array("id", "income_type", "amount", "date_added", "added_by", "description");
+	protected static $table_name2  = "income JOIN income_sources ON incomeType = income_sources.id";
+	protected static $db_fields = array("income.id", "incomeType", "amount", "dateAdded", "addedBy", "description");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");

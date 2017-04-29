@@ -3,14 +3,14 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Dashboard extends Db {
 	public function totalActiveLoans($where = 1){
-		return $this->count("loan", $where);
+		return $this->count("loan_account", $where);
 	}
 	public function getCountOfLoans($where = 1){
 		$result = $this->getfrec("loan", "count(`id`) loanCount ", $where, "", "");
 		return !empty($result) ? (($result['loanCount']!=NULL)?$result['loanCount']:0) : 0;
 	}
 	public function getSumOfLoans($where = 1){
-		$result = $this->getfrec("loan", "sum(`expected_payback`) loanSum ", $where, "", "");
+		$result = $this->getfrec("loan", "sum(`expectedPayback`) loanSum ", $where, "", "");
 		return !empty($result) ? (($result['loanSum']!=NULL)?$result['loanSum']:0) : 0;
 	}
 	public function getSumOfShares($where = 1){

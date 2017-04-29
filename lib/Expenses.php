@@ -2,8 +2,8 @@
 $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Expenses extends Db {
-	protected static $table_name  = "expense";
-	protected static $db_fields = array("id", "amount_used","expense_type","staff", "date_of_expense", "amount_description");
+	protected static $table_name  = "expense LEFT JOIN expensetypes ON expenseType = expensetypes.id";
+	protected static $db_fields = array("expense.id", "amountUsed", "amountDescription","expenseType","staff", "expenseDate", "description", "expenseName");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -11,7 +11,7 @@ class Expenses extends Db {
 	}
 	
 	public function findExpenseType(){
-		$result = $this->getfrec(self::$table_name, "expense_type", "id='$id'", "");
+		$result = $this->getfrec(self::$table_name, "expenseType", "id=$id", "");
 		if($result){
 			
 		}
@@ -23,8 +23,8 @@ class Expenses extends Db {
 	}
 	
 	public function findAmountExpensed($id){
-		$result = $this->getfrec(self::$table_name, "amount_used", "id='$id'", "");
-		return !empty($result) ? $result['amount']:false;
+		$result = $this->getfrec(self::$table_name, "amountUsed", "id='$id'", "");
+		return !empty($result) ? $result['amountUsed']:false;
 	}
 	
 	
