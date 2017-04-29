@@ -19,6 +19,21 @@
     <!-- Custom and plugin javascript -->
     <script src="js/inspinia.js"></script>
     <script src="js/plugins/pace/pace.min.js"></script>
-
+	<?php 
+	if($show_i_check){ ?>
+		 <!-- iCheck -->
+		<script src="js/plugins/iCheck/icheck.min.js"></script>
+		<script>
+			$(document).ready(function () {
+				$('.i-checks').iCheck({
+					checkboxClass: 'icheckbox_square-green',
+					radioClass: 'iradio_square-green',
+				});
+			});
+		</script>
+	<?php 
+	}
+	?>
+		
 </body>
 </html>

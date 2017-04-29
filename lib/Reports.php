@@ -27,25 +27,21 @@ Class Reports{
 			case 'mysavings';
 				$this->viewMemberSaving();
 			break;
-			case '';
-				$this->defaultDisplay();
-			break;
-			case '';
-				$this->defaultDisplay();
-			break;
-			case '';
-				$this->defaultDisplay();
+			default:
+				$this->personType();
 			break;
 			default:
 				$this->defaultDisplay();
 			break;
 		}
 	}
-	public function defaultDisplay(){
-		
+	public function defaultDisplay(){ ?>
+		<div class="alert alert-warning">
+			The information you are looking for is currently unavailable.
+		</div>
+		<?php
 	}
 	public function viewClientLoans(){ 
-		print_r($_GET);
 		?>
 		<p>This is a test report</p>
 		<?php	

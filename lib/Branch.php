@@ -3,16 +3,13 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Branch extends Db {
 	protected static $table_name  = "branch";
-	protected static $db_fields = array("id","branch_number","branch_name","physical_address","office_phone", "postal_address","email_address");
+	protected static $db_fields = array("id","branch_name","physical_address","office_phone", "postal_address","email_address");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
 		return !empty($result) ? $result:false;
 	}
-	public function findByBranchNo($bno){
-		$result = $this->getrec(self::$table_name, "branch_number=".$bno, "", "");
-		return !empty($result) ? $result:false;
-	}
+	
 	public function createNewBranchNumber(){
 		$r = $this->findRecentId();
 		$no = 0;
