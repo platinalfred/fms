@@ -1,6 +1,7 @@
 <?php 
 $show_table_js = false;
 $page_title = "Dashboard";
+$daterangepicker = true;
 include("includes/header.php"); 
 ?>
 	<div id="page-wrapper" class="gray-bg">
@@ -8,15 +9,20 @@ include("includes/header.php");
 			<nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
 				<div class="navbar-header">
 					<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-					<form role="search" class="navbar-form-custom" action="http://webapplayers.com/inspinia_admin-v2.5/search_results.html">
+					<form role="search" class="navbar-form-custom" action="#">
 						<div class="form-group">
 							<input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+							<!--input type="hidden" id="startDate" data-bind="value: startDate"/>
+							<input type="hidden" id="endDate" data-bind="value: endDate"/-->
 						</div>
 					</form>
 				</div>
 				<ul class="nav navbar-top-links navbar-right">
 					<li>
-						<span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>
+						<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 10px; border: 1px solid #ccc">
+						  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+						  <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+						</div>
 					</li>
 					<li class="dropdown">
 						<a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
@@ -132,17 +138,70 @@ include("includes/header.php");
 			</nav>
 		</div>
 
-		<div class="wrapper wrapper-content">
+		<div class="wrapper wrapper-content" data-bind='with: dashboardData'>
 			<div class="row">
+				<div class="col-lg-4">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<span class="label label-primary pull-right">This period</span>
+							<h5>Loans</h5>
+						</div>
+						<div class="ibox-content">
+							<div class="row">
+								<div class="col-md-4">
+									<h1 class="no-margins"><a href="view_loan_payments.php" title="Details" data-bind="text:figures.loan_portfolio">40,642</a></h1>
+									<div class="font-bold text-navy"> <span data-bind="text: percents.loan_portfolio">44</span>% <i data-bind="css: { 'fa fa-level-down': percents.loan_portfolio < 1, 'fa fa-level-up': percents.loan_portfolio > 0}"></i> <small>Portfolio</small></div>
+								</div>
+								<div class="col-md-4">
+									<h1 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text:figures.loan_payments">20,612</a></h1>
+									<div class="font-bold text-navy"><span data-bind="text:percents.loan_payments">22</span>% <i data-bind="css: { 'fa fa-level-down': percents.loan_payments < 1, 'fa fa-level-up': percents.loan_payments > 0}"></i> <small>Payments</small></div>
+								</div>
+								<div class="col-md-4">
+									<h1 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text:figures.loan_interest">20,612</a></h1>
+									<div class="font-bold text-navy"><span data-bind="text:percents.loan_interest">22</span>% <i data-bind="css: { 'fa fa-level-down': percents.loan_interest < 1, 'fa fa-level-up': percents.loan_interest > 0}"></i> <small>Interest</small></div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5>Loan Applications</h5>
+							<!--div class="ibox-tools">
+								<span class="label label-primary">Performances</span>
+							</div-->
+						</div>
+						<div class="ibox-content">
+							<div class="row">
+								<div class="col-md-4">
+									<h1 class="no-margins"><a href="view_loan_payments.php" title="Details" data-bind="text: figures.pending_loans">40,642</a></h1>
+									<div class="font-bold text-navy"> <span data-bind="text: percents.pending_loans">44</span>% <i data-bind="css: { 'fa fa-level-down': percents.pending_loans < 1, 'fa fa-level-up': percents.pending_loans > 0}"></i> <small>Pending</small></div>
+								</div>
+								<div class="col-md-4">
+									<h1 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text: figures.partial_loans">90,893</a></h1>
+									<div class="font-bold text-navy"><span data-bind="text: percents.partial_loans">67</span>% <i data-bind="css: { 'fa fa-level-down': percents.pending_loans < 1, 'fa fa-level-up': percents.pending_loans > 0}"></i> <small>Partial</small></div>
+								</div>
+								<div class="col-md-4">
+									<h1 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text: figures.approved_loans">206,12</a></h1>
+									<div class="font-bold text-navy"><span data-bind="text: percents.approved_loans">22</span>% <i data-bind="css: { 'fa fa-level-down': percents.approved_loans < 1, 'fa fa-level-up': percents.approved_loans > 0}"></i> <small>Approved</small></div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
 				<div class="col-lg-2">
 					<div class="ibox float-e-margins">
 						<div class="ibox-title">
-							<span class="label label-success pull-right">Current</span>
-							<h5>Members</h5>
+							<!--span class="label label-success pull-right">Current</span-->
+							<h5>Membership</h5>
 						</div>
 						<div class="ibox-content">
-							<h1 class="no-margins"><a href="view_members.php" title="Details" id="no_members">386,200</a></h1>
-							<div class="stat-percent font-bold text-success" id="members_percent">98% <i class="fa fa-bolt"></i></div>
+						<!--span data-bind='value: dashboard'></span-->
+							<h1 class="no-margins"><a href="view_members.php" title="Details"><span data-bind='text: figures.no_members'>386,200</span></a></h1>
+							<div class="stat-percent font-bold text-success"><span data-bind='text: percents.members_percent'>98</span>% <i data-bind="css: { 'fa fa-level-down': percents.members_percents < 1, 'fa fa-level-up': percents.members_percent > 0}"></i></div>
 							<small>Total members</small>
 						</div>
 					</div>
@@ -150,55 +209,17 @@ include("includes/header.php");
 				<div class="col-lg-2">
 					<div class="ibox float-e-margins">
 						<div class="ibox-title">
-							<span class="label label-info pull-right">Annual</span>
-							<h5>Subscriptions</h5>
+							<!--span class="label label-info pull-right">Annual</span-->
+							<h5>Subscription</h5>
 						</div>
 						<div class="ibox-content">
-							<h1 class="no-margins"><a href="view_subscriptions.php" title="Details" id="total_scptions">80,800</a></h1>
-							<div class="stat-percent font-bold text-info" id="scptions_percent">20% <i class="fa fa-level-up"></i></div>
-							<small>New subscriptions</small>
+							<h1 class="no-margins"><a href="view_subscriptions.php" title="Details" data-bind='text: figures.total_scptions'>80,800</a></h1>
+							<div class="stat-percent font-bold text-info"><span data-bind='text: percents.scptions_percent'>20</span>% <i data-bind="css: { 'fa fa-level-down': percents.scptions_percent < 1, 'fa fa-level-up': percents.scptions_percent > 0}"></i></div>
+							<small>Subscriptions</small>
 						</div>
 					</div>
 				</div>
 
-				<div class="col-lg-4">
-					<div class="ibox float-e-margins">
-						<div class="ibox-title">
-							<span class="label label-primary pull-right">Today</span>
-							<h5>Loans</h5>
-						</div>
-						<div class="ibox-content">
-
-							<div class="row">
-								<div class="col-md-6">
-									<h1 class="no-margins"><a href="view_loan_payments.php" title="Details" id="loan_payments">406,42</a></h1>
-									<div class="font-bold text-navy"> <span id="loan_payments_percent">44%</span> <i class="fa fa-level-up" id="loan_payments_percent"></i> <small>Payments</small></div>
-								</div>
-								<div class="col-md-6">
-									<h1 class="no-margins"><a href="view_loans.php?type=4" title="Details" id="due_loans">206,12</a></h1>
-									<div class="font-bold text-navy"><span id="due_loans_percent">22%</span> <i class="fa fa-level-up" id="due_loans_percent"></i> <small>Due Loans</small></div>
-								</div>
-							</div>
-
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4">
-					<div class="ibox float-e-margins">
-						<div class="ibox-title">
-							<h5>Monthly income</h5>
-							<div class="ibox-tools">
-								<span class="label label-primary">Updated 12.2015</span>
-							</div>
-						</div>
-						<div class="ibox-content no-padding">
-							<div class="flot-chart m-t-lg" style="height: 55px;">
-								<div class="flot-chart-content" id="flot-chart1"></div>
-							</div>
-						</div>
-
-					</div>
-				</div>
 			</div>
 			<div class="row">
 				<div class="col-lg-8">
@@ -206,12 +227,12 @@ include("includes/header.php");
 						<div class="ibox-content">
 							<div>
 								<span class="pull-right text-right">
-									<small>Average value of sales in the past month in: <strong>United states</strong></small>
+									<small>Average value of sales for this : <strong>period</strong></small>
 										<br/>
-										All sales: 162,862
+										Total product sales: 162,862
 									</span>
 								<h3 class="font-bold no-margins">
-							Half-year revenue margin
+							Performance by Loan Products
 						</h3>
 								<small>Sales marketing.</small>
 							</div>
@@ -262,8 +283,8 @@ include("includes/header.php");
 				<div class="col-lg-4">
 					<div class="ibox float-e-margins">
 						<div class="ibox-title">
-							<span class="label label-warning pull-right">Data has changed</span>
-							<h5>User activity</h5>
+							<span class="label label-warning pull-right">Product revenue</span>
+							<h5>Loan Products</h5>
 						</div>
 						<div class="ibox-content">
 							<div class="row">
@@ -323,10 +344,11 @@ include("includes/header.php");
 
 			<div class="row">
 
-				<div class="col-lg-12">
+				<div class="col-lg-6">
 					<div class="ibox float-e-margins">
 						<div class="ibox-title">
-							<h5>Custom responsive table </h5>
+							<h5>Expenses </h5>
+							<span class="label label-primary">This period</span>
 							<div class="ibox-tools">
 								<a class="collapse-link">
 									<i class="fa fa-chevron-up"></i>
@@ -346,6 +368,100 @@ include("includes/header.php");
 							</div>
 						</div>
 						<div class="ibox-content">
+							<div class="table-responsive">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Description</th>
+											<th>Amount</th>
+											<th>Date</th>
+										</tr>
+									</thead>
+									<tbody data-bind="foreach: tables.expenses">
+										<tr>
+											<td data-bind="text: id">1</td>
+											<td data-bind="text: amountDescription"></td>
+											<td data-bind="text: curr_format(amountUsed"></td>
+											<td data-bind="text: moment(expenseDate).format('D MMMM, YYYY')"></td>
+										</tr>
+									</tbody>
+									<tfoot data-bind="if: tables.expenses.length>0">
+										<tr>
+											<th scope='row'>Total</th>
+											<th>&nbsp;</th>
+											<th>&nbsp;</th>
+											<th data-bind="text: curr_format(array_total(tables.expenses,2))"></th>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+
+				<div class="col-lg-6">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5>Income </h5>
+							<span class="label label-primary">This period</span>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+								<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+									<i class="fa fa-wrench"></i>
+								</a>
+								<ul class="dropdown-menu dropdown-user">
+									<li><a href="#">Config option 1</a>
+									</li>
+									<li><a href="#">Config option 2</a>
+									</li>
+								</ul>
+								<a class="close-link">
+									<i class="fa fa-times"></i>
+								</a>
+							</div>
+						</div>
+						<div class="ibox-content">
+							<div class="table-responsive">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Income type</th>
+											<th>Amount</th>
+											<th>Date</th>
+										</tr>
+									</thead>
+									<tbody data-bind="foreach: tables.income">
+										<tr>
+											<td data-bind="text: id">1</td>
+											<td data-bind="text: description"></td>
+											<td data-bind="text: curr_format(amount)"></td>
+											<td data-bind="text: moment(dateAdded).format('D MMMM, YYYY')"></td>
+										</tr>
+									</tbody>
+									<tfoot data-bind="if: tables.income.length>0">
+										<tr>
+											<th scope='row'>Total</th>
+											<th>&nbsp;</th>
+											<th>&nbsp;</th>
+											<th data-bind="text: curr_format(tables.income,2)"></th>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+<!-- default table
 							<div class="row">
 								<div class="col-sm-9 m-b-xs">
 									<div data-toggle="buttons" class="btn-group">
@@ -401,150 +517,11 @@ include("includes/header.php");
 											<td>Jul 16, 2013</td>
 											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
 										</tr>
-										<tr>
-											<td>3</td>
-											<td>Betha project</td>
-											<td>John Smith</td>
-											<td>0800 1111</td>
-											<td>Erat Volutpat</td>
-											<td><span class="pie">3,1</span></td>
-											<td>75%</td>
-											<td>Jul 18, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
-										<tr>
-											<td>4</td>
-											<td>Gamma project</td>
-											<td>Anna Jordan</td>
-											<td>(016977) 0648</td>
-											<td>Tellus Ltd</td>
-											<td><span class="pie">4,9</span></td>
-											<td>18%</td>
-											<td>Jul 22, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
-										<tr>
-											<td>2</td>
-											<td>Alpha project</td>
-											<td>Alice Jackson</td>
-											<td>0500 780909</td>
-											<td>Nec Euismod In Company</td>
-											<td><span class="pie">6,9</span></td>
-											<td>40%</td>
-											<td>Jul 16, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
-										<tr>
-											<td>1</td>
-											<td>Project <small>This is example of project</small></td>
-											<td>Patrick Smith</td>
-											<td>0800 051213</td>
-											<td>Inceptos Hymenaeos Ltd</td>
-											<td><span class="pie">0.52/1.561</span></td>
-											<td>20%</td>
-											<td>Jul 14, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
-										<tr>
-											<td>4</td>
-											<td>Gamma project</td>
-											<td>Anna Jordan</td>
-											<td>(016977) 0648</td>
-											<td>Tellus Ltd</td>
-											<td><span class="pie">4,9</span></td>
-											<td>18%</td>
-											<td>Jul 22, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
-										<tr>
-											<td>1</td>
-											<td>Project <small>This is example of project</small></td>
-											<td>Patrick Smith</td>
-											<td>0800 051213</td>
-											<td>Inceptos Hymenaeos Ltd</td>
-											<td><span class="pie">0.52/1.561</span></td>
-											<td>20%</td>
-											<td>Jul 14, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
-										<tr>
-											<td>2</td>
-											<td>Alpha project</td>
-											<td>Alice Jackson</td>
-											<td>0500 780909</td>
-											<td>Nec Euismod In Company</td>
-											<td><span class="pie">6,9</span></td>
-											<td>40%</td>
-											<td>Jul 16, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
-										<tr>
-											<td>3</td>
-											<td>Betha project</td>
-											<td>John Smith</td>
-											<td>0800 1111</td>
-											<td>Erat Volutpat</td>
-											<td><span class="pie">3,1</span></td>
-											<td>75%</td>
-											<td>Jul 18, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
-										<tr>
-											<td>4</td>
-											<td>Gamma project</td>
-											<td>Anna Jordan</td>
-											<td>(016977) 0648</td>
-											<td>Tellus Ltd</td>
-											<td><span class="pie">4,9</span></td>
-											<td>18%</td>
-											<td>Jul 22, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
-										<tr>
-											<td>2</td>
-											<td>Alpha project</td>
-											<td>Alice Jackson</td>
-											<td>0500 780909</td>
-											<td>Nec Euismod In Company</td>
-											<td><span class="pie">6,9</span></td>
-											<td>40%</td>
-											<td>Jul 16, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
-										<tr>
-											<td>1</td>
-											<td>Project <small>This is example of project</small></td>
-											<td>Patrick Smith</td>
-											<td>0800 051213</td>
-											<td>Inceptos Hymenaeos Ltd</td>
-											<td><span class="pie">0.52/1.561</span></td>
-											<td>20%</td>
-											<td>Jul 14, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
-										<tr>
-											<td>4</td>
-											<td>Gamma project</td>
-											<td>Anna Jordan</td>
-											<td>(016977) 0648</td>
-											<td>Tellus Ltd</td>
-											<td><span class="pie">4,9</span></td>
-											<td>18%</td>
-											<td>Jul 22, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
 									</tbody>
 								</table>
 							</div>
 
-						</div>
-					</div>
-				</div>
-
-			</div>
-
-		</div>
-
+-->
 		<div class="footer">
 			<div>
 				<strong>Copyright</strong> Buladde Fincial Services &copy; 2017 <?php if(date("Y") != 2017 ){ echo "- ".date("Y"); } ?>
@@ -592,77 +569,12 @@ include("includes/header.php");
 
     <!-- ChartJS-->
     <script src="js/plugins/chartJs/Chart.min.js"></script>
+	<?php 
+	include("js/dash.php");
+	?>
 
     <script>
         $(document).ready(function() {
-
-            var d1 = [
-                [1262304000000, 6],
-                [1264982400000, 3057],
-                [1267401600000, 20434],
-                [1270080000000, 31982],
-                [1272672000000, 26602],
-                [1275350400000, 27826],
-                [1277942400000, 24302],
-                [1280620800000, 24237],
-                [1283299200000, 21004],
-                [1285891200000, 12144],
-                [1288569600000, 10577],
-                [1291161600000, 10295]
-            ];
-            var d2 = [
-                [1262304000000, 5],
-                [1264982400000, 200],
-                [1267401600000, 1605],
-                [1270080000000, 6129],
-                [1272672000000, 11643],
-                [1275350400000, 19055],
-                [1277942400000, 30062],
-                [1280620800000, 39197],
-                [1283299200000, 37000],
-                [1285891200000, 27000],
-                [1288569600000, 21000],
-                [1291161600000, 17000]
-            ];
-
-            var data1 = [{
-                label: "Data 1",
-                data: d1,
-                color: '#17a084'
-            }, {
-                label: "Data 2",
-                data: d2,
-                color: '#127e68'
-            }];
-            $.plot($("#flot-chart1"), data1, {
-                xaxis: {
-                    tickDecimals: 0
-                },
-                series: {
-                    lines: {
-                        show: true,
-                        fill: true,
-                        fillColor: {
-                            colors: [{
-                                opacity: 1
-                            }, {
-                                opacity: 1
-                            }]
-                        },
-                    },
-                    points: {
-                        width: 0.1,
-                        show: false
-                    },
-                },
-                grid: {
-                    show: false,
-                    borderWidth: 0
-                },
-                legend: {
-                    show: false,
-                }
-            });
 
             var lineData = {
                 labels: ["January", "February", "March", "April", "May", "June", "July"],
