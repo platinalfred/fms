@@ -498,7 +498,7 @@ include("includes/header.php");
 -->
 		<div class="footer">
 			<div>
-				<strong>Copyright</strong> Buladde Fincial Services &copy; 2017 <?php if(date("Y") != 2017 ){ echo "- ".date("Y"); } ?>
+				<strong>Copyright</strong> Buladde Fincial Services &copy; 2017 <?php if(date("Y") > 2017 ){ echo "- ".date("Y"); } ?>
 			</div>
 		</div>
 

@@ -3,6 +3,7 @@
 require_once("lib/Shares.php"); */
 require_once("lib/Accounts.php");
 require_once("lib/LoanProducts.php");
+require_once("lib/DepositProducts.php");
 require_once("lib/Loans.php");
 require_once("lib/Income.php");
 require_once("lib/Expenses.php");
@@ -185,6 +186,18 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 	$_result['tables'] = $tables;//
 
 	echo json_encode($_result);
+}
+elseif(isset($_POST['origin'])&&$_POST['origin']=='deposit_product'){
+	
+	$depositProductType = new DepositProduct();
+	$deposit_product_types = $depositProductType->findDepositProductTypes();
+	echo json_encode($deposit_product_types);
+}
+elseif(isset($_POST['origin'])&&$_POST['origin']=='loan_product'){
+	$loanProductType = new LoanProduct();
+	$data['loanProductTypes'] = $loanProductType->findLoanProductTypes();
+	$data['feeTypes'] = $loanProductType->findFeeTypes();
+	echo json_encode($data);
 }
 else{//(isset($_POST['origin'])&&$_POST['origin']=='client_savings')
 	$accounts = new Accounts();

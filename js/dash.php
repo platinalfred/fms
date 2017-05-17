@@ -38,25 +38,6 @@
 	ko.applyBindings(dashModel);
 	
  $(document).ready(function() {
-	function getDashboardData(startDate, endDate){
-		$.ajax({
-			type: "post",
-			dataType: "json",
-			data:{start_date:startDate, end_date:endDate, origin:"dashboard"},
-			url: "ajax_data.php",
-			success: function(response){
-				// Now use this data to update the view models, 
-				// and Knockout will update the UI automatically 
-				dashboardData = response;
-				/*
-				//draw the tables
-				 $.each(elements, function(key, value){
-					$("#"+value).html(draw_loans_table(response.tables[value]));
-				});
-				*/
-			}
-		});
-	}
 	//draw loans table
 	function draw_loans_table(loans_data){
 		var amount = balance = 0;

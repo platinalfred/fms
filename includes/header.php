@@ -75,7 +75,7 @@
 								<li><a href="#">Person Types</a></li>
 								<li><a href="#">Account Type</a></li>
 								<li><a href="#">Branches</a></li>
-								<li><a href="#">Access Levels</a></li>
+								<li><a href="deposit_product.php">Deposit Products</a></li>
 								<li><a href="#">Loan Types</a></li>
 							</ul>
 						  </li>
