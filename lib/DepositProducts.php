@@ -4,7 +4,6 @@ require_once($curdir.'/Db.php');
 class DepositProduct extends Db {
 	protected static $product_table  = "deposit_product";
 	protected static $fee_table  = "deposit_product_fee";
-	protected static $fee_types_table  = "fee_type";
 	protected static $types_table  = "deposit_product_type";
 	protected static $product_table_fields = array("id", "productName", "productType", "availableTo", "recommededDepositAmount", "maxWithdrawalAmount", "defaultInterestRate", "minInterestRate", "maxInterestRate", "perNoOfDays", "accountBalForCalcInterest", "whenInterestIsPaid", "daysInYear", "applyWHTonInterest", "defaultOpeningBal", "minOpeningBal", "maxOpeningBal", "defaultTermLength", "minTermLength", "maxTermLength", "termTimeUnit", "dateCreated", "createdBy", "dateModified", "modifiedBy");
 	protected static $types_table_fields = array("id", "typeName", "description", "dateCreated", "createdBy", "dateModified", "modifiedBy");
@@ -22,11 +21,6 @@ class DepositProduct extends Db {
 	
 	public function findDepositProductTypes(){
 		$result_array = $this->getarray(self::$types_table, "", "", "");
-		return !empty($result_array) ? $result_array : false;
-	}
-	
-	public function findFeeTypes(){
-		$result_array = $this->getarray(self::$fee_types_table, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	

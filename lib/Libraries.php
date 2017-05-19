@@ -24,4 +24,5 @@ require_once("Nok.php");
 require_once("LoanRepaymentDuration.php");
 require_once("Guarantor.php");
 require_once("DepositProducts.php");
+require_once("LoanProducts.php");
 ?>

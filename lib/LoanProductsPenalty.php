@@ -14,5 +14,19 @@ class LoanProductsPenalty extends Db {
 		$result_array = $this->getarray(self::$table_name, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
+	
+	public function updateLoanProduct($data){
+		$fields = array_slice(self::$table_fields, 1);
+		$id = $data['id'];
+		unset($data['id']);
+		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){
+			return true;
+		}
+		return false;
+	}
+	
+	public function deleteLoanProduct($id){
+		$this->delete(self::$table_name, "id=".$id);
+	}
 }
 ?>

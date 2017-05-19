@@ -26,23 +26,23 @@ if(isset($_POST['origin'])){
 			}
 		break;
 		case "loan_product":
-			$depositProduct = new DepositProduct();
+			$loanProduct = new LoanProduct();
 			$data['dateCreated'] = time();
 			$data['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			$data['dateModified'] = time();
 			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-			$output = $depositProduct->addDepositProduct($data);
+			$output = $loanProduct->addLoanProduct($data);
 		break;
-		case "loan_product_penalty":
-			$depositProductFee = new DepositProduct();
+		case "loan_product_fee":
+			$loanProductFee = new LoanProduct();
 			$productId = $data['productId'];
-			foreach($data['penaltyPostData'] as $feeDataItem){
+			foreach($data['feePostData'] as $feeDataItem){
 				$feeDataItem['depositProductID'] = $productId;
 				$feeDataItem['dateCreated'] = time();
 				$feeDataItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				$feeDataItem['dateModified'] = time();
 				$feeDataItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-				$output = $depositProductFee->addDepositProductFee($feeDataItem);
+				$output = $loanProductFee->addLoanProductFee($feeDataItem);
 			}
 		break;
 		/* case "":

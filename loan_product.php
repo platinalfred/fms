@@ -135,7 +135,7 @@ include("includes/header.php");
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>Deposit Product <small>Creating deposit product</small></h5>
+                            <h5>Loan Product <small>Creating loan product</small></h5>
                             <div class="ibox-tools">
                                 <a class="collapse-link">
                                     <i class="fa fa-chevron-up"></i>
@@ -155,7 +155,7 @@ include("includes/header.php");
                             </div>
                         </div>
                         <div class="ibox-content">
-                            <form id="depProductForm" class="form-horizontal">
+                            <form id="loanProductForm" class="form-horizontal">
                                 <div class="form-group">
 									<label class="col-sm-2 control-label" for="productName">Product Name</label>
                                     <div class="col-sm-10"><input type="text" class="form-control input-sm" name="productName" id="productName" data-bind="value: productName" data-msg-required="Product name is required" required></div>
@@ -169,7 +169,7 @@ include("includes/header.php");
 									</div>
 
                                     <div class="col-sm-6">
-										<label class="control-label">Type of Deposit Product</label>
+										<label class="control-label">Type of Loan Product</label>
 										<select class="form-control m-b" id="productType" name="productType" data-bind='options: productTypes, optionsText: "typeName", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: productType' data-msg-required="Loan product type is required">
 										</select>
 										<div data-bind="with: productType"><span class="help-block m-b-none"><small data-bind="text: description">Product description goes here.</small></span></div>
@@ -177,15 +177,15 @@ include("includes/header.php");
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-									<div class="col-sm-6">
-									<label>State</label>
-											<div class="i-checks"><label title="Select if this product should be made active"> <input type="checkbox" data-bind="checked: active"> <i></i> Active </label></div>
-									</div>
-									<div class="col-sm-6">
-										<label class="control-label">Initial Account State</label>
+										<label class="control-label col-sm-1">State</label>
+                                    <div class="col-sm-2">
+										<div class="i-checks"><label title="Select if this product should be made active"> <input type="checkbox" data-bind="checked: active" value="1"> <i></i> Active </label></div>
+                                    </div>
+									<label class="control-label col-sm-3">Initial Account State</label>
+                                    <div class="col-sm-6">
 										<select class="form-control m-b" id="intialAccountState" name="intialAccountState" data-bind='options: intialAccountStateOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: intialAccountState' data-msg-required="Initial Account State is required">
 										</select>
-									</div>
+                                    </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
@@ -197,10 +197,10 @@ include("includes/header.php");
 										</div>
 									</div>
                                 </div>
-                                <div class="form-group" data-bind="visible: interestRateApplicable">
-									<label class="col-sm-1 control-label">Max Tranches <i data-toggle="tooltip" data-original-title="Specify if the loan amount can be disbursed in multiple tranches" data-placement="right" class="fa fa-question-circle"></i></label>
+                                <div class="form-group">
+									<label class="col-sm-2 control-label" data-toggle="tooltip" data-original-title="Specify if the loan amount can be disbursed in multiple tranches" data-placement="right">Max Tranches <i class="fa fa-question-circle"></i></label>
 
-                                    <div class="col-sm-2"><input type="number" placeholder="days" class="form-control input-sm " name="maxTranches" id="maxTranches" data-bind="value: maxTranches" data-msg-required="Number of days is required"/></div><label class="col-sm-1 control-label"> #</label><div class="col-sm-8"></div>
+                                    <div class="col-sm-2"><input type="number" placeholder="days" class="form-control input-sm " name="maxTranches" id="maxTranches" data-bind="value: maxTranches" data-msg-required="Number of days is required"/></div><label class="col-sm-1 control-label"> #</label><div class="col-sm-6"></div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
 								<!--Found at https://support.mambu.com/customer/en/portal/articles/1162103-setting-up-new-loan-products -->
@@ -214,15 +214,15 @@ include("includes/header.php");
 									</div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
-								<div><p class="text-info">Repayment scheduling</p></div>
+								<div><h4 class="text-info">Repayment scheduling</h4></div>
                                 <div class="form-group">
-									<div class="col-md-6">
+									<div class="col-md-4">
 										<p>Payment Interval Method: <strong>Interval</strong></p>
 									</div>
-									<div class="col-md-6">
+									<div class="col-md-8">
 											<label class="col-sm-6 control-label">Repayments are made every <i class="fa fa-question-circle" data-toggle="tooltip" data-original-title='Suppose you want the repayments to be made every two weeks.Enter the number (2 in this example) > select "weeks" from the dropdown list. This will define the period between repayments.' data-placement='right' ></i></label>
-											<div class="col-sm-3"><input type="number" class="form-control input-sm" name="repaymentsFrequency" id="repaymentsFrequency" data-bind="value: repaymentsFrequency"></div>
-											<div class="col-sm-3">
+											<div class="col-sm-2"><input type="number" class="form-control input-sm" name="repaymentsFrequency" id="repaymentsFrequency" data-bind="value: repaymentsFrequency"></div>
+											<div class="col-sm-4">
 											<select class="form-control m-b" id="repaymentsMadeEvery" name="repaymentsMadeEvery" data-bind='options: repaymentsMadeEveryOptions, optionsText: "desc", optionsCaption: "Select...", value: repaymentsMadeEvery' data-msg-required="Unit for term length is required">
 											</select>
 									</div>
@@ -259,10 +259,10 @@ include("includes/header.php");
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
 										<label class="control-label col-sm-3">Minimum number of guarantors</label>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
 										<input type="number" name="minGuarantorsRequired" id="minGuarantorsRequired" class="form-control input-sm" data-bind="value: minGuarantorsRequired" >
                                     </div>
-										<label class="control-label col-sm-3">Minimum Collateral Amount Required</label>
+										<label class="control-label col-sm-4">Minimum Collateral Amount Required</label>
                                     <div class="col-sm-3">
 										<input type="number" name="minCollateralRequired" id="minCollateralRequired" data-bind="value: minCollateralRequired" class="form-control input-sm">
                                     </div>
@@ -276,18 +276,51 @@ include("includes/header.php");
 										<div class="i-checks"><label> <input type="checkbox" data-bind="checked: penaltyApplicable"> Penalties Applicable <i class="fa fa-question-circle" data-toggle="tooltip" data-original-title="Linking accounts allows you to have loan repayments being automatically made from a client's deposit account. Given that a deposit account is being used as source for repayments, on the day the repayment becomes due, the amount is automatically transferred from the deposit account as a repayment on the loan account" data-placement="right"></i></label></div>
 									</div>
                                 </div>
+                                <div class="hr-line-dashed" data-bind="visible: penaltyApplicable"></div>
+                                <div class="form-group" data-bind="visible: penaltyApplicable">
+                                    <div class="col-md-12">
+										<label class="control-label">Penalty Calculation Method</label>
+										<select class="form-control m-b" id="penaltyCalculationMethod" name="penaltyCalculationMethod" data-bind='options: penaltyCalculationMethodOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: penaltyCalculationMethod'>
+										</select>
+                                    </div>
+                                </div>
+                                <div class="form-group" data-bind="visible: penaltyApplicable">
+                                    <div class="col-md-5">
+										<label class="control-label">Penalty Tolerance Period</label>
+										<div class="col-sm-9"><input type="number" class="form-control input-sm" name="penaltyTolerancePeriod" id="penaltyTolerancePeriod" data-bind="value: penaltyTolerancePeriod"></div><label class="col-sm-1">Days</label>
+                                    </div>
+                                    <div class="col-md-7">
+										<label class="control-label">How is the penalty rate charged</label>
+										<div class="col-sm-7"><input type="number" class="form-control input-sm" name="penaltyRateChargedPer" id="penaltyRateChargedPer" data-bind="value: penaltyRateChargedPer"></div><label class="col-sm-3">% per day</label>
+                                    </div>
+                                </div>
+                                <div class="form-group" data-bind="visible: penaltyApplicable">
+                                    <div class="col-md-4">
+										<label class="control-label">Default Penalty Rate</label>
+										<div class="col-sm-9"><input type="number" class="form-control input-sm" name="defPenaltyRate" id="defPenaltyRate" data-bind="value: defPenaltyRate"></div><label class="col-sm-1">%</label>
+                                    </div>
+                                    <div class="col-md-4">
+										<label class="control-label">Min Penalty Rate</label>
+										<div class="col-sm-9"><input type="number" class="form-control input-sm" id="minPenaltyRate" name="minPenaltyRate" data-bind="value: minPenaltyRate"></div><label class="col-sm-1">%</label>
+                                    </div>
+                                    <div class="col-md-4">
+										<label class="control-label">Max Penalty Rate</label>
+										<div class="col-sm-9"><input type="number" class="form-control input-sm" name="maxGracePeriod" id="maxGracePeriod" data-bind="value: maxGracePeriod"></div><label class="col-sm-1">%</label>
+                                    </div>
+                                </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-                                    <div class="col-sm-4">
-										<div class="i-checks"><label> <input type="checkbox" data-bind="checked: penaltyApplicable"> Penalties Applicable <i class="fa fa-question-circle" data-toggle="tooltip" data-original-title="Apply tax to Interest + Fees + Penalty as per government regulations" data-placement="right"></i></label></div>
-                                    </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
 										<label class="control-label">Tax Rate source</label>
+                                    </div>
+                                    <div class="col-sm-3">
 										<select class="form-control m-b" id="taxRateSource" name="taxRateSource" data-bind='options: taxRateSourceOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: taxRateSource'>
 										</select>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
 										<label class="control-label">Tax Calculation Method</label>
+                                    </div>
+                                    <div class="col-sm-3">
 										<select class="form-control m-b" id="taxCalculationMethod" name="taxCalculationMethod" data-bind='options: taxCalculationMethodOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: taxCalculationMethod'>
 										</select>
                                     </div>
@@ -300,8 +333,9 @@ include("includes/header.php");
 											<tr>
 												<th>Name</th>
 												<th>Amount, Flat(UGX)</th>
-												<th title="Method for calculating the day when the fee will be applied">Trigger</th>
-												<th>Apply Date Method</th>
+												<th>Fee Type</th>
+												<th>Amount Calculated As</th>
+												<th>Required Fee?</th>
 												<th>&nbsp;</th>
 											</tr>
 										</thead>
@@ -309,9 +343,9 @@ include("includes/header.php");
 											<tr>
 												<td><input class="form-control input-sm m-b required" name="feeName[]" data-bind='value: feeName, uniqueName: true' data-msg-required="Fee name is required" required/></td>
 												<td><input class="form-control input-sm m-b required" name="amount[]" type="number" data-bind='value: amount' required/></td>
-												<td><select class="form-control m-b" id="feeType" name="feeType" data-bind='options: dropDowns.feeTypesOptions, optionsText: "desc", optionsCaption: "Select...", , optionsAfterRender: $parent.setOptionValue("id"), value: feeType' data-msg-required="Charge trigger is required">
+												<td><select class="form-control m-b" id="feeType" name="feeType" data-bind='options: $parent.feeTypesOptions, optionsText: "description", optionsCaption: "Select...", , optionsAfterRender: $parent.setOptionValue("id"), value: feeType' data-msg-required="Fee type is required">
 												</select></td>
-												<td><select class="form-control m-b " id="amountCalculatedAs" name="amountCalculatedAs" data-bind='visible: id==2, options: amountCalculatedAsOptions, optionsText: "desc", , optionsAfterRender: $root.setOptionValue("id"), optionsCaption: "Select...", value: $parent.amountCalculatedAs'>
+												<td><select class="form-control m-b " id="amountCalculatedAs" name="amountCalculatedAs" data-bind='options: $parent.amountCalculatedAsOptions, optionsText: "desc", , optionsAfterRender: $root.setOptionValue("id"), optionsCaption: "Select...", value: $parent.amountCalculatedAs'>
 												</select><!-- to be used later , css: {required:id==2} --></td>
 												<td><input class="form-control input-sm m-b required" name="requiredFee[]" type="checkbox" data-bind='checked: requiredFee' required/></td>
 												<td><span title="Remove fee" class="btn text-danger" data-bind='click: $root.removeFee'><i class="fa fa-minus"></i></span></td>
@@ -361,7 +395,7 @@ include("includes/header.php");
     <script src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 	<?php 
-	include("js/depositProduct.php");
+	include("js/loanProduct.php");
 	?>
 
  </body>

@@ -4,6 +4,7 @@ require_once($curdir.'/Db.php');
 class LoanProduct extends Db {
 	protected static $products_table_name  = "loan_products";
 	protected static $types_table_name  = "loan_product_type";
+	protected static $fee_types_table  = "fee_type";
 	
 	protected static $products_table_fields = array("id", "productName", "description", "productType", "active", "availableTo", "defAmount", "minAmount", "maxAmount", "maxTranches", "defInterest", "minInterest", "maxInterest", "repaymentsFrequency", "repaymentsMadeEvery", "repaymentInstallments", "minRepaymentInstallments", "maxRepaymentInstallments", "daysOfYear", "intialAccountState", "defGracePeriod", "minGracePeriod", "maxGracePeriod", "minCollateralRequired", "minGuarantorsRequired", "defaultOffSet", "minOffSet", "maxOffSet", "penaltyApplicable", "taxRateSource", "taxCalculationMethod", "linkToLoanAccount", "createdBy", "dateCreated", "dateModified", "modifiedBy");
 	protected static $types_table_fields = array("id", "typeName", "description", "dateCreated", "createdBy", "dateModified", "modifiedBy");
@@ -20,6 +21,11 @@ class LoanProduct extends Db {
 	
 	public function findLoanProductTypes(){
 		$result_array = $this->getarray(self::$types_table, "", "", "");
+		return !empty($result_array) ? $result_array : false;
+	}
+	
+	public function findFeeTypes(){
+		$result_array = $this->getarray(self::$fee_types_table, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	
@@ -46,6 +52,13 @@ class LoanProduct extends Db {
 	//Loan product types
 	public function addLoanProductType($data){
 		$fields = array_slice(self::$types_table_fields, 1);
+		$result = $this->add(self::$types_table, $this->generateAddFields($fields, $data));
+		return $result;
+	}
+	
+	//Loan product fees
+	public function addLoanProductFee($data){
+		$fields = array_slice(self::$fees_table_fields, 1);
 		$result = $this->add(self::$types_table, $this->generateAddFields($fields, $data));
 		return $result;
 	}
