@@ -36,11 +36,14 @@
 		});
 		// Operations
 		//set options value afterwards
-		self.setOptionValue = function(option, item, key) {
-			if (item === undefined) {
-				option.value = "";
-			} else {
-				option.value = item[key];
+		//set options value afterwards
+		self.setOptionValue = function(propId) {
+			return function (option, item) {
+				if (item === undefined) {
+					option.value = "";
+				} else {
+					option.value = item[propId];
+				}
 			}
 		};
 		self.availableTo = function() {

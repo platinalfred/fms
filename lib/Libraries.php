@@ -23,6 +23,12 @@ require_once("Shares.php");
 require_once("Nok.php");
 require_once("LoanRepaymentDuration.php");
 require_once("Guarantor.php");
-require_once("DepositProducts.php");
-require_once("LoanProducts.php");
+require_once("DepositProductFee.php");
+require_once("DepositProduct.php");
+require_once("DepositProductType.php");
+require_once("LoanProduct.php");
+require_once("LoanProductType.php");
+require_once("LoanProductFee.php");
+require_once("LoanProductFeen.php");
+require_once("FeeType.php");
 ?>

@@ -104,3 +104,6 @@ ko.bindingHandlers.attrToggle = {
             $(element).attr(duration);   // Remove required from element
     }
 };
+/*$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})*/

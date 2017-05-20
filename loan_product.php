@@ -1,6 +1,6 @@
 <?php 
 $show_table_js = false;
-$page_title = "Create Deposit Product";
+$page_title = "Create Loan Product";
 $daterangepicker = false;
 include("includes/header.php"); 
 ?>
@@ -158,7 +158,11 @@ include("includes/header.php");
                             <form id="loanProductForm" class="form-horizontal">
                                 <div class="form-group">
 									<label class="col-sm-2 control-label" for="productName">Product Name</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control input-sm" name="productName" id="productName" data-bind="value: productName" data-msg-required="Product name is required" required></div>
+                                    <div class="col-sm-3"><input type="text" class="form-control input-sm" name="productName" id="productName" data-bind="value: productName" data-msg-required="Product name is required" required></div>
+									<label class="control-label col-sm-1">Description</label>
+                                    <div class="col-sm-6">
+                                        <textarea id="description" name="description" class="form-control required" data-msg-required="Product description is required" data-bind="value: description"> </textarea>
+									</div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
@@ -170,7 +174,7 @@ include("includes/header.php");
 
                                     <div class="col-sm-6">
 										<label class="control-label">Type of Loan Product</label>
-										<select class="form-control m-b" id="productType" name="productType" data-bind='options: productTypes, optionsText: "typeName", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: productType' data-msg-required="Loan product type is required">
+										<select class="form-control required m-b" id="productType" name="productType" data-bind='options: productTypes, optionsText: "typeName", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: productType' data-msg-required="Loan product type is required">
 										</select>
 										<div data-bind="with: productType"><span class="help-block m-b-none"><small data-bind="text: description">Product description goes here.</small></span></div>
                                     </div>
@@ -183,7 +187,7 @@ include("includes/header.php");
                                     </div>
 									<label class="control-label col-sm-3">Initial Account State</label>
                                     <div class="col-sm-6">
-										<select class="form-control m-b" id="intialAccountState" name="intialAccountState" data-bind='options: intialAccountStateOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: intialAccountState' data-msg-required="Initial Account State is required">
+										<select class="form-control required m-b" id="intialAccountState" name="intialAccountState" data-bind='options: intialAccountStateOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: intialAccountState' data-msg-required="Initial Account State is required">
 										</select>
                                     </div>
                                 </div>
@@ -198,7 +202,7 @@ include("includes/header.php");
 									</div>
                                 </div>
                                 <div class="form-group">
-									<label class="col-sm-2 control-label" data-toggle="tooltip" data-original-title="Specify if the loan amount can be disbursed in multiple tranches" data-placement="right">Max Tranches <i class="fa fa-question-circle"></i></label>
+									<label class="col-sm-2 control-label">Max Tranches <sup data-toggle="tooltip" title="Specify if the loan amount can be disbursed in multiple tranches" data-placement="right"><i class="fa fa-question-circle"></i><sup></label>
 
                                     <div class="col-sm-2"><input type="number" placeholder="days" class="form-control input-sm " name="maxTranches" id="maxTranches" data-bind="value: maxTranches" data-msg-required="Number of days is required"/></div><label class="col-sm-1 control-label"> #</label><div class="col-sm-6"></div>
                                 </div>
@@ -214,16 +218,16 @@ include("includes/header.php");
 									</div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
-								<div><h4 class="text-info">Repayment scheduling</h4></div>
+								<div><h3>Repayment scheduling</h3></div>
                                 <div class="form-group">
 									<div class="col-md-4">
 										<p>Payment Interval Method: <strong>Interval</strong></p>
 									</div>
 									<div class="col-md-8">
-											<label class="col-sm-6 control-label">Repayments are made every <i class="fa fa-question-circle" data-toggle="tooltip" data-original-title='Suppose you want the repayments to be made every two weeks.Enter the number (2 in this example) > select "weeks" from the dropdown list. This will define the period between repayments.' data-placement='right' ></i></label>
+											<label class="col-sm-6 control-label">Repayments are made every <sup data-toggle="tooltip" title='Suppose you want the repayments to be made every two weeks.Enter the number (2 in this example) > select "weeks" from the dropdown list. This will define the period between repayments.' data-placement='right' ><i class="fa fa-question-circle"></i></sup></label>
 											<div class="col-sm-2"><input type="number" class="form-control input-sm" name="repaymentsFrequency" id="repaymentsFrequency" data-bind="value: repaymentsFrequency"></div>
 											<div class="col-sm-4">
-											<select class="form-control m-b" id="repaymentsMadeEvery" name="repaymentsMadeEvery" data-bind='options: repaymentsMadeEveryOptions, optionsText: "desc", optionsCaption: "Select...", value: repaymentsMadeEvery' data-msg-required="Unit for term length is required">
+											<select class="form-control m-b" id="repaymentsMadeEvery" name="repaymentsMadeEvery" data-bind='css: {required: repaymentsFrequency()}, optionsAfterRender: setOptionValue("id"), options: repaymentsMadeEveryOptions, optionsText: "desc", optionsCaption: "Select...", value: repaymentsMadeEvery' data-msg-required="Time unit is required">
 											</select>
 									</div>
                                 </div>
@@ -239,7 +243,7 @@ include("includes/header.php");
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
 									<div class="col-md-12">
-										<div><label class="control-label">First Due Date Offset Constraints (days) <i class="fa fa-question-circle" data-original-title="Set the constraints for the number of offset days that can be established for the first repayment date when creating an account" data-placement="right" data-toggle="tooltip"></i></label>
+										<div><label class="control-label">First Due Date Offset Constraints (days) <sup data-toggle="tooltip" title="Set the constraints for the number of offset days that can be established for the first repayment date when creating an account" data-placement="right"><i class="fa fa-question-circle"></i></sup></label>
 										</div>
 										<div>
 											<label class="col-sm-1 control-label">Default</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="defOffSet" id="defOffSet" data-bind="value: defOffSet"></div><label class="col-sm-1 control-label">Min</label><div class="col-sm-3"><input type="number" class="form-control input-sm" id="minOffSet" name="minOffSet" data-bind="value: minOffSet"></div><label class="col-sm-1 control-label">Max</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="maxOffSet" id="maxOffSet" data-bind="value: maxOffSet"></div>
@@ -270,28 +274,32 @@ include("includes/header.php");
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
 									<div class="col-sm-6">
-											<div class="i-checks"><label> <input type="checkbox" data-bind="checked: linkToDepositAccount"> Link to Deposit Account <i class="fa fa-question-circle" data-toggle="tooltip" data-original-title="Linking accounts allows you to have loan repayments being automatically made from a client's deposit account. Given that a deposit account is being used as source for repayments, on the day the repayment becomes due, the amount is automatically transferred from the deposit account as a repayment on the loan account" data-placement="right"></i></label></div>
+											<div class="i-checks"><label> <input type="checkbox" data-bind="checked: linkToDepositAccount"> Link to Deposit Account <sup data-toggle="tooltip" title="Linking accounts allows you to have loan repayments being automatically made from a client's deposit account. Given that a deposit account is being used as source for repayments, on the day the repayment becomes due, the amount is automatically transferred from the deposit account as a repayment on the loan account" data-placement="right"><i class="fa fa-question-circle"></i><sup></label></div>
 									</div>
 									<div class="col-sm-6">
-										<div class="i-checks"><label> <input type="checkbox" data-bind="checked: penaltyApplicable"> Penalties Applicable <i class="fa fa-question-circle" data-toggle="tooltip" data-original-title="Linking accounts allows you to have loan repayments being automatically made from a client's deposit account. Given that a deposit account is being used as source for repayments, on the day the repayment becomes due, the amount is automatically transferred from the deposit account as a repayment on the loan account" data-placement="right"></i></label></div>
+										<div class="i-checks"><label> <input type="checkbox" data-bind="checked: penaltyApplicable"> Penalties Applicable <sup data-toggle="tooltip" title="Select for more product penalty settings" data-placement="right"><i class="fa fa-question-circle"></i></sup></label></div>
 									</div>
                                 </div>
                                 <div class="hr-line-dashed" data-bind="visible: penaltyApplicable"></div>
                                 <div class="form-group" data-bind="visible: penaltyApplicable">
                                     <div class="col-md-12">
-										<label class="control-label">Penalty Calculation Method</label>
-										<select class="form-control m-b" id="penaltyCalculationMethod" name="penaltyCalculationMethod" data-bind='options: penaltyCalculationMethodOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: penaltyCalculationMethod'>
+										<label class="control-label col-sm-3">Penalty Calculation Method</label>
+										<div class="col-sm-6">
+											<select class="form-control m-b " id="penaltyCalculationMethod" name="penaltyCalculationMethod" data-bind='css: {required: penaltyApplicable}, options: penaltyCalculationMethodOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: penaltyCalculationMethod' data-msg-required="Penalty Calculation Method is required">
 										</select>
+										</div>
+										<div class="col-sm-3">
+										</div>
                                     </div>
                                 </div>
                                 <div class="form-group" data-bind="visible: penaltyApplicable">
                                     <div class="col-md-5">
-										<label class="control-label">Penalty Tolerance Period</label>
-										<div class="col-sm-9"><input type="number" class="form-control input-sm" name="penaltyTolerancePeriod" id="penaltyTolerancePeriod" data-bind="value: penaltyTolerancePeriod"></div><label class="col-sm-1">Days</label>
+										<label class="col-sm-6">Penalty Tolerance Period</label>
+										<div class="col-sm-5"><input type="number" class="form-control input-sm" name="penaltyTolerancePeriod" id="penaltyTolerancePeriod" data-bind="value: penaltyTolerancePeriod"></div><label class="col-sm-1">Days</label>
                                     </div>
                                     <div class="col-md-7">
-										<label class="control-label">How is the penalty rate charged</label>
-										<div class="col-sm-7"><input type="number" class="form-control input-sm" name="penaltyRateChargedPer" id="penaltyRateChargedPer" data-bind="value: penaltyRateChargedPer"></div><label class="col-sm-3">% per day</label>
+										<label class="col-sm-6">How is the penalty rate charged</label>
+										<div class="col-sm-4"><input type="number" class="form-control input-sm" name="penaltyRateChargedPer" id="penaltyRateChargedPer" data-bind="value: penaltyRateChargedPer"></div><label class="col-sm-2">% per day</label>
                                     </div>
                                 </div>
                                 <div class="form-group" data-bind="visible: penaltyApplicable">
@@ -327,34 +335,62 @@ include("includes/header.php");
                                 </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
-                                <div class="table-responsive">
-									<table class="table table-condensed" data-bind="visible: productFees().length > 0">
-										<thead>
-											<tr>
-												<th>Name</th>
-												<th>Amount, Flat(UGX)</th>
-												<th>Fee Type</th>
-												<th>Amount Calculated As</th>
-												<th>Required Fee?</th>
-												<th>&nbsp;</th>
-											</tr>
-										</thead>
-										<tbody data-bind="foreach: $root.productFees">
-											<tr>
-												<td><input class="form-control input-sm m-b required" name="feeName[]" data-bind='value: feeName, uniqueName: true' data-msg-required="Fee name is required" required/></td>
-												<td><input class="form-control input-sm m-b required" name="amount[]" type="number" data-bind='value: amount' required/></td>
-												<td><select class="form-control m-b" id="feeType" name="feeType" data-bind='options: $parent.feeTypesOptions, optionsText: "description", optionsCaption: "Select...", , optionsAfterRender: $parent.setOptionValue("id"), value: feeType' data-msg-required="Fee type is required">
-												</select></td>
-												<td><select class="form-control m-b " id="amountCalculatedAs" name="amountCalculatedAs" data-bind='options: $parent.amountCalculatedAsOptions, optionsText: "desc", , optionsAfterRender: $root.setOptionValue("id"), optionsCaption: "Select...", value: $parent.amountCalculatedAs'>
-												</select><!-- to be used later , css: {required:id==2} --></td>
-												<td><input class="form-control input-sm m-b required" name="requiredFee[]" type="checkbox" data-bind='checked: requiredFee' required/></td>
-												<td><span title="Remove fee" class="btn text-danger" data-bind='click: $root.removeFee'><i class="fa fa-minus"></i></span></td>
-											</tr>
-										</tbody>
-									</table>
+								<div class="col-md-6">
+									<div class="table-responsive">
+										<table class="table table-condensed" data-bind="visible: existingProductFees().length > 0">
+											<thead>
+												<tr>
+													<th>Choose</th>
+													<th>Name</th>
+													<th>Amount, Flat(UGX)</th>
+													<th>Fee Type</th>
+													<th>Amount Calculated As</th>
+													<th>Required Fee?</th>
+												</tr>
+											</thead>
+											<tbody data-bind="foreach: $root.existingProductFees">
+												<tr>
+													<td><input class="form-control" name="fee" type="checkbox" data-bind="attr:{value: id}, checked: productFee" /></td>
+													<td data-bind='text: feeName'></td>
+													<td data-bind='text: amount'></td>
+													<td data-bind='text: feeTypeText'></td>
+													<td data-bind='text: "amountCalculatedAsText"'></td>
+													<td data-bind='text: requiredFee'></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="table-responsive">
+										<table class="table table-condensed" data-bind="visible: newProductFees().length > 0 || existingProductFees().length > 0">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Amount, Flat(UGX)</th>
+													<th>Fee Type</th>
+													<th>Amount Calculated As</th>
+													<th>Required Fee?</th>
+													<th>&nbsp;</th>
+												</tr>
+											</thead>
+											<tbody data-bind="foreach: $root.newProductFees">
+												<tr>
+													<td><input class="form-control input-sm m-b required" name="feeName[]" data-bind='value: feeName, uniqueName: true' data-msg-required="Fee name is required" required/></td>
+													<td><input class="form-control input-sm m-b required" name="amount[]" type="number" data-bind='value: amount' required/></td>
+													<td><select class="form-control m-b" id="feeType" name="feeType" data-bind='options: $parent.feeTypesOptions, optionsText: "description", optionsCaption: "Select...", , optionsAfterRender: $parent.setOptionValue("id"), value: feeType' data-msg-required="Fee type is required">
+													</select></td>
+													<td><select class="form-control m-b " id="amountCalculatedAs" name="amountCalculatedAs" data-bind='options: $parent.amountCalculatedAsOptions, optionsText: "desc", , optionsAfterRender: $root.setOptionValue("id"), optionsCaption: "Select...", value: $parent.amountCalculatedAs'>
+													</select><!-- to be used later , css: {required:id==2} --></td>
+													<td><input class="form-control input-sm m-b required" name="requiredFee[]" type="checkbox" data-bind='checked: requiredFee' required/></td>
+													<td><span title="Remove fee" class="btn text-danger" data-bind='click: $root.removeFee'><i class="fa fa-minus"></i></span></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
                                 </div>
                                 <div class="form-group">
-                                    <span class="btn btn-info btn-sm pull-right" data-bind='click: addFee'><i class="fa fa-plus"></i> Add fee</span>
+                                    <span class="btn btn-info btn-sm pull-right" data-bind='click: addFee'><i class="fa fa-plus"></i> New fee</span>
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
