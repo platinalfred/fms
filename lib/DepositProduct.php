@@ -1,10 +1,9 @@
 <?php
 $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
-class LoanProductType extends Db {
-	protected static $table_name  = "loan_product_type";
-	
-	protected static $table_fields = array("id", "typeName", "description", "dateCreated", "createdBy", "dateModified", "modifiedBy");
+class DepositProduct extends Db {
+	protected static $table_name  = "deposit_product";
+	protected static $table_fields = array("id", "productName", "productType", "availableTo", "recommededDepositAmount", "maxWithdrawalAmount", "defaultInterestRate", "minInterestRate", "maxInterestRate", "perNoOfDays", "accountBalForCalcInterest", "whenInterestIsPaid", "daysInYear", "applyWHTonInterest", "defaultOpeningBal", "minOpeningBal", "maxOpeningBal", "defaultTermLength", "minTermLength", "maxTermLength", "termTimeUnit", "dateCreated", "createdBy", "dateModified", "modifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");

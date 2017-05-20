@@ -1,10 +1,9 @@
 <?php
 $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
-class LoanProductType extends Db {
-	protected static $table_name  = "loan_product_type";
-	
-	protected static $table_fields = array("id", "typeName", "description", "dateCreated", "createdBy", "dateModified", "modifiedBy");
+class LoanProductsPenalty extends Db {
+	protected static $table_name  = "loan_products_penalty";
+	protected static $table_fields = array("id", "description", "penaltyCalculationMethodId", "penaltyChargedAs", "penaltyTolerancePeriod", "defaultAmount", "minAmount", "maxAmount", "createdBy", "dateCreated", "dateModified", "modifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -16,15 +15,7 @@ class LoanProductType extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
-	
-	public function add($data){
-		$fields = array_slice(self::$table_fields, 1);
-		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
-		return $result;
-	}
-	
-	public function update($data){
-		
+	public function updateLoanProduct($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
@@ -34,7 +25,7 @@ class LoanProductType extends Db {
 		return false;
 	}
 	
-	public function delete($id){
+	public function deleteLoanProduct($id){
 		$this->delete(self::$table_name, "id=".$id);
 	}
 }

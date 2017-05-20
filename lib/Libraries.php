@@ -33,4 +33,12 @@ require_once("LoanProductsPenalties.php");
 require_once("RelationshipType.php");
 require_once("AddressType.php");
 require_once("maritalStatus.php");
+require_once("DepositProductFee.php");
+require_once("DepositProduct.php");
+require_once("DepositProductType.php");
+require_once("LoanProduct.php");
+require_once("LoanProductType.php");
+require_once("LoanProductFee.php");
+require_once("LoanProductFeen.php");
+require_once("FeeType.php");
 ?>

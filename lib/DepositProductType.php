@@ -1,8 +1,8 @@
 <?php
 $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
-class LoanProductType extends Db {
-	protected static $table_name  = "loan_product_type";
+class DepositProductType extends Db {
+	protected static $table_name  = "deposit_product_type";
 	
 	protected static $table_fields = array("id", "typeName", "description", "dateCreated", "createdBy", "dateModified", "modifiedBy");
 	
@@ -16,7 +16,6 @@ class LoanProductType extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
-	
 	public function add($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
@@ -24,8 +23,7 @@ class LoanProductType extends Db {
 	}
 	
 	public function update($data){
-		
-		$fields = array_slice(self::$table_fields, 1);
+		$fields = array_slice(1, self::$table_fields);
 		$id = $data['id'];
 		unset($data['id']);
 		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){
