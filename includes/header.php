@@ -1,7 +1,7 @@
 <?php 
+session_start();
 //Hide given files and will be displayed on appropriate pages by giving true values to the variables below
-$show_i_check = false; //shows or hides css/js for i-check radio/checbox elements
-
+ //shows or hides css/js for i-check radio/checbox elements
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,23 +13,116 @@ $show_i_check = false; //shows or hides css/js for i-check radio/checbox element
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
-
-    <!-- Morris -->
-    <link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-
+	<link href="css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+	<!-- Toastr style -->
+    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+	
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+	<?php
+	if(in_array("dataTables", $needed_files)){
+		?>
+		<link href="css/plugins/dataTables/datatables.min.css" rel="stylesheet">
 	<?php 
-	if($show_i_check){ ?>
+	}
+	if(in_array("iCheck", $needed_files)){ ?>
 		<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
 		<?php 
 	}
-	?>
-
-	<?php if($daterangepicker):?>
+	if(in_array("daterangepicker", $needed_files)){ ?>
 		<!-- bootstrap-daterangepicker -->
 		<link href="css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
-	<?php endif;?>
+	<?php 
+	} 
+	 
+	if(in_array("Morris", $needed_files)){  ?>
+		<!-- Morris -->
+		<link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("c3", $needed_files)){ ?>
+		<link href="css/plugins/c3/c3.min.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("chosen", $needed_files)){ ?>
+		<link href="css/plugins/chosen/chosen.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("colorpicker", $needed_files)){ ?>
+    <link href="css/plugins/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("cropper", $needed_files)){ ?>
+    <link href="css/plugins/cropper/cropper.min.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("switchery", $needed_files)){ ?>
+		<link href="css/plugins/switchery/switchery.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("jasny", $needed_files)){ ?>
+		<link href="css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("nouslider", $needed_files)){ ?>
+		<link href="css/plugins/nouslider/jquery.nouislider.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("datapicker", $needed_files)){ ?>
+		<link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("ionRangeSlider", $needed_files)){ ?>
+		<link href="css/plugins/ionRangeSlider/ion.rangeSlider.css" rel="stylesheet">
+		<link href="css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("clockpicker", $needed_files)){ ?>
+		<link href="css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("daterangepicker", $needed_files)){ ?>
+		<link href="css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("select2", $needed_files)){ ?>
+		<link href="css/plugins/select2/select2.min.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("touchspin", $needed_files)){ ?>
+		<link href="css/plugins/touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("steps", $needed_files)){ ?>
+		<link href="css/plugins/steps/jquery.steps.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("dropzone", $needed_files)){ ?>
+		<link href="css/plugins/dropzone/basic.css" rel="stylesheet">
+		<link href="css/plugins/dropzone/dropzone.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("summernote", $needed_files)){ ?>
+		<link href="css/plugins/summernote/summernote.css" rel="stylesheet">
+		<link href="css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+	<?php 
+	}
+	if(in_array("bootstrap-markdown", $needed_files)){ ?>
+		<link href="css/plugins/bootstrap-markdown/bootstrap-markdown.min.css" rel="stylesheet">
+	<?php 
+	}
+	
+	 if(!isset($_SESSION['Logged'])){
+		header("Location:index.php");
+	} 
+	?>
+	<style>
+		.modal {
+			position: fixed;
+			top: 0;
+			bottom: 0;
+		}
+	</style>
 </head>
 
 <body>
@@ -46,11 +139,11 @@ $show_i_check = false; //shows or hides css/js for i-check radio/checbox element
                              </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a href="profile.html">Profile</a></li>
-                                <li><a href="contacts.html">Contacts</a></li>
-                                <li><a href="mailbox.html">Mailbox</a></li>
+                                <li><a href="">Profile</a></li>
+                                <li><a href="">Contacts</a></li>
+                                <li><a href="">Mailbox</a></li>
                                 <li class="divider"></li>
-                                <li><a href="login.html">Logout</a></li>
+                                <li><a href="logout.php">Logout</a></li>
                             </ul>
                         </div> <!--
                         <div class="logo-element">
@@ -63,7 +156,7 @@ $show_i_check = false; //shows or hides css/js for i-check radio/checbox element
                     <li>
                         <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Reports</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li><a href="graph_flot.html">Flot Charts</a></li>
+                            <li><a href="graph_flot.">Flot Charts</a></li>
                         </ul>
                     </li>
                     <li><a href="members.php"><i class="fa fa-users"></i> <span class="nav-label">Members</span> <span class="label label-info pull-right">62</span></a></li>
@@ -71,7 +164,7 @@ $show_i_check = false; //shows or hides css/js for i-check radio/checbox element
                     <li>
                         <a href="#"><i class="fa fa-suitcase"></i> <span class="nav-label">Expenses</span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li><a href="contacts.html">Contacts</a></li>
+                            <li><a href="">Contacts</a></li>
                            
                         </ul>
                     </li>
@@ -94,11 +187,12 @@ $show_i_check = false; //shows or hides css/js for i-check radio/checbox element
             </div>
         </nav>
 		<div id="page-wrapper" class="gray-bg">
+			
 			<div class="row border-bottom">
 				<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
 					<div class="navbar-header">
 						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-						<form role="search" class="navbar-form-custom" action="http://webapplayers.com/inspinia_admin-v2.5/search_results.html">
+						<form role="search" class="navbar-form-custom" action="">
 							<div class="form-group">
 								<input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
 							</div>
@@ -208,7 +302,7 @@ $show_i_check = false; //shows or hides css/js for i-check radio/checbox element
 						</li>
 
 						<li>
-							<a href="login.html">
+							<a href="logout.php">
 								<i class="fa fa-sign-out"></i> Log out
 							</a>
 						</li>
@@ -216,20 +310,8 @@ $show_i_check = false; //shows or hides css/js for i-check radio/checbox element
 
 				</nav>
 			</div>
-			<!--<div class="row wrapper border-bottom white-bg page-heading">
-				<div class="col-lg-10">
-					<h2>Settings</h2>
-					<ol class="breadcrumb">
-						<li>
-							<a href="index-2.html">Home</a>
-						</li>
-						
-						<li class="active">
-							<strong>Settings</strong>
-						</li>
-					</ol>
-				</div>
-				<div class="col-lg-2">
-
-				</div>
-			</div> -->
+			<div class="alert alert-danger alert-dismissable" id="notice_message_general" style="display:none;">
+				<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+				<div id="notice_general"></div>
+			</div>
+			

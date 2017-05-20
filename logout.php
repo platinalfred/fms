@@ -1,0 +1,9 @@
+<?php 
+session_start();
+unset($_SESSION['branch_number']);
+unset($_SESSION['Logged']);
+unset($_SESSION['username']);
+unset($_SESSION['access_level']);
+unset($_SESSION['user_id']);
+header("location:index.php");
+?>

@@ -14,18 +14,18 @@ class IncomeSource extends Db {
 		$result_array = $this->getarray(self::$table_name, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
-	public function findLevelName($id){
+	public function findIncomeSourceName($id){
 		$result = $this->getfrec(self::$table_name, "name", "id=".$id, "", "");
 		return !empty($result) ? $result['name'] : false;
 	}
-	public function addAccessLevel($data){
+	public function addIncomeSource($data){
 		$fields = array_slice(self::$db_fields ,1);
 		if($this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data))){
 			return true;
 		}
 		return false;
 	}
-	public function updateAccessLevel($data){
+	public function updatIncomeSource($data){
 		$fields = array_slice(self::$db_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);

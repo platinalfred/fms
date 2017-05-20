@@ -39,9 +39,6 @@ class Branch extends Db {
 		return $this->countRecords(self::$table_name, "branch_name='.$bno.'");
 	}
 	public function addBranch($data){
-		if($this->doesBranchNoExist($data['branch_number']) > 0){
-			$data['branch_number'] = $this->createNewBranchNumber();
-		}
 		$fields = array_slice(self::$db_fields, 1);
 		if($this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data))){
 			return true;

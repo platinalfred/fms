@@ -1,19 +1,27 @@
-       </div>
-		
-        </div>
-        </div>
+			<div class="footer">
+                <div class="pull-right">
+                    10GB of <strong>250GB</strong> Free.
+                </div>
+                <div>
+                    <strong>Copyright</strong> Example Company &copy; 2014-2015
+                </div>
+            </div>
 
-
+        </div>
+    </div>
 
     <!-- Mainly scripts -->
     <script src="js/jquery-2.1.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+	 <!-- Form Validate -->
 	<script src="js/jquery.validate.min.js" type="text/javascript"></script>
+	
     <!-- Custom and plugin javascript -->
     <script src="js/inspinia.js"></script>
     <script src="js/plugins/pace/pace.min.js"></script>
+	<!-- Pricing Format -->
 	<script type="text/javascript" src="js/jquery.priceformat.min.js"></script>
 	<?php
 	if(in_array("dataTables", $needed_files)){
@@ -195,6 +203,12 @@
 		<script src="js/plugins/bootstrap-markdown/markdown.js"></script>
 	<?php 
 	}
-	?>
+
+	?><!-- PNotify -->
+	<script src="js/plugins/pnotify/dist/pnotify.js"></script>
+	<script src="js/plugins/pnotify/dist/pnotify.buttons.js"></script>
+	<script src="js/plugins/pnotify/dist/pnotify.nonblock.js"></script>
+	
 </body>
+
 </html>

@@ -23,14 +23,17 @@ class Person extends Db {
 		$result_array = $this->getarray(self::$table_name, "","id DESC", "");
 		return !empty($result_array) ? $result_array : false;
 	}
-	
+	public function findPersonsPosition($pid){
+		$result = $this->getfrec("staff as st, position as p", "p.name", "st.person_id='$pid' AND st.position_id = p.id", "", "");
+		return !empty($result) ? $result['name'] : false;
+	}
 	public function findNamesByPersonNumber($pno){
-		$result = $this->getfrec(self::$table_name, "first_name, last_name, other_names", "person_number='$pno'", "", "");
-		return !empty($result) ? $result['first_name']." ".$result['other_names']." ".$result['last_name'] : false;
+		$result = $this->getfrec(self::$table_name, "firstname, lastname, othername", "person_number='$pno'", "", "");
+		return !empty($result) ? $result['firstname']." ".$result['othername']." ".$result['lastname'] : false;
 	}
 	public function findNamesById($id){
-		$result = $this->getfrec(self::$table_name, "first_name, last_name, other_names", "id=".$id, "", "");
-		return !empty($result) ? $result['first_name']." ".$result['other_names']." ".$result['last_name'] : false;
+		$result = $this->getfrec(self::$table_name, "firstname, lastname, othername", "id=".$id, "", "");
+		return !empty($result) ? $result['firstname']." ".$result['othername']." ".$result['lastname'] : false;
 	}
 	
 	public function updateImage($data){

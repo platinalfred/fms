@@ -447,6 +447,7 @@ class Db{
 		//echo $ins;
 		$inse = $this->conn->query($ins);
 		if($inse){
+			
 			return mysqli_insert_id($this->conn);
 		}
 		return false;
@@ -647,6 +648,9 @@ class Db{
 	function del($table, $where) {
 		$del = "DELETE FROM ".$table." WHERE ".$where; 
 		return $this->conn->query($del);
+	}
+	function turnOff($table, $where) {
+		return $this->update($table, array("active"), array("active"=>0),  $where);
 	}
 	// "database-neutral" methods
 	public function fetch_array($result_set) {
