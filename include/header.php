@@ -194,7 +194,10 @@ $person = new Person();
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>
+							<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 10px; border: 1px solid #ccc">
+							  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+							  <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+							</div>
                         </li>
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
@@ -296,7 +299,7 @@ $person = new Person();
                         </li>
 
                         <li>
-                            <a href="login.html">
+                            <a href="logout.php">
                                 <i class="fa fa-sign-out"></i> Log out
                             </a>
                         </li>
