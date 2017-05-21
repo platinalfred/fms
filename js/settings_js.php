@@ -813,7 +813,7 @@ $(document).ready(function(){
 				  "orderable": false
 			  } */],
 			  "autoWidth": false,
-			  columns:[ { data: 'title'},
+			  columns:[ { data: 'typeName'},
 			  { data: 'description'},
 					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_account_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-loan_product_types-tblLoanProductType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
