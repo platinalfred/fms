@@ -16,13 +16,13 @@ class FeeType extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
-	public function add($data){
+	public function addFeeType($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
 		return $result;
 	}
 	
-	public function update($data){
+	public function updateFeeType($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
@@ -32,7 +32,7 @@ class FeeType extends Db {
 		return false;
 	}
 	
-	public function delete($id){
+	public function deleteFeeType($id){
 		$this->delete(self::$table_name, "id=".$id);
 	}
 }

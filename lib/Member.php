@@ -3,22 +3,22 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Member extends Db {
 	protected static $table_name  = "member";
-	protected static $db_fields = array("id","person_id","branch_id","member_type","comments", "added_by","date_added", "active");
+	protected static $db_fields = array("id","personId","branchId","memberType","comments", "addedBy","dateAdded", "active");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
 		return !empty($result) ? $result:false;
 	}
 	public function findByPersonIdNo($pno){
-		$result = $this->getrec(self::$table_name, "person_id=".$pno, "", "");
+		$result = $this->getrec(self::$table_name, "personId=".$pno, "", "");
 		return !empty($result) ? $result:false;
 	}
 	public function findPersonNumber($id){
-		$result = $this->getfrec(self::$table_name, "person_id", "id=".$id, "", "");
+		$result = $this->getfrec(self::$table_name, "personId", "id=".$id, "", "");
 		return !empty($result) ? $result['person_id']: false;
 	}
 	public function findMemberIdByPersonIdNo($pno){
-		$result = $this->getfrec(self::$table_name, "id", "person_id=".$pno, "", "");
+		$result = $this->getfrec(self::$table_name, "id", "personId=".$pno, "", "");
 		return !empty($result) ? $result['id']:false;
 	}
 	public function findGender($g){
@@ -30,8 +30,8 @@ class Member extends Db {
 		return false;
 	}
 	public function findBranch($br){
-		$result = $this->getfrec("branch", "branch_name", "branch_number='$br'","","");
-		return !empty($result) ? $result['branch_name'] : false;
+		$result = $this->getfrec("branch", "branch_name", "branchId='$br'","","");
+		return !empty($result) ? $result['branchName'] : false;
 	}
 	public function findMemberNames($p_id){
 		$result = $this->getfrec("person", "firstname, lastname, othername", "id=".$pno, "", "");
@@ -45,15 +45,22 @@ class Member extends Db {
 		return $this->count("member", $where);
 	}
 	public function findMemberPersonNumber($id){
-		$result = $this->getfrec(self::$table_name, "person_id", "id=".$id, "", "");
+		$result = $this->getfrec(self::$table_name, "personId", "id=".$id, "", "");
 		return !empty($result) ? $result['person_id'] : false;
 	}
+	//list of the members for special kinds of select lists
+	public function findSelectList(){
+		$table = self::$table_name. " JOIN `person` ON `member`.`personId` = `person`.`id`";
+		$fields = "`person`.`id`, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType`";
+		$result_array = $this->getfarray($table, $fields, "", "", "");
+		return $result_array;
+	}
 	public function findAll(){
-		$result_array = $this->queryData("SELECT `member`.`id`, `member`.`person_id`, `firstname`, `lastname`, `othername`, `phone`, `email`, `postal_address`, `physical_address`, `dateofbirth`, `gender`, `date_registered`, `photograph`, `member_type`, `date_added`, `branch_number`, `added_by` FROM `member` JOIN `person` ON `member`.`person_id` = `person`.`id`");
+		$result_array = $this->queryData("SELECT `member`.`id`, `member`.`personId`, `firstname`, `lastname`, `othername`, `phone`, `email`, `postal_address`, `physical_address`, `dateofbirth`, `gender`, `date_registered`, `photograph`, `memberType`, `date_added`, `branchId`, `added_by` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id`");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findGuarantors($person_no){
-		$result_array = $this->queryData("SELECT `member`.`person_id`, `phone`, `shares`, `savings`, CONCAT(`firstname`, ' ', `lastname`, ' ', `othername`) `member_names` FROM `member` JOIN `person` ON `member`.`person_id` = `person`.`id` JOIN (SELECT SUM(`amount`) savings, `person_id` FROM `transaction` WHERE `transaction_type`=1 GROUP BY `person_id`) `client_savings` ON `member`.`person_id` = `client_savings`.`person_id` JOIN (SELECT SUM(`amount`) `shares`, `person_id` FROM `shares` GROUP BY `person_id`) `client_shares` ON `member`.`person_id` = `client_shares`.`person_id` WHERE `member`.`id` <> {$_GET['member_id']}");
+		$result_array = $this->queryData("SELECT `member`.`personId`, `phone`, `shares`, `savings`, CONCAT(`firstname`, ' ', `lastname`, ' ', `othername`) `member_names` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id` JOIN (SELECT SUM(`amount`) savings, `person_id` FROM `transaction` WHERE `transaction_type`=1 GROUP BY `person_id`) `client_savings` ON `member`.`personId` = `client_savings`.`personId` JOIN (SELECT SUM(`amount`) `shares`, `personId` FROM `shares` GROUP BY `personId`) `client_shares` ON `member`.`personId` = `client_shares`.`personId` WHERE `member`.`id` <> {$_GET['member_id']}");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findNamesByPersonNumber($pno){

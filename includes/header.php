@@ -175,18 +175,10 @@ session_start();
 						<ul class="nav side-menu">
 						  <li><a href="settings.php"><i class="fa fa-gear"></i> Administration <span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level collapse">
-<<<<<<< HEAD
 							  <li><a href="settings.php">Settings</a></li>
 								<li><a href="#">Users</a></li>
-=======
-							  <li><a href="#">Security Types</a></li>
-								<li><a href="#">Member Types</a></li>
-								<li><a href="#">Person Types</a></li>
-								<li><a href="#">Account Type</a></li>
-								<li><a href="#">Branches</a></li>
 								<li><a href="deposit_product.php">Deposit Products</a></li>
 								<li><a href="loan_product.php">Loan Products</a></li>
->>>>>>> befcabd3752d34c4acfc491f05e3b6a23fee0974
 							</ul>
 						  </li>
 						</ul>

@@ -24,7 +24,7 @@ class LoanProductsPenalties extends Db {
 		}
 		return false;
 	}
-	public function updateLoanProductType($data){
+	public function updateLoanProductPenalty($data){
 		$fields = array_slice(1, self::$db_fields);
 		$id = $data['id'];
 		unset($data['id']);

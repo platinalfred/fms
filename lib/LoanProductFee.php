@@ -4,7 +4,7 @@ require_once($curdir.'/Db.php');
 class LoanProductFee extends Db {
 	protected static $table_name  = "loan_product_fee";
 	
-	protected static $table_fields = array("id", "feeName", "feeType", "amountCalculatedAs", "requiredFee", "amount");
+	protected static $table_fields = array("loan_product_fee.id", "feeName", "feeType", "amountCalculatedAs", "requiredFee", "amount");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -12,11 +12,22 @@ class LoanProductFee extends Db {
 	}
 	
 	public function findAll(){
-		$result_array = $this->getarray(self::$table_name, "", "", "");
-		return !empty($result_array) ? $result_array : false;
+		$table_fields = self::$table_fields;
+		array_push($table_fields, 'feeTypeName');
+		
+		$table = "`loan_product_fee` JOIN `fee_type` ON `loan_product_fee`.`feeType` = `fee_type`.`id`";
+		$result_array = $this->getfarray($table, implode(",",$table_fields), "", "", "");
+		//return !empty($result_array) ? $result_array : false;
+		return $result_array;
 	}
 	
-	public function update($data){
+	public function addLoanProductFee($data){
+		$fields = array_slice(self::$table_fields, 1);
+		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
+		return $result;
+	}
+	
+	public function updateLoanProductFee($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
@@ -26,7 +37,7 @@ class LoanProductFee extends Db {
 		return false;
 	}
 	
-	public function delete($id){
+	public function deleteLoanProductFee($id){
 		$this->delete(self::$table_name, "id=".$id);
 	}
 }

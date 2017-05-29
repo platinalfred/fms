@@ -146,7 +146,7 @@ $person = new Person();
                         </div>
                     </li>
                     <li>
-                        <a href="dashboard.php"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboards</span> 
+                        <a href="dashboard.php"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span> 
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Reports</span><span class="fa arrow"></span></a>
@@ -158,6 +158,12 @@ $person = new Person();
                             <li><a href="#">Log Reports</a></li>
                             <li><a href="#">Income Statement</a></li>
                         </ul>
+                    </li>
+                    <li>
+                        <a href="add_loan_account.php"><i class="fa fa-credit-card"></i> <span class="nav-label">New Loan Application</span>  </a>
+                    </li>
+                    <li>
+                        <a href="add_deposit_account.php"><i class="fa fa-money"></i> <span class="nav-label">New Deposit Account</span>  </a>
                     </li>
                     <li>
                         <a href="members.php"><i class="fa fa-group"></i> <span class="nav-label">Members</span>  </a>
@@ -193,12 +199,14 @@ $person = new Person();
                         </form>
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
+						<?php if(in_array("daterangepicker", $needed_files)){ ?>
                         <li>
 							<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 10px; border: 1px solid #ccc">
 							  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 							  <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
 							</div>
                         </li>
+						<?php } ?>
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                                 <i class="fa fa-envelope"></i> <span class="label label-warning">16</span>
@@ -307,4 +315,5 @@ $person = new Person();
 
                 </nav>
             </div>
+			<div class="wrapper wrapper-content animated fadeInRight">
             

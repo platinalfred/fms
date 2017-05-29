@@ -15,7 +15,13 @@ class LoanProductsPenalty extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
-	public function updateLoanProduct($data){
+	public function addLoanProductsPenalty($data){
+		$fields = array_slice(self::$table_fields, 1);
+		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
+		return $result;
+	}
+	
+	public function updateLoanProductsPenalty($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
@@ -25,7 +31,7 @@ class LoanProductsPenalty extends Db {
 		return false;
 	}
 	
-	public function deleteLoanProduct($id){
+	public function deleteLoanProductsPenalty($id){
 		$this->delete(self::$table_name, "id=".$id);
 	}
 }
