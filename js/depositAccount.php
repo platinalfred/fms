@@ -23,9 +23,9 @@
 		
 		self.depositProduct = ko.observable();
 		self.client = ko.observable(<?php if(isset($client)) echo json_encode($client);?>);
-		self.openingBal = ko.observable();
-		self.termLength = ko.observable();
-		self.interestRate = ko.observable();
+		self.openingBal = ko.observable(self.depositProduct()?self.depositProduct().defaultOpeningBal:0);
+		self.termLength = ko.observable(self.depositProduct()?self.depositProduct().defaultTermLength:0);
+		self.interestRate = ko.observable(self.depositProduct()?self.depositProduct().defaultInterestRate:0);
 		
 		// Operations
 		//set options value afterwards
@@ -93,6 +93,8 @@
 					depositProductId : (self.depositProduct()?self.depositProduct().id:undefined),
 					clientId : (self.client()?self.client().id:undefined),
 					clientType : (self.client()?self.client().clientType:undefined),
+					recomDepositAmount : (self.depositProduct()?self.depositProduct().recommededDepositAmount:undefined),
+					maxWithdrawalAmount : (self.depositProduct()?self.depositProduct().maxWithdrawalAmount:undefined),
 					openingBalance : self.openingBal(),
 					termLength : self.termLength(),
 					interestRate : self.interestRate(),
@@ -121,9 +123,14 @@
 									}						
 								}
 							});
+						}else{
+							showStatusMessage("Data successfully saved" ,"success");
+							setTimeout(function(){
+								self.resetForm();
+							}, 3000);
 						}
 					}else{
-						showStatusMessage("Data successfully saved" ,"success");
+						showStatusMessage("Error encountered while saving data: \n"+response ,"failed");
 						setTimeout(function(){
 							self.resetForm();
 						}, 3000);

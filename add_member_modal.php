@@ -252,7 +252,7 @@
 							
 							<h1>Dependants and Employer</h1>
 							<fieldset>
-								<h2>Dependants</div>
+								<h2>Dependants</h2>
 								<div class="row">
 									<div class="col-lg-3">
 										<div class="form-group">
@@ -268,7 +268,7 @@
 									</div>
 									
 								</div>
-								<h2>Employer</div>
+								<h2>Employer</h2>
 								<div class="row">
 									<div class="col-lg-3">
 										<div class="form-group">

@@ -1,9 +1,9 @@
 <?php
 $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
-class DepositAccount extends Db {
-	protected static $table_name  = "deposit_account";
-	protected static $table_fields = array("id", "depositProductId", "recomDepositAmount", "maxWithdrawalAmount", "interestRate", "openingBalance", "termLength", "dateCreated", "createdBy", "dateModified", "modifiedBy");
+class MemberLoanAccount extends Db {
+	protected static $table_name  = "member_loan_account";
+	protected static $table_fields = array("id", "memberId", "loanAccountId", "dateCreated", "createdBy", "dateModified", "modifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -16,13 +16,13 @@ class DepositAccount extends Db {
 	}
 	
 	
-	public function addDepositAccount($data){
+	public function addMemberLoanAccount($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
 		return $result;
 	}
 	
-	public function updateDepositAccount($data){
+	public function updateMemberLoanAccount($data){
 		
 		$fields = array_slice(self::$table_fields, 1);
 		$id = $data['id'];
@@ -33,7 +33,7 @@ class DepositAccount extends Db {
 		return false;
 	}
 	
-	public function deleteDepositAccount($id){
+	public function deleteMemberLoanAccount($id){
 		$this->delete(self::$table_name, "id=".$id);
 	}
 }

@@ -169,9 +169,13 @@
 		<script src="js/plugins/clockpicker/clockpicker.js"></script>
 	<?php 
 	}
+	if(in_array("moment", $needed_files)){ ?>
+		 <!-- Moment -->
+		<script src="js/moment/min/moment.min.js"></script>
+	<?php 
+	}
 	if(in_array("daterangepicker", $needed_files)){ ?>
 			 <!-- Date range picker -->
-		<script src="js/moment/min/moment.min.js"></script>
 		<script src="js/plugins/daterangepicker/daterangepicker.js"></script>
 		<script>
 			$(document).ready(function () {

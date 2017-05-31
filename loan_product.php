@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-										<label class="control-label col-sm-1">State</label>
+										<label class="control-label col-sm-1">Product State</label>
                                     <div class="col-sm-2">
 										<div class="i-checks"><label title="Select if this product should be made active"> <input type="checkbox" data-bind="checked: active" value="1"> <i></i> Active </label></div>
                                     </div>
@@ -85,7 +85,7 @@
 									</div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
-								<div><h3>Repayment scheduling</h3></div>
+								<div><h3><i>Repayment scheduling</i></h3></div>
                                 <div class="form-group">
 									<div class="col-md-4">
 										<p>Payment Interval Method: <strong>Interval</strong></p>
@@ -150,23 +150,23 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <div class="col-md-12">
-										<label class="control-label col-sm-3">Penalty Calculation Method</label>
+										<label class="control-label col-sm-4">Penalty Calculation Method</label>
 										<div class="col-sm-6">
 											<select class="form-control required" id="penaltyCalculationMethod" name="penaltyCalculationMethod" data-bind='options: penaltyCalculationMethodOptions, optionsText: "methodDescription", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: penaltyCalculationMethod' data-msg-required="Penalty Calculation Method is required">
 										</select>
 										</div>
-										<div class="col-sm-3">
+										<div class="col-sm-2">
 										</div>
                                     </div>
                                 </div>
                                 <div class="form-group" data-bind="visible: penCalcMethId">
-                                    <div class="col-md-5">
+                                    <div class="col-md-6">
 										<label class="col-sm-6">Penalty Tolerance Period</label>
 										<div class="col-sm-5"><input type="number" class="form-control input-sm" name="penaltyTolerancePeriod" id="penaltyTolerancePeriod" data-bind="value: penaltyTolerancePeriod"></div><label class="col-sm-1">Days</label>
                                     </div>
-                                    <div class="col-md-7">
-										<label class="col-sm-6">How is the penalty rate charged</label>
-										<label class="col-sm-2">% per</label>
+                                    <div class="col-md-6">
+										<label class="col-sm-5">How is the penalty rate charged</label>
+										<label class="col-sm-3">% per</label>
 										<div class="col-sm-4">
 											<select class="form-control" id="penaltyRateChargedPer" name="penaltyRateChargedPer" data-bind='css: {required: penaltyTolerancePeriod()}, options: taxRateSourceOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: penaltyRateChargedPer'>
 										</select>

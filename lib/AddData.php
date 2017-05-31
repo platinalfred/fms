@@ -102,6 +102,50 @@ if(isset($_POST['origin'])){
 				$output = $depositAccountFee->addDepositAccountFee($feeDataItem);
 			}
 		break;
+		case "loan_account":
+			$depositAccount = new DepositAccount();
+			$data['dateCreated'] = time();
+			$data['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+			$data['dateModified'] = time();
+			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+			
+			$output = $depositAccount->addLoanAccount($data);
+			
+			//send less data to reduce bandwidth usage
+			$clientData['loanAccountId'] = $output ;
+			$clientData['dateCreated'] = time();
+			$clientData['dateModified'] = time();
+			$clientData['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+			$clientData['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+			
+			if($data['clientType']==1){
+				//create loan account for member
+				$clientData['memberId'] = $data['clientId'] ;
+				$memberLoanAccount = new MemberLoanAccount();
+				$memberLoanAccountId = $memberLoanAccount->addMemberLoanAccount($clientData);
+			}else{
+				//create loan account for group
+				$clientData['groupId'] = $data['clientId'] ;
+				$saccoGroupLoanAccount = new SaccoGroupLoanAccount();
+				$accoGroupLoanAccountId = $saccoGroupLoanAccount->addSaccoGroupLoanAccount($clientData);
+			}
+			unset($clientData);
+			unset($data);
+		break;
+		case "loan_account_fee":
+			$loanAccountFee = new LoanAccountFee();
+			$loanAccounId = $data['loanAccountId'];
+			foreach($data['feePostData'] as $feeDataItem){
+				$loanAccountFeeItem['loanAccountID'] = $loanAccountId;
+				$loanAccountFeeItem['loanProductFeeID'] = $feeDataItem['id'];
+				$loanAccountFeeItem['feeAmount'] = $feeDataItem['amount'];
+				$loanAccountFeeItem['dateCreated'] = time();
+				$loanAccountFeeItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$loanAccountFeeItem['dateModified'] = time();
+				$loanAccountFeeItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$output = $loanAccountFee->addLoanAccountFee($loanAccountFeeItem);
+			}
+		break;
 		default: //the default scenario
 		break;
 	}

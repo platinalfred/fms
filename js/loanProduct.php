@@ -19,7 +19,6 @@
 		self.repaymentsMadeEveryOptions = [{id:1,desc:'Day(s)'},{id:2,desc:'Week(s)'},{id:3,desc:'Month(s)'}];
 		self.taxRateSourceOptions = [{id:1,desc:'Day'},{id:2,desc:'Week'},{id:3,desc:'Month'}];
 		
-
 		self.amountCalculatedAsOptions = [{id:1,desc:'Flat amount'},{id:2,desc:'% of Disbursement Amount'},];
 		
 		self.existingLoanProductFees = ko.observableArray();
