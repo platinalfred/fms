@@ -60,7 +60,6 @@ require_once("lib/Libraries.php");
 															<form class="form-horizontal" method="post" action="save_data.php" id="personTypeTable">
 																<input name="tbl" value="person_type" type="hidden">
 																<div class="form-group"><label class="col-lg-2 control-label">Name</label>
-
 																	<div class="col-lg-10"><input name="name" type="text" placeholder="Name" class="form-control"> <span class="help-block m-b-none">Name of the person type.</span>
 																	</div>
 																</div>
@@ -69,7 +68,7 @@ require_once("lib/Libraries.php");
 																</div>
 																<div class="form-group">
 																	<div class="col-lg-offset-2 col-lg-10">
-																		<button class="btn btn-sm btn-primary save" type="button">Submit</button>
+																		<button class="btn btn-sm btn-primary save" type="button"><i class="ti-save"></i>Submit</button>
 																	</div>
 																</div>
 															</form>
