@@ -1,9 +1,4 @@
-<!-- Knockout js -->
-<script src="js/knockout/knockout-min.js"></script>
-<script src="js/moment/min/moment.min.js"></script>
-<script src="js/plugins/daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript">
-	<?php include_once("utils.inc");?> //utility functions
 	var Dashboard = function() {
 		var self = this;
 		// Stores an array of all the Data for viewing in the Dashboard
@@ -63,6 +58,5 @@
 					  "</tfoot>";
 		return html_data;
 	}
-	<?php include_once("daterangepicker.inc");?> //daterangepicker function
  });
 </script>

@@ -16,13 +16,13 @@ class DepositProductFee extends Db {
 	}
 	
 	
-	public function add($data){
+	public function addDepositProductFee($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
 		return $result;
 	}
 	
-	public function update($data){
+	public function updateDepositProductFee($data){
 		
 		$fields = array_slice(self::$table_fields, 1);
 		$id = $data['id'];
@@ -33,7 +33,7 @@ class DepositProductFee extends Db {
 		return false;
 	}
 	
-	public function delete($id){
+	public function deleteDepositProductFee($id){
 		$this->delete(self::$table_name, "id=".$id);
 	}
 }

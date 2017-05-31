@@ -35,72 +35,10 @@ $(document).ready(function(){
 			}
 		});
 	}
-	/* Save function called when various buttons with .save are clicked */
-	function saveData(){
-		$(".save").click(function(){
-			var fmid = $(this).closest("form");
-			var frmdata = fmid.serialize();
-			var tbl_id = fmid.attr("id");
-			$.ajax({
-				url: "save_data.php",
-				type: 'POST',
-				data: frmdata,
-				success: function (response) {
-					if($.trim(response) == "success"){
-						fmid[0].reset();
-						showStatusMessage("Successfully added new record" ,"success");
-						setTimeout(function(){
-							var dt = dTable[tbl_id];
-							dt.ajax.reload();
-						}, 2000);
-					}else{//"Action not successful"
-						showStatusMessage(response, "failed");
-					}
-					
-				}
-			});
-
-			return false;
-		});
-	}
 	/*Thousands separator and creates a price format into an input */
 	$('#minimum_balance, #minAmount, #maxAmount, #defmount').priceFormat({
 		thousandsSeparator: '.'
 	});
-	function showStatusMessage(message='', display_type='success'){
-		new PNotify({
-			  title: "Alert",
-			  text: message,
-			  type: display_type,
-			  styling: 'bootstrap3',
-			  sound: true,
-			  hide:true,
-			  buttons: {
-				closer_hover: false,
-			},
-			confirm: {
-				confirm: true,
-				buttons: [{
-					text: 'Ok',
-					addClass: 'btn-primary',
-					click: function(notice) {
-						notice.remove();
-					}
-				},
-				null]
-			},
-			animate: {
-				animate: true,
-				in_class: 'zoomInLeft',
-				out_class: 'zoomOutRight'
-			},
-			  nonblock: {
-				  nonblock: true
-			  }
-			  
-		  });
-		
-	}
 /* ====  END COMMON FUNCTIONS ==== */
 	
 	$('#person_types tbody').on('click', 'tr', function () {
@@ -119,7 +57,7 @@ $(document).ready(function(){
 			  "order": [[ 1, 'asc' ]],*/
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'person_type';
@@ -179,7 +117,7 @@ $(document).ready(function(){
 			  "order": [[ 1, 'asc' ]],*/
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'account_type';
@@ -239,7 +177,7 @@ $(document).ready(function(){
 			  "order": [[ 1, 'asc' ]],*/
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'branch';
@@ -297,7 +235,7 @@ $(document).ready(function(){
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'access_level';
@@ -352,7 +290,7 @@ $(document).ready(function(){
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'income_sources';
@@ -407,7 +345,7 @@ $(document).ready(function(){
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'individual_types';
@@ -462,7 +400,7 @@ $(document).ready(function(){
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'loan_types';
@@ -517,7 +455,7 @@ $(document).ready(function(){
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'penalty_calculations';
@@ -571,7 +509,7 @@ $(document).ready(function(){
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'loan_product_penalties';
@@ -632,7 +570,7 @@ $(document).ready(function(){
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'loan_repayment_durations';
@@ -687,7 +625,7 @@ $(document).ready(function(){
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'positions';
@@ -742,7 +680,7 @@ $(document).ready(function(){
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'id_card_types';
@@ -797,7 +735,7 @@ $(document).ready(function(){
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'loan_product_types';
@@ -813,7 +751,7 @@ $(document).ready(function(){
 				  "orderable": false
 			  } */],
 			  "autoWidth": false,
-			  columns:[ { data: 'title'},
+			  columns:[ { data: 'typeName'},
 			  { data: 'description'},
 					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_account_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-loan_product_types-tblLoanProductType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
@@ -852,7 +790,7 @@ $(document).ready(function(){
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'security_types';
@@ -909,7 +847,7 @@ $(document).ready(function(){
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'relationship_types';
@@ -964,7 +902,7 @@ $(document).ready(function(){
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'address_type';
@@ -1012,14 +950,14 @@ $(document).ready(function(){
 			//$("#datatable-buttons").DataTable();
 		}
 		/*End Address Types- --*/
-		/* Address Type */
+		/* Marital Status */
 		if ($("#marital-status").length) {
 			  dTable['tblMaritalStatus'] = $('#marital-status').DataTable({
 			  dom: "lfrtipB",
 			  "processing": true,
 			  "ajax": {
 				  "url":"settings_data.php",
-				  "type": "JSON",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'marital_status';
@@ -1066,7 +1004,119 @@ $(document).ready(function(){
 			});
 			//$("#datatable-buttons").DataTable();
 		}
-		/*End Address Types- --*/
+		/*End Marital Status --*/
+		/* Loan Product */
+		if ($("#loan-product").length) {
+			  dTable['tblLoanProduct'] = $('#loan-product').DataTable({
+			  dom: "lfrtipB",
+			  "processing": true,
+			  "ajax": {
+				  "url":"settings_data.php",
+				  "dataType": "JSON",
+				  "type": "POST",
+				  "data":  function(d){
+						d.tbl = 'loan_product';
+						//d.start_date = getStartDate();
+						//d.end_date = getEndDate();
+					}
+			  },"columnDefs": [ {
+				  "targets": [3],
+				  "orderable": false,
+				  "searchable": false
+			  }/* , {
+				  "targets": [0],
+				  "orderable": false
+			  } */],
+			  "autoWidth": false,
+			  columns:[ { data: 'productName'},
+				  { data: 'description'},
+				  { data: 'typeName'},
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_loan_product" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-loan_product-tblLoanProduct" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					
+					] ,
+			  buttons: [
+				{
+				  extend: "copy",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "csv",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "excel",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "pdfHtml5",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "print",
+				  className: "btn-sm"
+				},
+			  ],
+			  responsive: true,
+			});
+			//$("#datatable-buttons").DataTable();
+		}
+		/*End Loan Product- --*/
+		/* Deposit Product */
+		if ($("#deposit-product").length) {
+			  dTable['tblDepositProduct'] = $('#deposit-product').DataTable({
+			  dom: "lfrtipB",
+			  "processing": true,
+			  "ajax": {
+				  "url":"settings_data.php",
+				  "dataType": "JSON",
+				  "type": "POST",
+				  "data":  function(d){
+						d.tbl = 'deposit_product';
+						//d.start_date = getStartDate();
+						//d.end_date = getEndDate();
+					}
+			  },"columnDefs": [ {
+				  "targets": [3],
+				  "orderable": false,
+				  "searchable": false
+			  }/* , {
+				  "targets": [0],
+				  "orderable": false
+			  } */],
+			  "autoWidth": false,
+			  columns:[ { data: 'productName'},
+			  { data: 'description'},
+				  { data: 'typeName'},
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_deposit_product" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-deposit_product-tblDepositProduct" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					
+					] ,
+			  buttons: [
+				{
+				  extend: "copy",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "csv",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "excel",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "pdfHtml5",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "print",
+				  className: "btn-sm"
+				},
+			  ],
+			  responsive: true,
+			});
+			//$("#datatable-buttons").DataTable();
+		}
+		/*End Deposit Product- --*/
 	};
 	TableManageButtons = function() {
 	  "use strict";
@@ -1082,5 +1132,7 @@ $(document).ready(function(){
 	
 	
 });
-
+	<?php include("depositProduct.php");?>
+	<?php include("loanProduct.php");?>
+	//ko.applyBindings({ depositProductModel: depositProductModel, loanProductModel: loanProductModel });
 </script>

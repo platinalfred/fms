@@ -1,11 +1,30 @@
-			<div class="row">
+<?php 
+$needed_files = array("daterangepicker", "iCheck", "jasny");
+
+$page_title = "Create Deposit Product";
+include("include/header.php"); 
+?>
+<div class="wrapper wrapper-content">
+<div class="row">
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>Deposit Product <small>Create deposit product</small></h5>
+                            <h5>Deposit Product <small>Creating deposit product</small></h5>
                             <div class="ibox-tools">
-                                <a class="" data-dismiss="modal">
-                                    <i class="fa fa-times lg" style="color:red;"></i>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">Config option 1</a>
+                                    </li>
+                                    <li><a href="#">Config option 2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </div>
                         </div>
@@ -29,9 +48,9 @@
 
                                     <div class="col-sm-6">
 										<label class="control-label">Type of Deposit Product</label>
-										<select class="form-control" id="productType" name="productType" data-bind='options: productTypes, optionsText: "typeName", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: productType' data-msg-required="Deposit product type is required">
+										<select class="form-control m-b" id="productType" name="productType" data-bind='options: productTypes, optionsText: "typeName", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: productType' data-msg-required="Deposit product type is required">
 										</select>
-										<div data-bind="with: productType"><span class="help-block-none"><small data-bind="text: description">Product description goes here.</small></span></div>
+										<div data-bind="with: productType"><span class="help-block m-b-none"><small data-bind="text: description">Product description goes here.</small></span></div>
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
@@ -48,7 +67,7 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
 									<div class="col-sm-12">
-											<div class="i-checks"><label> <input type="checkbox" data-bind="checked: interestRateApplicable"/> <i></i> Interest paid into account <sup data-toggle="tooltip" title="Select if interest should be paid into the account" data-placement="right"><i class="fa fa-question-circle"></i><sup></label><label data-bind="text: interestRateApplicable"></label></div>
+											<div class="i-checks"><label title="Select if interest should be paid into the account"> <input type="checkbox" data-bind="checked: interestRateApplicable"> <i></i> Interest paid into account </label></div>
 									</div>
                                 </div>
                                 <div class="form-group" data-bind="visible: interestRateApplicable">
@@ -68,23 +87,23 @@
                                 <div class="form-group" data-bind="visible: interestRateApplicable">
                                     <div class="col-sm-4">
 										<label class="control-label">What account balance is used for calculations</label>
-										<select class="form-control" id="accountBalForCalcInterest" name="accountBalForCalcInterest" data-bind='options: dropDowns.accountBalForCalcInterestOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: accountBalForCalcInterest'>
+										<select class="form-control m-b" id="accountBalForCalcInterest" name="accountBalForCalcInterest" data-bind='options: dropDowns.accountBalForCalcInterestOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: accountBalForCalcInterest'>
 										</select>
                                     </div>
                                     <div class="col-sm-4">
 										<label class="control-label">When is the interest paid into the account</label>
-										<select class="form-control" id="whenInterestIsPaid" name="whenInterestIsPaid" data-bind='options: dropDowns.whenInterestIsPaidOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: whenInterestIsPaid'>
+										<select class="form-control m-b" id="whenInterestIsPaid" name="whenInterestIsPaid" data-bind='options: dropDowns.whenInterestIsPaidOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: whenInterestIsPaid'>
 										</select>
                                     </div>
                                     <div class="col-sm-4">
 										<label class="control-label">Days in year</label>
-										<select class="form-control" id="daysInYear" name="daysInYear" data-bind='options: dropDowns.daysInYearOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: daysInYear'>
+										<select class="form-control m-b" id="daysInYear" name="daysInYear" data-bind='options: dropDowns.daysInYearOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: daysInYear'>
 										</select>
                                     </div>
                                 </div>
                                 <div class="form-group" data-bind="visible: interestRateApplicable">
 									<div class="col-sm-12">
-											<div class="i-checks"><label> <input type="checkbox" value="" name="applyWHTonInterest" id="applyWHTonInterest" data-bind="value: applyWHTonInterest"> <i></i> Apply withholding taxes <sup data-toggle="tooltip" title="Apply withholding taxes on the interest paid into account" data-placement="right"><i class="fa fa-question-circle"></i><sup></label></div>
+											<div class="i-checks" title="Apply withholding taxes on the interest paid into account"><label> <input type="checkbox" value="" name="applyWHTonInterest" id="applyWHTonInterest" data-bind="value: applyWHTonInterest"> <i></i> Apply withholding taxes </label></div>
 									</div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
@@ -100,13 +119,13 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
 									<div class="col-md-12">
-										<div><label class="control-label">Term Length Constraints <sup data-toggle="tooltip" title="Period of time before which a client start withdrawing from the account" data-placement="right"><i class="fa fa-question-circle"></i><sup></label>
+										<div><label class="control-label" title="Period of time before which a withdraw can be made">Term Length Constraints</label>
 										</div>
 										<div>
 											<label class="col-sm-1 control-label">Default</label><div class="col-sm-2"><input type="number" class="form-control input-sm" name="defaultTermLength" id="defaultTermLength" data-bind="value: defaultTermLength"></div><label class="col-sm-1 control-label">Min</label><div class="col-sm-2"><input type="number" class="form-control input-sm" id="minTermLength" name="minTermLength" data-bind="value: minTermLength"></div><label class="col-sm-1 control-label">Max</label><div class="col-sm-2"><input type="number" class="form-control input-sm" name="maxTermLength" id="maxTermLength" data-bind="value: maxTermLength"></div>
-											<label class="col-sm-1 control-label">Unit<sup data-toggle="tooltip" title="Unit of time for the term length" data-placement="right"><i class="fa fa-question-circle"></i><sup></label>
+											<label class="col-sm-1 control-label" title="Unit of time for the term length">Unit</label>
 											<div class="col-sm-2">
-											<select class="form-control" id="termTimeUnit" name="termTimeUnit" data-bind='options: dropDowns.termTimeUnitOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: termTimeUnit' data-msg-required="Unit for term length is required">
+											<select class="form-control m-b" id="termTimeUnit" name="termTimeUnit" data-bind='options: dropDowns.termTimeUnitOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: termTimeUnit' data-msg-required="Unit for term length is required">
 											</select>
 											</div>
 										</div>
@@ -115,7 +134,7 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
 									<div class="col-sm-12">
-											<div class="i-checks"><label> <input type="checkbox" data-bind="checked: allowArbitraryFee"> Allow arbitrary fees  <sup data-toggle="tooltip" title="Fees which can be applied manually to the accounts at any point during the deposit account's lifetime and with any given amount" data-placement="right"><i class="fa fa-question-circle"></i><sup></label></div>
+											<div class="i-checks"><label title="Fees which can be applied manually to the accounts at any point during the deposit account's lifetime and with any given amount"> <input type="checkbox" data-bind="checked: allowArbitraryFee"> <i></i> Allow arbitrary fees </label></div>
 									</div>
                                 </div>
                                 <div class="table-responsive">
@@ -131,11 +150,11 @@
 										</thead>
 										<tbody data-bind="foreach: $root.productFees">
 											<tr>
-												<td><input class="form-control input-sm required" name="feeName[]" data-bind='value: feeName, uniqueName: true' data-msg-required="Fee name is required" required/></td>
-												<td><input class="form-control input-sm required" name="amount[]" type="number" data-bind='value: amount' data-msg-required="Amount is required" required/></td>
-												<td><select class="form-control" id="chargeTrigger" name="chargeTrigger" data-bind='options: $root.dropDowns.chargeTriggerOptions, optionsText: "desc", optionsCaption: "Select...", , optionsAfterRender: $parent.setOptionValue("id"), value: chargeTrigger' data-msg-required="Charge trigger is required">
+												<td><input class="form-control input-sm m-b required" name="feeName[]" data-bind='value: feeName, uniqueName: true' data-msg-required="Fee name is required" required/></td>
+												<td><input class="form-control input-sm m-b required" name="amount[]" type="number" data-bind='value: amount' required/></td>
+												<td><select class="form-control m-b" id="chargeTrigger" name="chargeTrigger" data-bind='options: dropDowns.chargeTriggerOptions, optionsText: "desc", optionsCaption: "Select...", , optionsAfterRender: $parent.setOptionValue("id"), value: chargeTrigger' data-msg-required="Charge trigger is required">
 												</select></td>
-												<td data-bind='with: chargeTrigger'><select class="form-control " id="dateApplicationMethod" name="dateApplicationMethod" data-bind='visible: id==2, options: $root.dropDowns.dateApplicationMethodOptions, optionsText: "desc", , optionsAfterRender: $root.setOptionValue("id"), optionsCaption: "Select...", value: $parent.dateApplicationMethod'>
+												<td data-bind='with: chargeTrigger'><select class="form-control m-b " id="dateApplicationMethod" name="dateApplicationMethod" data-bind='visible: id==2, options: dropDowns.dateApplicationMethodOptions, optionsText: "desc", , optionsAfterRender: $root.setOptionValue("id"), optionsCaption: "Select...", value: $parent.dateApplicationMethod'>
 												</select><!-- to be used later , css: {required:id==2} --></td>
 												<td><span title="Remove fee" class="btn text-danger" data-bind='click: $root.removeFee'><i class="fa fa-minus"></i></span></td>
 											</tr>
@@ -156,4 +175,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
+			</div>
+<?php 
+	include("include/footer.php"); 
+	include("js/depositProduct.php");
+?>
+
+ </body>
+
+</html>

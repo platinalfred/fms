@@ -16,17 +16,17 @@ class LoanProductFeen extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
-	public function add($data){
+	public function addLoanProductFeen($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
 		return $result;
 	}
 	
-	public function update($data){
+	public function updateLoanProductFeen($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
-		if($this->update(self::$table_name, $table_fields, $this->generateAddFields($fields, $data), "id=".$id)){
+		if($this->updateLoanProductFeen(self::$table_name, $table_fields, $this->generateAddFields($fields, $data), "id=".$id)){
 			return true;
 		}
 		return false;

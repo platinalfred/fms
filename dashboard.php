@@ -3,13 +3,13 @@
 	include specific plugin files that you need on a page by  adding the names as below in the array
 	dataTables, ChartJs,iCheck,daterangepicker,clockpicker,colorpicker,datapicker,easypiechart,fullcalendar,idle-timer,morris, nouslider, summernote,validate,wow,video,touchspin,Sparkline,Flot, Peity, Jvectormap, touchspin, select2, daterangepicker, clockpicker, ionRangeSlider, datapicker, nouslider, jasny, switchery, cropper, colorpicker, steps, dropzone, bootstrap-markdown
 */
-$needed_files = array("daterangepicker", "iCheck", "jasny");
+$needed_files = array("daterangepicker", "iCheck", "jasny", "knockout", "ChartJS");
 
 $page_title = "Dashboard";
 include("include/header.php"); 
 ?>
 
-		<div class="wrapper wrapper-content" data-bind='with: dashboardData'>
+		<div data-bind='with: dashboardData'>
 			<div class="row">
 				<div class="col-lg-4">
 					<div class="ibox float-e-margins">
@@ -367,58 +367,7 @@ include("include/header.php");
 							</div>
 
 -->
-		<div class="footer">
-			<div>
-				<strong>Copyright</strong> Buladde Fincial Services &copy; 2017 <?php if(date("Y") > 2017 ){ echo "- ".date("Y"); } ?>
-			</div>
-		</div>
-
-	</div>
-</div>
-
-    <!-- Mainly scripts -->
-    <script src="js/jquery-2.1.1.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
-    <!-- Flot -->
-    <script src="js/plugins/flot/jquery.flot.js"></script>
-    <script src="js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-    <script src="js/plugins/flot/jquery.flot.spline.js"></script>
-    <script src="js/plugins/flot/jquery.flot.resize.js"></script>
-    <script src="js/plugins/flot/jquery.flot.pie.js"></script>
-    <script src="js/plugins/flot/jquery.flot.symbol.js"></script>
-    <script src="js/plugins/flot/curvedLines.js"></script>
-
-    <!-- Peity -->
-    <script src="js/plugins/peity/jquery.peity.min.js"></script>
-    <script src="js/demo/peity-demo.js"></script>
-
-    <!-- Custom and plugin javascript -->
-    <script src="js/inspinia.js"></script>
-    <script src="js/plugins/pace/pace.min.js"></script>
-
-    <!-- jQuery UI -->
-    <script src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
-
-    <!-- Jvectormap -->
-    <script src="js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
-    <script src="js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-
-    <!-- Sparkline -->
-    <script src="js/plugins/sparkline/jquery.sparkline.min.js"></script>
-
-    <!-- Sparkline demo data  -->
-    <script src="js/demo/sparkline-demo.js"></script>
-
-    <!-- ChartJS-->
-    <!--script src="js/plugins/chartJs/Chart.min.js"></script-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-	<?php 
-	include("js/dash.php");
-	?>
-
- </body>
-
-</html>
+<?php
+include("include/footer.php"); 
+include("js/dash.php");
+?>

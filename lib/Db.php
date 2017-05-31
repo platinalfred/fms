@@ -590,6 +590,7 @@ class Db{
 			$q->close();
 			return $res;
 		}
+		return false;
 	}
 	function getarrayunique($table, $where, $ordby, $limit) {
 		$out = array();

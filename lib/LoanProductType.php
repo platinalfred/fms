@@ -17,13 +17,13 @@ class LoanProductType extends Db {
 	}
 	
 	
-	public function add($data){
+	public function addProductType($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
 		return $result;
 	}
 	
-	public function update($data){
+	public function updateProductType($data){
 		
 		$fields = array_slice(self::$table_fields, 1);
 		$id = $data['id'];
@@ -34,7 +34,7 @@ class LoanProductType extends Db {
 		return false;
 	}
 	
-	public function delete($id){
+	public function deleteProductType($id){
 		$this->delete(self::$table_name, "id=".$id);
 	}
 }

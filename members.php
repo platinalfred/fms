@@ -1,10 +1,10 @@
 <?php 
 $needed_files = array("dataTables", "iCheck", "steps", "jasny");
+$page_title = "Members";
 include("include/header.php"); 
 require_once("lib/Libraries.php");
 $member = new Member();
 ?>
-<div class="wrapper wrapper-content  animated fadeInRight">
 	<div class="row">
 		<?php include("add_member_modal.php"); ?>
 		<div class="col-sm-8">
@@ -1134,10 +1134,9 @@ $member = new Member();
 				</div>
 			</div>
 		</div>
+	</div>
 	
 			
-	</div>
-</div>
 <?php 
  include("include/footer.php");
  ?>
@@ -1179,7 +1178,7 @@ $(document).ready(function(){
 		  "order": [[ 1, 'asc' ]],/**/
 		  "ajax": {
 			  "url":"settings_data.php",
-			  "type": "JSON",
+			  "dataType": "JSON",
 			  "type": "POST",
 			  "data":  function(d){
 					d.tbl = 'person_type';

@@ -3,28 +3,29 @@
 	include specific plugin files that you need on a page by  adding the names as below in the array
 	dataTables, ChartJs,iCheck,daterangepicker,clockpicker,colorpicker,datapicker,easypiechart,fullcalendar,idle-timer,morris, nouslider, summernote,validate,wow,video,touchspin,Sparkline,Flot, Peity, Jvectormap, touchspin, select2, daterangepicker, clockpicker, ionRangeSlider, datapicker, nouslider, jasny, switchery, cropper, colorpicker, steps, dropzone, bootstrap-markdown
 */
-$needed_files = array("dataTables", "iCheck", "jasny");
-include("include/header.php"); 
+$needed_files = array("dataTables", "iCheck", "jasny", "knockout");
+$page_title = "Settings";
+include("include/header.php");
 require_once("lib/Libraries.php");
-
 ?>
-<div class="wrapper wrapper-content  animated fadeInRight">
 	<div class="row wrapper border-bottom white-bg page-heading">
 		<div class="col-lg-12  m-b-md" style="padding-top:10px;">
 			<div class="tabs-container">
 				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#tab-1" href="#">Person Types</a></li>
+					<li class="active"><a data-toggle="tab" href="#tab-20" href="#">Loan Products</a></li>
+					<li><a data-toggle="tab" href="#tab-21" href="#">Deposit Products</a></li>
+					<li><a data-toggle="tab" href="#tab-1" href="#">Person Types</a></li>
 					<li class=""><a data-toggle="tab" href="#tab-2" href="#">Account Types</a></li>
 					<li class=""><a data-toggle="tab" href="#tab-3" href="#">Branches</a></li>
 					<li class=""><a data-toggle="tab" href="#tab-5" href="#">Access Levels</a></li>
 					<li class=""><a data-toggle="tab" href="#tab-6" href="#">Id Card Types</a></li>
-					<li class=""><a data-toggle="tab" href="#tab-7" href="#">Income Sources</a></li>
-					<li class=""><a data-toggle="tab" href="#tab-8" href="#">Individual Types</a></li>
-					<li class=""><a data-toggle="tab" href="#tab-9" href="#">Loan Product Types</a></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">More <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<!--<li class=""><a data-toggle="tab" role="tab" href="#tab-11" href="#">Loan Types</a></li>-->
+							<li class=""><a data-toggle="tab" href="#tab-7" href="#">Income Sources</a></li>
+							<li class=""><a data-toggle="tab" href="#tab-8" href="#">Individual Types</a></li>
+							<li class=""><a data-toggle="tab" href="#tab-9" href="#">Loan Product Types</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-12" href="#">Penalty Calculation Method</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-13" href="#">Loan Product Penalties</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-14" href="#">Relationhip Types </a></li>
@@ -38,7 +39,7 @@ require_once("lib/Libraries.php");
 				</ul>
 				<div class="tab-content">
 					<!---  Person Type Start   --->
-					<div id="tab-1" class="tab-pane active">
+					<div id="tab-1" class="tab-pane">
 						<div class="panel-body">
 							<div class="col-lg-2 col-offset-sm-8">
 								<div class="text-center">
@@ -610,7 +611,7 @@ require_once("lib/Libraries.php");
 							
 						</div>
 					</div>
-					<!-- Loan TYPE Start -->		
+					<!-- Penalty Calculation Method Start -->		
 					<div id="tab-12" class="tab-pane ">
 						<div class="panel-body">
 							<div class="col-lg-2 col-offset-sm-8">
@@ -718,7 +719,7 @@ require_once("lib/Libraries.php");
 																<div class="form-group"><label class="col-lg-2 control-label">Description</label>
 																	<div class="col-lg-10"><textarea  placeholder="Description" class="form-control"></textarea></div>
 																</div>
-																<div class="form-group"><label class="col-lg-2 control-label">Penalty Charges AS</label>
+																<div class="form-group"><label class="col-lg-2 control-label">Penalty Charged AS</label>
 																	<div class="col-lg-5">
 																		<div class="i-checks"><label> <input type="radio" value="option1" name="a"> <i></i> (%) </label></div>
 																		<div class="i-checks"><label> <input type="radio" checked="" value="option2" name="a"> <i></i>(Amount) </label></div>
@@ -1195,12 +1196,105 @@ require_once("lib/Libraries.php");
 							
 						</div>
 					</div>
-					<!-- Marital Status -->
+					<!-- End Marital Status -->
+					<!-- Loan Products -->
+					<div id="tab-20" class="tab-pane active">
+						<div class="panel-body">
+							<div class="col-lg-2 col-offset-sm-8">
+								<div class="text-center">
+									<a data-toggle="modal" class="btn btn-primary" href="#loan_products"><i class="fa fa-plus"></i> Add Loan Product</a>
+								</div>
+								<div id="loan_products" class="modal fade" aria-hidden="true">
+									<div class="modal-dialog modal-lg">
+										<div class="modal-content">
+											<div class="modal-body">
+												<?php include_once("loan_product.php");?>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+							<div class="col-lg-12" style="margin-top:10px;">
+								<div class="ibox-content">
+									<div class="table-responsive">
+										<table class="table table-striped table-bordered table-hover" id="loan-product">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Product Type</th>
+													<th>Edit / Delete</th>
+												</tr>
+											</thead>
+											<tbody></tbody>
+											<tfoot>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Product Type</th>
+													<th></th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					<!-- End Loan Products -->
+					<!-- Deposit Products -->
+					<div id="tab-21" class="tab-pane">
+						<div class="panel-body">
+							<div class="col-lg-2 col-offset-sm-8">
+								<div class="text-center">
+									<a data-toggle="modal" class="btn btn-primary" href="#deposit_product"><i class="fa fa-plus"></i> Add Deposit Product</a>
+								</div>
+								<div id="deposit_product" class="modal fade" aria-hidden="true">
+									<div class="modal-dialog modal-lg">
+										<div class="modal-content">
+											<div class="modal-body">
+												<?php include_once("deposit_product.php");?>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+							<div class="col-lg-12" style="margin-top:10px;">
+								<div class="ibox-content">
+									<div class="table-responsive">
+										<table class="table table-striped table-bordered table-hover" id="deposit-product">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Product Type</th>
+													<th>Edit / Delete</th>
+												</tr>
+											</thead>
+											<tbody></tbody>
+											<tfoot>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Product Type</th>
+													<th></th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					<!-- End Loan Products -->
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 <?php
 include("include/footer.php"); 
 include("js/settings_js.php");

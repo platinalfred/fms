@@ -1,4 +1,4 @@
-//format numbers to currency format
+<script>//format numbers with thousands separator
 function curr_format(n) {
 	var formatted = "";
 	if(n<0){
@@ -85,25 +85,73 @@ function draw_pie_chart(url_data){
         responsive: true
     }
 	});
-}	
-ko.bindingHandlers.attrToggle = {
-    update: function(element, valueAccessor, allBindings) {
-        // First get the latest data that we're bound to
-        var value = valueAccessor();
- 
-        // Next, whether or not the supplied model property is observable, get its current value
-        var valueUnwrapped = ko.unwrap(value);
- 
-        // Grab some more data from another binding property
-        var duration = allBindings.get('slideDuration') || 400; // 400ms is default duration unless otherwise specified
- 
-        // Now manipulate the DOM element
-        if (valueUnwrapped == true)
-            $(element).attr("required",""); // Add required attribute to element
-        else
-            $(element).attr(duration);   // Remove required from element
-    }
-};
+}
+
+/* Save function called when various buttons with .save are clicked */
+function saveData(){
+	$(".save").click(function(){
+		var fmid = $(this).closest("form");
+		var frmdata = fmid.serialize();
+		var tbl_id = fmid.attr("id");
+		$.ajax({
+			url: "save_data.php",
+			type: 'POST',
+			data: frmdata,
+			success: function (response) {
+				if($.trim(response) == "success"){
+					fmid[0].reset();
+					showStatusMessage("Successfully added new record" ,"success");
+					setTimeout(function(){
+						var dt = dTable[tbl_id];
+						dt.ajax.reload();
+					}, 2000);
+				}else{//"Action not successful"
+					showStatusMessage(response, "failed");
+				}
+				
+			}
+		});
+
+		return false;
+	});
+}
+	
+// Displays an alert message
+function showStatusMessage(message='', display_type='success'){
+	new PNotify({
+		  title: "Alert",
+		  text: message,
+		  type: display_type,
+		  styling: 'bootstrap3',
+		  sound: true,
+		  hide:true,
+		  buttons: {
+			closer_hover: false,
+		},
+		confirm: {
+			confirm: true,
+			buttons: [{
+				text: 'Ok',
+				addClass: 'btn-primary',
+				click: function(notice) {
+					notice.remove();
+				}
+			},
+			null]
+		},
+		animate: {
+			animate: true,
+			in_class: 'zoomInLeft',
+			out_class: 'zoomOutRight'
+		},
+		  nonblock: {
+			  nonblock: true
+		  }
+		  
+	  });
+	
+}
 /*$(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })*/
+</script>

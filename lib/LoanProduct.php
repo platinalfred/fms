@@ -4,7 +4,9 @@ require_once($curdir.'/Db.php');
 class LoanProduct extends Db {
 	protected static $table_name  = "loan_products";
 	
-	protected static $table_fields = array("id", "productName", "description", "productType", "active", "availableTo", "defAmount", "minAmount", "maxAmount", "maxTranches", "defInterest", "minInterest", "maxInterest", "repaymentsFrequency", "repaymentsMadeEvery", "repaymentInstallments", "minRepaymentInstallments", "maxRepaymentInstallments", "daysOfYear", "intialAccountState", "defGracePeriod", "minGracePeriod", "maxGracePeriod", "minCollateralRequired", "minGuarantorsRequired", "defaultOffSet", "minOffSet", "maxOffSet", "penaltyApplicable", "taxRateSource", "taxCalculationMethod", "linkToLoanAccount", "createdBy", "dateCreated", "dateModified", "modifiedBy");
+	protected static $table_fields = array("id", "productName", "description", "productType", "active", "availableTo", "defAmount", "minAmount", "maxAmount", "maxTranches", "defInterest", "minInterest", "maxInterest", "repaymentsFrequency", "repaymentsMadeEvery", "defRepaymentInstallments", "minRepaymentInstallments", "maxRepaymentInstallments", "daysOfYear", "intialAccountState", "defGracePeriod", "minGracePeriod", "maxGracePeriod", "minCollateral", "minGuarantors", "defOffSet", "minOffSet", "maxOffSet", "penaltyCalculationMethodId", "penaltyTolerancePeriod", "penaltyRateChargedPer", "defPenaltyRate", "minPenaltyRate", "maxPenaltyRate", "taxRateSource", "taxCalculationMethod", "linkToDepositAccount", "createdBy", "dateCreated", "dateModified", "modifiedBy");
+	
+	//"penaltyApplicable", 
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -16,14 +18,21 @@ class LoanProduct extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
+	public function getDtData(){
+		$fields = "`loan_products`.`id`,`productName`,`loan_products`.`description`,`typeName`";
+		$table2 = " JOIN `loan_product_type` ON `loan_product_type`.`id` = `loan_products`.`productType`";
+		$result_array = $this->getfarray(self::$table_name.$table2, $fields, "", "", "");
+		return !empty($result_array) ? $result_array : false;
+	}
 	
-	public function add($data){
+	
+	public function addLoanProduct($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
 		return $result;
 	}
 	
-	public function update($data){
+	public function updateLoanProduct($data){
 		
 		$fields = array_slice(self::$table_fields, 1);
 		$id = $data['id'];
@@ -34,7 +43,7 @@ class LoanProduct extends Db {
 		return false;
 	}
 	
-	public function delete($id){
+	public function deleteLoanProduct($id){
 		$this->delete(self::$table_name, "id=".$id);
 	}
 }

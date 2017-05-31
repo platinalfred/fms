@@ -1,9 +1,10 @@
+			</div>
 			<div class="footer">
                 <div class="pull-right">
                     10GB of <strong>250GB</strong> Free.
                 </div>
                 <div>
-                    <strong>Copyright</strong> Example Company &copy; 2014-2015
+                    <strong>Copyright</strong> Buladde Financial Services &copy; 2017
                 </div>
             </div>
 
@@ -15,6 +16,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script -->
 	 <!-- Form Validate -->
 	<script src="js/jquery.validate.min.js" type="text/javascript"></script>
 	
@@ -23,7 +25,11 @@
     <script src="js/plugins/pace/pace.min.js"></script>
 	<!-- Pricing Format -->
 	<script type="text/javascript" src="js/jquery.priceformat.min.js"></script>
-	<?php
+	<?php if(in_array("knockout", $needed_files)){ ?>
+		<!-- Knockout js -->
+		<script src="js/knockout/knockout-min.js"></script>
+	<?php 
+	}
 	if(in_array("dataTables", $needed_files)){
 		?>
 		<script src="js/plugins/dataTables/datatables.min.js"></script>
@@ -60,11 +66,6 @@
 		</script>
 		<?php 
 	}
-	if(in_array("daterangepicker", $needed_files)){ ?>
-		<!-- bootstrap-daterangepicker -->
-		
-	<?php 
-	} 
 	if(in_array("Morris", $needed_files)){ ?>
 		<!-- Morris -->
 		    <script src="js/plugins/morris/raphael-2.1.0.min.js"></script>
@@ -102,8 +103,9 @@
 	}
 	if(in_array("ChartJS", $needed_files)){ ?>
 		<!-- ChartJS-->
-		 <script src="js/plugins/chartJs/Chart.min.js"></script>
-		<script src="js/demo/chartjs-demo.js"></script>
+		 <!-- script src="js/plugins/chartJs/Chart.min.js"></script -->
+		<!-- script src="js/demo/chartjs-demo.js"></script -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 	<?php 
 	}
 	if(in_array("c3", $needed_files)){ ?>
@@ -116,6 +118,11 @@
 	if(in_array("chosen", $needed_files)){ ?>
 		  <!-- Chosen -->
 		<script src="js/plugins/chosen/chosen.jquery.js"></script>
+		<script>
+			$(document).ready(function () {
+				$(".chosen-select").chosen();
+			});
+		</script>
 	<?php 
 	}
 	if(in_array("colorpicker", $needed_files)){ ?>
@@ -147,8 +154,8 @@
 		<script src="js/plugins/nouslider/jquery.nouislider.min.js"></script>
 	<?php 
 	}
-	if(in_array("datapicker", $needed_files)){ ?>
-		 <!-- Data picker -->
+	if(in_array("datepicker", $needed_files)){ ?>
+		 <!-- Date picker -->
 		<script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
 	<?php 
 	}
@@ -164,7 +171,13 @@
 	}
 	if(in_array("daterangepicker", $needed_files)){ ?>
 			 <!-- Date range picker -->
+		<script src="js/moment/min/moment.min.js"></script>
 		<script src="js/plugins/daterangepicker/daterangepicker.js"></script>
+		<script>
+			$(document).ready(function () {
+				<?php include_once("./js/daterangepicker.inc"); //daterangepicker function?>
+			});
+		</script>
 	<?php 
 	}
 	if(in_array("select2", $needed_files)){ ?>
@@ -187,7 +200,7 @@
 		<script src="js/plugins/validate/jquery.validate.min.js"></script>
 	<?php 
 	}
-	if(in_array("validate", $needed_files)){ ?>
+	if(in_array("dropzone", $needed_files)){ ?>
 	  <!-- DROPZONE -->
 		<script src="js/plugins/dropzone/dropzone.js"></script>
 	<?php 
@@ -203,8 +216,9 @@
 		<script src="js/plugins/bootstrap-markdown/markdown.js"></script>
 	<?php 
 	}
-
-	?><!-- PNotify -->
+	?>
+	<?php include_once("./js/utils.inc");//utility functions?>
+	<!-- PNotify -->
 	<script src="js/plugins/pnotify/dist/pnotify.js"></script>
 	<script src="js/plugins/pnotify/dist/pnotify.buttons.js"></script>
 	<script src="js/plugins/pnotify/dist/pnotify.nonblock.js"></script>

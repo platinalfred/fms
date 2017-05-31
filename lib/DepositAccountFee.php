@@ -1,10 +1,9 @@
 <?php
 $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
-class DepositProductType extends Db {
-	protected static $table_name  = "deposit_product_type";
-	
-	protected static $table_fields = array("id", "typeName", "description", "dateCreated", "createdBy", "dateModified", "modifiedBy");
+class DepositAccountFee extends Db {
+	protected static $table_name  = "deposit_accountfee";
+	protected static $table_fields = array("id", "depositProductFeeId", "amount", "dateCreated", "createdBy", "dateModified", "modifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -16,14 +15,16 @@ class DepositProductType extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
-	public function addDepositProductType($data){
+	
+	public function addDepositAccountFee($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
 		return $result;
 	}
 	
-	public function updateDepositProductType($data){
-		$fields = array_slice(1, self::$table_fields);
+	public function updateDepositAccountFee($data){
+		
+		$fields = array_slice(self::$table_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
 		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){
@@ -32,7 +33,7 @@ class DepositProductType extends Db {
 		return false;
 	}
 	
-	public function deleteDepositProductType($id){
+	public function deleteDepositAccountFee($id){
 		$this->delete(self::$table_name, "id=".$id);
 	}
 }

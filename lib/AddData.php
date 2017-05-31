@@ -11,7 +11,7 @@ if(isset($_POST['origin'])){
 			$data['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			$data['dateModified'] = time();
 			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-			$output = $depositProduct->add($data);
+			$output = $depositProduct->addDepositProduct($data);
 		break;
 		case "deposit_product_fee":
 			$depositProductFee = new DepositProductFee();
@@ -22,7 +22,7 @@ if(isset($_POST['origin'])){
 				$feeDataItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				$feeDataItem['dateModified'] = time();
 				$feeDataItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-				$output = $depositProductFee->add($feeDataItem);
+				$output = $depositProductFee->addDepositProductFee($feeDataItem);
 			}
 		break;
 		case "loan_product":
@@ -31,11 +31,13 @@ if(isset($_POST['origin'])){
 			$data['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			$data['dateModified'] = time();
 			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-			$output = $loanProduct->add($data);
+			unset($data['origin']);
+			//print_r($data);
+			$output = $loanProduct->addLoanProduct($data);
 		break;
 		case "loan_product_fee":
 			$loanProductFee = new LoanProductFee();
-			$productId = $data['productId'];
+			//$productId = $data['productId'];
 			$productFees = array();
 			foreach($data['feePostData'] as $feeDataItem){
 				/* $feeDataItem['dateCreated'] = time();
@@ -43,7 +45,7 @@ if(isset($_POST['origin'])){
 				$feeDataItem['dateModified'] = time();
 				$feeDataItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;$feeDataItem['depositProductID'] = $productId;
 				 */
-				$productFees[] = $loanProductFee->add($feeDataItem);
+				$productFees[] = $loanProductFee->addLoanProductFee($feeDataItem);
 			}
 			$output = json_encode($productFees);
 		break;
@@ -51,18 +53,56 @@ if(isset($_POST['origin'])){
 			$loanProductFeen = new LoanProductFeen();
 			$loanProductId = $data['productId'];
 			$loanProductFees = array();
-			foreach($data['feePostData'] as $feeDataItem){
+			foreach($data['productFeePostData'] as $productFeeDataItem){
 				$loanProductFees['dateCreated'] = time();
 				$loanProductFees['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				$loanProductFees['dateModified'] = time();
 				$loanProductFees['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				$loanProductFees['loanProductId'] = $loanProductId;
-				$loanProductFees['loanProductFeeId'] = $feeDataItem;
-				$loanProductFee->add($loanProductFees);
+				$loanProductFees['loanProductFeeId'] = $productFeeDataItem;
+				$output = $loanProductFeen->addLoanProductFeen($loanProductFees);
 			}
-			$output = json_encode($loanProductFees);
 		break;
-		default:
+		case "deposit_account":
+			$depositAccount = new DepositAccount();
+			$data['dateCreated'] = time();
+			$data['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+			$data['dateModified'] = time();
+			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+			
+			$output = $depositAccount->addDepositAccount($data);
+			$data['depositAccountId'] = $output ;
+			unset($data['openingBalance']);
+			unset($data['termLength']);
+			unset($data['interestRate']);
+			
+			if($data['clientType']==1){
+				//create deposit account for member
+				$data['memberId'] = $data['clientId'] ;
+				unset($data['clientId']);
+				$memberDepositAccount = new MemberDepositAccount();
+				$memberDepositAccountId = $memberDepositAccount->addMemberDepositAccount($data);
+			}else{
+				//create deposit account for group
+				$data['groupId'] = $data['clientId'] ;
+				unset($data['clientId']);
+				$saccoGroupDepositAccount = new SaccoGroupDepositAccount();
+				$accoGroupDepositAccountId = $saccoGroupDepositAccount->addSaccoGroupDepositAccount($data);
+			}
+		break;
+		case "deposit_account_fee":
+			$depositAccountFee = new DepositAccountFee();
+			$depositAccounId = $data['depositAccountId'];
+			foreach($data['feePostData'] as $feeDataItem){
+				$feeDataItem['depositAccountID'] = $depositAccountId;
+				$feeDataItem['dateCreated'] = time();
+				$feeDataItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$feeDataItem['dateModified'] = time();
+				$feeDataItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$output = $depositAccountFee->addDepositAccountFee($feeDataItem);
+			}
+		break;
+		default: //the default scenario
 		break;
 	}
 	echo $output;

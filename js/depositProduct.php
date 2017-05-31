@@ -1,16 +1,5 @@
-<!-- Knockout js -->
-<script src="js/knockout/knockout-min.js"></script>
-<script type="text/javascript">
-	<?php include_once("utils.inc");?> //utility functions
-	var dropDowns = new Object();
-	dropDowns.termTimeUnitOptions = [{id:1,desc:'Days'},{id:2,desc:'Weeks'},{id:3,desc:'Months'}];
-	dropDowns.daysInYearOptions = [{id:1,desc:'Actual/365 Fixed(365 days)'},{id:2,desc:'30 Day month (360 days)'}];
-	dropDowns.whenInterestIsPaidOptions = [{id:1,desc:'First day of every month'},{id:2,desc:'Date when account was created'}];
-	dropDowns.accountBalForCalcInterestOptions = [{id:1,desc:'Average daily balance'},{id:2,desc:'Minimum balance on a given day'}];
-	dropDowns.chargeTriggerOptions = [{id:1,desc:'Manual'},{id:2,desc:'Monthly Fee'}];
-	dropDowns.dateApplicationMethodOptions = [{id:1,desc:'Monthly from Activation'},{id:2,desc:'Monthly from Start of Month'}];
 	
-	var ProductFee = function() {
+	var DepositProductFee = function() {
 			var self = this;
 			self.chargeTrigger = ko.observable(),
 			self.feeName = ko.observable(),
@@ -18,8 +7,17 @@
 			self.dateApplicationMethod = ko.observable();
 		};
 	
-	var Product = function() {
+	var DepositProduct = function() {
 		var self = this;
+		self.dropDowns = new Object();
+		
+		self.dropDowns.termTimeUnitOptions = [{id:1,desc:'Days'},{id:2,desc:'Weeks'},{id:3,desc:'Months'}];
+		self.dropDowns.daysInYearOptions = [{id:1,desc:'Actual/365 Fixed(365 days)'},{id:2,desc:'30 Day month (360 days)'}];
+		self.dropDowns.whenInterestIsPaidOptions = [{id:1,desc:'First day of every month'},{id:2,desc:'Date when account was created'}];
+		self.dropDowns.accountBalForCalcInterestOptions = [{id:1,desc:'Average daily balance'},{id:2,desc:'Minimum balance on a given day'}];
+		self.dropDowns.chargeTriggerOptions = [{id:1,desc:'Manual'},{id:2,desc:'Monthly Fee'}];
+		self.dropDowns.dateApplicationMethodOptions = [{id:1,desc:'Monthly from Activation'},{id:2,desc:'Monthly from Start of Month'}];
+		
 		self.productFees = ko.observableArray();
 		self.availableToCb = ko.observableArray();
 		// Stores an array of all the Data for viewing on the page
@@ -54,18 +52,24 @@
 			return total;
 		};
 		//Add a fee
-		self.addFee = function() { self.productFees.push(new ProductFee()) };
+		self.addFee = function() { self.productFees.push(new DepositProductFee()) };
 		//remove fee
 		self.removeFee = function(fee) {
 			self.productFees.remove(fee);
 		};
+		self.removeFees = function() {
+			self.productFees.remove(fee);
+		};
 		//reset the form
 		self.resetForm = function() {
-			self.productFees(null);
-			$("#depProductForm").reset();
+			$("#depProductForm")[0].reset();
+			self.updateDepositProductTypes();
+			$.map(self.productFees(), function(fee) {
+				self.productFees.remove(fee);
+			});
 		};
 		//Update the product types list
-		self.updateProductTypes = function() {
+		self.updateDepositProductTypes = function() {
 			$.ajax({
 				type: "post",
 				dataType: "json",
@@ -80,6 +84,7 @@
 		};
 		
 		self.productName = ko.observable();
+		self.description = ko.observable();
 		self.recommededDepositAmount = ko.observable(0);
 		self.maxWithdrawalAmount = ko.observable(0);
 		self.defaultOpeningBal = ko.observable();
@@ -89,7 +94,7 @@
 		self.minTermLength = ko.observable();
 		self.maxTermLength = ko.observable();
 		self.termTimeUnit = ko.observable();
-		self.interestPaid = self.interestRateApplicable();
+		self.interestPaid = (self.interestRateApplicable()?1:0);
 		self.defaultInterestRate = ko.observable();
 		self.minInterestRate = ko.observable();
 		self.maxInterestRate = ko.observable();
@@ -114,6 +119,7 @@
 				type: "post",
 				data:{
 					productName : self.productName(),
+					description : self.description(),
 					productType : self.productType()?self.productType().id:undefined,
 					availableTo : self.availableTo,
 					recommededDepositAmount : self.recommededDepositAmount(),
@@ -140,32 +146,39 @@
 				success: function(response){
 					// if it was an OK response, get the id of the inserted product and insert the product fees
 					var result = parseInt(response)||0;
-					if(/* result &&  */self.productFees().length>0){
-						$.ajax({
-							type: "post",
-							data:{feePostData:feePostData, productId: result, origin: "deposit_product_fee"},
-							url: "lib/AddData.php",
-							success: function(innerResponse){
-								if(innerResponse===true){
-									self.resetForm();
+					if(result){/*  */
+						if(self.productFees().length>0){
+							$.ajax({
+								type: "post",
+								data:{feePostData:feePostData, productId: result, origin: "deposit_product_fee"},
+								url: "lib/AddData.php",
+								success: function(innerResponse){
+									if(innerResponse===true){
+										showStatusMessage("Data successfully saved" ,"success");
+										setTimeout(function(){
+											self.resetForm();
+										}, 3000);
+									}
+									else{
+										console.log(innerResponse);
+										showStatusMessage("Error saving data: \n"+innerResponse ,"failed");
+									}						
 								}
-								else{
-									console.log(innerResponse);
-								}							
-							}
-						});
+							});
+						}
 					}else{
+						//inform the user what went wrong
 						console.log(response);
+						showStatusMessage("Error saving data: \n"+response ,"failed");
 					}
 										
 				}
 			});
 			
 		};
-		self.updateProductTypes();//
+		self.updateDepositProductTypes();//
 	};
 
-	var productModel = new Product();
-	ko.applyBindings(productModel);
-	$("#depProductForm").validate({ submitHandler: productModel.save });//
-</script>
+	var depositProductModel = new DepositProduct();
+	ko.applyBindings(depositProductModel, $("#deposit_product")[0]);
+	$("#depProductForm").validate({ submitHandler: depositProductModel.save });//
