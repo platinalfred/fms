@@ -214,9 +214,7 @@ $person = new Person();
                             <ul class="dropdown-menu dropdown-messages">
                                 <li>
                                     <div class="dropdown-messages-box">
-                                        <a href="profile.html" class="pull-left">
-                                            <img alt="image" class="img-circle" src="img/a7.jpg">
-                                        </a>
+                                        
                                         <div class="media-body">
                                             <small class="pull-right">46h ago</small>
                                             <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>.
@@ -228,9 +226,7 @@ $person = new Person();
                                 <li class="divider"></li>
                                 <li>
                                     <div class="dropdown-messages-box">
-                                        <a href="profile.html" class="pull-left">
-                                            <img alt="image" class="img-circle" src="img/a4.jpg">
-                                        </a>
+                                        
                                         <div class="media-body ">
                                             <small class="pull-right text-navy">5h ago</small>
                                             <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>.
@@ -242,9 +238,7 @@ $person = new Person();
                                 <li class="divider"></li>
                                 <li>
                                     <div class="dropdown-messages-box">
-                                        <a href="profile.html" class="pull-left">
-                                            <img alt="image" class="img-circle" src="img/profile.jpg">
-                                        </a>
+                                        
                                         <div class="media-body ">
                                             <small class="pull-right">23h ago</small>
                                             <strong>Monica Smith</strong> love <strong>Kim Smith</strong>.

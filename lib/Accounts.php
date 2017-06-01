@@ -136,7 +136,7 @@ class Accounts extends Db {
 		$data['transaction_type'] = 2;
 		$data['transaction_date'] = date("Y-m-d");
 		$data['amount'] = (-1*(int)$data['amount']);
-		$trans_fields = array("transaction_type", "branch_number", "person_id", "amount", "amount_description", "transacted_by", "transaction_date", "approved_by", "comments");
+		$trans_fields = array("transaction_type", "branch_id", "person_id", "amount", "amount_description", "transacted_by", "transaction_date", "approved_by", "comments");
 		$trans =  $this->add("transaction", $trans_fields, $this->generateAddFields($trans_fields, $data));
 		if($trans){
 			$account_balance = $this->findByAccountBalance($data['person_id']);
@@ -150,10 +150,7 @@ class Accounts extends Db {
 	}
 	public function addAccount($data){
 		$fields = array_slice(self::$db_fields, 1);
-		if($this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data))){
-			return true;
-		}
-		return false;
+		return $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
 	}
 	public function updateAccount($data){
 		$fields = array_slice(1, self::$db_fields);

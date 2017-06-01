@@ -8,6 +8,20 @@
 }
        
 </style>
+<script>
+function addCommas(nStr){
+    var sep = ',';
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + sep + '$2');
+    }
+    return x1 + x2;
+}
+</script>
 <div id="add_member" class="modal  fade" aria-hidden="true" >
 	<div class="modal-dialog modal-lg" style="width: 900px !important;">
 		<div class="modal-content">
@@ -30,12 +44,12 @@
 						<p>
 							Capture information about a member
 						</p>
-
-						<form id="form" action="#" class="wizard-big">
-							<input type="hidden" name="added_by" value="<?php echo $_SESSION['user_id'];?>">
+							
+						<form id="form1" action="" method="post" name="registration"  class="wizard-big">
+							<input type="hidden" name="registered_by" value="<?php echo $_SESSION['user_id'];?>">
 							<input type="hidden" name="modifiedBy" value="<?php echo $_SESSION['user_id'];?>">
-							<input type="hidden" name="dateAdded" value="<?php echo time();?>">
-							<input type="hidden" name="branchId" value="<?php echo $_SESSION['branchId'];?>">
+							<input type="hidden" name="date_registered" value="<?php echo time();?>">
+							<input type="hidden" name="branch_id" value="<?php echo $_SESSION['branch_id'];?>">
 							<input type="hidden" name="person_type" value="0">
 							<input type="hidden" name="tbl" value="add_member">
 							<h1>Demographic Information</h1>
@@ -55,13 +69,23 @@
 											</div>
 										</div>
 										<div class="col-sm-12">&nbsp;</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label no_padding">Member Type</label>
+											<div class="col-sm-5">
+												<select class="form-control m-b" name="memberType" >
+													<option value="0	">Member Only</option>
+													<option value="1">Member and Share Holder</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-12">&nbsp;</div>
 											<div class="col-sm-12 no_padding">
 											<div class="form-group">
 												<div class="col-sm-3 no_padding">
 													<label style=""class="">Name <span class="req">*</span></label>
 												</div>
 												<div class="col-sm-9">
-													<input type="text" class="form-control" name="firstname" placeholder="First Name" required/>
+													<input type="text" class="form-control" name="firstname" data-msg-require="Please enter name" placeholder="First Name" required/>
 													<span class="input-group-btn" style="width:2px;"></span>
 													<input type="text" class="form-control" name="lastname" placeholder="Last Name" required />
 													<span class="input-group-btn" style="width:2px;"></span>
@@ -69,22 +93,21 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-sm-12 no_padding">
-											<div class="form-group" style="padding-top:10px;">	
-												<label class="col-sm-3 control-label no_padding" >Gender</label>
-												<div class="col-sm-5">
-													<select class="form-control m-b" name="gender">
-														<option value="M">Male</option>
-														<option value="F" >Female</option>
-													</select>
+										<div class="col-sm-12 no_padding" style="margin-top:8px;margin-bottom:8px;">
+											<div class="form-group">
+												<div class="col-sm-3 no_padding"><label class="col-lg-12" >Gender</label></div>
+												<div class="col-sm-9">
+													<label > <input name="is_next_of_kin" class="i-checks" type="radio" value="M" >Male</label>
+													<label > <input name="is_next_of_kin" class="i-checks" type="radio" value="F"> Female</label>
 												</div>
-											</div>
+											</div>											
+												
 										</div>
 										<div class="col-sm-12 no_padding">
 											<div class="form-group">
-												<label class="col-sm-3 control-label no_padding" >Date of Birth *</label>
+												<label class="col-sm-3 control-label no_padding" >Date of Birth <span class="req">*</span></label>
 												<div class="col-sm-9">
-													<input id="dateofbirth" name="dateofbirth" type="text" data-mask="99/99/9999" class="form-control" required>
+													<input id="dateofbirth" name="dateofbirth" type="text" data-mask="99/99/9999" class="form-control" >
 													<span class="help-block">(dd/mm/yyyy)</span>
 												</div>
 											</div>
@@ -98,13 +121,14 @@
 											</div>
 										</div>
 									</div>
+									<!--
 									<div class="col-lg-4">
 										<div class="text-center">
 											<div style="margin-top: 20px">
 												<i class="fa fa-sign-in" style="font-size: 180px;color: #e5e5e5 "></i>
 											</div>
 										</div>
-									</div>
+									</div> -->
 								</div>
 
 							</fieldset>
@@ -134,7 +158,7 @@
 									</div>
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Id Number(*)</label>
+											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Id Number <span class="req">*</span></label>
 											<div class="col-md-9 col-sm-9 col-xs-12">
 												<input id="id_number" name="id_number" type="text" class="form-control" required>
 											</div>
@@ -143,7 +167,7 @@
 									<div class="col-lg-12">&nbsp;</div>
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label>CRB Card Number *</label>
+											<label>Credit Reference Bureau Card Number (CRB )</label>
 											<input id="no_of_dependents" name="CRB_card_no" type="text" class="form-control ">
 										</div>
 									</div>
@@ -151,19 +175,19 @@
 									<div class="col-lg-6">
 										<div class="form-group">
 											<label >Email </label>
-												<input id="email" name="email" type="email" class="form-control ">
+											<input id="email" name="email" type="email" class="form-control ">
 											
 										</div>
 									</div>
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label>Telephone *</label>
-											<input id="phone" type="text" class="form-control" data-mask="(999) 999-9999" placeholder="" name="phone" required><span class="help-block">(073) 000-0000</span>
+											<label>Telephone <span class="req">*</span></label>
+											<input id="phone" type="text" class="form-control" data-mask="(999) 999-9999" placeholder="" name="phone"required ><span class="help-block">(073) 000-0000</span>
 										</div>
 									</div>
 									<div class="col-lg-3">
 										<div class="form-group">
-											<label>Physical Address *</label>
+											<label>Physical Address <span class="req">*</span></label>
 											<input id="physical_address" name="physical_address" type="text" class="form-control" required>
 										</div>
 									</div>
@@ -175,15 +199,31 @@
 									</div>
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label>Parish *</label>
-											<?php 
-											$member->loadList("SELECT * FROM parish", "village", "id", "name", "village_select");
-											?>
+											<label>District </label>
+											<input id="" name="district" type="text" class="form-control">
+										</div>
+									</div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label>County </label>
+											<input id="" name="county" type="text" class="form-control">
+										</div>
+									</div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label>Sub County </label>
+											<input id="" name="subcounty" type="text" class="form-control">
+										</div>
+									</div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label>Parish </label>
+											<input id="" name="parish" type="text" class="form-control">
 										</div>
 									</div>
 									<div class="col-lg-6">
 										<label class="control-label">Village</label>
-										<div  id="village"></div>
+										<input id="" name="village" type="text" class="form-control">
 									</div>
 								</div>
 							</fieldset>
@@ -199,12 +239,9 @@
 										</div>
 									</div>
 									<div class="col-sm-4">
-										<div class="form-group" >	
-											<label  >Gender</label>
-											<select class="form-control m-b" name="r_gender">
-												<option value="M">Male</option>
-												<option value="F" >Female</option>
-											</select>
+										<div class="form-group"><label class="col-lg-12" >Gender</label>
+											<label > <input name="is_next_of_kin" class="i-checks" type="radio" value="M" required>Male</label>
+											<label > <input name="is_next_of_kin" class="i-checks" type="radio" value="F" required> Female</label>
 										</div>
 									</div>
 									<div class="col-lg-12">
@@ -218,7 +255,7 @@
 													<span class="input-group-btn" style="width:2px;"></span>
 												</div>
 												<div class="col-sm-4">
-													<input type="text" class="form-control" name="last_name" placeholder="Last Name" required />
+													<input type="text" class="form-control" name="last_name" placeholder="Last Name"  required/>
 													<span class="input-group-btn" style="width:2px;"></span>
 												</div>
 												<div class="col-sm-4">
@@ -240,9 +277,16 @@
 										</div>
 									</div>
 									<div class="col-lg-3">
-										 <div class="form-group"><label class="col-lg-12" >Is Next of Kin?</label>
-											<label class="checkbox-inline i-checks"> <input type="radio" value="1">Yes</label>
-											<label class="checkbox-inline i-checks"> <input type="radio" value="0"> No</label>
+										<div class="form-group">
+											<label>Phone </label>
+											<input id="address2" name="telephone" type="text" class="form-control ">
+										</div>
+									</div>
+									<div class="clearboth"></div>
+									<div class="col-lg-12">
+										 <div class="form-group"><label class="col-lg-12" >Is Direct Next of Kin?</label>
+											<label > <input name="is_next_of_kin" class="i-checks" type="radio" value="1">Yes</label>
+											<label > <input name="is_next_of_kin" class="i-checks" type="radio" value="0"> No</label>
 										
 										</div>
 									</div>
@@ -252,11 +296,11 @@
 							
 							<h1>Dependants and Employer</h1>
 							<fieldset>
-								<h2>Dependants</div>
+								<h2>Dependants</h2>
 								<div class="row">
 									<div class="col-lg-3">
 										<div class="form-group">
-											<label>Number of Children *</label>
+											<label>Number of Children </label>
 											<input id="children_no" name="children_no" type="number" class="form-control">
 										</div>
 									</div>
@@ -268,50 +312,49 @@
 									</div>
 									
 								</div>
-								<h2>Employer</div>
+								<h2>Employer</h2>
 								<div class="row">
-									<div class="col-lg-3">
+									<div class="col-lg-5">
 										<div class="form-group">
 											<label>Name of Employer</label>
-											<input id="children_no" name="children_no" type="number" class="form-control">
+											<input id="children_no" name="employer" type="text" class="form-control">
 										</div>
 									</div>
-									<div class="col-lg-3">
+									<div class="col-lg-5">
 										<div class="form-group">
 											<label>Number of years with Employer</label>
-											<input id="no_of_dependents" name="dependants_no" type="number" class="form-control ">
+											<input id="no_of_dependents" name="years_of_employment" type="number" class="form-control ">
 										</div>
 									</div>
-									<div class="col-lg-3">
+									<div class="col-lg-4">
 										<div class="form-group">
 											<label>Nature of employment</label>
-											<input id="no_of_dependents" name="dependants_no" type="number" class="form-control ">
+											<input id="no_of_dependents" name="nature_of_employment" type="text" class="form-control ">
 										</div>
 									</div>
-									<div class="col-lg-3">
+									<div class="col-lg-4">
 										<div class="form-group">
 											<label>Monthly Salary</label>
-											<input id="no_of_dependents" name="dependants_no" type="number" class="form-control ">
+											<input id="monthlySalary" name="monthlySalary" onkeyup="return addCommas(this)" type="number" class="form-control ">
 										</div>
 									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Browse contract details</label>
-											<input id="no_of_dependents" name="dependants_no" type="number" class="form-control ">
-										</div>
-									</div>
+									
 								</div>
 							</fieldset>
 							<h1>Finish</h1>
 							<fieldset>
 								<label>Comment</label>
-									<textarea name="comment" class="form-control " rows="7"></textarea>
-								<h2>Consent!</h2>
+								<textarea name="comment" class="form-control " rows="5"></textarea>
+								
 								<div class="row">
-								<input id="acceptTerms" name="acceptTerms" type="checkbox" class="required"> <label for="acceptTerms">I Accept that all member details captured are correct.</label>
+									<div class="col-lg-12">
+									<div class="col-lg-12"><input id="acceptTerms" name="acceptTerms" type="radio" class="i-checks" required> </div><br/>
+									<div class="col-lg-12">	<label for="acceptTerms">I Accept that all member details captured are correct.</label></div>
+									</div>
 								</div>
+								
 								<div class="col-lg-4">
-									<button class="btn btn-lg btn-primary save" type="button">Submit Member</button>
+									<button class="btn btn-lg btn-primary" type="submit">Submit Member</button>
 								</div>
 							</fieldset>
 						</form>

@@ -3,13 +3,19 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Person extends Db {
 	protected static $table_name  = "person";
-	protected static $db_fields = array("id","person_number","person_type","title","firstname", "lastname", "othername","gender", "dateofbirth", "phone", "email","country","district","county","subcounty","parish","village","id_type", "id_number","physical_address","postal_address", "occupation", "photograph", "comment", "date_registered", "registered_by");
+	protected static $db_fields = array("id","person_number","person_type","title","branch_id", "firstname", "lastname", "othername","gender", "dateofbirth", "phone", "email","district","county","subcounty","parish","village","id_type", "id_number","physical_address","postal_address", "occupation", "photograph", "comment", "date_registered", "registered_by", "children_no", "dependants_no");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
 		return !empty($result) ? $result:false;
 	}
-	
+	public function updatePersonNumber($id){
+		$pno = "BFS". sprintf('%08d',$id);
+		if($this->update(self::$table_name, array("person_number"), array("person_number"=>$pno), "id=".$id)){
+			return true;
+		}
+		return false;
+	}
 	public function personNumber($id){
 		$result = $this->getfrec(self::$table_name, "person_number", "id=".$id, "", "");
 		return !empty($result) ? $result['person_number'] : false;
@@ -44,9 +50,19 @@ class Person extends Db {
 		}
 	}
 	public function addPerson($data){
-		$fields = array("person_number","person_type","title","firstname", "lastname", "othername","gender", "dateofbirth", "phone", "email","country","district","county","subcounty","parish","village","id_type", "id_number","physical_address","postal_address", "occupation", "photograph", "comment", "date_registered", "registered_by");
-		$data['dateofbirth'] = $this->formatSlashedDate($data['dateofbirth']);
-		return $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
+		$fields = array_slice(self::$db_fields, 1);
+		return $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data)); 
+			
+	}
+
+	public function addPersonEmployment($data){
+		$fields = array("person_id", "employer", "years_of_employment", "nature_of_employment", "monthlySalary");
+		return $this->add("person_employment", $fields, $this->generateAddFields($fields, $data)); 
+			
+	}
+	public function addRelative($data){
+		$fields = array("person_id",  "is_next_of_kin", "first_name", "last_name", "other_names", "telephone", "gender", "relationship", "address", "address2");
+		return $this->add("peron_relative", $fields, $this->generateAddFields($fields, $data)); 
 			
 	}
 	public function updatePerson($data){

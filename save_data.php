@@ -20,11 +20,39 @@ if(isset($_POST['tbl'])){
 			}
 		break;
 		case "add_member":
+			$data = $_POST;
 			$member = new Member();
-			if($person_type->addMember($_POST)){
-				$output = "success";
-			}else{
-				$output ="Member could not be added";
+			$person = new Person();
+			$accounts = new Accounts();
+			$data['date_registered'] = date("Y-m-d");
+			$data['date_added'] = date("Y-m-d");
+			$data['photograph'] = "";
+			$data['active']=1;
+			$person_id = $person->addPerson($data);
+			if($person_id){
+				$data['person_id'] = $person_id;
+				$person->updatePersonNumber($person_id);
+				$person->addPersonEmployment($data);
+				$person->addRelative($data);
+				$data["personId"] = $person_id;
+				$data['branchId'] = $data['branch_id'];
+				$data['addedBy'] = $data['modifiedBy'];
+				$data['dateAdded'] = $data['date_registered'];
+				$member_id = $member->addMember($data);
+				if($member_id){
+					$act= sprintf('%08d', $person_id);
+					$data['account_number'] =  $act;
+					$data['balance'] = 0.00;
+					$data['status'] = 1;
+					$data['dateAdded'] = date("Y-m-d");
+					$data['added_by'] = $data['registered_by']; 
+					if($accounts->addAccount($data)){
+						$output = "success";
+					}
+					
+				} 
+			}else{ 
+				$output = "Member details could not be added. Please try again!";
 			}
 		break;
 		case "account_type":
