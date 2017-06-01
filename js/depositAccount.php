@@ -98,6 +98,7 @@
 					openingBalance : self.openingBal(),
 					termLength : self.termLength(),
 					interestRate : self.interestRate(),
+					feePostData:self.productFees(),
 					origin : "deposit_account"
 				},
 				url: "lib/AddData.php",
@@ -105,30 +106,10 @@
 					// if it was an OK response, get the id of the inserted product and insert the product fees
 					var result = parseInt(response)||0;
 					if(result){/*  */
-						if(self.productFees().length>0){
-							$.ajax({
-								type: "post",
-								data:{feePostData:self.productFees(), depositAccountId: result, origin: "deposit_account_fee"},
-								url: "lib/AddData.php",
-								success: function(innerResponse){
-									if(innerResponse===true){
-										showStatusMessage("Data successfully saved" ,"success");
-										setTimeout(function(){
-											self.resetForm();
-										}, 3000);
-									}
-									else{
-										//inform the user what went wrong
-										showStatusMessage("Error encountered while saving data: \n"+innerResponse ,"failed");
-									}						
-								}
-							});
-						}else{
-							showStatusMessage("Data successfully saved" ,"success");
-							setTimeout(function(){
-								self.resetForm();
-							}, 3000);
-						}
+						showStatusMessage("Data successfully saved" ,"success");
+						setTimeout(function(){
+							self.resetForm();
+						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while saving data: \n"+response ,"failed");
 						setTimeout(function(){

@@ -158,18 +158,11 @@ elseif(isset($_POST['origin'])&&$_POST['origin']=='loan_account'){
 	
 	$data['products'] = $loanProductObj->findAll();
 	$data['productFees'] = $productFeeObj->findAll();
+	$data['guarantors'] = $memberObj->findGuarantors();
 	
-	//only if client is a member do we run this
-	if(isset($_POST['memberId'])&&isset($_POST['clientType'])){
-		if($_POST['clientType'] == 1){
-			$data['guarantors'] = $memberObj->findGuarantors($_POST['memberId']);
-		}
-	}
-	else{
-		$members = $memberObj->findSelectList();
-		$groups = $saccoGroupObj->findSelectList();
-		$data['customers'] = array_merge($members,$groups);
-	}
+	$members = $memberObj->findSelectList();
+	$groups = $saccoGroupObj->findSelectList();
+	$data['customers'] = array_merge($members,$groups);
 	
 	echo json_encode($data);
 }

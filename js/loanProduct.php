@@ -13,7 +13,7 @@
 
 		//variables for the dropdowns
 		self.daysOfYearOptions = [{id:1,desc:'Actual/365 Fixed(365 days)'},{id:2,desc:'30 Day month (360 days)'}];
-		self.intialAccountStateOptions = [{"id":1, "desc":"Pending Approval"},{"id":1, "desc":"Partial Application"}];
+		self.initialAccountStateOptions = [{"id":1, "desc":"Pending Approval"},{"id":1, "desc":"Partial Application"}];
 		self.taxCalculationMethodOptions = [{"id":1, "desc":"Inclusive"},{"id":2, "desc":"Exclusive"}];
 		self.penaltyCalculationMethodOptions = ko.observableArray([{"id":1, "methodDescription":"No penalty"},{"id":2, "methodDescription":"(Overdue Principal + Overdue Interest)*# of Late Days * Penalty Rate"}]);
 		self.repaymentsMadeEveryOptions = [{id:1,desc:'Day(s)'},{id:2,desc:'Week(s)'},{id:3,desc:'Month(s)'}];
@@ -53,7 +53,7 @@
 		self.minRepaymentInstallments = ko.observable();
 		self.maxRepaymentInstallments = ko.observable();
 		self.daysOfYear = ko.observable();
-		self.intialAccountState = ko.observable();
+		self.initialAccountState = ko.observable();
 		self.defGracePeriod = ko.observable();
 		self.minGracePeriod = ko.observable();
 		self.maxGracePeriod = ko.observable();
@@ -181,7 +181,7 @@
 					defRepaymentInstallments : self.defRepaymentInstallments(),
 					minRepaymentInstallments : self.minRepaymentInstallments(),
 					maxRepaymentInstallments : self.maxRepaymentInstallments(),
-					intialAccountState : self.intialAccountState()?self.intialAccountState().id:undefined,
+					initialAccountState : self.initialAccountState()?self.initialAccountState().id:undefined,
 					defGracePeriod : self.defGracePeriod(),
 					minGracePeriod : self.minGracePeriod(),
 					maxGracePeriod : self.maxGracePeriod(),

@@ -54,7 +54,7 @@
                                     </div>
 									<label class="control-label col-sm-3">Initial Account State</label>
                                     <div class="col-sm-6">
-										<select class="form-control required" id="intialAccountState" name="intialAccountState" data-bind='options: intialAccountStateOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: intialAccountState' data-msg-required="Initial Account State is required">
+										<select class="form-control required" id="initialAccountState" name="initialAccountState" data-bind='options: initialAccountStateOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: initialAccountState' data-msg-required="Initial Account State is required">
 										</select>
                                     </div>
                                 </div>

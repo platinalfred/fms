@@ -59,12 +59,12 @@ class Member extends Db {
 		$result_array = $this->queryData("SELECT `member`.`id`, `member`.`personId`, `firstname`, `lastname`, `othername`, `phone`, `email`, `postal_address`, `physical_address`, `dateofbirth`, `gender`, `date_registered`, `photograph`, `memberType`, `date_added`, `branchId`, `added_by` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id`");
 		return !empty($result_array) ? $result_array : false;
 	}
-	public function findGuarantors($member_id){
-		$result_array = $this->queryData("SELECT `member`.`personId`, `phone`, `shares`, `savings`, CONCAT(`firstname`, ' ', `lastname`, ' ', `othername`) `member_names` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id` JOIN (SELECT SUM(`amount`) savings, `person_id` FROM `transaction` WHERE `transaction_type`=1 GROUP BY `person_id`) `client_savings` ON `member`.`personId` = `client_savings`.`personId` JOIN (SELECT SUM(`amount`) `shares`, `personId` FROM `shares` GROUP BY `personId`) `client_shares` ON `member`.`personId` = `client_shares`.`personId` WHERE `member`.`id` <> $member_id");
+	public function findGuarantors(){
+		$result_array = $this->queryData("SELECT `member`.`id`, `phone`, `shares`, `savings`, CONCAT(`firstname`, ' ', `lastname`, ' ', `othername`) `memberNames` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id` JOIN (SELECT SUM(`amount`) savings, `personId` FROM `account_transaction` WHERE `transactionType`=1 GROUP BY `personId`) `client_savings` ON `member`.`personId` = `client_savings`.`personId` JOIN (SELECT SUM(`amount`) `shares`, `personId` FROM `shares` GROUP BY `personId`) `client_shares` ON `member`.`personId` = `client_shares`.`personId`");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findNamesByPersonNumber($pno){
-		$result = $this->getrec(self::$table_name." st, person p", "p.firstname, p.lastname, p.othername", "p.person_id=".$pno." AND p.id = st.person_id", "", "");
+		$result = $this->getrec(self::$table_name." st, person p", "p.firstname, p.lastname, p.othername", "p.personId=".$pno." AND p.id = st.person_id", "", "");
 		return !empty($result) ? $result['firstname']." ".$result['othername']." ".$result['lastname'] : false;
 	}
 	public function findNamesById($id){

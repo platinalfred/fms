@@ -46,7 +46,7 @@
 													<div class="input-group date" data-provide="datepicker" data-date-format="dd-mm-yyyy">
 														<input type="text" class="form-control" name="applicationDate" id="applicationDate" data-bind='value: $root.applicationDate' required>
 														<div class="input-group-addon">
-															<span class="fa fa-calendar-o"></span>
+															<span class="fa fa-calendar"></span>
 														</div>
 													</div>
 												</div>
@@ -117,11 +117,12 @@
 									</div>
 
                                 </fieldset>
+								<!--ko with: loanProduct -->
 								<h1>Loan Fees</h1>
 								<fieldset>
 									<h2>Applicable Fees</h2>
 									<div class="row">
-										<div class="form-group" data-bind="with: loanProduct">
+										<div class="form-group">
 											<div class="table-responsive" data-bind="visible: $root.productFees().length > 0">
 												<table class="table table-condensed">
 													<thead>
@@ -135,11 +136,11 @@
 													</thead>
 													<tbody data-bind="foreach: $root.productFees">
 														<tr>
-															<td><input class="icheckbox_square-green" style="position: relative;" name="fee" type="checkbox" data-bind="attr:{value: $data}, checked: $parent.loanAccountFees" /></td>
+															<td><input class="icheckbox_square-green" style="position: relative;" name="fee" type="checkbox" data-bind="checkedValue: $data, checked: $root.loanAccountFees" /></td>
 															<td data-bind='text: feeName'></td>
 															<td data-bind='text: curr_format(amount)'></td>
 															<td data-bind='text: feeTypeName'></td>
-															<td data-bind='text: getDescription(5, amountCalculatedAs)'></td>
+															<td data-bind='text: getDescription(5, $data.amountCalculatedAs)'></td>
 														</tr>
 													</tbody>
 												</table>
@@ -147,13 +148,14 @@
 										</div>
 									</div>
 								</fieldset>
-		<?php if(isset($client)): ?>
-			<?php if($client['clientType']==1):?>
+								<!-- /ko -->
+								<!--ko with: loanProduct -->
+								<!--ko if: (parseInt($root.client.clientType)==1) -->
 								<h1>Guarantors</h1>
 								<fieldset>
 									<h2>Choose Guarantors</h2>
 									<div class="row">
-										<div class="form-group" data-bind="with: loanProduct">
+										<div class="form-group">
 											<div class="table-responsive">
 												<table  class="table table-striped table-condensed table-hover">
 													<thead>
@@ -165,10 +167,10 @@
 															<th>&nbsp;</th>
 														</tr>
 													</thead>
-													<tbody data-bind='foreach: $parent.selectedGuarantors'>
+													<tbody data-bind='foreach: $root.selectedGuarantors'>
 														<tr>
 															<td>
-																<select data-bind='options: guarantors, optionsText: "member_names", optionsCaption: "Select guarantor...", value: guarantor' class="form-control"> </select>
+																<select data-bind='options: $root.filteredGuarantors, optionsText: "memberNames", optionsCaption: "Select guarantor...", value: guarantor' class="form-control"> </select>
 															</td>
 															<td class='phone' data-bind='with: guarantor'>
 																<span data-bind='text: phone' > </span>
@@ -178,25 +180,25 @@
 															</td>
 															<td class='savings' data-bind='with: guarantor'>
 																<span data-bind='text: savings'> </span>
-																<input name = "guarantor[]" data-bind='value: person_number' type="hidden"/>
+																<input name="guarantor[]" data-bind='value: person_number' type="hidden"/>
 															</td>
 															<td>
-																<a href='#' data-bind='click: $parent.removeGuarantor' title="Remove"><span class="fa fa-times red"></span></a>
+																<a href='#' data-bind='click: $root.removeGuarantor' title="Remove"><span class="fa fa-times red"></span></a>
 															</td>
 														</tr>
 													</tbody>
 												</table>
 											</div>
 											<div class="col-sm-3">
-											<a data-bind='click: addGuarantor, enable: selectedGuarantors().length < loanProduct.minGuarantors' class="btn btn-info btn-sm"><i class="fa fa-plus"></i>Add Guarantor</a></div>
-											<div class="col-sm-3"></div>
-											<div class="col-sm-3">Total shares: <span data-bind='text: totalShares()'> </span></div>
-											<div class="col-sm-3">Total savings: <span data-bind='text: totalSavings()'> </span></div>
+											<a data-bind='click: $root.addGuarantor, enable: $root.selectedGuarantors().length < $root.loanProduct.minGuarantors' class="btn btn-info btn-sm"><i class="fa fa-plus"></i>Add Guarantor</a></div>
+											<div class="col-sm-3">Min <span data-bind='text: $root.loanProduct.minGuarantors'> </span></div>
+											<div class="col-sm-3">Total shares: <span data-bind='text: $root.totalShares()'> </span></div>
+											<div class="col-sm-3">Total savings: <span data-bind='text: $root.totalSavings()'> </span></div>
 										</div>
 									</div>
 								</fieldset>
-			<?php endif;?>
-		<?php endif;?>
+								<!-- /ko -->
+								<!-- /ko -->
                                 <div class="form-group">
                                     <div class="col-sm-4 col-sm-offset-2">
                                         <button class="btn btn-warning" type="reset">Cancel</button>
