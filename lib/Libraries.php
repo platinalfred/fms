@@ -43,8 +43,12 @@ require_once("LoanProduct.php");
 require_once("LoanProductType.php");
 require_once("LoanProductFee.php");
 require_once("LoanProductFeen.php");
-require_once("FeeType.php");
 require_once("SaccoGroup.php");
 require_once("SaccoGroupDepositAccount.php");
 require_once("MemberDepositAccount.php");
+require_once("FeeType.php");
+require_once("LoanAccount.php");
+require_once("LoanAccountFee.php");
+require_once("SaccoGroupLoanAccount.php");
+require_once("MemberLoanAccount.php");
 ?>

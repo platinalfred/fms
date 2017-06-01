@@ -95,7 +95,7 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 	//Expenses"
 	$tables['expenses'] = $expense->findAllExpenses("`expenseDate` BETWEEN ".$start_date." AND ".$end_date, "amountUsed DESC", "10");
 
-	$products_sql = "SELECT `productName`, SUM(`loanAmount`) `loan_amount`, SUM(`loanAmount`*`interestRate`/100) `interest`, SUM(`penalty`) `penalties`, `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_product`.`id` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `paidAmount`, `loanId` FROM `loan_repayment` WHERE `transaactionDate` <= ".$end_date." GROUP BY `loanId`) `payments` `loan_account`.`id`=`payments`.`loanId` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `penalty`, `loanId` FROM `loan_repayment` WHERE `dateCreated` <= ".$end_date." GROUP BY `loanId`) `penalt` ON `loan_account`.`id` = `penalt`.`loanId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3 GROUP BY `productName` ORDER BY `productName`";
+	$products_sql = "SELECT `productName`, SUM(`disbursedAmount`) `loan_amount`, SUM(`disbursedAmount`*`interestRate`/100) `interest`, SUM(`penalty`) `penalties`, `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_product`.`id` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `paidAmount`, `loanId` FROM `loan_repayment` WHERE `transaactionDate` <= ".$end_date." GROUP BY `loanId`) `payments` `loan_account`.`id`=`payments`.`loanId` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `penalty`, `loanId` FROM `loan_repayment` WHERE `dateCreated` <= ".$end_date." GROUP BY `loanId`) `penalt` ON `loan_account`.`id` = `penalt`.`loanId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3 GROUP BY `productName` ORDER BY `productName`";
 	
 	$tables['loan_products'] = $loan->findLoans($products_sql);
 
@@ -138,12 +138,27 @@ elseif(isset($_POST['origin'])&&$_POST['origin']=='loan_product'){
 elseif(isset($_POST['origin'])&&$_POST['origin']=='deposit_account'){
 	$depositProductObj = new DepositProduct();
 	$productFeeObj = new DepositProductFee();
-	$clientObj = new DepositProductFee();
 	$memberObj = new Member();
 	$saccoGroupObj = new SaccoGroup();
 	
 	$data['products'] = $depositProductObj->findAll();
 	$data['productFees'] = $productFeeObj->findAll();
+	
+	$members = $memberObj->findSelectList();
+	$groups = $saccoGroupObj->findSelectList();
+	$data['customers'] = array_merge($members,$groups);
+	
+	echo json_encode($data);
+}
+elseif(isset($_POST['origin'])&&$_POST['origin']=='loan_account'){
+	$loanProductObj = new LoanProduct();
+	$productFeeObj = new LoanProductFee();
+	$memberObj = new Member();
+	$saccoGroupObj = new SaccoGroup();
+	
+	$data['products'] = $loanProductObj->findAll();
+	$data['productFees'] = $productFeeObj->findAll();
+	$data['guarantors'] = $memberObj->findGuarantors();
 	
 	$members = $memberObj->findSelectList();
 	$groups = $saccoGroupObj->findSelectList();

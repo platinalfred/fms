@@ -70,7 +70,11 @@ if(isset($_POST['origin'])){
 			$data['dateModified'] = time();
 			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			
+			$feePostData = $data['feePostData'];
+			unset($data['feePostData']);
+			
 			$output = $depositAccount->addDepositAccount($data);
+			
 			$data['depositAccountId'] = $output ;
 			unset($data['openingBalance']);
 			unset($data['termLength']);
@@ -89,11 +93,11 @@ if(isset($_POST['origin'])){
 				$saccoGroupDepositAccount = new SaccoGroupDepositAccount();
 				$accoGroupDepositAccountId = $saccoGroupDepositAccount->addSaccoGroupDepositAccount($data);
 			}
-		break;
-		case "deposit_account_fee":
+			
+			//insert account fees
 			$depositAccountFee = new DepositAccountFee();
 			$depositAccounId = $data['depositAccountId'];
-			foreach($data['feePostData'] as $feeDataItem){
+			foreach($feePostData as $feeDataItem){
 				$feeDataItem['depositAccountID'] = $depositAccountId;
 				$feeDataItem['dateCreated'] = time();
 				$feeDataItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
@@ -102,39 +106,77 @@ if(isset($_POST['origin'])){
 				$output = $depositAccountFee->addDepositAccountFee($feeDataItem);
 			}
 		break;
+		case "loan_account":
+			/* $loanAccount = new LoanAccount();
+			$data['dateCreated'] = time();
+			$data['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+			$data['dateModified'] = time();
+			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+			
+			$feePostData = $data['feePostData'];
+			unset($data['feePostData']);
+			$guarantors= $data['guarantors'];
+			unset($data['guarantors']);
+			$output = $loanAccountId = $loanAccount->addLoanAccount($data);
+			
+			//send less data to reduce bandwidth usage
+			$clientData['loanAccountId'] = $output ;
+			$clientData['dateCreated'] = time();
+			$clientData['dateModified'] = time();
+			$clientData['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+			$clientData['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+			
+			if($data['clientType']==1){
+				//create loan account for member
+				$clientData['memberId'] = $data['clientId'] ;
+				$memberLoanAccount = new MemberLoanAccount();
+				$memberLoanAccountId = $memberLoanAccount->addMemberLoanAccount($clientData);
+				
+				//then add the guarantors
+				$guarantor = new Guarantor();
+				
+				foreach($guarantors as $guarantorDataItem){
+					$loanAccountGuarantor['loanAccountId'] = $loanAccountId;
+					$loanAccountGuarantor['guarantorId'] = $guarantorDataItem['id'];
+					$loanAccountGuarantor['dateCreated'] = time();
+					$loanAccountGuarantor['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+					$loanAccountGuarantor['dateModified'] = time();
+					$loanAccountGuarantor['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+					$output = $guarantor->addGuarantors($loanAccountGuarantor);
+				}
+				unset($loanAccountGuarantor);
+			}else{
+				//create loan account for group
+				$clientData['groupId'] = $data['clientId'] ;
+				$saccoGroupLoanAccount = new SaccoGroupLoanAccount();
+				$accoGroupLoanAccountId = $saccoGroupLoanAccount->addSaccoGroupLoanAccount($clientData);
+			}
+			unset($clientData);
+			
+			//insert the account fees since we now have
+			$loanAccountFee = new LoanAccountFee();
+			
+			foreach($feePostData as $feeDataItem){
+				$loanAccountFeeItem['loanAccountId'] = $loanAccountId;
+				$loanAccountFeeItem['loanProductFeeId'] = $feeDataItem['id'];
+				$loanAccountFeeItem['feeAmount'] = $feeDataItem['amount'];
+				$loanAccountFeeItem['dateCreated'] = time();
+				$loanAccountFeeItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$loanAccountFeeItem['dateModified'] = time();
+				$loanAccountFeeItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$output = $loanAccountFee->addLoanAccountFee($loanAccountFeeItem);
+			}
+			
+			unset($loanAccountFeeItem);
+			unset($data); */
+		break;
 		default: //the default scenario
 		break;
 	}
 	echo $output;
 }
 //Transaction Types 1-Deposits, 2-Withdraws, 3-Loan Repayment, 4-Shares, 5-Membership subscription
-if(isset($_POST['add_loan'])){
-	$data = $_POST;
-	$loan = new Loans();
-	$guarantor = new Guarantor();
-	$data['loan_date'] = date("Y-m-d");
-	if(isset($data['guarantor'])){
-		$loan_id = $loan->addLoan($data);
-		if($loan_id){
-			$result = false;
-			$guarantor_data = array();
-			foreach($data['guarantor'] as $person_number){
-				$guarantor_data[] = '("'.mysql_real_escape_string($person_number).'", '.$loan_id.')';
-			}
-			$result = $guarantor->addGuarantors($guarantor_data);
-			if($result){
-				echo "success";
-			}
-		}
-		else
-			echo "Failed adding loan";
-		return;
-	}
-	else{
-		echo "Please fill in all fields including guarantors. ";
-		return;
-	}
-}elseif(isset($_POST['repayment_duration'])){
+if(isset($_POST['repayment_duration'])){
 	$data = $_POST;
 	$loan_repayment_duration = new LoanRepaymentDuration();
 	 if($loan_repayment_duration->addLoanRepaymentDuration($data)){

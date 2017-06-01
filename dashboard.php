@@ -3,7 +3,7 @@
 	include specific plugin files that you need on a page by  adding the names as below in the array
 	dataTables, ChartJs,iCheck,daterangepicker,clockpicker,colorpicker,datapicker,easypiechart,fullcalendar,idle-timer,morris, nouslider, summernote,validate,wow,video,touchspin,Sparkline,Flot, Peity, Jvectormap, touchspin, select2, daterangepicker, clockpicker, ionRangeSlider, datapicker, nouslider, jasny, switchery, cropper, colorpicker, steps, dropzone, bootstrap-markdown
 */
-$needed_files = array("daterangepicker", "iCheck", "jasny", "knockout", "ChartJS");
+$needed_files = array("daterangepicker", "iCheck", "jasny", "knockout", "moment", "ChartJS");
 
 $page_title = "Dashboard";
 include("include/header.php"); 
@@ -166,7 +166,7 @@ include("include/header.php");
 											<td data-bind="text: curr_format(parseInt(loan_amount)+parseInt(interest)+parseInt(penalties)-parseInt(paidAmount))"></td>
 										</tr>
 									</tbody>
-									<tfoot data-bind="if: tables.expenses.length>0">
+									<tfoot data-bind="if: tables.loan_products">
 										<tr>
 											<th scope='row'>Total</th>
 											<th data-bind="text: curr_format(array_total(tables.loan_products,1))"></th>
@@ -177,7 +177,7 @@ include("include/header.php");
 										</tr>
 									</tfoot>
 								</table>
-								<p data-bind="if: tables.expenses.length>0" class="pull-right"><a data-bind="attr: { href: 'view_expenses.php?start_date='+$parent.startDate()+'&end_date='+$parent.endDate()}" class="btn btn-info" title="View all expenses">View all...</a></p>
+								<p data-bind="if: tables.loan_products" class="pull-right"><a data-bind="attr: { href: 'view_loans.php?start_date='+$parent.startDate()+'&end_date='+$parent.endDate()}" class="btn btn-info" title="View all loans">View all...</a></p>
 							</div>
 						</div>
 					</div>
@@ -229,7 +229,7 @@ include("include/header.php");
 											<td data-bind="text: curr_format(amountUsed)"></td>
 										</tr>
 									</tbody>
-									<tfoot data-bind="if: tables.expenses.length>0">
+									<tfoot data-bind="if: tables.expenses">
 										<tr>
 											<th scope='row'>Total</th>
 											<th>&nbsp;</th>
@@ -238,7 +238,7 @@ include("include/header.php");
 										</tr>
 									</tfoot>
 								</table>
-								<p data-bind="if: tables.expenses.length>0" class="pull-right"><a data-bind="attr: { href: 'view_expenses.php?start_date='+$parent.startDate()+'&end_date='+$parent.endDate()}" class="btn btn-info" title="View all expenses">View all...</a></p>
+								<p data-bind="if: tables.expenses" class="pull-right"><a data-bind="attr: { href: 'view_expenses.php?start_date='+$parent.startDate()+'&end_date='+$parent.endDate()}" class="btn btn-info" title="View all expenses">View all...</a></p>
 							</div>
 
 						</div>
@@ -288,7 +288,7 @@ include("include/header.php");
 											<td data-bind="text: curr_format(amount)"></td>
 										</tr>
 									</tbody>
-									<tfoot data-bind="if: tables.income.length>0">
+									<tfoot data-bind="if: tables.income">
 										<tr>
 											<th scope='row'>Total</th>
 											<th>&nbsp;</th>
@@ -297,7 +297,7 @@ include("include/header.php");
 										</tr>
 									</tfoot>
 								</table>
-								<p data-bind="if: tables.income.length>0" class="pull-right"><a data-bind="attr: { href: 'view_income.php?start_date='+$parent.startDate()+'&end_date='+$parent.endDate()}" class="btn btn-info" title="View income in this period">View all...</a></p>
+								<p data-bind="if: tables.income" class="pull-right"><a data-bind="attr: { href: 'view_income.php?start_date='+$parent.startDate()+'&end_date='+$parent.endDate()}" class="btn btn-info" title="View income in this period">View all...</a></p>
 							</div>
 						</div>
 					</div>
