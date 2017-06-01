@@ -103,7 +103,7 @@
 											<div class="form-group">
 												<label class="col-md-3 control-label">Repayment Installments</label>
 												<div class="col-md-3">
-													<input type="number" class="form-control input-sm" name="installments" id="installments" data-bind='value: $root.installments, attr: {"data-rule-min":(parseFloat(minRepaymentInstallments)>0?minRepaymentInstallments:null), "data-rule-max": (parseFloat(maxRepaymentInstallments)>0?maxRepaymentInstallments:null), "data-msg-min":"Repayment Installments than "+minRepaymentInstallments, "data-msg-max":"Repayment Installments more than "+maxRepaymentInstallments}'>
+													<input type="number" class="form-control input-sm" name="installments" id="installments" data-bind='value: $root.installments, attr: {"data-rule-min":(parseFloat(minRepaymentInstallments)>0?minRepaymentInstallments:null), "data-rule-max": (parseFloat(maxRepaymentInstallments)>0?maxRepaymentInstallments:null), "data-msg-min":"Repayment Installments less than "+minRepaymentInstallments, "data-msg-max":"Repayment Installments more than "+maxRepaymentInstallments}'>
 													<div>
 														<label class="col-sm-4" data-bind="visible: parseFloat(minRepaymentInstallments)>0">Min</label>
 														<label class="col-sm-2" data-bind="visible: parseFloat(minRepaymentInstallments)>0, text: minRepaymentInstallments"></label>
@@ -120,27 +120,27 @@
 								<!--ko with: loanProduct -->
 								<h1>Loan Fees</h1>
 								<fieldset>
-									<h2>Applicable Fees</h2>
+									<h2>Applicable Fees (<span data-bind="text: $root.filteredLoanProductFees().length"></span>)</h2>
 									<div class="row">
 										<div class="form-group">
-											<div class="table-responsive" data-bind="visible: $root.productFees().length > 0">
+											<div class="table-responsive" data-bind="visible: $root.filteredLoanProductFees().length > 0">
 												<table class="table table-condensed">
 													<thead>
 														<tr>
 															<th>Choose</th>
 															<th>Name</th>
+															<th>Rate</th>
+															<th>Rate As</th>
 															<th>Amount(UGX)</th>
-															<th>Fee Type</th>
-															<th>Amount Calculated As</th>
 														</tr>
 													</thead>
-													<tbody data-bind="foreach: $root.productFees">
+													<tbody data-bind="foreach: $root.filteredLoanProductFees">
 														<tr>
 															<td><input class="icheckbox_square-green" style="position: relative;" name="fee" type="checkbox" data-bind="checkedValue: $data, checked: $root.loanAccountFees" /></td>
 															<td data-bind='text: feeName'></td>
 															<td data-bind='text: curr_format(amount)'></td>
-															<td data-bind='text: feeTypeName'></td>
 															<td data-bind='text: getDescription(5, $data.amountCalculatedAs)'></td>
+															<td data-bind='text: getFeeAmount($root.requestedAmount(), amount, $data.amountCalculatedAs)'></td>
 														</tr>
 													</tbody>
 												</table>
@@ -150,7 +150,7 @@
 								</fieldset>
 								<!-- /ko -->
 								<!--ko with: loanProduct -->
-								<!--ko if: (parseInt($root.client.clientType)==1) -->
+								<!--ko if: (parseInt($root.client().clientType)==1) -->
 								<h1>Guarantors</h1>
 								<fieldset>
 									<h2>Choose Guarantors</h2>
@@ -191,7 +191,7 @@
 											</div>
 											<div class="col-sm-3">
 											<a data-bind='click: $root.addGuarantor, enable: $root.selectedGuarantors().length < $root.loanProduct.minGuarantors' class="btn btn-info btn-sm"><i class="fa fa-plus"></i>Add Guarantor</a></div>
-											<div class="col-sm-3">Min <span data-bind='text: $root.loanProduct.minGuarantors'> </span></div>
+											<div class="col-sm-3">Minimum: <span data-bind='text: $root.loanProduct().minGuarantors'> </span></div>
 											<div class="col-sm-3">Total shares: <span data-bind='text: $root.totalShares()'> </span></div>
 											<div class="col-sm-3">Total savings: <span data-bind='text: $root.totalSavings()'> </span></div>
 										</div>

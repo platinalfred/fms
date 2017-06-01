@@ -107,16 +107,12 @@ if(isset($_POST['origin'])){
 			}
 		break;
 		case "loan_account":
-			/* $loanAccount = new LoanAccount();
+			$loanAccount = new LoanAccount();
 			$data['dateCreated'] = time();
 			$data['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			$data['dateModified'] = time();
 			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			
-			$feePostData = $data['feePostData'];
-			unset($data['feePostData']);
-			$guarantors= $data['guarantors'];
-			unset($data['guarantors']);
 			$output = $loanAccountId = $loanAccount->addLoanAccount($data);
 			
 			//send less data to reduce bandwidth usage
@@ -135,16 +131,21 @@ if(isset($_POST['origin'])){
 				//then add the guarantors
 				$guarantor = new Guarantor();
 				
-				foreach($guarantors as $guarantorDataItem){
-					$loanAccountGuarantor['loanAccountId'] = $loanAccountId;
-					$loanAccountGuarantor['guarantorId'] = $guarantorDataItem['id'];
-					$loanAccountGuarantor['dateCreated'] = time();
-					$loanAccountGuarantor['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-					$loanAccountGuarantor['dateModified'] = time();
-					$loanAccountGuarantor['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-					$output = $guarantor->addGuarantors($loanAccountGuarantor);
+				if(isset($data['guarantors'])){
+					$guarantors = $data['guarantors'];
+					unset($data['guarantors']);
+					
+					foreach($guarantors as $guarantorDataItem){
+						$loanAccountGuarantor['loanAccountId'] = $loanAccountId;
+						$loanAccountGuarantor['guarantorId'] = $guarantorDataItem['id'];
+						$loanAccountGuarantor['dateCreated'] = time();
+						$loanAccountGuarantor['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						$loanAccountGuarantor['dateModified'] = time();
+						$loanAccountGuarantor['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						$output = $guarantor->addGuarantors($loanAccountGuarantor);
+					}
+					unset($loanAccountGuarantor);
 				}
-				unset($loanAccountGuarantor);
 			}else{
 				//create loan account for group
 				$clientData['groupId'] = $data['clientId'] ;
@@ -156,19 +157,23 @@ if(isset($_POST['origin'])){
 			//insert the account fees since we now have
 			$loanAccountFee = new LoanAccountFee();
 			
-			foreach($feePostData as $feeDataItem){
-				$loanAccountFeeItem['loanAccountId'] = $loanAccountId;
-				$loanAccountFeeItem['loanProductFeeId'] = $feeDataItem['id'];
-				$loanAccountFeeItem['feeAmount'] = $feeDataItem['amount'];
-				$loanAccountFeeItem['dateCreated'] = time();
-				$loanAccountFeeItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-				$loanAccountFeeItem['dateModified'] = time();
-				$loanAccountFeeItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-				$output = $loanAccountFee->addLoanAccountFee($loanAccountFeeItem);
+			if(isset($data['feePostData'])){
+				$feePostData = $data['feePostData'];
+				foreach($feePostData as $feeDataItem){
+					$loanAccountFeeItem['loanAccountId'] = $loanAccountId;
+					$loanAccountFeeItem['loanProductFeenId'] = $feeDataItem['id'];
+					$loanAccountFeeItem['feeAmount'] = ($feeDataItem['amountCalculatedAs'] == 2?(($feeDataItem['amount']/100)*$data['requestedAmount']):$feeDataItem['amount']);
+					$loanAccountFeeItem['dateCreated'] = time();
+					$loanAccountFeeItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+					$loanAccountFeeItem['dateModified'] = time();
+					$loanAccountFeeItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+					$output = $loanAccountFee->addLoanAccountFee($loanAccountFeeItem);
+				}
+				unset($data['feePostData']);
 			}
 			
 			unset($loanAccountFeeItem);
-			unset($data); */
+			unset($data);/*  */
 		break;
 		default: //the default scenario
 		break;

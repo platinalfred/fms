@@ -80,7 +80,7 @@
 										<div><label class="control-label">Interest Rate Constraints(%)</label>
 										</div>
 										<div>
-											<label class="col-sm-1 control-label">Default</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="defInterest" id="defInterest" data-bind="value: defInterest"></div><label class="col-sm-1 control-label">Min</label><div class="col-sm-3"><input type="number" class="form-control input-sm" id="minInterest" name="minInterest" data-bind="value: minInterest"></div><label class="col-sm-1 control-label">Max</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="maxInterest" id="maxInterest" data-bind="value: maxInterest"></div>
+											<label class="col-sm-1 control-label">Default</label><div class="col-sm-3"><input type="text" class="form-control input-sm" name="defInterest" id="defInterest" data-bind="value: defInterest" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1 control-label">Min</label><div class="col-sm-3"><input type="text" class="form-control input-sm" id="minInterest" name="minInterest" data-bind="value: minInterest" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1 control-label">Max</label><div class="col-sm-3"><input type="text" class="form-control input-sm" name="maxInterest" id="maxInterest" data-bind="value: maxInterest" data-rule-min="0" data-rule-max="100"></div>
 										</div>
 									</div>
                                 </div>
@@ -176,15 +176,15 @@
                                 <div class="form-group" data-bind="visible: penCalcMethId">
                                     <div class="col-md-4">
 										<label class="control-label">Default Penalty Rate</label>
-										<div class="col-sm-9"><input type="number" class="form-control input-sm" name="defPenaltyRate" id="defPenaltyRate" data-bind="value: defPenaltyRate"></div><label class="col-sm-1">%</label>
+										<div class="col-sm-9"><input type="number" class="form-control input-sm" name="defPenaltyRate" id="defPenaltyRate" data-bind="value: defPenaltyRate" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1">%</label>
                                     </div>
                                     <div class="col-md-4">
 										<label class="control-label">Min Penalty Rate</label>
-										<div class="col-sm-9"><input type="number" class="form-control input-sm" id="minPenaltyRate" name="minPenaltyRate" data-bind="value: minPenaltyRate"></div><label class="col-sm-1">%</label>
+										<div class="col-sm-9"><input type="number" class="form-control input-sm" id="minPenaltyRate" name="minPenaltyRate" data-bind="value: minPenaltyRate" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1">%</label>
                                     </div>
                                     <div class="col-md-4">
 										<label class="control-label">Max Penalty Rate</label>
-										<div class="col-sm-9"><input type="number" class="form-control input-sm" name="maxPenaltyRate" id="maxPenaltyRate" data-bind="value: maxPenaltyRate"></div><label class="col-sm-1">%</label>
+										<div class="col-sm-9"><input type="number" class="form-control input-sm" name="maxPenaltyRate" id="maxPenaltyRate" data-bind="value: maxPenaltyRate" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1">%</label>
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>

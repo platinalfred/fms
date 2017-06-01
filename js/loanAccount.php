@@ -73,6 +73,18 @@
 				return (clientType == parseInt(loanProduct.availableTo) || parseInt(loanProduct.availableTo)==3);
 			});
 		});
+		//filter the loan product fees based on the currently selected product id
+		self.filteredLoanProductFees = ko.computed(function() {
+			if(self.loanProduct()){
+				var loanProductId = parseInt(self.loanProduct().id);
+				return ko.utils.arrayFilter(self.productFees(), function(productFee) {
+					return (loanProductId == parseInt(productFee.loanProductId));
+				});
+			}
+			else{
+				return self.productFees();
+			}
+		});
 		//filter the guarantors based on the user type and current client selected
 		self.filteredGuarantors = ko.computed(function() {
 			if(self.client()){
@@ -90,6 +102,8 @@
 		
 		//reset the whole form after saving data in the database
 		self.resetForm = function() {
+			self.client(null);
+			self.loanProduct(null);
 			$("#loanAccountForm")[0].reset();
 		};
 		
@@ -111,7 +125,6 @@
 		
 		//send the items to the server for saving
 		self.save = function(form) {
-			console.log(self.loanAccountFees());
 			$.ajax({
 				type: "post",
 				data:{
@@ -134,7 +147,7 @@
 					linkToDepositAccount : self.loanProduct()?self.loanProduct().linkToDepositAccount:undefined,
 					<?php if(isset($client)){if($client['clientType']==1){ ?> <?php } }?>
 					guarantors:self.guarantors(),//the guarantors
-					feePostData:self.loanAccountFees(), //the applicable fees
+					feePostData:self.filteredLoanProductFees(), //the applicable fees
 					origin : "loan_account"
 				},
 				url: "lib/AddData.php",
