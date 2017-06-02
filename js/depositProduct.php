@@ -157,6 +157,8 @@
 										showStatusMessage("Data successfully saved" ,"success");
 										setTimeout(function(){
 											self.resetForm();
+											var dt = dTable[tblDepositProduct];
+											dt.ajax.reload();
 										}, 3000);
 									}
 									else{

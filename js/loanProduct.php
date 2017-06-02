@@ -17,7 +17,8 @@
 		self.taxCalculationMethodOptions = [{"id":1, "desc":"Inclusive"},{"id":2, "desc":"Exclusive"}];
 		self.penaltyCalculationMethodOptions = ko.observableArray([{"id":1, "methodDescription":"No penalty"},{"id":2, "methodDescription":"(Overdue Principal + Overdue Interest)*# of Late Days * Penalty Rate"}]);
 		self.repaymentsMadeEveryOptions = [{id:1,desc:'Day(s)'},{id:2,desc:'Week(s)'},{id:3,desc:'Month(s)'}];
-		self.taxRateSourceOptions = [{id:1,desc:'Day'},{id:2,desc:'Week'},{id:3,desc:'Month'}];
+		self.penaltyChargeRate = [{id:1,desc:'Day'},{id:2,desc:'Week'},{id:3,desc:'Month'}];
+		self.taxRateSourceOptions = [{id:1,desc:'URA'},{id:2,desc:'GOVT'},{id:3,desc:'District'}];
 		
 		self.amountCalculatedAsOptions = [{id:1,desc:'Flat amount'},{id:2,desc:'% of Disbursement Amount'},];
 		
@@ -40,9 +41,9 @@
 		
 		self.productName = ko.observable();
 		self.description = ko.observable();
-		self.defAmount = ko.observable();
-		self.minAmount = ko.observable();
-		self.maxAmount = ko.observable();
+		self.defLoanAmount = ko.observable();
+		self.minLoanAmount = ko.observable();
+		self.maxLoanAmount = ko.observable();
 		self.maxTranches = ko.observable(1);
 		self.defInterest = ko.observable();
 		self.minInterest = ko.observable();
@@ -90,8 +91,8 @@
 		};
 		self.availableTo = function() {
 			var total = 0;
-			$.each(self.availableToCb(), function(k, v) {
-				total += parseInt(v);
+			$.map(self.availableToCb(), function(val) {
+				total += parseInt(val);
 			})
 			return total;
 		};
@@ -114,18 +115,13 @@
 		self.removeFee = function(fee) {
 			self.newLoanProductFees.remove(fee);
 		};
-		self.removeFees = function() {
-			self.newLoanProductFees.remove();
-		};
 		//reset the form
 		self.resetForm = function() {
-			/* if(self.newLoanProductFees())self.newLoanProductFees(null);
-			if(self.productFee())self.productFee(null); */
+			/* if(self.newLoanProductFees())self.newLoanProductFees(null);*/
 			$("#loanProductForm")[0].reset();
-			$.map(self.newLoanProductFees(), function(fee) {
-				self.newLoanProductFees.remove(fee);
-			});
-			self.updateLoanProductTypes();
+			self.newLoanProductFees.removeAll();
+			self.productType(null); 
+			//self.updateLoanProductTypes();
 		};
 		//Update the product types list
 		self.updateLoanProductTypes = function() {
@@ -169,9 +165,9 @@
 					productType : (self.productType()?self.productType().id:undefined),
 					active : (self.active()?1:0),
 					availableTo : self.availableTo,
-					defAmount : self.defAmount(),
-					minAmount : self.minAmount(),
-					maxAmount : self.maxAmount(),
+					defAmount : self.defLoanAmount(),
+					minAmount : self.minLoanAmount(),
+					maxAmount : self.maxLoanAmount(),
 					maxTranches : self.maxTranches(),
 					defInterest : self.defInterest(),
 					minInterest : self.minInterest(),
@@ -201,6 +197,8 @@
 					taxRateSource : self.taxRateSource()?self.taxRateSource().id:undefined,
 					taxCalculationMethod : (self.taxCalculationMethod()?self.taxCalculationMethod().id:undefined),
 					linkToDepositAccount : self.linkToDepositAccount(),
+					newLoanProductFees:feePostData,
+					existingLoanProductFees:self.productFee(),
 					origin : "loan_product"
 				},
 				url: "lib/AddData.php",
@@ -208,44 +206,12 @@
 					// if it was an OK response, get the id of the inserted product and insert the product fees
 					var result = parseInt(response)||0;
 					if(result){
-						if(self.newLoanProductFees().length>0){
-							$.ajax({
-								type: "post",
-								dataType: "json",
-								data:{feePostData:feePostData, origin: "loan_product_fee"},
-								url: "lib/AddData.php",
-								success: function(innerResponse){
-									if(innerResponse.length>0){
-										//not sure if the array actually gets pushed
-										var productfees = self.productFee();
-										self.productFee(productfees.concat(innerResponse));
-										showStatusMessage("Data successfully saved" ,"success");
-									}							
-								}
-							});
-						}
-						if(self.productFee().length>0){
-							$.ajax({
-								type: "post",
-								dataType: "json",
-								data:{productFeePostData:self.productFee(), productId: result, origin: "loan_product_feen"},
-								url: "lib/AddData.php",
-								success: function(innerResponse){
-									var result = parseInt(innerResponse)||0;
-									if(innerResponse){
-										showStatusMessage("Data successfully saved" ,"success");
-									}
-									else{
-										//tell the user why it wasn't successful
-										console.log(innerResponse);
-										showStatusMessage("Error saving data: \n"+innerResponse ,"failed");
-									}							
-								}
-							});
-						}
-						setTimeout(function(){
-							self.resetForm();
-						}, 3000);
+							showStatusMessage("Data successfully saved" ,"success");
+							setTimeout(function(){
+								self.resetForm();
+								var dt = dTable[tblLoanProduct];
+								dt.ajax.reload();
+							}, 3000);
 					}else{
 						console.log(response);
 						showStatusMessage("Error saving record: \n" + response, "failed");
@@ -255,9 +221,9 @@
 			});
 			
 		};
-		self.updateLoanProductTypes();//
 	};
 
 	var loanProductModel = new LoanProduct();
-	ko.applyBindings(loanProductModel, $("#loan_products")[0]);//
-	$("#loanProductForm").validate({ submitHandler: loanProductModel.save });//
+	ko.applyBindings(loanProductModel, $("#loan_products")[0]);
+	loanProductModel.updateLoanProductTypes();
+	$("#loanProductForm").validate({ submitHandler: loanProductModel.save });

@@ -59,20 +59,20 @@
 												<div class="col-md-3">
 													<input type="number" class="form-control input-sm" name="requestedAmount" id="requestedAmount" data-bind='value: $root.requestedAmount, attr: {"data-rule-min":(parseFloat(minAmount)>0?minAmount:null), "data-rule-max": (parseFloat(maxAmount)>0?maxAmount:null), "data-msg-min":"Loan amount is less than "+minAmount, "data-msg-max":"Loan amount is more than "+maxAmount}'/>
 													<div>
-														<label class="col-sm-4" data-bind="visible: parseFloat(minAmount)>0">Min</label>
-														<label class="col-sm-2" data-bind="visible: parseFloat(minAmount)>0, text: minAmount"></label>
-														<label class="col-sm-4" data-bind='visible: parseFloat(maxAmount)>0'>Max</label>
-														<label class="col-sm-2" data-bind="visible: parseFloat(maxAmount)>0, text: maxAmount"></label>
+														<label class="col-sm-2" data-bind="visible: parseFloat(minAmount)>0">Min</label>
+														<label class="col-sm-4" data-bind="visible: parseFloat(minAmount)>0, text: minAmount"></label>
+														<label class="col-sm-2" data-bind='visible: parseFloat(maxAmount)>0'>Max</label>
+														<label class="col-sm-4" data-bind="visible: parseFloat(maxAmount)>0, text: maxAmount"></label>
 													</div>
 												</div>
 												<label class="col-md-3 control-label">Interest Rate</label>
 												<div class="col-md-3">
 													<input type="number" class="form-control input-sm" name="interestRate" id="interestRate" data-bind='value: $root.interestRate, attr: {"data-rule-min":(parseFloat(minInterest)>0?minInterest:null), "data-rule-max": (parseFloat(maxInterest)>0?maxInterest:null), "data-msg-min":"Interest Rate is less than "+minInterest, "data-msg-max":"Interest Rate is more than "+maxInterest}'/>
 													<div>
-														<label class="col-sm-4" data-bind="visible: parseFloat(minInterest)>0">Min</label>
-														<label class="col-sm-2" data-bind="visible: parseFloat(minInterest)>0, text: minInterest"></label>
-														<label class="col-sm-4" data-bind='visible: parseFloat(maxInterest)>0'>Max</label>
-														<label class="col-sm-2" data-bind="visible: parseFloat(maxInterest)>0, text: maxInterest"></label>
+														<label class="col-sm-2" data-bind="visible: parseFloat(minInterest)>0">Min</label>
+														<label class="col-sm-4" data-bind="visible: parseFloat(minInterest)>0, text: minInterest"></label>
+														<label class="col-sm-2" data-bind='visible: parseFloat(maxInterest)>0'>Max</label>
+														<label class="col-sm-4" data-bind="visible: parseFloat(maxInterest)>0, text: maxInterest"></label>
 													</div>
 												</div>
 											</div>
@@ -82,20 +82,20 @@
 												<div class="col-md-3">
 													<input type="number" class="form-control input-sm" name="offSetPeriod" id="offSetPeriod" data-bind='value: $root.offSetPeriod, attr: {"data-rule-min":(parseFloat(minOffSet)>0?minOffSet:null), "data-rule-max": (parseFloat(maxOffSet)>0?maxOffSet:null), "data-msg-min":"Offset period is less than "+minOffSet, "data-msg-max":"Offset period is more than "+maxOffSet}'>
 													<div>
-														<label class="col-sm-4" data-bind="visible: parseFloat(minOffSet)>0">Min</label>
-														<label class="col-sm-2" data-bind="visible: parseFloat(minOffSet)>0, text: minOffSet"></label>
-														<label class="col-sm-4" data-bind="visible: parseFloat(maxOffSet)>0">Max</label>
-														<label class="col-sm-2" data-bind="visible: parseFloat(maxOffSet)>0, text: maxOffSet"></label>
+														<label class="col-sm-2" data-bind="visible: parseFloat(minOffSet)>0">Min</label>
+														<label class="col-sm-4" data-bind="visible: parseFloat(minOffSet)>0, text: minOffSet"></label>
+														<label class="col-sm-2" data-bind="visible: parseFloat(maxOffSet)>0">Max</label>
+														<label class="col-sm-4" data-bind="visible: parseFloat(maxOffSet)>0, text: maxOffSet"></label>
 													</div>
 												</div>
 												<label class="col-md-3 control-label">Grace Period <sup data-toggle="tooltip" title="Number of days the client is given to pay up upon default of the payment contract" data-placement="right"><i class="fa fa-question-circle"></i><sup></label>
 												<div class="col-md-3">
 													<input type="number" class="form-control input-sm" name="gracePeriod" id="gracePeriod" data-bind='value: $root.gracePeriod, attr: {"data-rule-min":(parseFloat(minGracePeriod)>0?minGracePeriod:null), "data-rule-max": (parseFloat(maxGracePeriod)>0?maxGracePeriod:null), "data-msg-min":"Grace Period is less than "+minGracePeriod, "data-msg-max":"Grace Period is more than "+maxGracePeriod}'>
 													<div>
-														<label class="col-sm-4" data-bind="visible: parseFloat(minGracePeriod)>0">Min</label>
-														<label class="col-sm-2" data-bind="visible: parseFloat(minGracePeriod)>0, text: minGracePeriod"></label>
-														<label class="col-sm-4" data-bind="visible: parseFloat(maxGracePeriod)>0">Max</label>
-														<label class="col-sm-2" data-bind="visible: parseFloat(maxGracePeriod)>0, text: maxGracePeriod"></label>
+														<label class="col-sm-2" data-bind="visible: parseFloat(minGracePeriod)>0">Min</label>
+														<label class="col-sm-4" data-bind="visible: parseFloat(minGracePeriod)>0, text: minGracePeriod"></label>
+														<label class="col-sm-2" data-bind="visible: parseFloat(maxGracePeriod)>0">Max</label>
+														<label class="col-sm-4" data-bind="visible: parseFloat(maxGracePeriod)>0, text: maxGracePeriod"></label>
 													</div>
 												</div>
 											</div>
@@ -105,10 +105,10 @@
 												<div class="col-md-3">
 													<input type="number" class="form-control input-sm" name="installments" id="installments" data-bind='value: $root.installments, attr: {"data-rule-min":(parseFloat(minRepaymentInstallments)>0?minRepaymentInstallments:null), "data-rule-max": (parseFloat(maxRepaymentInstallments)>0?maxRepaymentInstallments:null), "data-msg-min":"Repayment Installments less than "+minRepaymentInstallments, "data-msg-max":"Repayment Installments more than "+maxRepaymentInstallments}'>
 													<div>
-														<label class="col-sm-4" data-bind="visible: parseFloat(minRepaymentInstallments)>0">Min</label>
-														<label class="col-sm-2" data-bind="visible: parseFloat(minRepaymentInstallments)>0, text: minRepaymentInstallments"></label>
-														<label class="col-sm-4" data-bind="visible: parseFloat(maxRepaymentInstallments)>0">Max</label>
-														<label class="col-sm-2" data-bind="visible: parseFloat(maxRepaymentInstallments)>0, text: maxRepaymentInstallments"></label>
+														<label class="col-sm-2" data-bind="visible: parseFloat(minRepaymentInstallments)>0">Min</label>
+														<label class="col-sm-4" data-bind="visible: parseFloat(minRepaymentInstallments)>0, text: minRepaymentInstallments"></label>
+														<label class="col-sm-2" data-bind="visible: parseFloat(maxRepaymentInstallments)>0">Max</label>
+														<label class="col-sm-4" data-bind="visible: parseFloat(maxRepaymentInstallments)>0, text: maxRepaymentInstallments"></label>
 													</div>
 												</div>
 												<div class="col-md-6"> </div>

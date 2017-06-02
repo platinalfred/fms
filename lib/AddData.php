@@ -32,36 +32,40 @@ if(isset($_POST['origin'])){
 			$data['dateModified'] = time();
 			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			unset($data['origin']);
-			//print_r($data);
-			$output = $loanProduct->addLoanProduct($data);
-		break;
-		case "loan_product_fee":
-			$loanProductFee = new LoanProductFee();
-			//$productId = $data['productId'];
-			$productFees = array();
-			foreach($data['feePostData'] as $feeDataItem){
-				/* $feeDataItem['dateCreated'] = time();
-				$feeDataItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-				$feeDataItem['dateModified'] = time();
-				$feeDataItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;$feeDataItem['depositProductID'] = $productId;
-				 */
-				$productFees[] = $loanProductFee->addLoanProductFee($feeDataItem);
+			$output = $loanProductId = $loanProduct->addLoanProduct($data);
+			
+			if($loanProductId){
+				//insert new loan product fees to the loan products table
+				$productFees = array();
+				if(isset($data['newLoanProductFees'])){
+					$loanProductFee = new LoanProductFee();
+					foreach($data['newLoanProductFees'] as $feeDataItem){
+						$feeDataItem['dateCreated'] = time();
+						$feeDataItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						$feeDataItem['dateModified'] = time();
+						$feeDataItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						/*  */
+						$productFees[] = $loanProductFee->addLoanProductFee($feeDataItem);
+					}
+				}
+				
+				//then the actual fees assigned to this product
+				if(isset($data['existingLoanProductFees'])){
+					array_merge($productFees, $data['existingLoanProductFees']);
+					$loanProductFeen = new LoanProductFeen();
+					$loanProductFees = array();
+					foreach($data['existingLoanProductFees'] as $productFeeDataItem){
+						$loanProductFees['dateCreated'] = time();
+						$loanProductFees['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						$loanProductFees['dateModified'] = time();
+						$loanProductFees['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						$loanProductFees['loanProductId'] = $loanProductId;
+						$loanProductFees['loanProductFeeId'] = $productFeeDataItem;
+						$loanProductFeenId = $loanProductFeen->addLoanProductFeen($loanProductFees);
+					}
+				}
 			}
-			$output = json_encode($productFees);
-		break;
-		case "loan_product_feen":
-			$loanProductFeen = new LoanProductFeen();
-			$loanProductId = $data['productId'];
-			$loanProductFees = array();
-			foreach($data['productFeePostData'] as $productFeeDataItem){
-				$loanProductFees['dateCreated'] = time();
-				$loanProductFees['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-				$loanProductFees['dateModified'] = time();
-				$loanProductFees['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-				$loanProductFees['loanProductId'] = $loanProductId;
-				$loanProductFees['loanProductFeeId'] = $productFeeDataItem;
-				$output = $loanProductFeen->addLoanProductFeen($loanProductFees);
-			}
+			unset($data);
 		break;
 		case "deposit_account":
 			$depositAccount = new DepositAccount();
