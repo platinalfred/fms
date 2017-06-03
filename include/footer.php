@@ -1,7 +1,7 @@
 			</div>
 			<div class="footer">
                 <div class="pull-right">
-                    10GB of <strong>250GB</strong> Free.
+                    Developed by <a href="http://www.connectsoftz.com" target="_blank"><img style="width:40%;" src="img/cs_logo.png"></a>
                 </div>
                 <div>
                     <strong>Copyright</strong> Buladde Financial Services &copy; 2017

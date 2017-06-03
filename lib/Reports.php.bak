@@ -358,54 +358,54 @@ Class Reports{
 		$all_member_deposits = $accounts->findMemberDeposits($member_data['personId']); 
 		?>
 			<div class="ibox">
-			  <div class="ibox_title">
-				<h2><?php echo $account_names['firstname']." ".$account_names['lastname']; ?> <small> My savings</small></h2>
-				<div class="clearfix"></div>
-			  </div>
+                  <div class="ibox_title">
+                    <h2><?php echo $account_names['firstname']." ".$account_names['lastname']; ?> <small> My savings</small></h2>
+                    <div class="clearfix"></div>
+                  </div>
 
-			  <div class="ibox_content">
-					<?php 
-					if($all_member_deposits){  ?>
-						<div class="table-responsive">
-						  <table class="table table-striped jambo_table bulk_action">
-							<thead>
-							  <tr class="headings">
-								
-								<?php 
-								$header_keys = array("Amount", "Amount in Words", "Deposited By","Date Deposited");
-								foreach($header_keys as $key){ ?>
-									<th><?php echo $key; ?></th>
-									<?php
-								}
-								?>
-							  </tr>
-							</thead>
-
-							<tbody>
-								<?php 
-								foreach($all_member_deposits as $single){ 
+                  <div class="ibox_content">
+						<?php 
+						if($all_member_deposits){  ?>
+							<div class="table-responsive">
+							  <table class="table table-striped jambo_table bulk_action">
+								<thead>
+								  <tr class="headings">
 									
+									<?php 
+									$header_keys = array("Amount", "Amount in Words", "Deposited By","Date Deposited");
+									foreach($header_keys as $key){ ?>
+										<th><?php echo $key; ?></th>
+										<?php
+									}
 									?>
-									<tr class="even pointer " >
+								  </tr>
+								</thead>
+
+								<tbody>
+									<?php 
+									foreach($all_member_deposits as $single){ 
 										
-										<td class=" "><?php echo $single['amount']; ?></td>
-										<td class=" "><?php echo $single['amount_description']; ?> </td>
-										<td class=" "><?php echo $single['transacted_by']; ?></td>
-										<td class="a-right a-right "><?php echo date("j F, Y", strtotime($single['transaction_date'])); ?></td>
-									</tr>
-									<?php
-								}
-								?>
-							</tbody>
-						  </table>
-						</div>
-					<?php 
-					}else{
-						echo "There are current no deposits.";
-					}
-					?>
-			  </div>
-            </div>
+										?>
+										<tr class="even pointer " >
+											
+											<td class=" "><?php echo $single['amount']; ?></td>
+											<td class=" "><?php echo $single['amount_description']; ?> </td>
+											<td class=" "><?php echo $single['transacted_by']; ?></td>
+											<td class="a-right a-right "><?php echo date("j F, Y", strtotime($single['transaction_date'])); ?></td>
+										</tr>
+										<?php
+									}
+									?>
+								</tbody>
+							  </table>
+							</div>
+						<?php 
+						}else{
+							echo "There are current no deposits.";
+						}
+						?>
+                  </div>
+              </div>
            
 		<?php
 	}

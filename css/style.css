@@ -6,6 +6,9 @@
  *   version 2.4
  *
 */
+.clearboth{
+	clear:both;
+}
 h1,
 h2,
 h3,

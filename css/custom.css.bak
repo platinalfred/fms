@@ -1,6 +1,7 @@
 .details{
     border-bottom: 1px dotted #DFE3FC;
 }
+}
 .daterangepicker .ranges li {
     color: #73879C
 }

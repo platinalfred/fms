@@ -8,7 +8,30 @@ $(document).ready(function(){
 	//This is an object that will hold data table names acrross the settings insterface
 	var dTable = new Object();
 	//With this one function all settings will be sent to save_data.php for saving
-	
+	function saveData(){
+		$(".save").click(function(){
+			var frmdata = $(this).closest("form").serialize();
+			$.ajax({
+				url: "save_data.php",
+				type: 'POST',
+				data: frmdata,
+				success: function (response) {
+					if($.trim(response) == "success"){
+						showStatusMessage("Successfully added new record" ,"success");
+						setTimeout(function(){
+							dTable.ajax.reload();
+						}, 2000);
+					}else{
+						
+						showStatusMessage(response, "fail");
+					}
+					
+				}
+			});
+
+			return false;
+		});
+	}
 	//Functions being used in more than one instances / places
 		/* Delete whenever a Delete Button has been clicked */
 	 function deleteDataTableRowData(){

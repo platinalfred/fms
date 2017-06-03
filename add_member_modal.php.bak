@@ -240,8 +240,8 @@ function addCommas(nStr){
 									</div>
 									<div class="col-sm-4">
 										<div class="form-group"><label class="col-lg-12" >Gender</label>
-											<label > <input name="relative_gender" class="i-checks" type="radio" value="1" required>Male</label>
-											<label > <input name="relative_gender" class="i-checks" type="radio" value="0" required> Female</label>
+											<label > <input name="is_next_of_kin" class="i-checks" type="radio" value="M" required>Male</label>
+											<label > <input name="is_next_of_kin" class="i-checks" type="radio" value="F" required> Female</label>
 										</div>
 									</div>
 									<div class="col-lg-12">

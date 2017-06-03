@@ -449,9 +449,13 @@ class Db{
 		if($inse){
 			
 			return mysqli_insert_id($this->conn);
+<<<<<<< HEAD
 		} 
 		return false;
-		
+=======
+		}
+		return mysqli_error($this->conn);
+>>>>>>> ff079cd09b7e94318e50b0b67b2fe31be3f77c5d
 	}
 	function addMultiple($table, $fields, $values){
 		$fi = implode(",", $fields);
