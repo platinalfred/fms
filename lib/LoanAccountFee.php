@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class LoanAccountFee extends Db {
 	protected static $table_name  = "loan_account_fee";
-	protected static $table_fields = array("id", "loanProductFeeId", "feeAmount", "dateCreated", "createdBy", "dateModified", "modifiedBy");
+	protected static $table_fields = array("id", "loanAccountId", "loanProductFeenId", "feeAmount", "dateCreated", "createdBy", "dateModified", "modifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");

@@ -152,12 +152,12 @@ elseif(isset($_POST['origin'])&&$_POST['origin']=='deposit_account'){
 }
 elseif(isset($_POST['origin'])&&$_POST['origin']=='loan_account'){
 	$loanProductObj = new LoanProduct();
-	$productFeeObj = new LoanProductFee();
+	$productFeeObj = new LoanProductFeen();
 	$memberObj = new Member();
 	$saccoGroupObj = new SaccoGroup();
 	
 	$data['products'] = $loanProductObj->findAll();
-	$data['productFees'] = $productFeeObj->findAll();
+	$data['productFees'] = $productFeeObj->findAllLPFDetails();
 	$data['guarantors'] = $memberObj->findGuarantors();
 	
 	$members = $memberObj->findSelectList();

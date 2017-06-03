@@ -36,7 +36,7 @@
 									<label class="control-label col-sm-2">Availabe To</label>
                                     <div class="col-sm-4">
 										<label class="checkbox-inline"> <input type="checkbox" value="1" id="availableToindividuals" name="availableTo" data-bind="checked: availableToCb"> Individual Clients </label> <label class="checkbox-inline">
-                                        <input type="checkbox" value="2" id="availableToGroups" name="availableTo" data-bind="checked: availableToCb"> Groups </label>
+                                        <input type="checkbox" value="2" id="availableToGroups" name="availableToGroups" data-bind="checked: availableToCb"> Groups </label>
 									</div>
 
                                     <div class="col-sm-6">
@@ -64,7 +64,7 @@
 										<div><label class="control-label">Loan Amount Constraints</label>
 										</div>
 										<div>
-											<label class="col-sm-1 control-label">Default</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="defAmount" id="defAmount" data-bind="value: defAmount"></div><label class="col-sm-1 control-label">Min</label><div class="col-sm-3"><input type="number" class="form-control input-sm" id="minAmount" name="minAmount" data-bind="value: minAmount"></div><label class="col-sm-1 control-label">Max</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="maxAmount" id="maxAmount" data-bind="value: maxAmount"></div>
+											<label class="col-sm-1 control-label">Default</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="defLoanAmount" id="defLoanAmount" data-bind="value: defLoanAmount"></div><label class="col-sm-1 control-label">Min</label><div class="col-sm-3"><input type="number" class="form-control input-sm" id="minLoanAmount" name="minLoanAmount" data-bind="value: minLoanAmount"></div><label class="col-sm-1 control-label">Max</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="maxLoanAmount" id="maxLoanAmount" data-bind="value: maxLoanAmount"></div>
 										</div>
 									</div>
                                 </div>
@@ -80,7 +80,7 @@
 										<div><label class="control-label">Interest Rate Constraints(%)</label>
 										</div>
 										<div>
-											<label class="col-sm-1 control-label">Default</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="defInterest" id="defInterest" data-bind="value: defInterest"></div><label class="col-sm-1 control-label">Min</label><div class="col-sm-3"><input type="number" class="form-control input-sm" id="minInterest" name="minInterest" data-bind="value: minInterest"></div><label class="col-sm-1 control-label">Max</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="maxInterest" id="maxInterest" data-bind="value: maxInterest"></div>
+											<label class="col-sm-1 control-label">Default</label><div class="col-sm-3"><input type="text" class="form-control input-sm" name="defInterest" id="defInterest" data-bind="value: defInterest" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1 control-label">Min</label><div class="col-sm-3"><input type="text" class="form-control input-sm" id="minInterest" name="minInterest" data-bind="value: minInterest" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1 control-label">Max</label><div class="col-sm-3"><input type="text" class="form-control input-sm" name="maxInterest" id="maxInterest" data-bind="value: maxInterest" data-rule-min="0" data-rule-max="100"></div>
 										</div>
 									</div>
                                 </div>
@@ -168,7 +168,7 @@
 										<label class="col-sm-5">How is the penalty rate charged</label>
 										<label class="col-sm-3">% per</label>
 										<div class="col-sm-4">
-											<select class="form-control" id="penaltyRateChargedPer" name="penaltyRateChargedPer" data-bind='css: {required: penaltyTolerancePeriod()}, options: taxRateSourceOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: penaltyRateChargedPer'>
+											<select class="form-control" id="penaltyRateChargedPer" name="penaltyRateChargedPer" data-bind='css: {required: penaltyTolerancePeriod()}, options: penaltyChargeRate, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: penaltyRateChargedPer'>
 										</select>
 										</div>
                                     </div>
@@ -176,15 +176,15 @@
                                 <div class="form-group" data-bind="visible: penCalcMethId">
                                     <div class="col-md-4">
 										<label class="control-label">Default Penalty Rate</label>
-										<div class="col-sm-9"><input type="number" class="form-control input-sm" name="defPenaltyRate" id="defPenaltyRate" data-bind="value: defPenaltyRate"></div><label class="col-sm-1">%</label>
+										<div class="col-sm-9"><input type="text" class="form-control input-sm" name="defPenaltyRate" id="defPenaltyRate" data-bind="value: defPenaltyRate" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1">%</label>
                                     </div>
                                     <div class="col-md-4">
 										<label class="control-label">Min Penalty Rate</label>
-										<div class="col-sm-9"><input type="number" class="form-control input-sm" id="minPenaltyRate" name="minPenaltyRate" data-bind="value: minPenaltyRate"></div><label class="col-sm-1">%</label>
+										<div class="col-sm-9"><input type="text" class="form-control input-sm" id="minPenaltyRate" name="minPenaltyRate" data-bind="value: minPenaltyRate" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1">%</label>
                                     </div>
                                     <div class="col-md-4">
 										<label class="control-label">Max Penalty Rate</label>
-										<div class="col-sm-9"><input type="number" class="form-control input-sm" name="maxPenaltyRate" id="maxPenaltyRate" data-bind="value: maxPenaltyRate"></div><label class="col-sm-1">%</label>
+										<div class="col-sm-9"><input type="text" class="form-control input-sm" name="maxPenaltyRate" id="maxPenaltyRate" data-bind="value: maxPenaltyRate" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1">%</label>
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
@@ -252,7 +252,7 @@
 													<td><input class="form-control input-sm required" name="amount[]" type="number" data-bind='value: amount' required/></td>
 													<td><select class="form-control" id="feeType" name="feeType" data-bind='options: $parent.feeTypesOptions, optionsText: "description", optionsCaption: "Select...", , optionsAfterRender: $parent.setOptionValue("id"), value: feeType' data-msg-required="Fee type is required">
 													</select></td>
-													<td><select class="form-control " id="amountCalculatedAs" name="amountCalculatedAs" data-bind='options: $parent.amountCalculatedAsOptions, optionsText: "desc", , optionsAfterRender: $root.setOptionValue("id"), optionsCaption: "Select...", value: $parent.amountCalculatedAs'>
+													<td><select class="form-control " id="amountCalculatedAs" name="amountCalculatedAs" data-bind='options: $parent.amountCalculatedAsOptions, optionsText: "desc", , optionsAfterRender: $root.setOptionValue("id"), optionsCaption: "Select...", value: amountCalculatedAs'>
 													</select><!-- to be used later , css: {required:id==2} --></td>
 													<td><input class="form-control input-sm required" name="requiredFee[]" type="checkbox" data-bind='checked: requiredFee' required/></td>
 													<td><span title="Remove fee" class="btn text-danger" data-bind='click: $root.removeFee'><i class="fa fa-minus"></i></span></td>

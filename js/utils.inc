@@ -160,7 +160,7 @@ function showStatusMessage(message='', display_type='success'){
 			[{id:1,desc:'Manual'},{id:2,desc:'Monthly Fee'}],
 			[{id:1,desc:'Monthly from Activation'},{id:2,desc:'Monthly from Start of Month'}],
 			[{id:1,desc:'Days'},{id:2,desc:'Weeks'},{id:3,desc:'Months'}],
-			[{id:1,desc:'Flat amount'},{id:2,desc:'% of Disbursement Amount'},]
+			[{id:1,desc:'Flat amount'},{id:2,desc:'% of Disbursement Amount'}]
 		];
 		var description = "";
 		$.each(arrays[array_index], function(k, v) {
@@ -168,6 +168,12 @@ function showStatusMessage(message='', display_type='success'){
 			description = v.desc;
 		});
 		return description;
+	};
+	//calculate the fee amount
+	function getFeeAmount(amount, rate, rateAs) {
+		//var arrays = [{id:1,desc:'Flat amount'},{id:2,desc:'% of Disbursement Amount'}];
+		//return (parseInt(rateAs) == 0?(parseFloat(rate)*parseFloat(amount)):rate);
+		return curr_format((parseInt(rateAs) == 2?((parseFloat(rate)/100)*parseFloat(amount)):rate));
 	};
 /*$(function () {
   $('[data-toggle="tooltip"]').tooltip()

@@ -16,6 +16,13 @@ class LoanProductFeen extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
+	public function findAllLPFDetails(){
+		$table = self::$table_name. " JOIN `loan_product_fee` ON `loan_product_feen`.`loanProductFeeId` = `loan_product_fee`.`id`";
+		$fields = "`loan_product_feen`.`id`, `feeName`, `loanProductId`, `amountCalculatedAs`, `requiredFee`, `amount`";
+		$result_array = $this->getfarray($table, $fields, "", "", "");
+		return !empty($result_array) ? $result_array : false;
+	}
+	
 	public function addLoanProductFeen($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
