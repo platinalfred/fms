@@ -26,42 +26,17 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
 }
 //list of loans
 if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
-	if(isset($_POST['type']) && $_POST['type'] == 1){ //performing loans
-		
-		if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
-			
-			$where = "`id` IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF('".$_POST['end_date']."',`transaction_date`)<61)";
-		}else{
-			$where = "`loan`.`id` IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF(`transaction_date`,CURDATE())<61)";
-		}
-	}
-	if(isset($_POST['type']) && $_POST['type'] == 2){ //non-performing loans
-		
-		if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
-			
-			$where = "(`loan_date` <= '".$_POST['end_date']."') AND `expected_payback` > COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id`),0) AND `id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$_POST['end_date']."',`transaction_date`)<61)";
-		}else{
-			$where = "`loan`.`id` NOT IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF(`transaction_date`,CURDATE())<61)";
-		}
-	}
-	if(isset($_POST['type']) && $_POST['type'] == 3){ //active loans
-		if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
-			
-			$where = "(`loan_date` <= '".$_POST['end_date']."') AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE (`transaction_date` < '".$_POST['end_date']."') AND `loan_id` = `loan`.`id`),0)";
-		}else{
-			$where = "`expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE `loan_id` = `loan`.`id`),0)";
-		}
-		
-	}
-	if(isset($_POST['type']) && $_POST['type'] == 4){ //due loans
-		$where = "`expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE `loan_id` = `loan`.`id`),0)";
-	}
-
-	$table = "`loan` JOIN `person` ON `loan`.`person_number` = `person`.`id` JOIN `loan_type` ON `loan`.`loan_type` = `loan_type`.`id`";
 	
-	$primary_key = "`loan`.`id`";
+	$member_sql = "(SELECT `members`.`id` `clientId`, loanAccountId, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType` FROM `member_loan_account` JOIN (SELECT `member`.`id`, `firstname`, `lastname`, `othername` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`)`members` ON `memberId` = `members`.`id`)";
+	$saccogroup_sql = "(SELECT `saccogroup`.`id` `clientId`, `loanAccountId`, `groupName` `clientNames`, 2 as `clientType` FROM `group_loan_account` JOIN `saccogroup` ON `saccoGroupId` = `saccogroup`.`id`)";
+	
+	$member_group_union_sql = " ".$member_sql. " UNION ". $saccogroup_sql . " ORDER BY `clientNames`";
+	
+	$table = "`loan_account` JOIN ($member_group_union_sql) `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id`";
+	
+	$primary_key = "`loan_account`.`id`";
 
-	$columns = array( "`loan`.`id`", "`loan`.`loan_number`", "`firstname`", "`loan_type`.`name`", "`lastname`", "`othername`", "`loan_amount`","`interest_rate`","`expected_payback`", "`loan_date`", "`loan_end_date`", "TIMESTAMPDIFF(day, `loan_date`,`loan_end_date`) `duration`" );
+	$columns = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`productName`", "`requestedAmount`","`interestRate`","`disbursedAmount`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" );
 }
 //list of the income transactions
 if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {

@@ -103,7 +103,7 @@
 											<div class="form-group">
 												<label class="col-md-3 control-label">Repayment Installments</label>
 												<div class="col-md-3">
-													<input type="number" class="form-control input-sm" name="installments" id="installments" data-bind='value: $root.installments, attr: {"data-rule-min":(parseFloat(minRepaymentInstallments)>0?minRepaymentInstallments:null), "data-rule-max": (parseFloat(maxRepaymentInstallments)>0?maxRepaymentInstallments:null), "data-msg-min":"Repayment Installments less than "+minRepaymentInstallments, "data-msg-max":"Repayment Installments more than "+maxRepaymentInstallments}'>
+													<input type="number" class="form-control input-sm" name="installments" id="installments" data-bind='value: $root.installments, attr: {"data-rule-min":(parseFloat(minRepaymentInstallments)>0?minRepaymentInstallments:null), "data-rule-max": (parseFloat(maxRepaymentInstallments)>0?maxRepaymentInstallments:null), "data-msg-min":"Repayment Installments less than "+minRepaymentInstallments, "data-msg-max":"Repayment Installments more than "+maxRepaymentInstallments}' required />
 													<div>
 														<label class="col-sm-2" data-bind="visible: parseFloat(minRepaymentInstallments)>0">Min</label>
 														<label class="col-sm-4" data-bind="visible: parseFloat(minRepaymentInstallments)>0, text: minRepaymentInstallments"></label>
@@ -111,7 +111,7 @@
 														<label class="col-sm-4" data-bind="visible: parseFloat(maxRepaymentInstallments)>0, text: maxRepaymentInstallments"></label>
 													</div>
 												</div>
-												<div class="col-md-6"> </div>
+												<div class="col-md-6"><label class="control-label"></label><label>made every <span data-bind="text: repaymentsFrequency +' '+getDescription(4,repaymentsMadeEvery)"></span></label></div>
 											</div>
 										</div>
 									</div>
@@ -123,7 +123,7 @@
 									<h2>Applicable Fees (<span data-bind="text: $root.filteredLoanProductFees().length"></span>)</h2>
 									<div class="row">
 										<div class="form-group">
-											<div class="table-responsive" data-bind="visible: $root.filteredLoanProductFees().length > 0">
+											<div class="table-responsive" data-bind="">
 												<table class="table table-condensed">
 													<thead>
 														<tr>
@@ -183,7 +183,7 @@
 																<input name="guarantor[]" data-bind='value: person_number' type="hidden"/>
 															</td>
 															<td>
-																<a href='#' data-bind='click: $root.removeGuarantor' title="Remove"><span class="fa fa-times red"></span></a>
+																<span title="Remove item" class="btn text-danger" data-bind='click: $root.removeGuarantor'><i class="fa fa-minus"></i></span>
 															</td>
 														</tr>
 													</tbody>
@@ -199,8 +199,55 @@
 								</fieldset>
 								<!-- /ko -->
 								<!-- /ko -->
+								<!--ko with: loanProduct -->
+								<!--ko if: (parseInt($root.client().clientType)==1) -->
+								<h1>Collateral</h1>
+								<fieldset>
+									<h2>Add Collateral</h2>
+									<div class="row">
+										<div class="hr-line-dashed"></div>
+										<div class="form-group" data-bind="visible: $root.addedCollateral().length > 0">
+											<div class="col-md-12">
+												<div class="col-sm-6">Total Collateral: UGX <span data-bind="text: curr_format($root.totalCollateral()), css: {'text-danger': $root.totalCollateral()<(($root.loanProduct().minCollateral/100)*$root.requestedAmount()), 'text-info': $root.totalCollateral()>(($root.loanProduct().minCollateral/100)*$root.requestedAmount())}"></span> <i  data-bind="css: {'fa fa-check text-info':$root.totalCollateral()>(($root.loanProduct().minCollateral/100)*$root.requestedAmount())}"></i></div>
+												<div class="col-sm-6" class="text-info">
+												Required Minimum: UGX <span data-bind='text: curr_format(($root.loanProduct().minCollateral/100)*$root.requestedAmount())'> </span>
+												</div>
+											</div>
+										<div class="hr-line-dashed"></div>
+											<div class="table-responsive">
+												<table class="table table-condensed">
+													<thead>
+														<tr>
+															<th>Item Name</th>
+															<th>Description</th>
+															<th>Item Value</th>
+															<th>Attachment</th>
+															<th>&nbsp;</th>
+														</tr>
+													</thead>
+													<tbody data-bind="foreach: $root.addedCollateral">
+														<tr>
+															<td><input class="form-control input-sm required" name="itemName[]" data-bind='value: itemName, uniqueName: true' data-msg-required="Item name is required" required/></td>
+															<td><textarea class="form-control input-sm required" name="description[]" data-bind='value: description' required></textarea></td>
+															<td><input class="form-control input-sm required" name="itemValue[]" type="number" data-bind='value: itemValue' required/></td>
+															<td><input class="input-sm" name="attachmentUrl[]" type="file" data-bind='value: attachmentUrl'/></td>
+															<td><span title="Remove item" class="btn text-danger" data-bind='click: $root.removeCollateral'><i class="fa fa-minus"></i></span></td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-12">
+											<span class="btn btn-info btn-sm pull-right" data-bind='click: $root.addCollateral'><i class="fa fa-plus"></i> Add Item</span>
+											</div>
+										</div>
+									</div>
+								</fieldset>
+								<!-- /ko -->
+								<!-- /ko -->
                                 <div class="form-group">
-                                    <div class="col-sm-4 col-sm-offset-2">
+                                    <div class="col-sm-6 col-sm-offset-2">
                                         <button class="btn btn-warning" type="reset">Cancel</button>
                                         <button class="btn btn-primary" type="submit" data-bind="enable: loanProduct">Submit</button>
                                     </div>

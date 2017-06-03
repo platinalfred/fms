@@ -1,8 +1,11 @@
 <script type="text/javascript">
-	/* var LoanAccountFee = function() {
+	var Collateral = function() {
 			var self = this;
-			self.loanAccountFee = ko.observable()
-	}; */
+			self.itemName = ko.observable();
+			self.description = ko.observable();
+			self.itemValue = ko.observable();
+			self.attachmentUrl = ko.observable();
+		};
 	//list of the guarantors
 	var GuarantorSelection = function() {
 		var self = this;
@@ -15,12 +18,22 @@
 		self.guarantors = ko.observableArray();
 		// Stores an array of selectedGuarantors
 		self.selectedGuarantors = ko.observableArray([new GuarantorSelection()]);
+		self.addedCollateral = ko.observableArray([new Collateral()]);
 		// Put one guarantor in by default
 		self.totalSavings = ko.pureComputed(function() {
 			var total = 0;
 			$.map(self.selectedGuarantors(), function(selectedGuarantor) {
 				if(selectedGuarantor.guarantor()) {
 					total += parseFloat("0" + selectedGuarantor.guarantor().savings);
+				};
+			});
+			return total;
+		});
+		self.totalCollateral = ko.pureComputed(function() {
+			var total = 0;
+			$.map(self.addedCollateral(), function(collateralItem) {
+				if(collateralItem.itemValue()) {
+					total += parseFloat("0" + collateralItem.itemValue());
 				};
 			});
 			return total;
@@ -38,6 +51,9 @@
 		// Operations
 		self.addGuarantor = function() { self.selectedGuarantors.push(new GuarantorSelection()) };
 		self.removeGuarantor = function(selectedGuarantor) { self.selectedGuarantors.remove(selectedGuarantor) };
+		self.addCollateral = function() { self.addedCollateral.push(new Collateral()) };
+		self.removeCollateral = function(addedCollateral) { self.addedCollateral.remove(addedCollateral) };
+		
 		self.customers = ko.observableArray([{"id":1,"clientNames":"Kiwatule Womens Savings Group","clientType":2}]);
 		// Stores an array of all the Data for viewing on the page
 		self.loanProducts = ko.observableArray([{"id":1,"productName":"Group Savings Loan","description":"Suitable for group savings", "availableTo":"2"}]);
@@ -148,6 +164,7 @@
 					<?php if(isset($client)){if($client['clientType']==1){ ?> <?php } }?>
 					guarantors:self.guarantors(),//the guarantors
 					feePostData:self.filteredLoanProductFees(), //the applicable fees
+					collateral:self.addedCollateral(), //the applicable fees
 					origin : "loan_account"
 				},
 				url: "lib/AddData.php",

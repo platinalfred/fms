@@ -151,10 +151,10 @@ $person = new Person();
                     <li>
                         <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Reports</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li><a href="loans.php">Loans</a></li>
-                            <li><a href="dashboard2.php">Shares</a></li>
-                            <li><a href="#">Subscriptions</a></li>
-                            <li><a href="#">Savings</a></li>
+                            <li><a href="view_loans.php">Loans</a></li>
+                            <li><a href="view_savings.php">Savings</a></li>
+                            <li><a href="view_shares.php">Shares</a></li>
+                            <li><a href="view_subscriptions.php">Subscriptions</a></li>
                             <li><a href="#">Log Reports</a></li>
                             <li><a href="#">Income Statement</a></li>
                         </ul>
