@@ -23,7 +23,6 @@ $person = new Person();
 
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-	 <link href="css/general.css" rel="stylesheet">
 		<?php
 	if(in_array("dataTables", $needed_files)){
 		?>

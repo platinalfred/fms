@@ -61,7 +61,7 @@ class Person extends Db {
 			
 	}
 	public function addRelative($data){
-		$fields = array("person_id",  "is_next_of_kin", "first_name", "last_name", "other_names", "telephone", "relative_gender", "relationship", "address", "address2");
+		$fields = array("person_id",  "is_next_of_kin", "first_name", "last_name", "other_names", "telephone", "gender", "relationship", "address", "address2");
 		return $this->add("peron_relative", $fields, $this->generateAddFields($fields, $data)); 
 			
 	}

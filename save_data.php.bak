@@ -3,23 +3,23 @@ require_once('lib/Libraries.php');
 $output = "";
 if(isset($_POST['tbl'])){
 	switch($_POST['tbl']){
-		case "subscription":
 			$data = $_POST;
-			$member = new Member();
-			$subscription = new Subscription();
-			$income = new Income();
-			$data['date_paid'] = date("Y-m-d");
-			 if($subscription->addSubscription($data)){
-				$data['income_type'] = 1;
-				$data['date_added'] = date("Y-m-d");
-				$data['added_by'] = $data['received_by'];
-				
-				$data['description'] = "Annual subscription paid by ".$member->findMemberNames($data['person_id'])." for year ".$data['subscription_year'];
-				if($income->addIncome($data)){
-					echo "success";
-					return;
-				}
-			}  
+	$member = new Member();
+	$subscription = new Subscription();
+	$income = new Income();
+	$data['date_paid'] = date("Y-m-d");
+	 if($subscription->addSubscription($data)){
+		$data['income_type'] = 1;
+		$data['date_added'] = date("Y-m-d");
+		$data['added_by'] = $data['received_by'];
+		
+		$data['description'] = "Annual subscription paid by ".$member->findMemberNames($data['person_id'])." for year ".$data['subscription_year'];
+		if($income->addIncome($data)){
+			echo "success";
+			return;
+		}
+	}  	case "subscription":
+	
 		break;
 		case "shares":
 			$data = $_POST;

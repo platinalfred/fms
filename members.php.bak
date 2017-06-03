@@ -63,7 +63,7 @@ $member = new Member();
 						<div id="member_details" class="tab-pane active">
 							<div class="row m-b-lg" data-bind="with: member_details">
 								<div class="col-lg-4 text-center">
-									<h2 id="name"><span data-bind="text: firstname+' '+lastname+' '+othername">a a</span></h2>
+									<h2 id="name"><span data-bind="text: firstname+' '+lastname+' '+othername">Nicki Smith</span></h2>
 									<div class="m-b-sm">
 										<img alt="image" class="img-circle" id="photo" src="img/user.png" style="width: 62px">
 									</div>

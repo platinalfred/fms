@@ -1,0 +1,9 @@
+.details{
+    border-bottom: 1px dotted #DFE3FC;
+}
+.clearboth{
+	clear:both;
+}
+.lead{
+	font-size: 18px !important;
+}

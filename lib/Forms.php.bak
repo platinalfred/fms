@@ -887,7 +887,7 @@ Class Forms{
 				</ul>
 				<div class="clearfix"></div>
 			  </div>
-			 <div class="ibox-content">
+			  <div class="x_content">
 				<?php 
 				if($max_withdraw < 5000){ ?>
 					<h4>Your account is insufficient, you can not withdraw less than the minimum balance of <?php echo $accounts->numberFormat($minimum_amount); ?>, your current balance is <?php echo $accounts->numberFormat($account_balance); ?> </h4>

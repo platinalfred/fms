@@ -46,7 +46,7 @@ class Member extends Db {
 		return !empty($result) ? $result['branchName'] : false;
 	}
 	public function findMemberNames($p_id){
-		$result = $this->getfrec("person", "firstname, lastname, othername", "id=".$p_id, "", "");
+		$result = $this->getfrec("person", "firstname, lastname, othername", "id=".$pno, "", "");
 		return !empty($result) ? $result['firstname']." ".$result['othername']." ".$result['lastname'] : false;
 	}
 	public function personDetails($id){
