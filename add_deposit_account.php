@@ -1,14 +1,13 @@
-	<?php 
-		$needed_files = array("iCheck", "knockout", /* "chosen" */);
-		$page_title = "New Deposit Account";
-		include("include/header.php"); 
-		require_once("lib/Libraries.php");
-	?>
 			<div class="row" id="deposit_account_form">
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <h5>New Deposit Account <small>Create new Account</small></h5>
+                            <div class="ibox-tools">
+                                <a class="" data-dismiss="modal">
+                                    <i class="fa fa-times lg"></i>
+                                </a>
+                            </div>
                         </div>
                         <div class="ibox-content">
                             <form id="depAccountForm" class="form-horizontal">
@@ -30,8 +29,22 @@
 								<div data-bind="with: depositProduct">
 									<div class="hr-line-dashed"></div>
 									<div class="form-group">
-										<label class="col-md-2 control-label">Interest Rate</label>
-										<div class="col-md-3">
+										<label class="col-md-3 control-label">Opening Balance</label>
+										<div class="col-md-6">
+											<input type="number" class="form-control input-sm" name="openingBal" id="openingBal" data-bind='value: $root.openingBal, attr: {"data-rule-min":(parseFloat(minOpeningBal)>0?minOpeningBal:null), "data-rule-max": (parseFloat(maxOpeningBal)>0?maxOpeningBal:null), "data-msg-min":"Opening balance is higher than "+minOpeningBal, "data-msg-max":"Opening balance is lower than "+maxOpeningBal}'>
+											<div>
+												<label class="col-sm-4" data-bind="visible: parseFloat(minOpeningBal)>0">Min</label>
+												<label class="col-sm-2" data-bind="visible: parseFloat(minOpeningBal)>0, text: minOpeningBal"></label>
+												<label class="col-sm-4" data-bind="visible: parseFloat(maxOpeningBal)>0">Max</label>
+												<label class="col-sm-2" data-bind="visible: parseFloat(maxOpeningBal)>0, text: maxOpeningBal"></label>
+											</div>
+										</div>
+										<div class="col-md-3"> </div>
+									</div>
+									<div class="hr-line-dashed" data-bind="visible: parseInt(interestPaid)"></div>
+									<div class="form-group" data-bind="visible: parseInt(interestPaid)">
+										<label class="col-md-3 control-label">Interest Rate <sup data-toggle="tooltip" title="The percentage of interest the account earns on the balance" data-placement="right"><i class="fa fa-question-circle"></i><sup></label>
+										<div class="col-md-4">
 											<input type="number" class="form-control input-sm" name="interestRate" id="interestRate" data-bind='value: $root.interestRate, attr: {"data-rule-min":(parseFloat(minInterestRate)>0?minInterestRate:null), "data-rule-max": (parseFloat(minInterestRate)>0?minInterestRate:null), "data-msg-min":"Interest Rate is higher than "+minInterestRate, "data-msg-max":"Interest Rate is lower than "+maxInterestRate}'/>
 											<div>
 												<label class="col-sm-4" data-bind="visible: parseFloat(minInterestRate)>0">Min</label>
@@ -46,22 +59,8 @@
 									</div>
 									<div class="hr-line-dashed"></div>
 									<div class="form-group">
-										<label class="col-md-2 control-label">Opening Balance</label>
-										<div class="col-md-3">
-											<input type="number" class="form-control input-sm" name="openingBal" id="openingBal" data-bind='value: $root.openingBal, attr: {"data-rule-min":(parseFloat(minOpeningBal)>0?minOpeningBal:null), "data-rule-max": (parseFloat(maxOpeningBal)>0?maxOpeningBal:null), "data-msg-min":"Opening balance is higher than "+minOpeningBal, "data-msg-max":"Opening balance is lower than "+maxOpeningBal}'>
-											<div>
-												<label class="col-sm-4" data-bind="visible: parseFloat(minOpeningBal)>0">Min</label>
-												<label class="col-sm-2" data-bind="visible: parseFloat(minOpeningBal)>0, text: minOpeningBal"></label>
-												<label class="col-sm-4" data-bind="visible: parseFloat(maxOpeningBal)>0">Max</label>
-												<label class="col-sm-2" data-bind="visible: parseFloat(maxOpeningBal)>0, text: maxOpeningBal"></label>
-											</div>
-										</div>
-										<div class="col-md-7"> </div>
-									</div>
-									<div class="hr-line-dashed"></div>
-									<div class="form-group">
-										<label class="col-md-2 control-label">Term Length <sup data-toggle="tooltip" title="Period of time before which a client can start withdrawing from the account" data-placement="right"><i class="fa fa-question-circle"></i><sup></label>
-										<div class="col-md-3">
+										<label class="col-md-3 control-label">Term Length <sup data-toggle="tooltip" title="Period of time before which a client can start withdrawing from the account" data-placement="right"><i class="fa fa-question-circle"></i><sup></label>
+										<div class="col-md-4">
 											<input type="number" class="form-control input-sm" name="termLength" id="termLength" data-bind='value: $root.termLength, attr: {"data-rule-min":(parseFloat(minTermLength)>0?minTermLength:null), "data-rule-max": (parseFloat(minTermLength)>0?minTermLength:null), "data-msg-min":"Term Length is higher than "+minTermLength, "data-msg-max":"Term Length is lower than "+maxTermLength}'/>
 											<div>
 												<label class="col-sm-4" data-bind="visible: parseFloat(minTermLength)>0">Min</label>
@@ -71,7 +70,7 @@
 											</div>
 										</div>
 										<label class="col-md-1" data-bind='text: $root.getDescription(4, termTimeUnit)'></label>
-										<div class="col-md-6"></div>
+										<div class="col-md-4"></div>
 									</div>
 									<div class="hr-line-dashed"></div>
 									<div class="form-group" data-bind="visible: $root.productFees().length > 0">
@@ -124,7 +123,3 @@
                     </div>
                 </div>
             </div>	
-<?php 
- include("include/footer.php");
-include("js/depositAccount.php");
- ?>

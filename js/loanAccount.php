@@ -121,6 +121,7 @@
 			self.client(null);
 			self.loanProduct(null);
 			$("#loanAccountForm")[0].reset();
+			dTable.ajax.reload();
 		};
 		
 		//Retrieve page data from the server

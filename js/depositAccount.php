@@ -68,6 +68,7 @@
 		//reset the whole form
 		self.resetForm = function() {
 			$("#depAccountForm")[0].reset();
+			dTable.ajax.reload();
 		};
 		
 		//Retrieve page data from the server

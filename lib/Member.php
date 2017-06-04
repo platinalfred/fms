@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Member extends Db {
 	protected static $table_name  = "member";
-	protected static $db_fields = array("id","personId","branchId","memberType","comment", "addedBy","dateAdded", "active", "ModifiedBy");
+	protected static $db_fields = array("id","personId","branch_id","memberType","comment", "addedBy","dateAdded", "active", "ModifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
@@ -42,7 +42,7 @@ class Member extends Db {
 		return false;
 	}
 	public function findBranch($br){
-		$result = $this->getfrec("branch", "branch_name", "branchId='$br'","","");
+		$result = $this->getfrec("branch", "branch_name", "branch_id='$br'","","");
 		return !empty($result) ? $result['branchName'] : false;
 	}
 	public function findMemberNames($p_id){

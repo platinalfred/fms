@@ -1,15 +1,15 @@
-	<?php 
-		$needed_files = array("iCheck", "jasny", "knockout" , "moment"  , "datepicker" /* , "steps", "chosen" */);
-		$page_title = "New Loan Account";
-		include("include/header.php"); 
-		require_once("lib/Libraries.php");
-		if(isset($_GET['id'])){ $client = $_GET['id']; }
-		?>
+	<?php  if(isset($_GET['id'])){ $client = $_GET['id']; } ?>
+	
 			<div class="row" id="loan_account_form">
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <h5>Loan Application <small>Create loan Account</small></h5>
+                            <div class="ibox-tools">
+                                <a class="" data-dismiss="modal">
+                                    <i class="fa fa-times lg"></i>
+                                </a>
+                            </div>
                         </div>
                         <div class="ibox-content">
                             <form id="loanAccountForm" class="form-horizontal wizard-big">
@@ -259,7 +259,3 @@
                     </div>
                 </div>
             </div>	
-<?php
- include("include/footer.php");
- require_once("js/loanAccount.php");
- ?>
