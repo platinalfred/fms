@@ -3,6 +3,9 @@ require_once('lib/Libraries.php');
 $output = "";
 if(isset($_POST['tbl'])){
 	switch($_POST['tbl']){
+		case "add_staff":
+			print_r($_POST);
+		break;
 		case "subscription":
 			$data = $_POST;
 			$member = new Member();
@@ -10,15 +13,7 @@ if(isset($_POST['tbl'])){
 			$income = new Income();
 			$data['date_paid'] = date("Y-m-d");
 			 if($subscription->addSubscription($data)){
-				$data['income_type'] = 1;
-				$data['date_added'] = date("Y-m-d");
-				$data['added_by'] = $data['received_by'];
-				
-				$data['description'] = "Annual subscription paid by ".$member->findMemberNames($data['person_id'])." for year ".$data['subscription_year'];
-				if($income->addIncome($data)){
-					echo "success";
-					return;
-				}
+				echo "success";
 			}  
 		break;
 		case "shares":
@@ -28,23 +23,7 @@ if(isset($_POST['tbl'])){
 			$income = new Income();
 			$data['date_paid'] = date("Y-m-d");
 			if($shares->addShares($data)){
-				$data['date_added'] = date("Y-m-d");
-				$data['added_by'] = $data['received_by'];
-				$data['income_type'] = 2;
-				$data['description'] = "Shares bought by ".$member->findMemberNames($data['person_id'])." on ".$data['date_added'];
-				if($income->addIncome($data)){
-					//Record into the transaction table
-					/* $data['transaction_type']  = 3;
-					$data['branch_id']  = $_SESSION['branch_id'];
-					$data['transacted_by']  = $data['paid_by'];
-					$data['transaction_date'] = $data['date_added'];
-					$data['approved_by']= $data['received_by'];
-					$data['comments'] = $data['description'] ;
-					$trans_fields = array("transaction_type", "branch_id", "person_id", "amount", "amount_description", "transacted_by", "transaction_date", "approved_by", "comments");
-					$shares->add("transaction", $trans_fields, $shares->generateAddFields($trans_fields, $data)); */
-					echo "success";
-					return;
-				}
+				echo "success";
 			} 
 		break;
 		case "expense":
@@ -78,35 +57,37 @@ if(isset($_POST['tbl'])){
 			$person = new Person();
 			$accounts = new Accounts();
 			$data['date_registered'] = date("Y-m-d");
+			$data['dateofbirth'] = date("Y-m-d", strtotime($data['dateofbirth']));
 			$data['date_added'] = date("Y-m-d");
 			$data['photograph'] = "";
 			$data['active']=1;
-			$person_id = $person->addPerson($data);
+			 $person_id = $person->addPerson($data);
 			if($person_id){
 				$data['person_id'] = $person_id;
 				$person->updatePersonNumber($person_id);
-				$person->addPersonEmployment($data);
-				$person->addRelative($data);
 				$data["personId"] = $person_id;
 				$data['branchId'] = $data['branch_id'];
 				$data['addedBy'] = $data['modifiedBy'];
 				$data['dateAdded'] = $data['date_registered'];
-				$member_id = $member->addMember($data);
-				if($member_id){
-					$act= sprintf('%08d', $person_id);
-					$data['account_number'] =  $act;
-					$data['balance'] = 0.00;
-					$data['status'] = 1;
-					$data['dateAdded'] = date("Y-m-d");
-					$data['added_by'] = $data['registered_by']; 
-					if($accounts->addAccount($data)){
-						$output = "success";
-					}
-					
-				} 
+				
+				if(isset($data['relative'])){
+					foreach($data['relative'] as $single){
+						$single['personId'] = $person_id;
+						$person->addRelative($single);
+					} 	 
+				}
+				if(isset($data['employment'])){
+					foreach($data['employment'] as $single){
+						$single['personId'] = $person_id;
+						$person->addPersonEmployment($single);
+					} 	 
+				}
+				if($member->addMember($data)){
+					$output = "success";
+				}
 			}else{ 
 				$output = "Member details could not be added. Please try again!";
-			}
+			} 
 		break;
 		case "account_type":
 			$account_type = new AccountType();

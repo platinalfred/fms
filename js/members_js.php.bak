@@ -256,7 +256,6 @@ $(document).ready(function(){
 	
 	$('.table tbody').on('click', 'tr ', function () {
 		var data = dTable.row(this).data();
-		console.log(data);
 		memberTableModel.member_details(data);
 		//ajax to retrieve other member details
 		findMemberDetails(data.id);

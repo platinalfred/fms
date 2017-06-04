@@ -121,7 +121,6 @@
 			self.client(null);
 			self.loanProduct(null);
 			$("#loanAccountForm")[0].reset();
-			dTable.ajax.reload();
 		};
 		
 		//Retrieve page data from the server
@@ -162,6 +161,11 @@
 					penaltyRateChargedPer : self.loanProduct()?self.loanProduct().penaltyRateChargedPer:undefined,
 					penaltyRate : self.loanProduct()?self.loanProduct().penaltyRate:undefined,
 					linkToDepositAccount : self.loanProduct()?self.loanProduct().linkToDepositAccount:undefined,
+					<?php 
+					/* if(isset($client)){ 
+						if($client['clientType'] ==1){ ?> <?php }
+					} */
+					?>
 					guarantors:self.guarantors(),//the guarantors
 					feePostData:self.filteredLoanProductFees(), //the applicable fees
 					collateral:self.addedCollateral(), //the applicable fees

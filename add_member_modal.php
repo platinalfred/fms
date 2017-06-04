@@ -55,10 +55,10 @@ function addCommas(nStr){
 							<h1>Demographic Information</h1>
 							<fieldset>
 								<div class="row">
-									<div class="col-lg-8">
+									<div class="col-lg-6">
 										<div class="form-group">
-											<label class="col-sm-3 control-label no_padding">Title</label>
-											<div class="col-sm-5">
+											<label class="col-sm-4 control-label no_padding">Title</label>
+											<div class="col-sm-7">
 												<select class="form-control m-b" name="title" required>
 													<option value="">Choose option</option>
 													<option value="Mr" >Mr.</option>
@@ -68,16 +68,19 @@ function addCommas(nStr){
 												</select>
 											</div>
 										</div>
-										<div class="col-sm-12">&nbsp;</div>
+									</div>	
+									<div class="col-lg-6">
 										<div class="form-group">
 											<label class="col-sm-3 control-label no_padding">Member Type</label>
-											<div class="col-sm-5">
+											<div class="col-sm-7">
 												<select class="form-control m-b" name="memberType" >
 													<option value="0	">Member Only</option>
 													<option value="1">Member and Share Holder</option>
 												</select>
 											</div>
 										</div>
+									</div>
+									<div class="col-lg-8">
 										<div class="col-sm-12">&nbsp;</div>
 											<div class="col-sm-12 no_padding">
 											<div class="form-group">
@@ -116,7 +119,7 @@ function addCommas(nStr){
 											<div class="form-group">
 												<label class="col-sm-3 control-label no_padding" >Occupation</label>
 												<div class="col-sm-9">
-													<input id="Occupation" name="occupation" type="text" class="form-control">
+													<input  name="occupation" type="text" class="form-control">
 												</div>
 											</div>
 										</div>
@@ -160,7 +163,7 @@ function addCommas(nStr){
 										<div class="form-group">
 											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Id Number <span class="req">*</span></label>
 											<div class="col-md-9 col-sm-9 col-xs-12">
-												<input id="id_number" name="id_number" type="text" class="form-control" required>
+												<input name="id_number" type="text" class="form-control" required>
 											</div>
 										</div>
 									</div>
@@ -168,7 +171,7 @@ function addCommas(nStr){
 									<div class="col-lg-6">
 										<div class="form-group">
 											<label>Credit Reference Bureau Card Number (CRB )</label>
-											<input id="no_of_dependents" name="CRB_card_no" type="text" class="form-control ">
+											<input  name="CRB_card_no" type="text" class="form-control ">
 										</div>
 									</div>
 									<div class="col-lg-12">&nbsp;</div>
@@ -229,19 +232,25 @@ function addCommas(nStr){
 							</fieldset>
 							<h1>Relatives</h1>
 							<fieldset>
-								<div class="row">
-									<div class="col-lg-5">
+								<div class="row" data-bind="foreach: $root.member_relatives">
+									<div class="col-lg-3">
 										<div class="form-group">
 											<label>Relationship</label>
-											<?php 
-											$member->loadList("SELECT * FROM relationship_type", "relationship", "id", "rel_type", "relationship");
-											?>
+											<select class="form-control"  data-bind="attr: {name:'relative['+$index()+'][relationship]'}, options: relationships, optionsText: 'rel_type', optionsCaption: 'Select...', , optionsAfterRender: $parent.setOptionValue('id'), value: relationship" data-msg-required="Relationship is required"></select>
 										</div>
 									</div>
-									<div class="col-sm-4">
+									<div class="col-sm-3">
 										<div class="form-group"><label class="col-lg-12" >Gender</label>
-											<label > <input name="relative_gender" class="i-checks" type="radio" value="1" required>Male</label>
-											<label > <input name="relative_gender" class="i-checks" type="radio" value="0" required> Female</label>
+											<label > <input  data-bind="attr: {name:'relative['+$index()+'][relative_gender]'}, value: relative_gender" class="i-checks" type="radio" value="1"  >Male</label>
+											<label > <input  data-bind="attr: {name:'relative['+$index()+'][relative_gender]'}, value: relative_gender"  class="i-checks" type="radio" value="0" > Female</label>
+										</div>
+									</div>
+									<div class="col-lg-3">
+										 <div class="form-group">
+											<label  >Is Direct Next of Kin?</label>
+											<label > <input  class="i-checks" type="radio" value="1" data-bind="attr: {name:'relative['+$index()+'][is_next_of_kin]'}, checked: is_next_of_kin">Yes</label>
+											<label > <input data-bind="attr: {name:'relative['+$index()+'][is_next_of_kin]'}, checked: is_next_of_kin" class="i-checks" type="radio" value="0" > No</label>
+										
 										</div>
 									</div>
 									<div class="col-lg-12">
@@ -251,15 +260,15 @@ function addCommas(nStr){
 											</div>
 											<div class="col-sm-9">
 												<div class="col-sm-4">
-													<input type="text" class="form-control" name="first_name" placeholder="First Name" required/>
+													<input type="text" class="form-control" placeholder="First Name" data-bind="attr: {name:'relative['+$index()+'][first_name]'}, value: first_name" />
 													<span class="input-group-btn" style="width:2px;"></span>
 												</div>
 												<div class="col-sm-4">
-													<input type="text" class="form-control" name="last_name" placeholder="Last Name"  required/>
+													<input type="text" class="form-control" data-bind="attr: {name:'relative['+$index()+'][last_name]'}, value: last_name" placeholder="Last Name" />
 													<span class="input-group-btn" style="width:2px;"></span>
 												</div>
 												<div class="col-sm-4">
-													<input type="text" class="form-control" name="other_names"  placeholder="Other Name" />
+													<input type="text" class="form-control" data-bind="attr: {name:'relative['+$index()+'][other_names]'}, value: other_names"   placeholder="Other Name" />
 												</div>
 											</div>
 										</div>
@@ -267,36 +276,78 @@ function addCommas(nStr){
 									<div class="col-lg-3">
 										<div class="form-group">
 											<label>Address</label>
-											<input id="" name="address" type="text" class="form-control ">
+											<input id=""  data-bind="attr: {name:'relative['+$index()+'][address]'}, value: address" type="text" class="form-control " >
 										</div>
 									</div>
 									<div class="col-lg-3">
 										<div class="form-group">
 											<label>Address 2</label>
-											<input id="address2" name="address2" type="text" class="form-control ">
+											<input  type="text" class="form-control"  data-bind="attr: {name:'relative['+$index()+'][address2]'}, value: address2">
 										</div>
 									</div>
 									<div class="col-lg-3">
 										<div class="form-group">
 											<label>Phone </label>
-											<input id="address2" name="telephone" type="text" class="form-control ">
+											<input ="relative[]['telephone']" data-bind="attr: {name:'relative['+$index()+'][telephone]'}, value: telephone" type="text" class="form-control ">
 										</div>
 									</div>
+									<div class="col-lg-3"><span title="Remove relative" class="btn text-danger btn-lg" data-bind='click: $root.removeRelative'><i class="fa fa-minus"></i></span></div>
+									<div class="clearboth"></div>
+									
+										
+								</div>
+								<div class="row">
 									<div class="clearboth"></div>
 									<div class="col-lg-12">
-										 <div class="form-group"><label class="col-lg-12" >Is Direct Next of Kin?</label>
-											<label > <input name="is_next_of_kin" class="i-checks" type="radio" value="1">Yes</label>
-											<label > <input name="is_next_of_kin" class="i-checks" type="radio" value="0"> No</label>
-										
+										 <div class="form-group">
+											<span class="btn btn-info btn-sm pull-right" data-bind='click: addRelative'><i class="fa fa-plus"></i> Add more</span>
 										</div>
 									</div>
 								</div>
 								
 							</fieldset>
 							
-							<h1>Dependants and Employer</h1>
+							<h1>Employment History</h1>
 							<fieldset>
-								<h2>Dependants</h2>
+								<div class="row" data-bind="foreach: $root.member_employment">
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label>Name of Employer</label>
+											<input   data-bind="attr: {name:'employment['+$index()+'][employer]'}"  type="text" class="form-control">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label>Number of years with Employer</label>
+											<input  data-bind="attr: {name:'employment['+$index()+'][years_of_employment]'}"  type="number" class="form-control ">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label>Nature of employment</label>
+											<input data-bind="attr: {name:'employment['+$index()+'][nature_of_employment]'}" type="text" class="form-control ">
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="form-group">
+											<label>Monthly Salary</label>
+											<input data-bind="attr: {name:'employment['+$index()+'][monthlySalary]'}"  type="number" class="form-control ">
+										</div>
+									</div>
+									<div class="col-lg-1"><span title="Remove employer" class="btn text-danger btn-lg" data-bind='click: $root.removeEmployment'><i class="fa fa-minus"></i></span></div>
+									<div class="clearboth"></div>
+								</div>
+								<div class="row">
+									<div class="clearboth"></div>
+									<div class="col-lg-12">
+										 <div class="form-group">
+											<span class="btn btn-info btn-sm pull-right" data-bind='click: addEmployment'><i class="fa fa-plus"></i> Add more</span>
+										</div>
+									</div>
+								</div>
+							<fieldset>
+							<h1>Dependants</h1>
+							<fieldset>
 								<div class="row">
 									<div class="col-lg-3">
 										<div class="form-group">
@@ -312,34 +363,7 @@ function addCommas(nStr){
 									</div>
 									
 								</div>
-								<h2>Employer</h2>
-								<div class="row">
-									<div class="col-lg-5">
-										<div class="form-group">
-											<label>Name of Employer</label>
-											<input id="children_no" name="employer" type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-lg-5">
-										<div class="form-group">
-											<label>Number of years with Employer</label>
-											<input id="no_of_dependents" name="years_of_employment" type="number" class="form-control ">
-										</div>
-									</div>
-									<div class="col-lg-4">
-										<div class="form-group">
-											<label>Nature of employment</label>
-											<input id="no_of_dependents" name="nature_of_employment" type="text" class="form-control ">
-										</div>
-									</div>
-									<div class="col-lg-4">
-										<div class="form-group">
-											<label>Monthly Salary</label>
-											<input id="monthlySalary" name="monthlySalary"  type="number" class="form-control ">
-										</div>
-									</div>
-									
-								</div>
+								
 							</fieldset>
 							<h1>Finish</h1>
 							<fieldset>

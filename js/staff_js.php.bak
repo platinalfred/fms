@@ -1,60 +1,6 @@
 <script>
-<?php $relationshipTypeObj = new RelationshipType();?>
-	var relationships = <?php echo json_encode($relationshipTypeObj->findAll());?>;
-	
-	/*MEMBER EMPLOYMENT HISTORY KO*/
-	var MemberEmployment = function() {
-		var self = this;
-	}
-	/*MEMBER RELATIVE KO*/
-	var MemberRelative = function() {
-			var self = this;
-			self.is_next_of_kin = ko.observable(0);
-			self.first_name = ko.observable();
-			self.last_name = ko.observable();
-			self.other_names = ko.observable();
-			self.relative_gender = ko.observable();
-			self.relationship = ko.observable();
-			self.telephone = ko.observable();
-			self.address = ko.observable();
-			self.address2 = ko.observable();
-		};
-	var Member = function() {
-		var self = this;
-		self.member_employment = ko.observableArray([new MemberEmployment()]);
-		self.addEmployment = function() { self.member_employment.push(new MemberEmployment()) };
-		self.removeEmployment = function(relative) {
-			self.member_employment.remove(relative);
-		};
-		//Keeps track of member relatives, observing any changes
-		self.member_relatives = ko.observableArray([new MemberRelative()]);
-		//Add a relative
-		self.addRelative = function() { self.member_relatives.push(new MemberRelative()) };
-		//remove relative
-		self.removeRelative = function(relative) {
-			self.member_relatives.remove(relative);
-		};
-		//reset the form
-		self.resetForm = function() {
-			self.member_relatives.removeAll();
-			self.member_employment.removeAll();
-			$("#form1")[0].reset();
-		};
-		//set options value afterwards
-		self.setOptionValue = function(propId) {
-			return function (option, item) {
-				if (item === undefined) {
-					option.value = "";
-				} else {
-					option.value = item[propId];
-				}
-			}
-		};
-	};
-	
-	var memberModel = new Member();
-	ko.applyBindings(memberModel, $("#form1")[0]);
-	
+
+
 $(document).ready(function(){
 	var dTable;
 	
@@ -68,7 +14,6 @@ $(document).ready(function(){
 				if($.trim(response) == "success"){
 					showStatusMessage("Successfully added new record" ,"success");
 					setTimeout(function(){
-						memberModel.resetForm();
 						dTable.ajax.reload();
 					}, 2000);
 				}else{
@@ -170,17 +115,17 @@ $(document).ready(function(){
     }
   });
 	
-	var MemberTable = function(){
+	var Member = function(){
 		var self = this;
 		self.member_details = ko.observable();
-		self.member_relatives2 = ko.observableArray();
-		self.member_employers2 = ko.observableArray();
+		self.member_relatives = ko.observableArray();
+		self.member_employers = ko.observableArray();
 	}
-	var memberTableModel = new MemberTable();
+	var memberModel = new Member();
   
   /* PICK DATA FOR DATA TABLE  */
 	var handleDataTableButtons = function() {
-		  if ($("#member_table").length ) {
+		  if ($("#staffTable").length ) {
 			  dTable = $('#member_table').DataTable({
 			  dom: "lfrtipB",
 				"processing": true,
@@ -188,11 +133,11 @@ $(document).ready(function(){
 			  "deferRender": true,
 			  "order": [[ 1, 'asc' ]],
 			  "ajax": {
-				  "url":"find_members.php",
+				  "url":"find_staff.php",
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
-						d.page = 'view_members';
+						d.page = 'view_staff';
 					}
 			  },"columnDefs": [ {
 				  "targets": [0],
@@ -235,7 +180,7 @@ $(document).ready(function(){
 			  ],
 			  responsive: true,
 			   "initComplete": function(settings, json) {
-					ko.applyBindings(memberTableModel, $("#member_details")[0]);
+					ko.applyBindings(memberModel, $("#member_details")[0]);
 					$(".table tbody>tr:first").trigger('click');
 			  }
 			});
@@ -256,27 +201,12 @@ $(document).ready(function(){
 	
 	$('.table tbody').on('click', 'tr ', function () {
 		var data = dTable.row(this).data();
-		console.log(data);
-		memberTableModel.member_details(data);
+		//console.log(data);
+		memberModel.member_details(data);
 		//ajax to retrieve other member details
-		findMemberDetails(data.id);
+		//memberModel.member_employers(data.member_employers);
+		//memberModel.member_relatives(data.member_relatives);
 	});
-	function findMemberDetails(id){
-		$.ajax({
-			url: "find_more_member_details.php?id="+id,
-			type: 'GET',
-			dataType: 'json',
-			success: function (data) {
-				if(data.relatives != "false"){
-					memberTableModel.member_relatives2(data.relatives);
-				}
-				if(data.employers != "false"){
-					memberTableModel.member_employers2(data.employers);
-				}
-				
-			}
-		});
-	}
 	
 });
 </script>

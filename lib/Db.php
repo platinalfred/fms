@@ -18,7 +18,7 @@ class Db{
 	   $this->server = "localhost";
 	   $this->user = "root";
 	   $this->password = "";
-	   $this->database = "fms";
+	   $this->database = "fms_current";
 	   //Connects to the database;
 	   $this->connectDB();
 	   
@@ -101,7 +101,7 @@ class Db{
 		if(!isset($_SESSION)) {
 			session_start();
 		}
-		$to_add = array("id","username","access_level", "branch_id", "person_id");
+		$to_add = array("id","username","access_level", "branch_id", "personId");
 		$password = md5($password);
 		$results = $this->getfrec("staff", implode(",",$to_add), "username='$username' AND password='$password'", "", "");
 		if(count($results) > 0){
@@ -570,7 +570,7 @@ class Db{
 		else $sel = "SELECT * FROM ".$table;
 		if ($ordby != "") $sel = $sel." ORDER BY ".$ordby;
 		if ($limit != "") $sel = $sel." LIMIT ".$limit;
-		
+		//echo $sel;
 		$q = $this->conn->query($sel);
 		if($q){
 			$res = $this->buildOut($q);

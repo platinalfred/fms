@@ -9,6 +9,8 @@ $accounts = new Accounts();
 $shares = new Shares();
 $member_data  = $member->findMemberDetails($_GET['id']);
 $names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_data['othername']; 
+$data['relatives'] = $person->findPersonRelatives($_GET['id']);
+print_r();
 ?>
 
 <div class="row">
@@ -136,10 +138,10 @@ $names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_da
 					<div class="clearboth"></div>
 					<div class="col-md-12 col-sm-12 col-xs-12 " style="border-top:1px solid #09A; padding-top:10px;">
 						<p>
-							<a  href="add_loan_account.php?id=<?php echo $member_data['personId']; ?>" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Apply for a loan</a>
+							<a  href="add_loan_account.php?id=<?php echo $member_data['personId']; ?>&type=1" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Apply for a loan</a>
 							<a  href="?id=<?php echo  $member_data['personId']; ?>&task=subscription.add" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Subscribe</a>
 							<a  href="?id=<?php echo  $member_data['personId']; ?>&task=shares.add" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Buy Shares</a>
-							<a  href="?id=<?php echo  $member_data['personId']; ?>&task=deposit.add" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Deposit</a>
+							<a  href="add_deposit_account.php?id=<?php echo  $member_data['personId']; ?>&type=1" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Deposit</a>
 							<a  href="?id=<?php echo  $member_data['personId']; ?>&task=withdraw.add" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Withdraw</a>
                         </p>
 					</div>
@@ -148,7 +150,7 @@ $names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_da
 							<a  href="?id=<?php echo  $_GET['id']; ?>&view=client_loans" class="btn btn-info btn-sm"> <i class="fa fa-folder-open-o"></i> View Loans</a>
 							<a  href="?id=<?php echo  $_GET['id']; ?>&view=mysubscriptions" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Subscriptions</a>
 							<a  href="?id=<?php echo  $_GET['id']; ?>&view=mysavings" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> My Savings</a>
-							<a  href="?id=<?php echo  $_GET['member_id']; ?>&view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-calculator"></i> Ledger</a>
+							<a  href="?id=<?php echo  $_GET['id']; ?>&view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-calculator"></i> Ledger</a>
                         </p>
 					</div>
 					<div class="clearboth"></div>
@@ -171,5 +173,5 @@ $names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_da
 </div>
 <?php
  include("include/footer.php");
-  include("js/settings_js.php");
+  include("js/members_js.php");
 ?>
