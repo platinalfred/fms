@@ -136,6 +136,13 @@ $(document).ready(function(){
         minlength: 5
       }
     },
+	errorPlacement: function(error, element) {
+      if (element.attr("type") == "radio" || element.attr("type") == "checkbox") {
+         $("#accept_msg").html("Please acknowledge all the details above are correct.");
+       }else{
+			error.insertAfter(element);
+	   }
+    },
     // Specify validation error messages
     messages: {
       firstname: "Please enter your firstname",
@@ -160,6 +167,7 @@ $(document).ready(function(){
 				if($.trim(response) == "success"){
 					showStatusMessage("Successfully added new record" ,"success");
 					form[0].reset();
+					$('input[type="checkbox"]').removeAttr('checked').iCheck('update');
 					dTable.ajax.reload();
 				}else{
 					showStatusMessage(response, "fail");

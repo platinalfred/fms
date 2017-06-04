@@ -372,7 +372,8 @@ function addCommas(nStr){
 								
 								<div class="row">
 									<div class="col-lg-12">
-									<div class="col-lg-12"><input id="acceptTerms" name="acceptTerms" type="radio" class="i-checks" required> </div><br/>
+										<span class="alert-danger" id="accept_msg"></span>
+										<div class="col-lg-1"><input id="acceptTerms" name="acceptTerms" type="radio" class="i-checks" required> </div><br/>
 									<div class="col-lg-12">	<label for="acceptTerms">I Accept that all member details captured are correct.</label></div>
 									</div>
 								</div>

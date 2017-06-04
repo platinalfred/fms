@@ -18,7 +18,7 @@ class Db{
 	   $this->server = "localhost";
 	   $this->user = "root";
 	   $this->password = "";
-	   $this->database = "fms_current";
+	   $this->database = "fms";
 	   //Connects to the database;
 	   $this->connectDB();
 	   
@@ -445,12 +445,12 @@ class Db{
 		}
 		$ins = "INSERT INTO ".$table. " (".$fi.") VALUES (".$va.")";
 		//echo $ins;
-		$inse = $this->conn->query($ins);
+		 $inse = $this->conn->query($ins);
 		if($inse){
 			
 			return mysqli_insert_id($this->conn);
 		} 
-		return false;
+		return false; 
 		
 	}
 	function addMultiple($table, $fields, $values){

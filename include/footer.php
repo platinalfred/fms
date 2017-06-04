@@ -56,10 +56,11 @@
 		<script src="js/plugins/iCheck/icheck.min.js"></script>
 		<script>
 			$(document).ready(function () {
+			
 				$('.i-checks').iCheck({
 					checkboxClass: 'icheckbox_square-green',
 					radioClass: 'iradio_square-green',
-				});
+				})
 				
 				function hideStatusMessageGeneral(){
 					document.getElementById('notice_message_general').style.display = 'none'; 

@@ -4,7 +4,65 @@ $output = "";
 if(isset($_POST['tbl'])){
 	switch($_POST['tbl']){
 		case "add_staff":
-			print_r($_POST);
+			
+			$data = $_POST;
+			$staff = new Staff();
+			$person = new Person();
+			$data['dateofbirth'] = date("Y-m-d", strtotime($data['dateofbirth']));
+			$data['date_added'] = date("Y-m-d");
+			$data['photograph'] = "";
+			$data['active']=1;
+			$person_id = $person->addPerson($data);
+			if($person_id){
+				$data['personId'] = $person_id;
+				$person->updateStaffNumber($person_id);
+				if(!empty($_POST['access_levels'])){
+					foreach($_POST['access_levels'] as $single){
+						$data['role_id'] = $single;
+						$staff->addStaffAccessLevels($data);
+					}
+				}
+				if($staff->addStaff($data)){
+					$output = "success";
+				}
+			}  
+		break;
+		case "add_member":
+			$data = $_POST;
+			$member = new Member();
+			$person = new Person();
+			$data['date_registered'] = date("Y-m-d");
+			$data['dateofbirth'] = date("Y-m-d", strtotime($data['dateofbirth']));
+			$data['date_added'] = date("Y-m-d");
+			$data['photograph'] = "";
+			$data['active']=1;
+			 $person_id = $person->addPerson($data);
+			if($person_id){
+				$data['personId'] = $person_id;
+				$person->updatePersonNumber($person_id);
+				$data["personId"] = $person_id;
+				$data['branchId'] = $data['branch_id'];
+				$data['addedBy'] = $data['modifiedBy'];
+				$data['dateAdded'] = $data['date_registered'];
+				
+				if(isset($data['relative'])){
+					foreach($data['relative'] as $single){
+						$single['personId'] = $person_id;
+						$person->addRelative($single);
+					} 	 
+				}
+				if(isset($data['employment'])){
+					foreach($data['employment'] as $single){
+						$single['personId'] = $person_id;
+						$person->addPersonEmployment($single);
+					} 	 
+				}
+				if($member->addMember($data)){
+					$output = "success";
+				}
+			}else{ 
+				$output = "Member details could not be added. Please try again!";
+			} 
 		break;
 		case "subscription":
 			$data = $_POST;
@@ -51,44 +109,7 @@ if(isset($_POST['tbl'])){
 				$output ="Marital Status could not be added";
 			}
 		break;
-		case "add_member":
-			$data = $_POST;
-			$member = new Member();
-			$person = new Person();
-			$accounts = new Accounts();
-			$data['date_registered'] = date("Y-m-d");
-			$data['dateofbirth'] = date("Y-m-d", strtotime($data['dateofbirth']));
-			$data['date_added'] = date("Y-m-d");
-			$data['photograph'] = "";
-			$data['active']=1;
-			 $person_id = $person->addPerson($data);
-			if($person_id){
-				$data['person_id'] = $person_id;
-				$person->updatePersonNumber($person_id);
-				$data["personId"] = $person_id;
-				$data['branchId'] = $data['branch_id'];
-				$data['addedBy'] = $data['modifiedBy'];
-				$data['dateAdded'] = $data['date_registered'];
-				
-				if(isset($data['relative'])){
-					foreach($data['relative'] as $single){
-						$single['personId'] = $person_id;
-						$person->addRelative($single);
-					} 	 
-				}
-				if(isset($data['employment'])){
-					foreach($data['employment'] as $single){
-						$single['personId'] = $person_id;
-						$person->addPersonEmployment($single);
-					} 	 
-				}
-				if($member->addMember($data)){
-					$output = "success";
-				}
-			}else{ 
-				$output = "Member details could not be added. Please try again!";
-			} 
-		break;
+		
 		case "account_type":
 			$account_type = new AccountType();
 			if($account_type->addAccountType($_POST)){

@@ -31,6 +31,7 @@ class Staff extends Db {
 	}
 	public function addStaffAccessLevels($data){
 		$fields = array("role_id", "personId");
+		
 		if($this->add("staff_roles", $fields, $this->generateAddFields($fields, $data))){
 			return true;
 		}

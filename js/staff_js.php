@@ -79,7 +79,21 @@ $(document).ready(function(){
       password: {
         required: true,
         minlength: 5
-      }
+      },
+	  acceptTerms:{
+		  required: true,
+		  errorPlacement: function(error, element) {
+			 $("#checkBoxErrorHolder").html(error);
+		 }
+	  }
+	  
+    },
+	errorPlacement: function(error, element) {
+      if (element.attr("type") == "radio" || element.attr("type") == "checkbox") {
+         $("#accept_msg").html("Please acknowledge all the details above are correct.");
+       }else{
+			error.insertAfter(element);
+	   }
     },
     // Specify validation error messages
     messages: {
@@ -105,6 +119,7 @@ $(document).ready(function(){
 				if($.trim(response) == "success"){
 					showStatusMessage("Successfully added new record" ,"success");
 					form[0].reset();
+					$('input[type="checkbox"]').removeAttr('checked').iCheck('update');
 					dTable.ajax.reload();
 				}else{
 					showStatusMessage(response, "fail");
