@@ -161,12 +161,6 @@ $person = new Person();
                         </ul>
                     </li>
                     <li>
-                        <a href="add_loan_account.php"><i class="fa fa-credit-card"></i> <span class="nav-label">New loan application</span>  </a>
-                    </li>
-                    <li>
-                        <a href="add_deposit_account.php"><i class="fa fa-money"></i> <span class="nav-label">New deposit account</span>  </a>
-                    </li>
-                    <li>
                         <a href="members.php"><i class="fa fa-group"></i> <span class="nav-label">Members</span>  </a>
                     </li>
 					

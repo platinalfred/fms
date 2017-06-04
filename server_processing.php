@@ -25,18 +25,22 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
 	$columns = array( "`person`.`person_number`", "`firstname`", "`lastname`", "`othername`", "`expense`.`id`", "`amount_used`","`expense_type`","`amount_description`", "`date_of_expense`", "`name`", "`description`" );
 }
 //list of loans
-if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
+if ( isset($_POST['page']) && $_POST['page'] == "loan_accounts" ) {
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+		$where1 = "(`date_added` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
+	}
 	
 	$member_sql = "(SELECT `members`.`id` `clientId`, loanAccountId, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType` FROM `member_loan_account` JOIN (SELECT `member`.`id`, `firstname`, `lastname`, `othername` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`)`members` ON `memberId` = `members`.`id`)";
 	$saccogroup_sql = "(SELECT `saccogroup`.`id` `clientId`, `loanAccountId`, `groupName` `clientNames`, 2 as `clientType` FROM `group_loan_account` JOIN `saccogroup` ON `saccoGroupId` = `saccogroup`.`id`)";
 	
 	$member_group_union_sql = " ".$member_sql. " UNION ". $saccogroup_sql . " ORDER BY `clientNames`";
+	$loan_payments_sql = "SELECT `loanAccountId`, COALESCE(SUM(amount),0) `amountPaid` FROM `loan_repayment`";
 	
-	$table = "`loan_account` JOIN ($member_group_union_sql) `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id`";
+	$table = "`loan_account` JOIN ($member_group_union_sql) `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` JOIN ($loan_payments_sql) `loan_payments` ON `loan_account`.`id` = `loan_payments`.`loanAccountId` ";
 	
 	$primary_key = "`loan_account`.`id`";
 
-	$columns = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`productName`", "`requestedAmount`","`interestRate`","`disbursedAmount`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" );
+	$columns = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`clientId`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`" );
 }
 //list of the income transactions
 if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
@@ -79,31 +83,38 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_subcriptns" ) {
 
 	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`subscription_year`", "`date_paid`", "`subscription`.`person_number`");
 }
-//list of all the client loan payments
+//list of all loan payments
 if ( isset($_POST['page']) && $_POST['page'] == "view_loan_payments" ) {
 	
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where = "(`transaction_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}
 	
-	$table = "`loan_repayment` JOIN (SELECT `firstname`, `lastname`, `othername`, `loan`.`id`, `loan_number` FROM `loan` JOIN `person` ON `loan`.`person_number` = `person`.`id`) `loan` ON `loan_repayment`.`loan_id` = `loan`.`id`";
+	$table = "`loan_repayment` JOIN (SELECT `firstname`, `lastname`, `othername`, `loan`.`id`, `loanNo` FROM `loan_account` JOIN `person` ON `loan_account`.`person_id` = `person`.`id`) `loan` ON `loan_repayment`.`loan_id` = `loan`.`id`";
 	
 	$primary_key = "`loan_repayment`.`id`";
 
 	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`comments`", "`transaction_date`", "`loan_number`", "`loan_id`");
 }
-//list of all the member savings
-if ( isset($_POST['page']) && $_POST['page'] == "member_savings" ) {
-		$where = "transaction_type=1";
-	
+//list of all the member deposit accounts
+if ( isset($_POST['page']) && $_POST['page'] == "deposit_accounts" ) {	
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
-		$where .= " AND (`transaction_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
-	}	
-	$table = "`transaction` JOIN `person` ON `transaction`.`person_number` = `person`.`id`";
+		$where1 = " AND (`deposit_account`.`dateCreated` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
+	}
 	
-	$primary_key = "`transaction`.`id`";
+	$member_sql = "(SELECT `members`.`id` `clientId`, depositAccountId, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType` FROM `member_deposit_account` JOIN (SELECT `member`.`id`, `firstname`, `lastname`, `othername` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`)`members` ON `memberId` = `members`.`id`)";
+	$saccogroup_sql = "(SELECT `saccogroup`.`id` `clientId`, `depositAccountId`, `groupName` `clientNames`, 2 as `clientType` FROM `group_deposit_account` JOIN `saccogroup` ON `saccoGroupId` = `saccogroup`.`id`)";
+	
+	$member_group_union_sql = " ".$member_sql. " UNION ". $saccogroup_sql . " ORDER BY `clientNames`";
+	$deposits_sql = "SELECT `depositAccountId`, COALESCE(SUM(amount),0) `sumDeposited` FROM `deposit_account_transaction` WHERE `transactionType` = 1";
+	$withdraws_sql = "SELECT `depositAccountId`, COALESCE(SUM(amount),0) `sumWithdrawn` FROM `deposit_account_transaction` WHERE `transactionType` = 2";
+	
+	$table = "`deposit_account` JOIN ($member_group_union_sql) `clients` ON `clients`.`depositAccountId` = `deposit_account`.`id` JOIN `deposit_product` ON `deposit_account`.`depositProductId` = `deposit_product`.`id` LEFT JOIN ($deposits_sql) `deposits` ON `deposit_account`.`id` = `deposits`.`depositAccountId` LEFT JOIN ($withdraws_sql) `withdraws` ON `deposit_account`.`id` = `withdraws`.`depositAccountId` ";
+	
+	$primary_key = "`deposit_account`.`id`";
 
-	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`amount_description`", "`transacted_by`", "`transaction_date`", "`transaction`.`id`");
+	$columns = array( "`deposit_account`.`id`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`sumWithdrawn`", "`sumDeposited`", "`deposit_account`.`dateCreated`" );
+
 }
 if ( isset($_POST['page']) && strlen($_POST['page'])>0) {
 	// Get the data

@@ -1,6 +1,6 @@
 	<?php 
-		$needed_files = array("iCheck", "knockout", "daterangepicker", "moment", "dataTables", "datepicker");
-		$page_title = "Loan Accounts";
+		$needed_files = array("iCheck", "knockout", "daterangepicker", "moment", "dataTables");
+		$page_title = "Savings Accounts";
 		include("include/header.php"); 
 		require_once("lib/Libraries.php");
 	?>
@@ -8,22 +8,16 @@
 		<div class="col-lg-12">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
-					<h5>Loan Accounts <small>loans list</small></h5>
-				  <div class="pull-right"><a href="#add_loan_account" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i> New Loan Application</a>
-					<!-- select id="loan_types" class="form-control">
-					  <option>All loans</option>
-					  <option value="1" <?php echo (isset($_GET['type'])&&$_GET['type']==1)?"selected":"";?>>Performing loans</option>
-					  <option value="2" <?php echo (isset($_GET['type'])&&$_GET['type']==2)?"selected":"";?>> Non Performing</option>
-					  <option value="3" <?php echo (isset($_GET['type'])&&$_GET['type']==3)?"selected":"";?>> Active loans</option>
-					  <option value="4" <?php echo (isset($_GET['type'])&&$_GET['type']==4)?"selected":"";?>> Due loans</option>
-					</select -->
+					<h5>Savings Accounts <small>Deposits and withdraws</small></h5>
+				  <div class="pull-right">
+					<div><a href="#add_deposit_account" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i>New Savings Account</a></div>
 				  </div>
 				</div>
-				<div id="add_loan_account" class="modal fade" aria-hidden="true">
+				<div id="add_deposit_account" class="modal fade" aria-hidden="true">
 					<div class="modal-dialog modal-lg">
 						<div class="modal-content">
 							<div class="modal-body">
-								<?php include_once("add_loan_account.php");?>
+								<?php include_once("add_deposit_account.php");?>
 							</div>
 						</div>
 					</div>
@@ -33,7 +27,7 @@
 						<thead>
 							<tr>
 								<?php 
-								$header_keys = array("Loan No", "Client", "Loan Product","Appn Date", "Duration", "Loan Amount", "Amount Paid", "Interest");
+								$header_keys = array("Account No", "Client", "Account type","Open Date", "Deposits(UGX)", "Withdraws(UGX)");
 								foreach($header_keys as $key){ ?>
 									<th><?php echo $key; ?></th>
 									<?php
@@ -45,12 +39,7 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<th colspan="5">Total (UGX)</th>
-								<!--th>&nbsp;</th>
-								<th>&nbsp;</th>
-								<th>&nbsp;</th>
-								<th>&nbsp;</th-->
-								<th>&nbsp;</th>
+								<th colspan="4">Total (UGX)</th>
 								<th>&nbsp;</th>
 								<th>&nbsp;</th>
 							</tr>
@@ -71,7 +60,7 @@
 	  if ($("#datatable-buttons").length) {
 		dTable = $('#datatable-buttons').DataTable({
 		  dom: "Bfrtip",
-		  "order": [ [3, 'asc' ]],
+		  "order": [ [1, 'asc' ]],
 		  "processing": true,
 		  "serverSide": true,
 		  "deferRender": true,
@@ -79,26 +68,24 @@
 			  "url":"server_processing.php",
 			  "type": "POST",
 			  "data":  function(d){
-				d.page = 'loan_accounts';
+				d.page = 'deposit_accounts';
 				d.type = <?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>; //loan_type for the datatable;
 				d.start_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"moment().subtract(30, 'days').format('X')"; ?>;
 				d.end_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"moment().format('X')"; ?>;
 				}
 		  },
 		  "footerCallback": function (tfoot, data, start, end, display ) {
-            var api = this.api(), cols = [5,6,7];
+            var api = this.api(), cols = [4,5];
 			$.each(cols, function(key, val){
 				var total = api.column(val).data().sum();
 				$(api.column(val).footer()).html( curr_format(total) );
 			});
-		  },columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {return '<a href="members.php?client_id='+full.clientId+'&clientType='+full.clientType+'&loanId='+full.id+'" title="View details">'+data+'</a>';}},
+		  },columns:[ { data: 'id', render: function ( data, type, full, meta ) {return '<a href="members.php?client_id='+full.clientId+'&clientType='+full.clientType+'&depositAccountId='+full.id+'" title="View details">'+full.productName + '-'+data+'</a>';}},
 				{ data: 'clientNames'},
 				{ data: 'productName'},
-				{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-				{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.repaymentsFrequency)) + ' ' + getDescription(4,data);}},
-				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
-				{ data: 'amountPaid', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
-				{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
+				{ data: 'dateCreated',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+				{ data: 'sumWithdrawn', render: function ( data, type, full, meta ) {return curr_format(parseInt(data?data:0));}},
+				{ data: 'sumDeposited', render: function ( data, type, full, meta ) {return curr_format(parseInt(data?data:0));}}
 				] ,
 		  buttons: [
 			{
@@ -139,6 +126,6 @@
 	TableManageButtons.init();
   });
 </script>
-<?php
- require_once("js/loanAccount.php");
+<?php 
+include("js/depositAccount.php");
  ?>

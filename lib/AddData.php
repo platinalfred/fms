@@ -86,7 +86,7 @@ if(isset($_POST['origin'])){
 			
 			if($data['clientType']==1){
 				//create deposit account for member
-				$data['memberId'] = $data['clientId'] ;
+				$data['member_id'] = $data['clientId'] ;
 				unset($data['clientId']);
 				$memberDepositAccount = new MemberDepositAccount();
 				$memberDepositAccountId = $memberDepositAccount->addMemberDepositAccount($data);
@@ -138,7 +138,7 @@ if(isset($_POST['origin'])){
 			
 			if((integer)$data['clientType']==1){
 				//create loan account for member
-				$clientData['memberId'] = $data['clientId'] ;
+				$clientData['member_id'] = $data['clientId'] ;
 				$memberLoanAccount = new MemberLoanAccount();
 				$memberLoanAccountId = $memberLoanAccount->addMemberLoanAccount($clientData);
 				
