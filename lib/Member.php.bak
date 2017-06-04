@@ -18,8 +18,8 @@ class Member extends Db {
 		return !empty($result) ? $result:false;
 	}
 	public function findPersonId($id){
-		$result = $this->getfrec(self::$table_name, "person_id", "id=".$id, "", "");
-		return !empty($result) ? $result['person_id']: false;
+		$result = $this->getfrec(self::$table_name, "personId", "id=".$id, "", "");
+		return !empty($result) ? $result['personId']: false;
 	}
 	public function findPersonNumber($id){
 		$result = $this->getfrec("person", "person_number", "id=".$id, "", "");
@@ -46,11 +46,11 @@ class Member extends Db {
 		return !empty($result) ? $result['branchName'] : false;
 	}
 	public function findMemberNames($p_id){
-		$result = $this->getfrec("person", "firstname, lastname, othername", "id=".$pno, "", "");
+		$result = $this->getfrec("person", "firstname, lastname, othername", "id=".$p_id, "", "");
 		return !empty($result) ? $result['firstname']." ".$result['othername']." ".$result['lastname'] : false;
 	}
 	public function personDetails($id){
-		$results = $this->getrec(self::$table_name." mb, person p", "mb.id=".$id." AND mb.person_id = p.id", "", "");
+		$results = $this->getrec(self::$table_name." mb, person p", "mb.id=".$id." AND mb.personId = p.id", "", "");
 		return !empty($results) ? $results : false;
 	}
 	public function noOfMembers($where = 1){
@@ -58,7 +58,7 @@ class Member extends Db {
 	}
 	public function findMemberPersonNumber($id){
 		$result = $this->getfrec(self::$table_name, "personId", "id=".$id, "", "");
-		return !empty($result) ? $result['person_id'] : false;
+		return !empty($result) ? $result['personId'] : false;
 	}
 	//list of the members for special kinds of select lists
 	public function findSelectList(){
@@ -76,11 +76,11 @@ class Member extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findNamesByPersonNumber($pno){
-		$result = $this->getrec(self::$table_name." st, person p", "p.firstname, p.lastname, p.othername", "p.personId=".$pno." AND p.id = st.person_id", "", "");
+		$result = $this->getrec(self::$table_name." st, person p", "p.firstname, p.lastname, p.othername", "p.personId=".$pno." AND p.id = st.personId", "", "");
 		return !empty($result) ? $result['firstname']." ".$result['othername']." ".$result['lastname'] : false;
 	}
 	public function findNamesById($id){
-		$result = $this->getrec(self::$table_name." st, person p", "p.first_name, p.last_name, p.other_names", "st.id='$id' AND p.person_id = st.person_id", "", "");
+		$result = $this->getrec(self::$table_name." st, person p", "p.first_name, p.last_name, p.other_names", "st.id='$id' AND p.id = st.personId", "", "");
 		return !empty($result) ? $result['first_name']." ".$result['other_names']." ".$result['last_name'] : false;
 	}
 	

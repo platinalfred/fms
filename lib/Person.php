@@ -30,7 +30,7 @@ class Person extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findPersonsPosition($pid){
-		$result = $this->getfrec("staff as st, position as p", "p.name", "st.person_id='$pid' AND st.position_id = p.id", "", "");
+		$result = $this->getfrec("staff as st, position as p", "p.name", "st.personId='$pid' AND st.position_id = p.id", "", "");
 		return !empty($result) ? $result['name'] : false;
 	}
 	public function findNamesByPersonNumber($pno){
@@ -56,12 +56,12 @@ class Person extends Db {
 	}
 
 	public function addPersonEmployment($data){
-		$fields = array("person_id", "employer", "years_of_employment", "nature_of_employment", "monthlySalary");
+		$fields = array("personId", "employer", "years_of_employment", "nature_of_employment", "monthlySalary");
 		return $this->add("person_employment", $fields, $this->generateAddFields($fields, $data)); 
 			
 	}
 	public function addRelative($data){
-		$fields = array("person_id",  "is_next_of_kin", "first_name", "last_name", "other_names", "telephone", "relative_gender", "relationship", "address", "address2");
+		$fields = array("personId",  "is_next_of_kin", "first_name", "last_name", "other_names", "telephone", "relative_gender", "relationship", "address", "address2");
 		return $this->add("peron_relative", $fields, $this->generateAddFields($fields, $data)); 
 			
 	}

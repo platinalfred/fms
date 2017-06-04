@@ -171,5 +171,5 @@ $names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_da
 </div>
 <?php
  include("include/footer.php");
-  include("js/settings_js.php");
+  include("js/members_js.php");
 ?>

@@ -136,7 +136,7 @@ $names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_da
 					<div class="clearboth"></div>
 					<div class="col-md-12 col-sm-12 col-xs-12 " style="border-top:1px solid #09A; padding-top:10px;">
 						<p>
-							<a  href="add_loan_account.php?id=<?php echo $member_data['personId']; ?>type=1" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Apply for a loan</a>
+							<a  href="add_loan_account.php?id=<?php echo $member_data['personId']; ?>&type=1" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Apply for a loan</a>
 							<a  href="?id=<?php echo  $member_data['personId']; ?>&task=subscription.add" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Subscribe</a>
 							<a  href="?id=<?php echo  $member_data['personId']; ?>&task=shares.add" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Buy Shares</a>
 							<a  href="add_deposit_account.php?id=<?php echo  $member_data['personId']; ?>&type=1" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Deposit</a>
@@ -171,5 +171,5 @@ $names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_da
 </div>
 <?php
  include("include/footer.php");
-  include("js/settings_js.php");
+  include("js/member_js.php");
 ?>

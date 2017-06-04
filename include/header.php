@@ -133,8 +133,8 @@ $person = new Person();
                     <li class="nav-header">
                         <div class="dropdown profile-element"> <span><img alt="image" class="img-circle" style="width:48px;" src="img/user.png" /></span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><?php echo $person->findNamesById($_SESSION['person_id']); ?></strong>
-                             </span> <span class="text-muted text-xs block"><?php echo $person->findPersonsPosition($_SESSION['person_id']); ?><b class="caret"></b></span> </span>
+                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><?php echo $person->findNamesById($_SESSION['personId']); ?></strong>
+                             </span> <span class="text-muted text-xs block"><?php echo $person->findPersonsPosition($_SESSION['personId']); ?><b class="caret"></b></span> </span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="">Profile</a></li>
