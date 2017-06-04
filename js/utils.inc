@@ -173,8 +173,20 @@ function showStatusMessage(message='', display_type='success'){
 	function getFeeAmount(amount, rate, rateAs) {
 		//var arrays = [{id:1,desc:'Flat amount'},{id:2,desc:'% of Disbursement Amount'}];
 		//return (parseInt(rateAs) == 0?(parseFloat(rate)*parseFloat(amount)):rate);
-		return curr_format((parseInt(rateAs) == 2?((parseFloat(rate)/100)*parseFloat(amount)):rate));
+		return curr_format((parseInt(rateAs) == 2?((parseFloat(rate)/100)*parseFloat(amount)):parseFloat(rate)));
 	};
+	jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
+		return this.flatten().reduce( function ( a, b ) {
+			if ( typeof a === 'string' ) {
+				a = a.replace(/[^\d.-]/g, '') * 1;
+			}
+			if ( typeof b === 'string' ) {
+				b = b.replace(/[^\d.-]/g, '') * 1;
+			}
+	 
+			return a + b;
+		}, 0 );
+	} );
 /*$(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })*/

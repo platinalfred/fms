@@ -135,7 +135,7 @@
                                     </div>
 										<label class="control-label col-sm-4">Minimum Collateral Amount Required</label>
                                     <div class="col-sm-3">
-										<input type="number" name="minCollateral" id="minCollateral" data-bind="value: minCollateral" class="form-control input-sm">
+										<input type="number" name="minCollateral" id="minCollateral" data-bind="value: minCollateral" class="form-control input-sm" data-rule-min="0" data-rule-max="100">
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>

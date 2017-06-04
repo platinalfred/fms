@@ -112,8 +112,18 @@ if(isset($_POST['origin'])){
 		break;
 		case "loan_account":
 			$loanAccount = new LoanAccount();
+			$db = new Db();
+			
+			$branchId = isset($_SESSION['branch_id'])?$_SESSION['branch_id']:1;
+			$branch = $db->getfrec("branch","branch_name", "id=".$branchId,"", "");
+			$branch_name = $branch['branch_name'];
+			$initials = ($branch['branch_name'] != "")? strtoupper($branch['branch_name']) : strtoupper(substr($branch_name, 0, 3));
+			$date = date("ymdis");
+		 
+			$data['loanNo'] = $initials."-".$date;
 			$data['dateCreated'] = time();
 			$data['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+			$data['branchId'] = $branchId;
 			$data['dateModified'] = time();
 			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			
@@ -126,7 +136,7 @@ if(isset($_POST['origin'])){
 			$clientData['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			$clientData['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			
-			if($data['clientType']==1){
+			if((integer)$data['clientType']==1){
 				//create loan account for member
 				$clientData['memberId'] = $data['clientId'] ;
 				$memberLoanAccount = new MemberLoanAccount();
@@ -136,23 +146,25 @@ if(isset($_POST['origin'])){
 				$guarantor = new Guarantor();
 				
 				if(isset($data['guarantors'])){
-					$guarantors = $data['guarantors'];
-					unset($data['guarantors']);
-					
-					foreach($guarantors as $guarantorDataItem){
-						$loanAccountGuarantor['loanAccountId'] = $loanAccountId;
-						$loanAccountGuarantor['guarantorId'] = $guarantorDataItem['id'];
-						$loanAccountGuarantor['dateCreated'] = time();
-						$loanAccountGuarantor['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-						$loanAccountGuarantor['dateModified'] = time();
-						$loanAccountGuarantor['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-						$output = $guarantor->addGuarantors($loanAccountGuarantor);
+					if(!$data['guarantors'] == "false"){
+						$guarantors = $data['guarantors'];
+						unset($data['guarantors']);
+						
+						foreach($guarantors as $guarantorDataItem){
+							$loanAccountGuarantor['loanAccountId'] = $loanAccountId;
+							$loanAccountGuarantor['guarantorId'] = $guarantorDataItem['id'];
+							$loanAccountGuarantor['dateCreated'] = time();
+							$loanAccountGuarantor['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+							$loanAccountGuarantor['dateModified'] = time();
+							$loanAccountGuarantor['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+							$output = $guarantor->addGuarantors($loanAccountGuarantor);
+						}
+						unset($loanAccountGuarantor);
 					}
-					unset($loanAccountGuarantor);
 				}
 			}else{
 				//create loan account for group
-				$clientData['groupId'] = $data['clientId'] ;
+				$clientData['saccoGroupId'] = $data['clientId'] ;
 				$saccoGroupLoanAccount = new SaccoGroupLoanAccount();
 				$accoGroupLoanAccountId = $saccoGroupLoanAccount->addSaccoGroupLoanAccount($clientData);
 			}
@@ -162,18 +174,36 @@ if(isset($_POST['origin'])){
 			$loanAccountFee = new LoanAccountFee();
 			
 			if(isset($data['feePostData'])){
-				$feePostData = $data['feePostData'];
-				foreach($feePostData as $feeDataItem){
-					$loanAccountFeeItem['loanAccountId'] = $loanAccountId;
-					$loanAccountFeeItem['loanProductFeenId'] = $feeDataItem['id'];
-					$loanAccountFeeItem['feeAmount'] = ($feeDataItem['amountCalculatedAs'] == 2?(($feeDataItem['amount']/100)*$data['requestedAmount']):$feeDataItem['amount']);
-					$loanAccountFeeItem['dateCreated'] = time();
-					$loanAccountFeeItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-					$loanAccountFeeItem['dateModified'] = time();
-					$loanAccountFeeItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-					$output = $loanAccountFee->addLoanAccountFee($loanAccountFeeItem);
+				if(!$data['feePostData'] == "false"){
+					$feePostData = $data['feePostData'];
+					foreach($feePostData as $feeDataItem){
+						$loanAccountFeeItem['loanAccountId'] = $loanAccountId;
+						$loanAccountFeeItem['loanProductFeenId'] = $feeDataItem['id'];
+						$loanAccountFeeItem['feeAmount'] = ($feeDataItem['amountCalculatedAs'] == 2?(($feeDataItem['amount']/100)*$data['requestedAmount']):$feeDataItem['amount']);
+						$loanAccountFeeItem['dateCreated'] = time();
+						$loanAccountFeeItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						$loanAccountFeeItem['dateModified'] = time();
+						$loanAccountFeeItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						$output = $loanAccountFee->addLoanAccountFee($loanAccountFeeItem);
+					}
+					unset($data['feePostData']);
 				}
-				unset($data['feePostData']);
+			}
+			
+			//insert the collateral items if any
+			$loanCollateral = new LoanCollateral();
+			
+			if(isset($data['collateral'])){
+				$collateralItems = $data['collateral'];
+				foreach($collateralItems as $collateralItem){
+					$collateralItem['loanAccountId'] = $loanAccountId;
+					$collateralItem['dateCreated'] = time();
+					$collateralItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+					$collateralItem['dateModified'] = time();
+					$collateralItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+					$output = $loanCollateral->addLoanCollateral($collateralItem);
+				}
+				unset($data['collateral']);
 			}
 			
 			unset($loanAccountFeeItem);
@@ -184,7 +214,7 @@ if(isset($_POST['origin'])){
 	}
 	echo $output;
 }
-//Transaction Types 1-Deposits, 2-Withdraws, 3-Loan Repayment, 4-Shares, 5-Membership subscription
+
 if(isset($_POST['repayment_duration'])){
 	$data = $_POST;
 	$loan_repayment_duration = new LoanRepaymentDuration();
