@@ -1,8 +1,4 @@
 	<?php 
-		$needed_files = array("iCheck", "jasny", "knockout" , "moment"  , "datepicker" /* , "steps", "chosen" */);
-		$page_title = "New Loan Account";
-		include("include/header.php"); 
-		require_once("lib/Libraries.php");
 		if(isset($_GET['id']) && $_GET['type'] == 1){
 			$member = new Member();
 			$client  = $member->findPersonList($_GET['id']);

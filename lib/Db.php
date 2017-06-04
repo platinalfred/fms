@@ -18,7 +18,7 @@ class Db{
 	   $this->server = "localhost";
 	   $this->user = "root";
 	   $this->password = "";
-	   $this->database = "fms_current";
+	   $this->database = "fms";
 	   //Connects to the database;
 	   $this->connectDB();
 	   
