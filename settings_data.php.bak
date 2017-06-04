@@ -58,7 +58,7 @@ if(isset($_POST['tbl'])){
 		break;
 		case "positions":
 			$positions = new Position();
-			$output['data'] = $positions->findPositionDetails();
+			$output['data'] = $positions->findAll();
 		break;
 		case "id_card_types":
 			$id_card_type = new IdCardType();

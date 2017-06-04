@@ -3,6 +3,9 @@ require_once('lib/Libraries.php');
 $output = "";
 if(isset($_POST['tbl'])){
 	switch($_POST['tbl']){
+		case "add_staff":
+			print_r($_POST);
+		break;
 		case "subscription":
 			$data = $_POST;
 			$member = new Member();

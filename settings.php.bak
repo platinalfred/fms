@@ -1070,7 +1070,7 @@ require_once("lib/Libraries.php");
 											<tfoot>
 												<tr>
 													<th>Name</th>
-													<th>Access Level</th>
+													Access Level</th>
 													<th>Description</th>
 													<th></th>
 												</tr>

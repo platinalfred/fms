@@ -161,23 +161,24 @@ $person = new Person();
                         </ul>
                     </li>
                     <li>
-                        <a href="add_loan_account.php"><i class="fa fa-credit-card"></i> <span class="nav-label">New Loan Application</span>  </a>
+                        <a href="add_loan_account.php"><i class="fa fa-credit-card"></i> <span class="nav-label">New loan application</span>  </a>
                     </li>
                     <li>
-                        <a href="add_deposit_account.php"><i class="fa fa-money"></i> <span class="nav-label">New Deposit Account</span>  </a>
+                        <a href="add_deposit_account.php"><i class="fa fa-money"></i> <span class="nav-label">New deposit account</span>  </a>
                     </li>
                     <li>
                         <a href="members.php"><i class="fa fa-group"></i> <span class="nav-label">Members</span>  </a>
                     </li>
-					<li>
-                        <a href="staff.php"><i class="fa fa-group"></i> <span class="nav-label">Staff</span>  </a>
-                    </li>
+					
 					<li>
                         <a href="expenses.php"><i class="fa fa-flask"></i> <span class="nav-label">Expenses</span></a>
                     </li>
 					<div class="menu_section">
 						<h3 style="padding-left:11%;">More</h3>
 						<ul class="nav side-menu">
+							<li>
+								<a href="staff.php"><i class="fa fa-group"></i> <span class="nav-label">Manage staff</span>  </a>
+							</li>
 							<li class="">
 								<a href="settings.php"><i class="fa fa-cogs"></i> <span class="nav-label">Settings</span></a>
 							</li>
