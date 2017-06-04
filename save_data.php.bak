@@ -57,6 +57,7 @@ if(isset($_POST['tbl'])){
 			$person = new Person();
 			$accounts = new Accounts();
 			$data['date_registered'] = date("Y-m-d");
+			$data['dateofbirth'] = date("Y-m-d", strtotime($data['dateofbirth']));
 			$data['date_added'] = date("Y-m-d");
 			$data['photograph'] = "";
 			$data['active']=1;
@@ -68,12 +69,11 @@ if(isset($_POST['tbl'])){
 				$data['branchId'] = $data['branch_id'];
 				$data['addedBy'] = $data['modifiedBy'];
 				$data['dateAdded'] = $data['date_registered'];
-				$member_id = $member->addMember($data);
+				
 				if(isset($data['relative'])){
 					foreach($data['relative'] as $single){
 						$single['personId'] = $person_id;
-						$person->addRelative($data);
-						
+						$person->addRelative($single);
 					} 	 
 				}
 				if(isset($data['employment'])){
@@ -82,7 +82,9 @@ if(isset($_POST['tbl'])){
 						$person->addPersonEmployment($single);
 					} 	 
 				}
-				
+				if($member->addMember($data);){
+					$output = "success";
+				}
 			}else{ 
 				$output = "Member details could not be added. Please try again!";
 			} 

@@ -9,6 +9,8 @@ $accounts = new Accounts();
 $shares = new Shares();
 $member_data  = $member->findMemberDetails($_GET['id']);
 $names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_data['othername']; 
+$data['relatives'] = $person->findPersonRelatives($_GET['id']);
+print_r($data['relatives']);
 ?>
 
 <div class="row">

@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Shares extends Db {
 	protected static $table_name  = "shares";
-	protected static $db_fields = array("id", "amount", "person_number",  "paid_by", "received_by", "date_paid");
+	protected static $db_fields = array("id", "amount", "personId",  "paid_by", "received_by", "date_paid");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -15,7 +15,7 @@ class Shares extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findMemberShares($pno){
-		$result_array = $this->getarray(self::$table_name, "person_number=".$pno, "", "");
+		$result_array = $this->getarray(self::$table_name, "personId=".$pno, "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findSubscriptionAmount($id){

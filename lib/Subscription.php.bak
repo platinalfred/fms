@@ -15,7 +15,7 @@ class Subscription extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findMemberSubscriptions($pno){
-		$result_array = $this->getarray(self::$table_name, "", "personId=".$pno, "");
+		$result_array = $this->getarray(self::$table_name, "", "person_number=".$pno, "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findSubscriptionAmount($id){

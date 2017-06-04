@@ -81,27 +81,7 @@ $(document).ready(function(){
 
 		return false;
 	});
-	/* function RemoveRougeChar(convertString){
-		if(convertString.substring(0,1) == ","){
-			return convertString.substring(1, convertString.length)            
-			
-		}
-		return convertString;
-	} */
-	/* $("#monthlySalary").keyup(function(event){
-		  // skip for arrow keys
-		  if(event.which >= 37 && event.which <= 40){
-			  event.preventDefault();
-		  }
-		  var input = $(this);
-		  var num = input.val().replace(/,/gi, "").split("").reverse().join("");
-		  
-		  var num2 = RemoveRougeChar(num.replace(/(.{3})/g,"$1,").split("").reverse().join(""));
-		  
-		  console.log(num2);
-		  // the following line has been simplified. Revision history contains original.
-		  input.val(num2);
-	  }); */
+	
 	function showStatusMessage(message='', display_type='success'){
 		new PNotify({
 			  title: "Alert",
@@ -190,13 +170,13 @@ $(document).ready(function(){
     }
   });
 	
-	var Member = function(){
+	var MemberTable = function(){
 		var self = this;
 		self.member_details = ko.observable();
-		self.member_relatives = ko.observableArray();
-		self.member_employers = ko.observableArray();
+		self.member_relatives2 = ko.observableArray();
+		self.member_employers2 = ko.observableArray();
 	}
-	var memberModel = new Member();
+	var memberTableModel = new MemberTable();
   
   /* PICK DATA FOR DATA TABLE  */
 	var handleDataTableButtons = function() {
@@ -255,7 +235,7 @@ $(document).ready(function(){
 			  ],
 			  responsive: true,
 			   "initComplete": function(settings, json) {
-					ko.applyBindings(memberModel, $("#member_details")[0]);
+					ko.applyBindings(memberTableModel, $("#member_details")[0]);
 					$(".table tbody>tr:first").trigger('click');
 			  }
 			});
@@ -276,12 +256,26 @@ $(document).ready(function(){
 	
 	$('.table tbody').on('click', 'tr ', function () {
 		var data = dTable.row(this).data();
-		//console.log(data);
-		memberModel.member_details(data);
+		memberTableModel.member_details(data);
 		//ajax to retrieve other member details
-		//memberModel.member_employers(data.member_employers);
-		//memberModel.member_relatives(data.member_relatives);
+		findMemberDetails(data.id);
 	});
+	function findMemberDetails(id){
+		$.ajax({
+			url: "find_more_member_details.php?id="+id,
+			type: 'GET',
+			dataType: 'json',
+			success: function (data) {
+				if(data.relatives != "false"){
+					memberTableModel.member_relatives2(data.relatives);
+				}
+				if(data.employers != "false"){
+					memberTableModel.member_employers2(data.employers);
+				}
+				
+			}
+		});
+	}
 	
 });
 </script>

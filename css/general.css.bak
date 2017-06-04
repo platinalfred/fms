@@ -1,9 +1,13 @@
 .details{
     border-bottom: 1px dotted #DFE3FC;
+	padding-top:8px;
 }
 .clearboth{
 	clear:both;
 }
 .lead{
 	font-size: 18px !important;
+}
+.titles{
+	font-weight:300;
 }

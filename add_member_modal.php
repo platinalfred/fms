@@ -119,7 +119,7 @@ function addCommas(nStr){
 											<div class="form-group">
 												<label class="col-sm-3 control-label no_padding" >Occupation</label>
 												<div class="col-sm-9">
-													<input id="Occupation" name="occupation" type="text" class="form-control">
+													<input  name="occupation" type="text" class="form-control">
 												</div>
 											</div>
 										</div>
@@ -163,7 +163,7 @@ function addCommas(nStr){
 										<div class="form-group">
 											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Id Number <span class="req">*</span></label>
 											<div class="col-md-9 col-sm-9 col-xs-12">
-												<input id="id_number" name="id_number" type="text" class="form-control" required>
+												<input name="id_number" type="text" class="form-control" required>
 											</div>
 										</div>
 									</div>
@@ -171,7 +171,7 @@ function addCommas(nStr){
 									<div class="col-lg-6">
 										<div class="form-group">
 											<label>Credit Reference Bureau Card Number (CRB )</label>
-											<input id="no_of_dependents" name="CRB_card_no" type="text" class="form-control ">
+											<input  name="CRB_card_no" type="text" class="form-control ">
 										</div>
 									</div>
 									<div class="col-lg-12">&nbsp;</div>
@@ -236,7 +236,7 @@ function addCommas(nStr){
 									<div class="col-lg-3">
 										<div class="form-group">
 											<label>Relationship</label>
-											<select class="form-control"  data-bind="attr: {name:'relative['+$index()+'][relative_gender]'}, options: relationships, optionsText: 'rel_type', optionsCaption: 'Select...', , optionsAfterRender: $parent.setOptionValue('id'), value: relationship" data-msg-required="Relationship is required"></select>
+											<select class="form-control"  data-bind="attr: {name:'relative['+$index()+'][relationship]'}, options: relationships, optionsText: 'rel_type', optionsCaption: 'Select...', , optionsAfterRender: $parent.setOptionValue('id'), value: relationship" data-msg-required="Relationship is required"></select>
 										</div>
 									</div>
 									<div class="col-sm-3">

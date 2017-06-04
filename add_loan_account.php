@@ -3,7 +3,11 @@
 		$page_title = "New Loan Account";
 		include("include/header.php"); 
 		require_once("lib/Libraries.php");
-		if(isset($_GET['id'])){ $client = $_GET['id']; }
+		if(isset($_GET['id']) && $_GET['type'] == 1){
+			$member = new Member();
+			$client  = $member->findPersonList($_GET['id']);
+			
+		}
 		?>
 			<div class="row" id="loan_account_form">
                 <div class="col-lg-12">
@@ -120,6 +124,7 @@
 
                                 </fieldset>
 								<!--ko with: loanProduct -->
+								<!--ko if: $root.filteredLoanProductFees().length>0 -->
 								<h1>Loan Fees</h1>
 								<fieldset>
 									<h2>Applicable Fees (<span data-bind="text: $root.filteredLoanProductFees().length"></span>)</h2>
@@ -150,6 +155,7 @@
 										</div>
 									</div>
 								</fieldset>
+								<!-- /ko -->
 								<!-- /ko -->
 								<!--ko with: loanProduct -->
 								<!--ko if: (parseInt($root.client().clientType)==1) -->

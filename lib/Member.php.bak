@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Member extends Db {
 	protected static $table_name  = "member";
-	protected static $db_fields = array("id","personId","branchId","memberType","comment", "addedBy","dateAdded", "active", "ModifiedBy");
+	protected static $db_fields = array("id","personId","branch_id","memberType","comment", "addedBy","dateAdded", "active", "ModifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
@@ -42,7 +42,7 @@ class Member extends Db {
 		return false;
 	}
 	public function findBranch($br){
-		$result = $this->getfrec("branch", "branch_name", "branchId='$br'","","");
+		$result = $this->getfrec("branch", "branch_name", "branch_id='$br'","","");
 		return !empty($result) ? $result['branchName'] : false;
 	}
 	public function findMemberNames($p_id){
@@ -61,6 +61,13 @@ class Member extends Db {
 		return !empty($result) ? $result['personId'] : false;
 	}
 	//list of the members for special kinds of select lists
+	public function findPersonList($id){
+		$table = self::$table_name. " JOIN `person` ON `member`.`personId` = `person`.`id`";
+		$fields = "`person`.`id`, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType`";
+		$result_array = $this->getrec($table, $fields, "person.id=".$id, "", "");
+		return $result_array;
+	}
+	//list of the members for special kinds of select lists
 	public function findSelectList(){
 		$table = self::$table_name. " JOIN `person` ON `member`.`personId` = `person`.`id`";
 		$fields = "`person`.`id`, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType`";
@@ -68,7 +75,7 @@ class Member extends Db {
 		return $result_array;
 	}
 	public function findAll(){
-		$result_array = $this->queryData("SELECT `member`.`id`, `member`.`personId`, `firstname`, `lastname`, `othername`, `phone`, `email`, `postal_address`, `physical_address`, `dateofbirth`, `gender`, `date_registered`, `photograph`, `memberType`, `date_added`, `branchId`, `added_by` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id`");
+		$result_array = $this->queryData("SELECT `member`.`id`, `member`.`personId`, `firstname`, `lastname`, `othername`, `phone`, `email`, `postal_address`, `physical_address`, `dateofbirth`, `gender`, `date_registered`, `photograph`, `memberType`, `date_added`, `branch_id`, `added_by` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id`");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findGuarantors(){
@@ -86,11 +93,7 @@ class Member extends Db {
 	
 	public function addMember($data){
 		$fields = array_slice(self::$db_fields, 1);
-		$ins_id = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
-		if($ins_id){
-			return $ins_id;
-		}
-		return false;
+		return $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
 	}
 	public function updateMember($data){
 		$fields = array("comment");

@@ -48,7 +48,6 @@
 					}, 0 );
 				} );
 			} );
-		</script>
 	<?php 
 	}
 	if(in_array("iCheck", $needed_files)){ ?>

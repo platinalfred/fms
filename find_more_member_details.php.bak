@@ -1,0 +1,17 @@
+<?php 
+require_once("lib/Libraries.php");
+$shares = new Shares();
+$subscription = new Subscription();
+$person = new Person();
+$send = array();
+$data = array();
+if(isset($_GET['id'])){
+	$pid = $_GET['id']; //person id
+	$relative['relatives'] = $person->findPersonRelatives($pid);
+	$data['employers'] = $person->findPersonEmploymentHistory($pid);
+	$data['subscriptions'] = $subscription->findMemberSubscriptions($pid);	
+	//$data['shares'] = $shares->findMemberShares($pid);
+}
+$_result['relatives'] = $relative;
+echo json_encode($_result);
+?>

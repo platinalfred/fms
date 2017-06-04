@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Person extends Db {
 	protected static $table_name  = "person";
-	protected static $db_fields = array("id","person_number","person_type","title","branch_id", "firstname", "lastname", "othername","gender", "dateofbirth", "phone", "email","district","county","subcounty","parish","village","id_type", "id_number","physical_address","postal_address", "occupation", "photograph", "comment", "date_registered", "registered_by", "children_no", "dependants_no");
+	protected static $db_fields = array("id","person_number","person_type","title", "firstname", "lastname", "othername","gender", "dateofbirth", "phone", "email","district","county","subcounty","parish","village","id_type", "id_number","physical_address","postal_address", "occupation", "photograph", "comment", "date_registered", "registered_by", "children_no", "dependants_no");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
@@ -11,6 +11,13 @@ class Person extends Db {
 	}
 	public function updatePersonNumber($id){
 		$pno = "BFS". sprintf('%08d',$id);
+		if($this->update(self::$table_name, array("person_number"), array("person_number"=>$pno), "id=".$id)){
+			return true;
+		}
+		return false;
+	}
+	public function updateStaffNumber($id){
+		$pno = "SBFS". sprintf('%08d',$id);
 		if($this->update(self::$table_name, array("person_number"), array("person_number"=>$pno), "id=".$id)){
 			return true;
 		}
@@ -27,6 +34,14 @@ class Person extends Db {
 	}
 	public function findAll(){
 		$result_array = $this->getarray(self::$table_name, "","id DESC", "");
+		return !empty($result_array) ? $result_array : false;
+	}
+	public function findPersonEmploymentHistory($id){
+		$result_array = $this->getarray("person_employment", "personId=".$id,"", "");
+		return !empty($result_array) ? $result_array : false;
+	}
+	public function findPersonRelatives($id){
+		$result_array = $this->getarray("person_relative p, relationship_type r", "p.relationship=r.id AND p.personId=".$id,"", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findPersonsPosition($pid){
@@ -50,6 +65,7 @@ class Person extends Db {
 		}
 	}
 	public function addPerson($data){
+		
 		$fields = array_slice(self::$db_fields, 1);
 		return $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data)); 
 			
@@ -62,7 +78,7 @@ class Person extends Db {
 	}
 	public function addRelative($data){
 		$fields = array("personId",  "is_next_of_kin", "first_name", "last_name", "other_names", "telephone", "relative_gender", "relationship", "address", "address2");
-		return $this->add("peron_relative", $fields, $this->generateAddFields($fields, $data)); 
+		return $this->add("person_relative", $fields, $this->generateAddFields($fields, $data)); 
 			
 	}
 	public function updatePerson($data){

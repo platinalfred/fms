@@ -9,6 +9,8 @@ $accounts = new Accounts();
 $shares = new Shares();
 $member_data  = $member->findMemberDetails($_GET['id']);
 $names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_data['othername']; 
+$data['relatives'] = $person->findPersonRelatives($_GET['id']);
+print_r();
 ?>
 
 <div class="row">
@@ -171,5 +173,5 @@ $names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_da
 </div>
 <?php
  include("include/footer.php");
-  include("js/member_js.php");
+  include("js/members_js.php");
 ?>

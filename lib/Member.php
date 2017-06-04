@@ -61,6 +61,13 @@ class Member extends Db {
 		return !empty($result) ? $result['personId'] : false;
 	}
 	//list of the members for special kinds of select lists
+	public function findPersonList($id){
+		$table = self::$table_name. " JOIN `person` ON `member`.`personId` = `person`.`id`";
+		$fields = "`person`.`id`, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType`";
+		$result_array = $this->getfrec($table, $fields, "person.id=".$id, "", "");
+		return $result_array;
+	}
+	//list of the members for special kinds of select lists
 	public function findSelectList(){
 		$table = self::$table_name. " JOIN `person` ON `member`.`personId` = `person`.`id`";
 		$fields = "`person`.`id`, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType`";
@@ -86,11 +93,7 @@ class Member extends Db {
 	
 	public function addMember($data){
 		$fields = array_slice(self::$db_fields, 1);
-		$ins_id = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
-		if($ins_id){
-			return $ins_id;
-		}
-		return false;
+		return $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
 	}
 	public function updateMember($data){
 		$fields = array("comment");
