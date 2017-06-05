@@ -18,7 +18,7 @@ class Db{
 	   $this->server = "localhost";
 	   $this->user = "root";
 	   $this->password = "";
-	   $this->database = "fms_current";
+	   $this->database = "fms";
 	   //Connects to the database;
 	   $this->connectDB();
 	   
@@ -101,9 +101,10 @@ class Db{
 		if(!isset($_SESSION)) {
 			session_start();
 		}
-		$to_add = array("id","username","access_level", "branch_id", "personId");
+		$to_add = array("id","username", "branch_id", "personId");
 		$password = md5($password);
 		$results = $this->getfrec("staff", implode(",",$to_add), "username='$username' AND password='$password'", "", "");
+		
 		if(count($results) > 0){
 		   $_SESSION['Logged'] = true;
 		   foreach($results as $key => $value){
@@ -113,8 +114,35 @@ class Db{
 				   }
 			  }
 		   }
-		  $this->setSessions("user_id", $results['id']);
-		  return $_SESSION;
+		   $access_levels = $this->getfarray("staff_roles", "role_id","personId=".$results['personId'], "", "");
+			if($access_levels){
+				foreach($access_levels as $single){
+					switch($single["role_id"]){
+						case 1://Administrator 1
+							$this->setSessions("admin", true);
+						break;
+						case 2://Loan Officer 2
+							$this->setSessions("loan_officer", true);
+						break;
+						case 3: //Branch Manager 3
+							$this->setSessions("branch_manager", true);
+						break;
+						case 4://Branch Credit Committee
+							$this->setSessions("branch_credit", true);
+						break;
+						case 5://Management Credit Committee
+							$this->setSessions("management_credit", true);
+						break;
+						case 6: //Executive board committee
+							$this->setSessions("executive_board", true);
+						break;
+					}
+					
+				}
+				
+			}  
+			$this->setSessions("user_id", $results['id']);
+			return $_SESSION;
 		}
 		return false;
 	}
@@ -444,13 +472,13 @@ class Db{
 			if ($i < (count($fields) - 1)) $va = $va.",";
 		}
 		$ins = "INSERT INTO ".$table. " (".$fi.") VALUES (".$va.")";
-		//echo $ins;
-		$inse = $this->conn->query($ins);
+		echo $ins;
+		 $inse = $this->conn->query($ins);
 		if($inse){
 			
 			return mysqli_insert_id($this->conn);
 		} 
-		return false;
+		return false; 
 		
 	}
 	function addMultiple($table, $fields, $values){
@@ -570,7 +598,7 @@ class Db{
 		else $sel = "SELECT * FROM ".$table;
 		if ($ordby != "") $sel = $sel." ORDER BY ".$ordby;
 		if ($limit != "") $sel = $sel." LIMIT ".$limit;
-		echo $sel;
+		//echo $sel;
 		$q = $this->conn->query($sel);
 		if($q){
 			$res = $this->buildOut($q);

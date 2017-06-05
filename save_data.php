@@ -3,8 +3,111 @@ require_once('lib/Libraries.php');
 $output = "";
 if(isset($_POST['tbl'])){
 	switch($_POST['tbl']){
+		case "add_group":
+			$data = $_POST;
+			$sacco_group = new SaccoGroup();
+			$group_id = $sacco_group->addSaccoGroup($data);
+			if($group_id){
+				$data['groupId'] = $group_id;
+				if(!empty($data['members'])){
+					foreach($data['members'] as $single){
+						$data['memberId'] = $single['memberId'];
+						$sacco_group->addSaccoGroupMembers($data);
+					}
+				}
+				$output = "success";
+			}else{ 
+				$output = "Group details could not be added. Please try again or contact admin for assistance!";
+			}
+		break;
+		//UPDATE STAFF
+		case "update_staff":
+			$data = $_POST;
+			$staff = new Staff();
+			$person = new Person();
+			$data['id'] = $data['personId'];
+			$data['dateofbirth'] = date("Y-m-d", strtotime($data['dateofbirth']));
+			if($person->updatePerson($data)){
+				if(!empty($data['access_levels'])){
+					foreach($_POST['access_levels'] as $single){
+						$data['role_id'] = $single;
+						$staff->updateStaffAccessLevels($data);
+					}
+				}
+				$data['id'] = $_POST['member_id'];
+				if(!$staff->isValidMd5($data['password'])){
+					$data['password'] = md5($data['password']);
+				}
+				if($staff->updateStaff($data)){
+					$output = "success";
+				}
+			}else{ 
+				$output = "Staff details could not be updated. Please try again!";
+			} 
+		break;
+		//ADD STAFF
 		case "add_staff":
-			print_r($_POST);
+			$data = $_POST;
+			$staff = new Staff();
+			$person = new Person();
+			$data['dateofbirth'] = date("Y-m-d", strtotime($data['dateofbirth']));
+			$data['date_added'] = date("Y-m-d");
+			$data['photograph'] = "";
+			$data['active']=1;
+			$person_id = $person->addPerson($data);
+			if($person_id){
+				$data['personId'] = $person_id;
+				$person->updateStaffNumber($person_id);
+				if(!empty($_POST['access_levels'])){
+					foreach($_POST['access_levels'] as $single){
+						$data['role_id'] = $single;
+						$staff->addStaffAccessLevels($data);
+					}
+				}
+				$data['password'] = md5($data['password']);
+				if($staff->addStaff($data)){
+					$output = "success";
+				}
+			}else{ 
+				$output = "Staff details could not be added. Please try again!";
+			}  
+		break;
+		case "add_member":
+			$data = $_POST;
+			$member = new Member();
+			$person = new Person();
+			$data['date_registered'] = date("Y-m-d");
+			$data['dateofbirth'] = date("Y-m-d", strtotime($data['dateofbirth']));
+			$data['dateAdded'] = time();
+			$data['photograph'] = "";
+			$data['active']=1;
+			 $person_id = $person->addPerson($data);
+			if($person_id){
+				$data['personId'] = $person_id;
+				$person->updatePersonNumber($person_id);
+				$data["personId"] = $person_id;
+				$data['branchId'] = $data['branch_id'];
+				$data['addedBy'] = $data['modifiedBy'];
+				$data['dateAdded'] = $data['date_registered'];
+				
+				if(!empty($data['relative'])){
+					foreach($data['relative'] as $single){
+						$single['personId'] = $person_id;
+						$person->addRelative($single);
+					} 	 
+				}
+				if(!empty($data['employment'])){
+					foreach($data['employment'] as $single){
+						$single['personId'] = $person_id;
+						$person->addPersonEmployment($single);
+					} 	 
+				}
+				if($member->addMember($data)){
+					$output = "success";
+				}
+			}else{ 
+				$output = "Member details could not be added. Please try again!";
+			} 
 		break;
 		case "subscription":
 			$data = $_POST;
@@ -51,44 +154,7 @@ if(isset($_POST['tbl'])){
 				$output ="Marital Status could not be added";
 			}
 		break;
-		case "add_member":
-			$data = $_POST;
-			$member = new Member();
-			$person = new Person();
-			$accounts = new Accounts();
-			$data['date_registered'] = date("Y-m-d");
-			$data['dateofbirth'] = date("Y-m-d", strtotime($data['dateofbirth']));
-			$data['date_added'] = date("Y-m-d");
-			$data['photograph'] = "";
-			$data['active']=1;
-			 $person_id = $person->addPerson($data);
-			if($person_id){
-				$data['person_id'] = $person_id;
-				$person->updatePersonNumber($person_id);
-				$data["personId"] = $person_id;
-				$data['branchId'] = $data['branch_id'];
-				$data['addedBy'] = $data['modifiedBy'];
-				$data['dateAdded'] = $data['date_registered'];
-				
-				if(isset($data['relative'])){
-					foreach($data['relative'] as $single){
-						$single['personId'] = $person_id;
-						$person->addRelative($single);
-					} 	 
-				}
-				if(isset($data['employment'])){
-					foreach($data['employment'] as $single){
-						$single['personId'] = $person_id;
-						$person->addPersonEmployment($single);
-					} 	 
-				}
-				if($member->addMember($data)){
-					$output = "success";
-				}
-			}else{ 
-				$output = "Member details could not be added. Please try again!";
-			} 
-		break;
+		
 		case "account_type":
 			$account_type = new AccountType();
 			if($account_type->addAccountType($_POST)){

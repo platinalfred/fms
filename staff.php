@@ -4,7 +4,20 @@ $page_title = "Members";
 include("include/header.php"); 
 require_once("lib/Libraries.php");
 $staff = new Staff();
+$staff
 ?>
+<div class="modal fade" id="DescModal" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-body">
+				 
+			</div>
+			
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
 	<div class="row">
 		<?php include("add_staff_modal.php"); ?>
 		<div class="col-sm-11">
@@ -33,12 +46,14 @@ $staff = new Staff();
 										<thead>
 											<tr>
 												<th>Id</th>
-												<th>Person Number</th>
+												<th>Staff Number</th>
+												<th>User Name</th>
+												<th>Position</th>
 												<th>Name</th>
 												<th>Phone</th>
 												<th>Id Number</th>
 												<th>Date of Birth</th>
-												<th>Details</th>
+												<th>Edit</th>
 											</tr>
 										</thead>
 										<tbody>

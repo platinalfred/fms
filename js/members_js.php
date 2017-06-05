@@ -136,6 +136,13 @@ $(document).ready(function(){
         minlength: 5
       }
     },
+	errorPlacement: function(error, element) {
+      if (element.attr("type") == "radio" || element.attr("type") == "checkbox") {
+         $("#accept_msg").html("Please acknowledge all the details above are correct.");
+       }else{
+			error.insertAfter(element);
+	   }
+    },
     // Specify validation error messages
     messages: {
       firstname: "Please enter your firstname",
@@ -160,6 +167,7 @@ $(document).ready(function(){
 				if($.trim(response) == "success"){
 					showStatusMessage("Successfully added new record" ,"success");
 					form[0].reset();
+					$('input[type="radio"]').removeAttr('checked').iCheck('update');
 					dTable.ajax.reload();
 				}else{
 					showStatusMessage(response, "fail");
@@ -208,8 +216,9 @@ $(document).ready(function(){
 					{ data: 'Name', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname; }},
 					{ data: 'phone'},
 					{ data: 'id_number'},
-					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}},
-					{ data: 'id', render: function ( data, type, full, meta ) {  return '<a href="member_details.php?id='+data+'" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a> ';}}
+					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}}<?php 
+					if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>,
+					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <a href="member_details.php?id='+data+'" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a> ';}} <?php } ?> 
 					] ,
 			  buttons: [
 				{
@@ -233,7 +242,7 @@ $(document).ready(function(){
 				  className: "btn-sm"
 				},
 			  ],
-			  responsive: true,
+			  
 			   "initComplete": function(settings, json) {
 					ko.applyBindings(memberTableModel, $("#member_details")[0]);
 					$(".table tbody>tr:first").trigger('click');
@@ -256,7 +265,6 @@ $(document).ready(function(){
 	
 	$('.table tbody').on('click', 'tr ', function () {
 		var data = dTable.row(this).data();
-		console.log(data);
 		memberTableModel.member_details(data);
 		//ajax to retrieve other member details
 		findMemberDetails(data.id);

@@ -46,7 +46,7 @@ class Staff extends Db {
 		return false;
 	}
 	public function updateStaffAccessLevels($data){
-		$this->del('staff_roles', 'personId='.$data['personId']);
+		$this->delete('staff_roles', 'personId='.$data['personId']);
 		$fields = array("role_id", "personId");
 		if($this->add("staff_roles", $fields, $this->generateAddFields($fields, $data))){
 			return true;

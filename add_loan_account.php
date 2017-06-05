@@ -1,4 +1,4 @@
-	<?php 
+		<?php 
 		if(isset($_GET['id']) && $_GET['type'] == 1){
 			$member = new Member();
 			$client  = $member->findPersonList($_GET['id']);

@@ -26,7 +26,8 @@ class SaccoGroup extends Db {
 		$group_members = "(SELECT `memberId` FROM `group_members` WHERE `groupId` = $id)";
 		$member_persons = "(SELECT `personId` FROM `member` WHERE `id` IN ($group_members))";
 		$group_members_details = "SELECT CONCAT(`lastname`, ' ', `firstname`, ' ', `othername`) `memberNames` FROM `person` WHERE `id` IN ($member_persons)";
-		return $this->queryData($group_members_details);
+		echo $group_members_details;
+		$this->queryData($group_members_details);
 	}
 	
 	
