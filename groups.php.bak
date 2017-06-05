@@ -68,7 +68,6 @@ $member = new Member();
 									<strong>Notes</strong>
 									<p data-bind="text:description">
 									</p>
-									<!--
 									<hr/>
 									<strong>Timeline activity</strong>
 									<div id="vertical-timeline" class="vertical-container dark-timeline">

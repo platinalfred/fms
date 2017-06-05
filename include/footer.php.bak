@@ -60,13 +60,7 @@
 				$('.i-checks').iCheck({
 					checkboxClass: 'icheckbox_square-green',
 					radioClass: 'iradio_square-green',
-				}).on('ifChanged', function(e) {
-					// Get the field name
-					var isChecked = e.currentTarget.checked;
-					if (isChecked == true) {
-						 $(this).iCheck('uncheck');
-					}
-				});
+				})
 				
 				function hideStatusMessageGeneral(){
 					document.getElementById('notice_message_general').style.display = 'none'; 

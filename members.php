@@ -12,8 +12,12 @@ $member = new Member();
 				<div class="ibox-content">
 					<!--<span class="text-muted small pull-right">Last modification: <i class="fa fa-clock-o"></i> 2:10 pm - 12.06.2014</span>-->
 					<h2>Members</h2>
-					
-					<div class="col-sm-5 text-muted small pull-left" style="padding:10px;"> <a data-toggle="modal" href="#add_member" class="btn btn-primary btn-xs"> <i class="fa fa-plus"></i> Add new member</a></div>
+					<?php 
+					if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>
+						<div class="col-sm-5 text-muted small pull-left" style="padding:10px;"> <a data-toggle="modal" href="#add_member" class="btn btn-primary btn-xs"> <i class="fa fa-plus"></i> Add new member</a></div> 
+						<?php
+					}
+					?>
 					<div class="clear:both;"></div>
 					<div class="input-group">
 						<input type="text" placeholder="Search client " class="input form-control">
@@ -39,7 +43,12 @@ $member = new Member();
 												<th>Phone</th>
 												<th>Id Number</th>
 												<th>Date of Birth</th>
-												<th>Details</th>
+												<?php 
+												if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>
+													<th>Details</th>
+												<?php 
+												}
+												?>
 											</tr>
 										</thead>
 										<tbody>

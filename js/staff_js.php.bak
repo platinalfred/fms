@@ -2,8 +2,14 @@
 
 
 $(document).ready(function(){
-	var dTable;
 	
+	var dTable;
+	$('#staffTable').on('click', 'tr .edit', function () {
+		var id = $(this).attr("id")
+		 $('#DescModal').removeData('bs.modal');
+        $('#DescModal').modal({remote: 'edit_staff.php?id=' + id });
+        $('#DescModal').modal('show');
+    });
 	$(".save").click(function(){
 		var frmdata = $(this).closest("form").serialize();
 		$.ajax({
@@ -65,27 +71,24 @@ $(document).ready(function(){
   $("form[name='registration']").validate({
     // Specify validation rules
     rules: {
-      // The key name on the left side is the name attribute
-      // of an input field. Validation rules are defined
-      // on the right side
-      firstname: "required",
-      lastname: "required",
-      /* email: {
-        required: true,
-        // Specify that email should be validated
-        // by the built-in "email" rule
-        email: true
-      }, */
-      password: {
-        required: true,
-        minlength: 5
-      },
-	  acceptTerms:{
-		  required: true,
-		  errorPlacement: function(error, element) {
-			 $("#checkBoxErrorHolder").html(error);
-		 }
-	  }
+		// The key name on the left side is the name attribute
+		// of an input field. Validation rules are defined
+		// on the right side
+		firstname: "required",
+		lastname: "required",
+		  /* email: {
+			required: true,
+			// Specify that email should be validated
+			// by the built-in "email" rule
+			email: true
+		  }, */
+		password: {
+			required: true,
+			minlength: 5
+		},
+		password2: {
+			equalTo: "#password"
+		}
 	  
     },
 	errorPlacement: function(error, element) {
@@ -119,7 +122,7 @@ $(document).ready(function(){
 				if($.trim(response) == "success"){
 					showStatusMessage("Successfully added new record" ,"success");
 					form[0].reset();
-					$('input[type="checkbox"]').iCheck('uncheck');
+					$('input[type="checkbox"]').removeAttr('checked').iCheck('update');
 					dTable.ajax.reload();
 				}else{
 					showStatusMessage(response, "fail");
@@ -163,13 +166,15 @@ $(document).ready(function(){
 				  "orderable": false
 			  }],
 			  columns:[  
-					{ data: 'id'},
+					{ data: 'id', render: function ( data, type, full, meta ) {return "  "+data; }},
 					{ data: 'person_number'},
-					{ data: 'Name', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname; }},
+					{ data: 'username'},
+					{ data: 'position'},
+					{ data: 'Names', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname; }},
 					{ data: 'phone'},
 					{ data: 'id_number'},
 					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}},
-					{ data: 'id', render: function ( data, type, full, meta ) {  return '<a href="member_details.php?id='+data+'" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a> ';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {  return '<a  id='+data +' class="btn btn-white btn-sm edit"><i class="fa fa-pencil"></i> Edit </a> <a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </button>';}}
 					] ,
 			  buttons: [
 				{
@@ -192,8 +197,20 @@ $(document).ready(function(){
 				  extend: "print",
 				  className: "btn-sm"
 				},
-			  ],
-			  responsive: true,
+			  ],/* ,
+			  responsive: {
+				details: {
+					display: $.fn.dataTable.Responsive.display.modal( {
+						header: function ( row ) {							
+							var data = row.data();
+							return 'Showing details for '+data.firstname+' '+data.lastname;
+						}
+					} ),
+					renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
+						tableClass: 'table'
+					} )
+				}
+			}, */
 			   "initComplete": function(settings, json) {
 					ko.applyBindings(memberModel, $("#member_details")[0]);
 					$(".table tbody>tr:first").trigger('click');

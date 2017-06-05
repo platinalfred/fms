@@ -51,6 +51,7 @@
 													<option value="Mrs">Mrs.</option>
 													<option value="Dr">Dr.</option>
 													<option value="Prof">Prof.</option>
+													<option value="Eng">Eng.</option>
 												</select>
 											</div>
 										</div>
@@ -84,22 +85,24 @@
 										</div>
 									</div>
 									
-									<div class="col-lg-6">
+									
+									<div class="col-lg-9 bottom_pad" >
 										<div class="form-group">
-											<label class="control-label col-md-4 col-sm-12 col-xs-12 no_padding">Password <span class="req">*</span></label>
-											<div class="col-md-8 col-sm-12 col-xs-12">
-												<input id="password" name="password" type="password" class="form-control" required>
+											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Password <span class="req">*</span></label>
+											<div class="col-md-9 col-sm-9 col-xs-12">
+												<input id="password" name="password" type="password"   class="form-control" required>
 											</div>
 										</div>
 									</div>
-									<div class="col-lg-6">
+									<div class="col-lg-9 bottom_pad" >
 										<div class="form-group">
 											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Confirm Password <span class="req">*</span></label>
 											<div class="col-md-9 col-sm-9 col-xs-12">
-												<input id="password" name="password" type="password1" class="form-control" required>
+												<input id="password" name="password2"  type="password" class="form-control" required>
 											</div>
 										</div>
 									</div>
+									
 									
 									<div class="col-lg-4">
 										<div class="col-sm-12">&nbsp;</div>
@@ -124,7 +127,7 @@
 									</div>
 									<div class="col-lg-8">
 										<div class="form-group">
-											<label class="col-sm-4 control-label">Access Level<br/><small class="text-navy">This staff rights will be limited to what access levels you assign.</small></label>
+											<label class="col-sm-4 control-label">Access Level<br/><small class="text-navy">Staff rights will be limited to the access level(s) you assign.</small></label>
 											<div class="col-sm-8">
 												<?php 
 												$access_level = new AccessLevel();

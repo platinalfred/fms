@@ -9,18 +9,27 @@ class Staff extends Db {
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
 		return !empty($result) ? $result:false;
 	}
-	public function findByPersonNumber($pno){
-		$result = $this->getfrec(self::$table_name, "person_number='$pno'", "");
+	public function findByPersonId($pno){
+		$result = $this->getfrec(self::$table_name, "personId=".$pno, "");
 		return !empty($result) ? $result:false;
+	}
+	public function findStaffDetails($id){
+		$result = $this->getrec(self::$table_name." s, person p", "s.id=".$id." AND s.personId=p.id", "", "");
+		return !empty($result) ? $result:false;
+	}
+	public function findAccessRoles($pid){
+		$result_array = $this->getarray("staff_roles", "personId=".$pid, "","", "");
+		return !empty($result_array) ? $result_array : false;
 	}
 	public function findPersonsPhoto($pno){
 		$result = $this->getfrec("person", "photograph", "id=".$pno, "", "");
 		return !empty($result) ? $result['photograph']:false;
 	}
 	public function findAll(){
-		$result_array = $this->getarray(self::$table_name, "","id DESC", "");
+		$result_array = $this->getarray(self::$table_name, "", "","id DESC", "");
 		return !empty($result_array) ? $result_array : false;
 	}
+	
 	public function findNamesByPersonNumber($pno){
 		$result = $this->getrec(self::$table_name." st, person p", "p.first_name, p.last_name, p.other_names", "st.personId='$pno' AND p.id = st.personId", "", "");
 		return !empty($result) ? $result['first_name']." ".$result['other_names']." ".$result['last_name'] : false;
@@ -36,6 +45,14 @@ class Staff extends Db {
 		}
 		return false;
 	}
+	public function updateStaffAccessLevels($data){
+		$this->del('staff_roles', 'personId='.$data['personId']);
+		$fields = array("role_id", "personId");
+		if($this->add("staff_roles", $fields, $this->generateAddFields($fields, $data))){
+			return true;
+		}
+		return false;
+	}
 	public function addStaff($data){
 		$fields = array_slice(self::$db_fields, 1);
 		if($this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data))){
@@ -44,7 +61,7 @@ class Staff extends Db {
 		return false;
 	}
 	public function updateStaff($data){
-		$fields = array_slice(1, self::$db_fields);
+		$fields = array_slice(self::$db_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
 		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){

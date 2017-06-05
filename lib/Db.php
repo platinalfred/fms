@@ -101,9 +101,10 @@ class Db{
 		if(!isset($_SESSION)) {
 			session_start();
 		}
-		$to_add = array("id","username","access_level", "branch_id", "personId");
+		$to_add = array("id","username", "branch_id", "personId");
 		$password = md5($password);
 		$results = $this->getfrec("staff", implode(",",$to_add), "username='$username' AND password='$password'", "", "");
+		
 		if(count($results) > 0){
 		   $_SESSION['Logged'] = true;
 		   foreach($results as $key => $value){
@@ -113,8 +114,35 @@ class Db{
 				   }
 			  }
 		   }
-		  $this->setSessions("user_id", $results['id']);
-		  return $_SESSION;
+		   $access_levels = $this->getfarray("staff_roles", "role_id","personId=".$results['personId'], "", "");
+			if($access_levels){
+				foreach($access_levels as $single){
+					switch($single["role_id"]){
+						case 1://Administrator 1
+							$this->setSessions("admin", true);
+						break;
+						case 2://Loan Officer 2
+							$this->setSessions("loan_officer", true);
+						break;
+						case 3: //Branch Manager 3
+							$this->setSessions("branch_manager", true);
+						break;
+						case 4://Branch Credit Committee
+							$this->setSessions("branch_credit", true);
+						break;
+						case 5://Management Credit Committee
+							$this->setSessions("management_credit", true);
+						break;
+						case 6: //Executive board committee
+							$this->setSessions("executive_board", true);
+						break;
+					}
+					
+				}
+				
+			}  
+			$this->setSessions("user_id", $results['id']);
+			return $_SESSION;
 		}
 		return false;
 	}

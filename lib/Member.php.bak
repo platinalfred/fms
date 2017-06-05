@@ -64,7 +64,7 @@ class Member extends Db {
 	public function findPersonList($id){
 		$table = self::$table_name. " JOIN `person` ON `member`.`personId` = `person`.`id`";
 		$fields = "`person`.`id`, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType`";
-		$result_array = $this->getrec($table, $fields, "person.id=".$id, "", "");
+		$result_array = $this->getfrec($table, $fields, "person.id=".$id, "", "");
 		return $result_array;
 	}
 	//list of the members for special kinds of select lists
@@ -75,7 +75,7 @@ class Member extends Db {
 		return $result_array;
 	}
 	public function findAll(){
-		$result_array = $this->queryData("SELECT `member`.`id`, `member`.`personId`, `firstname`, `lastname`, `othername`, `phone`, `email`, `postal_address`, `physical_address`, `dateofbirth`, `gender`, `date_registered`, `photograph`, `memberType`, `date_added`, `branch_id`, `added_by` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id`");
+		$result_array = $this->queryData("SELECT `member`.`id`, `member`.`personId`, CONCAT(`lastname`, ' ', ``, ' ', `othername`) `memberNames`, `firstname`, `lastname`, `othername`, `phone`, `email`, `postal_address`, `physical_address`, `dateofbirth`, `gender`, `date_registered`, `photograph`, `memberType`, `dateAdded`, `branch_id`, `addedBy` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id`");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findGuarantors(){

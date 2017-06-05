@@ -48,6 +48,7 @@ function addCommas(nStr){
 						<form id="form1" action="" method="post" name="registration"  class="wizard-big">
 							<input type="hidden" name="registered_by" value="<?php echo $_SESSION['user_id'];?>">
 							<input type="hidden" name="modifiedBy" value="<?php echo $_SESSION['user_id'];?>">
+							<input type="hidden" name="addedBy" value="<?php echo $_SESSION['user_id'];?>">
 							<input type="hidden" name="date_registered" value="<?php echo time();?>">
 							<input type="hidden" name="branch_id" value="<?php echo $_SESSION['branch_id'];?>">
 							<input type="hidden" name="person_type" value="0">
@@ -288,7 +289,7 @@ function addCommas(nStr){
 									<div class="col-lg-3">
 										<div class="form-group">
 											<label>Phone </label>
-											<input ="relative[]['telephone']" data-bind="attr: {name:'relative['+$index()+'][telephone]'}, value: telephone" type="text" class="form-control ">
+											<input ="relative[]['telephone']" data-mask="(999) 999-9999" data-bind="attr: {name:'relative['+$index()+'][telephone]'}, value: telephone" type="text" class="form-control ">
 										</div>
 									</div>
 									<div class="col-lg-3"><span title="Remove relative" class="btn text-danger btn-lg" data-bind='click: $root.removeRelative'><i class="fa fa-minus"></i></span></div>

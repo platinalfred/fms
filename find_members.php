@@ -11,6 +11,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 	$table = "`member` JOIN `person` ON `member`.`personId` = `person`.`id`"; 
 	$primary_key = "`member`.`id`";
 	$columns = array( "`person`.`id`","`person`.`person_number`", "`person`.`comment`","`firstname`", "`lastname`", "`othername`", "`phone`", "`id_number`" ,"`dateAdded`", "`memberType`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`", "`date_registered`", "`branch_id`" );
+	$group_by = "person.id DESC";
 }
 
 if ( isset($_POST['page']) && strlen($_POST['page'])>0) {

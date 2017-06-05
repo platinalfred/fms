@@ -33,6 +33,8 @@
 	if(in_array("dataTables", $needed_files)){
 		?>
 		<script src="js/plugins/dataTables/datatables.min.js"></script>
+		<script src="js/plugins/dataTables/dataTables.responsive.min.js"></script>
+		
 		<script>
 			$(document).ready(function () {
 				jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
