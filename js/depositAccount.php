@@ -1,15 +1,121 @@
+
+<!-- Datatables -->
+<script>
+	var dTable = new Object();
+	$(document).ready(function() {
+	var handleDataTableButtons = function() {
+	  if ($("#datatable-buttons").length) {
+		dTable = $('#datatable-buttons').DataTable({
+		  dom: "Bfrtip",
+		  "order": [ [1, 'asc' ]],
+		  "processing": true,
+		  "serverSide": true,
+		  "deferRender": true,
+		  "ajax": {
+			  "url":"server_processing.php",
+			  "type": "POST",
+			  "data":  function(d){
+				d.page = 'deposit_accounts';
+				d.type = <?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>; //loan_type for the datatable;
+				d.start_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"moment().subtract(30, 'days').format('X')"; ?>;
+				d.end_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"moment().format('X')"; ?>;
+				}
+		  },
+		   "initComplete": function(settings, json) {
+				$(".table tbody>tr:first").trigger('click');
+		  },
+		  "footerCallback": function (tfoot, data, start, end, display ) {
+            var api = this.api(), cols = [4,5];
+			$.each(cols, function(key, val){
+				var total = api.column(val).data().sum();
+				$(api.column(val).footer()).html( curr_format(total) );
+			});
+		  },columns:[ { data: 'id', render: function ( data, type, full, meta ) {return '<a href="members.php?client_id='+full.clientId+'&clientType='+full.clientType+'&depositAccountId='+full.id+'" title="View details">'+(full.productName + '-'+data).replace(/\s/g,'')+'</a>';}},
+				{ data: 'clientNames'},
+				{ data: 'productName'},
+				{ data: 'dateCreated',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+				{ data: 'sumWithdrawn', render: function ( data, type, full, meta ) {return curr_format(parseInt(data?data:0));}},
+				{ data: 'sumDeposited', render: function ( data, type, full, meta ) {return curr_format(parseInt(data?data:0));}}/* ,
+				{ data: 'id', render: function ( data, type, full, meta ) {  return '<a href="#enter_deposit" class="btn btn-white btn-sm"><i class="fa fa-money"></i> Enter Deposit </a><a href="#enter_withdraw" class="btn btn-white btn-sm"><i class="fa fa-money"></i> Withdraw Cash </a>';}} */
+				] ,
+		  buttons: [
+			{
+			  extend: "copy",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "csv",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "excel",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "pdfHtml5",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "print",
+			  className: "btn-sm"
+			},
+		  ],
+		  responsive: true/*, */
+		  
+		});
+	  }
+	};
+	TableManageButtons = function() {
+	  "use strict";
+	  return {
+		init: function() {
+		  handleDataTableButtons();
+		}
+	  };
+	}();
+	TableManageButtons.init();
+	$('.table tbody').on('click', 'tr ', function () {
+		var data = dTable.row(this).data();
+		depositAccountModel.account_details(data);
+		//ajax to retrieve transactions history
+		getTransactionHistory(data.id);
+	});
+  });
+ function getTransactionHistory(depositAccountId){
+	 $.ajax({
+		url: "ajax_data.php",
+		data: {id:depositAccountId, origin:'member_savings'},
+		type: 'POST',
+		dataType: 'json',
+		success: function (response) {
+			if(response.transactionHistory != "false"){
+				depositAccountModel.transactionHistory(response);
+			}
+			
+		}
+	});
+ }
+function sumUpAmount(items, transactionType){
+	var total = 0;
+	$.map(items, function(item){
+		total += (parseInt(item['transactionType']) == transactionType)?item['amount']:0;
+	});
+}
+</script>
 <script type="text/javascript">
-	/* var DepositAccountFee = function() {
-			var self = this;
-			self.chargeTrigger = ko.observable(),
-			self.feeName = ko.observable(),
-			self.amount = ko.observable(),
-			self.dateApplicationMethod = ko.observable();
-	}; */
 	
 	var DepositAccount = function() {
 		var self = this;
 		
+		//these are required before the datatabe is loaded
+		self.transactionHistory = ko.observableArray(); //for a deposit account transacation history display
+		self.account_details = ko.observable();
+		
+		//then these for the deposit entry form
+		self.deposit_amount = ko.observable(0);
+		self.comments = ko.observable("");
+		
+		//then these are for the main page
 		self.whenInterestIsPaidOptions = [{id:1,desc:'First day of every month'},{id:2,desc:'Date when account was created'}];
 		self.accountBalForCalcInterestOptions = [{id:1,desc:'Average daily balance'},{id:2,desc:'Minimum balance on a given day'}];
 		self.chargeTriggerOptions = [{id:1,desc:'Manual'},{id:2,desc:'Monthly Fee'}];
@@ -86,6 +192,58 @@
 			})
 		};
 		
+		self.addDeposit = function(){
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				data:{
+					origin:"add_deposit",
+					depositAccountId:(self.account_details()?self.account_details().id:undefined),
+					amount: self.deposit_amount(),
+					comment: self.comments()
+				},
+				url: "lib/AddData.php",
+				success: function(response){
+					var result = parseInt(response)||0;
+					if(result){/*  */
+						showStatusMessage("Data successfully saved" ,"success");
+						setTimeout(function(){
+							$("#depAccountForm")[0].reset();
+							getTransactionHistory(self.account_details().id);
+						}, 3000);
+					}else{
+						showStatusMessage("Error encountered while saving data: \n"+response ,"failed");
+					}
+				}
+			});
+		};
+		
+		self.addWithdraw = function(){
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				data:{
+					origin:"add_deposit",
+					depositAccountId:(self.account_details()?self.account_details().id:undefined),
+					amount: self.deposit_amount(),
+					comment: self.comments()
+				},
+				url: "lib/AddData.php",
+				success: function(response){
+					var result = parseInt(response)||0;
+					if(result){/*  */
+						showStatusMessage("Data successfully saved" ,"success");
+						setTimeout(function(){
+							$("#withdrawForm")[0].reset();
+							getTransactionHistory(self.account_details().id);
+						}, 3000);
+					}else{
+						showStatusMessage("Error encountered while saving data: \n"+response ,"failed");
+					}
+				}
+			});
+		};
+		
 		//send the items to the server for saving
 		self.save = function(form) {			
 			$.ajax({
@@ -126,6 +284,8 @@
 
 	var depositAccountModel = new DepositAccount();
 	depositAccountModel.getServerData();// get data to be populated on the page
-	ko.applyBindings(depositAccountModel, $("#deposit_account_form")[0]);
-	$("#depAccountForm").validate({ submitHandler: depositAccountModel.save });//
+	ko.applyBindings(depositAccountModel);
+	$("#enterDepositForm").validate({ submitHandler: depositAccountModel.addDeposit });
+	$("#enterWithdrawForm").validate({ submitHandler: depositAccountModel.addWithdraw });
+	$("#depAccountForm").validate({ submitHandler: depositAccountModel.save });//, $("#deposit_account_form")[0]
 	</script>

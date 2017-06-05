@@ -6,170 +6,184 @@ require_once("lib/Libraries.php");
 $start_date = isset($_POST['start_date'])?$_POST['start_date']:strtotime("-30 day");
 $end_date = isset($_POST['end_date'])?$_POST['end_date']:time();
 
-if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
-	$member = new Member();
-	$dashboard = new Dashboard();
-	$expense = new Expenses();
-	$income = new Income();
-	$loan = new Loans();
-	$accounts = new Accounts();
-	/* $share = new Shares(); */
-	
-	//set the respective variables to be received from the calling page
-	$figures = $tables = $percents = array();
-	//No of members
-	//1 in this period
-	$figures['members'] = $member->noOfMembers("(`dateAdded` BETWEEN ".$start_date." AND ".$end_date.") AND active=1");
-	//before this period
-	$members_b4 = $member->noOfMembers("(`dateAdded` < ".$start_date.") AND active=1");
-	$percents['members'] = $members_b4>0?round(($figures['members']/$members_b4)*100,2):0;
+if(isset($_POST['origin'])){
+	switch($_POST['origin']){
+		case 'dashboard':
+			$member = new Member();
+			$dashboard = new Dashboard();
+			$expense = new Expenses();
+			$income = new Income();
+			$loan = new Loans();
+			$accounts = new Accounts();
+			/* $share = new Shares(); */
+			
+			//set the respective variables to be received from the calling page
+			$figures = $tables = $percents = array();
+			//No of members
+			//1 in this period
+			$figures['members'] = $member->noOfMembers("(`dateAdded` BETWEEN ".$start_date." AND ".$end_date.") AND active=1");
+			//before this period
+			$members_b4 = $member->noOfMembers("(`dateAdded` < ".$start_date.") AND active=1");
+			$percents['members'] = $members_b4>0?round(($figures['members']/$members_b4)*100,2):0;
 
-	//Total amount of paid subscriptions
-	//1 in this period
-	$figures['total_scptions'] = $dashboard->getCountOfSubscriptions("(`datePaid` BETWEEN ".$start_date." AND ".$end_date.")");
-	//before this period
-	$total_scptions_b4 = $dashboard->getCountOfSubscriptions("(`datePaid` < ".$start_date.")");
-	//percentage increase/decrease
-	$percents['scptions_percent'] = $total_scptions_b4>0?round(($figures['total_scptions']/$total_scptions_b4)*100,2):0;
+			//Total amount of paid subscriptions
+			//1 in this period
+			$figures['total_scptions'] = $dashboard->getCountOfSubscriptions("(`datePaid` BETWEEN ".$start_date." AND ".$end_date.")");
+			//before this period
+			$total_scptions_b4 = $dashboard->getCountOfSubscriptions("(`datePaid` < ".$start_date.")");
+			//percentage increase/decrease
+			$percents['scptions_percent'] = $total_scptions_b4>0?round(($figures['total_scptions']/$total_scptions_b4)*100,2):0;
 
-	//Total loan portfolio
-	//1 in this period
-	$figures['loan_portfolio'] = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$end_date." AND ".$end_date.")");
-	//before this period
-	$loan_portfolio_b4 = $dashboard->getSumOfLoans("(`disbursementDate` < ".$start_date.")");
-	//percentage increase/decrease
-	$percents['loan_portfolio'] = $loan_portfolio_b4>0?round(($figures['loan_portfolio']/$loan_portfolio_b4)*100,2):0;
+			//Total loan portfolio
+			//1 in this period
+			$figures['loan_portfolio'] = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$end_date." AND ".$end_date.")");
+			//before this period
+			$loan_portfolio_b4 = $dashboard->getSumOfLoans("(`disbursementDate` < ".$start_date.")");
+			//percentage increase/decrease
+			$percents['loan_portfolio'] = $loan_portfolio_b4>0?round(($figures['loan_portfolio']/$loan_portfolio_b4)*100,2):0;
 
-	//Total loan payments
-	//1 in this period
-	$figures['loan_payments'] = $dashboard->getCountOfLoanRepayments("(`transactionDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
-	//before this period
-	$loan_payments_b4 = $dashboard->getCountOfLoanRepayments("(`transaction_date` < '".$start_date."') AND `status`=3");
-	//percentage increase/decrease
-	$percents['loan_payments'] = $loan_payments_b4>0?round((($loan_payments_b4 - $figures['loan_payments'])/$loan_payments_b4)*100,2):0;
+			//Total loan payments
+			//1 in this period
+			$figures['loan_payments'] = $dashboard->getCountOfLoanRepayments("(`transactionDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
+			//before this period
+			$loan_payments_b4 = $dashboard->getCountOfLoanRepayments("(`transaction_date` < '".$start_date."') AND `status`=3");
+			//percentage increase/decrease
+			$percents['loan_payments'] = $loan_payments_b4>0?round((($loan_payments_b4 - $figures['loan_payments'])/$loan_payments_b4)*100,2):0;
 
-	//Total pending loans
-	//1 in this period
-	$figures['pending_loans'] = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=1");
-	//before this period
-	$pending_loans_b4 = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=1");
-	//percentage increase/decrease
-	$percents['pending_loans'] = $pending_loans_b4>0?round(($figures['pending_loans']/$pending_loans_b4)*100,2):0;
+			//Total pending loans
+			//1 in this period
+			$figures['pending_loans'] = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=1");
+			//before this period
+			$pending_loans_b4 = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=1");
+			//percentage increase/decrease
+			$percents['pending_loans'] = $pending_loans_b4>0?round(($figures['pending_loans']/$pending_loans_b4)*100,2):0;
 
-	//Total partial application loans
-	//1 in this period
-	$figures['partial_loans'] = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
-	//before this period
-	$partial_loans_b4 = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
-	//percentage increase/decrease
-	$percents['partial_loans'] = $partial_loans_b4>0?round(($figures['partial_loans']/$partial_loans_b4)*100,2):0;
+			//Total partial application loans
+			//1 in this period
+			$figures['partial_loans'] = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
+			//before this period
+			$partial_loans_b4 = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
+			//percentage increase/decrease
+			$percents['partial_loans'] = $partial_loans_b4>0?round(($figures['partial_loans']/$partial_loans_b4)*100,2):0;
 
-	//Total approved loans
-	//1 in this period
-	$figures['approved_loans'] = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
-	//before this period
-	$approved_loans_b4 = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
-	//percentage increase/decrease
-	$percents['approved_loans'] = $approved_loans_b4>0?round(($figures['approved_loans']/$approved_loans_b4)*100,2):0;
+			//Total approved loans
+			//1 in this period
+			$figures['approved_loans'] = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
+			//before this period
+			$approved_loans_b4 = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
+			//percentage increase/decrease
+			$percents['approved_loans'] = $approved_loans_b4>0?round(($figures['approved_loans']/$approved_loans_b4)*100,2):0;
 
-	//Withdraws
-	//1 in this period
-	$withdraws = ($accounts->findAccountBalance("`transaction_type`=2 AND `transaction_date` BETWEEN '".$start_date."' AND '".$end_date."'")*-1);
-	//Deposits
-	$deposits = $accounts->findAccountBalance("`transaction_type`=1 AND `transaction_date` BETWEEN '".$start_date."' AND '".$end_date."'");
-	//before this period 
-	
-	$deposits_b4 = $accounts->findAccountBalance("`transaction_type`=1 AND `transaction_date` < '".$start_date."'");
-	//before this period  
-	$withdraws_b4 = ($accounts->findAccountBalance("`transaction_type`=2 AND `transaction_date` < '".$start_date."'")*-1);
-	
-	//percentage increase/decrease
-	$figures['savings'] = ($withdraws - $deposits);
-	
-	//percentage increase/decrease
-	$percents['savings'] = $withdraws_b4>0?round(((($deposits_b4-$withdraws_b4) - $figures['savings'])/$withdraws_b4 - $deposits_b4)*100,2):0;
+			//Withdraws
+			//1 in this period
+			$withdraws = ($accounts->findAccountBalance("`transaction_type`=2 AND `transaction_date` BETWEEN '".$start_date."' AND '".$end_date."'")*-1);
+			//Deposits
+			$deposits = $accounts->findAccountBalance("`transaction_type`=1 AND `transaction_date` BETWEEN '".$start_date."' AND '".$end_date."'");
+			//before this period 
+			
+			$deposits_b4 = $accounts->findAccountBalance("`transaction_type`=1 AND `transaction_date` < '".$start_date."'");
+			//before this period  
+			$withdraws_b4 = ($accounts->findAccountBalance("`transaction_type`=2 AND `transaction_date` < '".$start_date."'")*-1);
+			
+			//percentage increase/decrease
+			$figures['savings'] = ($withdraws - $deposits);
+			
+			//percentage increase/decrease
+			$percents['savings'] = $withdraws_b4>0?round(((($deposits_b4-$withdraws_b4) - $figures['savings'])/$withdraws_b4 - $deposits_b4)*100,2):0;
 
-	//Income
-	$tables['income'] = $income->findAll("`dateAdded` BETWEEN ".$start_date." AND ".$end_date, "amount DESC", "10");
+			//Income
+			$tables['income'] = $income->findAll("`dateAdded` BETWEEN ".$start_date." AND ".$end_date, "amount DESC", "10");
 
-	//Expenses"
-	$tables['expenses'] = $expense->findAllExpenses("`expenseDate` BETWEEN ".$start_date." AND ".$end_date, "amountUsed DESC", "10");
+			//Expenses"
+			$tables['expenses'] = $expense->findAllExpenses("`expenseDate` BETWEEN ".$start_date." AND ".$end_date, "amountUsed DESC", "10");
 
-	$products_sql = "SELECT `productName`, SUM(`disbursedAmount`) `loan_amount`, SUM(`disbursedAmount`*`interestRate`/100) `interest`, SUM(`penalty`) `penalties`, `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_product`.`id` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `paidAmount`, `loanAccountId` FROM `loan_repayment` WHERE `transaactionDate` <= ".$end_date." GROUP BY `loanAccountId`) `payments` `loan_account`.`id`=`payments`.`loanAccountId` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `penalty`, `loanAccountId` FROM `loan_repayment` WHERE `dateCreated` <= ".$end_date." GROUP BY `loanAccountId`) `penalt` ON `loan_account`.`id` = `penalt`.`loanAccountId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3 GROUP BY `productName` ORDER BY `productName`";
-	
-	$tables['loan_products'] = $loan->findLoans($products_sql);
+			$products_sql = "SELECT `productName`, SUM(`disbursedAmount`) `loan_amount`, SUM(`disbursedAmount`*`interestRate`/100) `interest`, SUM(`penalty`) `penalties`, `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_product`.`id` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `paidAmount`, `loanAccountId` FROM `loan_repayment` WHERE `transaactionDate` <= ".$end_date." GROUP BY `loanAccountId`) `payments` `loan_account`.`id`=`payments`.`loanAccountId` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `penalty`, `loanAccountId` FROM `loan_repayment` WHERE `dateCreated` <= ".$end_date." GROUP BY `loanAccountId`) `penalt` ON `loan_account`.`id` = `penalt`.`loanAccountId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3 GROUP BY `productName` ORDER BY `productName`";
+			
+			$tables['loan_products'] = $loan->findLoans($products_sql);
 
-	//line and barchart
-	$barchart = getGraphData($start_date, $end_date);
-	if($barchart){
-		$_result['graph_data'] = $barchart;
+			//line and barchart
+			$barchart = getGraphData($start_date, $end_date);
+			if($barchart){
+				$_result['graph_data'] = $barchart;
+			}
+
+			//pie chart
+			$piechart = getPieChartData($start_date, $end_date);
+			if($piechart){
+				$_result['pie_chart_data'] = $piechart['chart_data'];
+				$figures['total_product_sales'] = $piechart['total_product_sales'];
+			}
+			
+			$_result['figures'] = $figures;
+			$_result['percents'] = $percents;
+			$_result['tables'] = $tables;//
+
+			echo json_encode($_result);
+		break;
+		case 'deposit_product':
+			$depositProductType = new DepositProductType();
+			$deposit_product_types = $depositProductType->findAll();
+			echo json_encode($deposit_product_types);
+		break;
+		case 'loan_product':
+			$loanProductType = new LoanProductType();
+			$loanProductFee = new LoanProductFee();
+			$penaltyCalculationMethod = new PenaltyCalculationMethod();
+			$feeType = new FeeType();
+			
+			$data['loanProductTypes'] = $loanProductType->findAll();
+			$data['feeTypes'] = $feeType->findAll();
+			$data['existingProductFees'] = $loanProductFee->findAll();
+			$data['penaltyCalculationMethods'] = $penaltyCalculationMethod->findAll();
+			echo json_encode($data);
+		break;
+		case 'deposit_account':
+			$depositProductObj = new DepositProduct();
+			$productFeeObj = new DepositProductFee();
+			$memberObj = new Member();
+			$saccoGroupObj = new SaccoGroup();
+			
+			$data['products'] = $depositProductObj->findAll();
+			$data['productFees'] = $productFeeObj->findAll();
+			
+			$members = $memberObj->findSelectList();
+			$groups = $saccoGroupObj->findSelectList();
+			$data['customers'] = array_merge($members,$groups);
+			
+			echo json_encode($data);
+		break;
+		case 'loan_account':
+			$loanProductObj = new LoanProduct();
+			$productFeeObj = new LoanProductFeen();
+			$memberObj = new Member();
+			$saccoGroupObj = new SaccoGroup();
+			
+			$data['products'] = $loanProductObj->findAll();
+			$data['productFees'] = $productFeeObj->findAllLPFDetails();
+			$data['guarantors'] = $memberObj->findGuarantors();
+			
+			$members = $memberObj->findSelectList();
+			$groups = $saccoGroupObj->findSelectList();
+			$data['customers'] = array_merge($members,$groups);
+			
+			echo json_encode($data);
+		break;
+		case 'loan_products':
+			$loanProduct = new LoanProduct();
+			$loan_products = $loanProduct->getDtData();
+			echo json_encode($loan_products);
+		break;
+		case 'member_savings':
+			if(isset($_POST['id'])&&$_POST['id']){
+				$depositAccountId = $_POST['id'];
+			}
+			$depositAccountTransaction = new DepositAccountTransaction();
+			$transactonHistory = $depositAccountTransaction->getTransactionHistory($depositAccountId);
+			echo json_encode($transactonHistory);
+		break;
+		default:
+		echo json_encode("nothing found");
 	}
-
-	//pie chart
-	$piechart = getPieChartData($start_date, $end_date);
-	if($piechart){
-		$_result['pie_chart_data'] = $piechart['chart_data'];
-		$figures['total_product_sales'] = $piechart['total_product_sales'];
-	}
-	
-	$_result['figures'] = $figures;
-	$_result['percents'] = $percents;
-	$_result['tables'] = $tables;//
-
-	echo json_encode($_result);
-}
-elseif(isset($_POST['origin'])&&$_POST['origin']=='deposit_product'){
-	$depositProductType = new DepositProductType();
-	$deposit_product_types = $depositProductType->findAll();
-	echo json_encode($deposit_product_types);
-}
-elseif(isset($_POST['origin'])&&$_POST['origin']=='loan_product'){
-	$loanProductType = new LoanProductType();
-	$loanProductFee = new LoanProductFee();
-	$penaltyCalculationMethod = new PenaltyCalculationMethod();
-	$feeType = new FeeType();
-	
-	$data['loanProductTypes'] = $loanProductType->findAll();
-	$data['feeTypes'] = $feeType->findAll();
-	$data['existingProductFees'] = $loanProductFee->findAll();
-	$data['penaltyCalculationMethods'] = $penaltyCalculationMethod->findAll();
-	echo json_encode($data);
-}
-elseif(isset($_POST['origin'])&&$_POST['origin']=='deposit_account'){
-	$depositProductObj = new DepositProduct();
-	$productFeeObj = new DepositProductFee();
-	$memberObj = new Member();
-	$saccoGroupObj = new SaccoGroup();
-	
-	$data['products'] = $depositProductObj->findAll();
-	$data['productFees'] = $productFeeObj->findAll();
-	
-	$members = $memberObj->findSelectList();
-	$groups = $saccoGroupObj->findSelectList();
-	$data['customers'] = array_merge($members,$groups);
-	
-	echo json_encode($data);
-}
-elseif(isset($_POST['origin'])&&$_POST['origin']=='loan_account'){
-	$loanProductObj = new LoanProduct();
-	$productFeeObj = new LoanProductFeen();
-	$memberObj = new Member();
-	$saccoGroupObj = new SaccoGroup();
-	
-	$data['products'] = $loanProductObj->findAll();
-	$data['productFees'] = $productFeeObj->findAllLPFDetails();
-	$data['guarantors'] = $memberObj->findGuarantors();
-	
-	$members = $memberObj->findSelectList();
-	$groups = $saccoGroupObj->findSelectList();
-	$data['customers'] = array_merge($members,$groups);
-	
-	echo json_encode($data);
-}
-else{//(isset($_POST['origin'])&&$_POST['origin']=='loan_account')
-	$loanProduct = new LoanProduct();
-	$loan_products = $loanProduct->getDtData();
-	echo json_encode($loan_products);
 }
 
 

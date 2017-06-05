@@ -113,7 +113,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "deposit_accounts" ) {
 	
 	$primary_key = "`deposit_account`.`id`";
 
-	$columns = array( "`deposit_account`.`id`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`sumWithdrawn`", "`sumDeposited`", "`deposit_account`.`dateCreated`" );
+	$columns = array( "`deposit_account`.`id`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`deposit_account`.`maxWithdrawalAmount`", "`deposit_account`.`recomDepositAmount`", "`sumWithdrawn`", "`sumDeposited`", "`deposit_account`.`dateCreated`" );
 
 }
 if ( isset($_POST['page']) && strlen($_POST['page'])>0) {

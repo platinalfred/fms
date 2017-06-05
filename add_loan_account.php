@@ -159,7 +159,7 @@
 								<!-- /ko -->
 								<!-- /ko -->
 								<!--ko with: loanProduct -->
-								<!--ko if: (parseInt($root.client().clientType)==1) -->
+								<!--ko if: ((parseInt($root.client().clientType)==1)&&$root.filteredGuarantors().length>0) -->
 								<h1>Guarantors</h1>
 								<fieldset>
 									<h2>Choose Guarantors</h2>

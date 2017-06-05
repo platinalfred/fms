@@ -5,6 +5,26 @@ if(isset($_POST['origin'])){
 	$output = 0;
 	$data = $_POST;
 	switch($_POST['origin']){
+		case "add_deposit":
+			if(isset($data['depositAccountId'])){
+				$depositAccount = new DepositAccountTransaction();
+				$data['dateCreated'] = time();
+				$data['transactionType'] = 1;
+				$data['transactedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$output = $depositAccount->addDepositAccountTransaction($data);
+			}
+		break;
+		case "add_withdraw":
+			if(isset($data['depositAccountId'])){
+				$depositAccount = new DepositAccountTransaction();
+				$data['dateCreated'] = time();
+				$data['transactionType'] = 2;
+				$data['transactedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$output = $depositAccount->addDepositAccountTransaction($data);
+			}
+		break;
 		case "deposit_product":
 			$depositProduct = new DepositProduct();
 			$data['dateCreated'] = time();
@@ -74,8 +94,6 @@ if(isset($_POST['origin'])){
 			$data['dateModified'] = time();
 			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			
-			$feePostData = $data['feePostData'];
-			unset($data['feePostData']);
 			
 			$output = $depositAccount->addDepositAccount($data);
 			
@@ -98,16 +116,22 @@ if(isset($_POST['origin'])){
 				$accoGroupDepositAccountId = $saccoGroupDepositAccount->addSaccoGroupDepositAccount($data);
 			}
 			
-			//insert account fees
-			$depositAccountFee = new DepositAccountFee();
-			$depositAccounId = $data['depositAccountId'];
-			foreach($feePostData as $feeDataItem){
-				$feeDataItem['depositAccountID'] = $depositAccountId;
-				$feeDataItem['dateCreated'] = time();
-				$feeDataItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-				$feeDataItem['dateModified'] = time();
-				$feeDataItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-				$output = $depositAccountFee->addDepositAccountFee($feeDataItem);
+				
+			if(isset($data['feePostData'])){
+				if(!$data['feePostData'] == "false"){
+					$feePostData = $data['feePostData'];
+					unset($data['feePostData']);
+					//insert account fees
+					$depositAccountFee = new DepositAccountFee();
+					foreach($feePostData as $feeDataItem){
+						$feeDataItem['depositAccountID'] = $depositAccountId;
+						$feeDataItem['dateCreated'] = time();
+						$feeDataItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						$feeDataItem['dateModified'] = time();
+						$feeDataItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						$output = $depositAccountFee->addDepositAccountFee($feeDataItem);
+					}
+				}
 			}
 		break;
 		case "loan_account":

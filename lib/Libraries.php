@@ -40,6 +40,7 @@ require_once("DepositProduct.php");
 require_once("DepositProductType.php");
 require_once("DepositAccount.php");
 require_once("DepositAccountFee.php");
+require_once("DepositAccountTransaction.php");
 require_once("LoanProduct.php");
 require_once("LoanProductType.php");
 require_once("LoanProductFee.php");
