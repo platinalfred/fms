@@ -23,8 +23,8 @@
 		// Stores an array of all the Data for viewing on the page
 		self.productTypes = ko.observableArray([{"typeName":"Regular Savings","description":"A basic savings account where a client may perform regular deposit and withdrawals and accrue interest over time"}]);
 		self.productType = ko.observable();
-		self.interestRateApplicable = ko.observable(false);
-		self.allowArbitraryFee = ko.observable(false);
+		self.interestRateApplicable = ko.observable(0);
+		self.allowArbitraryFee = ko.observable(0);
 		self.reqAttr = ko.pureComputed(function() {
 			var required = false;
 			if(self.defaultInterestRate()>0||self.minInterestRate()>0 ||self.maxInterestRate()){
@@ -94,7 +94,6 @@
 		self.minTermLength = ko.observable();
 		self.maxTermLength = ko.observable();
 		self.termTimeUnit = ko.observable();
-		self.interestPaid = (self.interestRateApplicable()?1:0);
 		self.defaultInterestRate = ko.observable();
 		self.minInterestRate = ko.observable();
 		self.maxInterestRate = ko.observable();
@@ -131,7 +130,7 @@
 					minTermLength : self.minTermLength(),
 					maxTermLength : self.maxTermLength(),
 					termTimeUnit : self.termTimeUnit()?self.termTimeUnit().id:undefined,
-					interestPaid : self.interestPaid,
+					interestPaid : self.interestRateApplicable,
 					defaultInterestRate : self.defaultInterestRate(),
 					minInterestRate : self.minInterestRate(),
 					maxInterestRate : self.maxInterestRate(),

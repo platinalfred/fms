@@ -17,7 +17,7 @@ class DepositAccountTransaction extends Db {
 	
 	public function getTransactionHistory($accountId = false){
 		$where = "";
-		if(!$accountId){
+		if($accountId){
 			$where = "`depositAccountId` = ".$accountId;
 		}
 		$result_array = $this->getarray(self::$table_name, $where, "", "");

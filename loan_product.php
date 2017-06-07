@@ -7,18 +7,6 @@
                                 <a class="" data-dismiss="modal">
                                     <i class="fa fa-times lg" style="color:red;"></i>
                                 </a>
-                                <!-- <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#">Config option 1</a>
-                                    </li>
-                                    <li><a href="#">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a> -->
                             </div>
                         </div>
                         <div class="ibox-content">
@@ -50,7 +38,7 @@
                                 <div class="form-group">
 										<label class="control-label col-sm-1">Product State</label>
                                     <div class="col-sm-2">
-										<div class="i-checks"><label title="Select if this product should be made active"> <input type="checkbox" data-bind="checked: active" value="1"> <i></i> Active </label></div>
+										<div><label title="Select if this product should be made active"> <input type="checkbox" data-bind="checked: active" value="1"> <i></i> Active </label></div>
                                     </div>
 									<label class="control-label col-sm-3">Initial Account State</label>
                                     <div class="col-sm-6">
@@ -141,7 +129,7 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
 									<div class="col-sm-6">
-											<div class="i-checks"><label> <input type="checkbox" data-bind="checked: linkToDepositAccount"> Link to Deposit Account <sup data-toggle="tooltip" title="Linking accounts allows you to have loan repayments being automatically made from a client's deposit account. Given that a deposit account is being used as source for repayments, on the day the repayment becomes due, the amount is automatically transferred from the deposit account as a repayment on the loan account" data-placement="right"><i class="fa fa-question-circle"></i><sup></label></div>
+											<div><label> <input type="checkbox" data-bind="checked: linkToDepositAccount"> Link to Deposit Account <sup data-toggle="tooltip" title="Linking accounts allows you to have loan repayments being automatically made from a client's deposit account. Given that a deposit account is being used as source for repayments, on the day the repayment becomes due, the amount is automatically transferred from the deposit account as a repayment on the loan account" data-placement="right"><i class="fa fa-question-circle"></i><sup></label></div>
 									</div>
 									<div class="col-sm-6">
 										<!--div class="i-checks"><label> <input type="checkbox" data-bind="checked: penaltyApplicable" value="1"> Penalties Applicable <sup data-toggle="tooltip" title="Select for more product penalty settings" data-placement="right"><i class="fa fa-question-circle"></i></sup></label></div-->

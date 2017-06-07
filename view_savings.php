@@ -75,7 +75,7 @@
 							<div class="row m-b-lg">
 							<div class="hr-line-dashed"></div>
 								<div class="col-md-6"><a class="btn btn-primary btn-sm" href='#enter_deposit' data-toggle="modal"><i class="fa fa-edit"></i> Enter Deposit </a></div>
-								<div class="col-md-6"><a data-bind="attr: {href:(sumUpAmount($parent.transactionHistory(),2)>0?'#enter_withdraw':undefined)}" class="btn btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Withdraw Cash </a></div>
+								<div class="col-md-6"><a data-bind="attr: {href:(sumUpAmount($parent.transactionHistory(),1)>0?'#enter_withdraw':undefined)}" class="btn btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Withdraw Cash </a></div>
 							</div>
 							<div class="row m-b-lg" data-bind="if: $parent.transactionHistory().length>0">
 								<div class="table-responsive">
@@ -93,15 +93,15 @@
 											<tr>
 												<td data-bind="text: moment(dateCreated, 'X').format('DD-MMM-YYYY')"></td>
 												<td data-bind="text: id"></td>
-												<td data-bind="text: ((transactionType==1)?amount:'-')"></td>
-												<td data-bind="text: ((transactionType==2)?amount:'-')"></td>
+												<td data-bind="text: ((transactionType==1)?curr_format(parseInt(amount)):'-')"></td>
+												<td data-bind="text: ((transactionType==2)?curr_format(parseInt(amount)):'-')"></td>
 											</tr>
 										</tbody>
 										<tfoot>
 											<th>Total (UGX)</th>
 											<th>&nbsp;</th>
-											<th data-bind="text: sumUpAmount($parent.transactionHistory(),1)">&nbsp;</th>
-											<th data-bind="text: sumUpAmount($parent.transactionHistory(),2)">&nbsp;</th>
+											<th data-bind="text: curr_format(parseInt(sumUpAmount($parent.transactionHistory(),1)))">&nbsp;</th>
+											<th data-bind="text: curr_format(parseInt(sumUpAmount($parent.transactionHistory(),2)))">&nbsp;</th>
 										</tfoot>
 									</table>
 								</div>
