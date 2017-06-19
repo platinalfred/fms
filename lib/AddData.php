@@ -7,12 +7,12 @@ if(isset($_POST['origin'])){
 	switch($_POST['origin']){
 		case "add_deposit":
 			if(isset($data['depositAccountId'])){
-				$depositAccount = new DepositAccountTransaction();
+				$depositAccountTransaction = new DepositAccountTransaction();
 				$data['dateCreated'] = time();
 				$data['transactionType'] = 1;
 				$data['transactedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-				$output = $depositAccount->addDepositAccountTransaction($data);
+				$output = $depositAccountTransaction->addDepositAccountTransaction($data);
 			}
 		break;
 		case "add_withdraw":

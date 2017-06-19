@@ -88,18 +88,23 @@
 		type: 'POST',
 		dataType: 'json',
 		success: function (response) {
-			if(response.transactionHistory != "false"){
+			depositAccountModel.transactionHistory(response);
+			/* if(response.transactionHistory != "false"){
 				depositAccountModel.transactionHistory(response);
-			}
+			} */
 			
 		}
 	});
  }
 function sumUpAmount(items, transactionType){
 	var total = 0;
-	$.map(items, function(item){
-		total += (parseInt(item['transactionType']) == transactionType)?item['amount']:0;
-	});
+	if(items){
+		$.map(items, function(item){
+			total += (parseInt(item['transactionType']) == transactionType)?item['amount']:0;
+		});
+	}
+	
+	return total;
 }
 </script>
 <script type="text/javascript">

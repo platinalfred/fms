@@ -48,7 +48,7 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
 									<div class="col-sm-12">
-											<div class="i-checks"><label> <input type="checkbox" data-bind="checked: interestRateApplicable"/> <i></i> Interest paid into account <sup data-toggle="tooltip" title="Select if interest should be paid into the account" data-placement="right"><i class="fa fa-question-circle"></i><sup></label><label data-bind="text: interestRateApplicable"></label></div>
+											<div><label> <input type="checkbox" data-bind="checked: interestRateApplicable"/> <i></i> Interest paid into account <sup data-toggle="tooltip" title="Select if interest should be paid into the account" data-placement="right"><i class="fa fa-question-circle"></i><sup></label></div>
 									</div>
                                 </div>
                                 <div class="form-group" data-bind="visible: interestRateApplicable">
@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="form-group" data-bind="visible: interestRateApplicable">
 									<div class="col-sm-12">
-											<div class="i-checks"><label> <input type="checkbox" value="" name="applyWHTonInterest" id="applyWHTonInterest" data-bind="value: applyWHTonInterest"> <i></i> Apply withholding taxes <sup data-toggle="tooltip" title="Apply withholding taxes on the interest paid into account" data-placement="right"><i class="fa fa-question-circle"></i><sup></label></div>
+											<div><label> <input type="checkbox" value="" name="applyWHTonInterest" id="applyWHTonInterest" data-bind="value: applyWHTonInterest"> <i></i> Apply withholding taxes <sup data-toggle="tooltip" title="Apply withholding taxes on the interest paid into account" data-placement="right"><i class="fa fa-question-circle"></i><sup></label></div>
 									</div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
@@ -115,7 +115,7 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
 									<div class="col-sm-12">
-											<div class="i-checks"><label> <input type="checkbox" data-bind="checked: allowArbitraryFee"> Allow arbitrary fees  <sup data-toggle="tooltip" title="Fees which can be applied manually to the accounts at any point during the deposit account's lifetime and with any given amount" data-placement="right"><i class="fa fa-question-circle"></i><sup></label></div>
+											<div><label> <input type="checkbox" data-bind="checked: allowArbitraryFee"> Allow arbitrary fees  <sup data-toggle="tooltip" title="Fees which can be applied manually to the accounts at any point during the deposit account's lifetime and with any given amount" data-placement="right"><i class="fa fa-question-circle"></i><sup></label></div>
 									</div>
                                 </div>
                                 <div class="table-responsive">

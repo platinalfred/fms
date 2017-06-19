@@ -176,10 +176,10 @@ if(isset($_POST['origin'])){
 		case 'member_savings':
 			if(isset($_POST['id'])&&$_POST['id']){
 				$depositAccountId = $_POST['id'];
+				$depositAccountTransaction = new DepositAccountTransaction();
+				$transactonHistory = $depositAccountTransaction->getTransactionHistory($depositAccountId);
+				echo json_encode($transactonHistory);
 			}
-			$depositAccountTransaction = new DepositAccountTransaction();
-			$transactonHistory = $depositAccountTransaction->getTransactionHistory($depositAccountId);
-			echo json_encode($transactonHistory);
 		break;
 		default:
 		echo json_encode("nothing found");
