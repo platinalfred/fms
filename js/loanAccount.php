@@ -118,10 +118,10 @@
 		
 		//reset the whole form after saving data in the database
 		self.resetForm = function() {
-			self.client(null);
-			self.loanProduct(null);
+			//self.client(null);
+			//self.loanProduct(null);
 			$("#loanAccountForm")[0].reset();
-			dTable.ajax.reload();
+			dTable['applications'].ajax.reload();
 		};
 		
 		//Retrieve page data from the server

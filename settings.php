@@ -1311,7 +1311,7 @@ require_once("lib/Libraries.php");
 							
 						</div>
 					</div>
-					<!-- End Loan Products -->
+					<!-- End Deposit Products -->
 				</div>
 			</div>
 		</div>

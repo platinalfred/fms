@@ -154,7 +154,7 @@ if(isset($_POST['origin'])){
 			$output = $loanAccountId = $loanAccount->addLoanAccount($data);
 			
 			//send less data to reduce bandwidth usage
-			$clientData['loanAccountId'] = $output ;
+			$clientData['loanAccountId'] = $loanAccountId ;
 			$clientData['dateCreated'] = time();
 			$clientData['dateModified'] = time();
 			$clientData['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
@@ -162,7 +162,7 @@ if(isset($_POST['origin'])){
 			
 			if((integer)$data['clientType']==1){
 				//create loan account for member
-				$clientData['member_id'] = $data['clientId'] ;
+				$clientData['memberId'] = $data['clientId'] ;
 				$memberLoanAccount = new MemberLoanAccount();
 				$memberLoanAccountId = $memberLoanAccount->addMemberLoanAccount($clientData);
 				

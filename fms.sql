@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 04, 2017 at 09:43 PM
+-- Generation Time: Jun 19, 2017 at 07:46 AM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.5.35
 
@@ -257,9 +257,10 @@ CREATE TABLE `deposit_account` (
 --
 
 INSERT INTO `deposit_account` (`id`, `depositProductId`, `recomDepositAmount`, `maxWithdrawalAmount`, `interestRate`, `openingBalance`, `termLength`, `dateCreated`, `createdBy`, `dateModified`, `modifiedBy`) VALUES
-(1, 0, '0.00', '0.00', '23.00', '0.00', 3, 1496052915, 1, 1496052915, 1),
 (2, 1, '0.00', '0.00', '20.00', '10000.00', 10, 1496088967, 1, 1496088967, 1),
-(3, 1, '0.00', '0.00', '0.00', '0.00', 0, 1496089454, 1, 1496089454, 1);
+(3, 1, '0.00', '0.00', '0.00', '0.00', 0, 1496089454, 1, 1496089454, 1),
+(4, 1, '0.00', '0.00', '0.00', '0.00', 0, 1496672003, 1, 1496672003, 1),
+(5, 2, '0.00', '0.00', '0.00', '0.00', 0, 1496672191, 1, 1496672191, 1);
 
 -- --------------------------------------------------------
 
@@ -289,11 +290,19 @@ CREATE TABLE `deposit_account_transaction` (
   `amount` decimal(19,2) NOT NULL,
   `comment` text NOT NULL,
   `transactionType` tinyint(1) NOT NULL,
-  `transactedBy` varchar(120) NOT NULL,
+  `transactedBy` int(11) NOT NULL COMMENT 'Officer inserting this record',
   `dateCreated` int(11) NOT NULL,
   `dateModified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `addedBy` int(11) NOT NULL
+  `modifiedBy` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `deposit_account_transaction`
+--
+
+INSERT INTO `deposit_account_transaction` (`id`, `depositAccountId`, `amount`, `comment`, `transactionType`, `transactedBy`, `dateCreated`, `dateModified`, `modifiedBy`) VALUES
+(1, 3, '30000.00', 'Initial Account deposit', 1, 1, 1496682492, '0000-00-00 00:00:00', 1),
+(2, 2, '50000.00', 'Initial Account deposit', 1, 1, 1496682606, '0000-00-00 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -628,9 +637,9 @@ INSERT INTO `individual_type` (`1`, `name`, `description`) VALUES
 
 CREATE TABLE `loan_account` (
   `id` int(11) NOT NULL,
-  `loanNo` varchar(45) NOT NULL,
+  `loanNo` varchar(45) DEFAULT NULL,
   `branch_id` int(11) NOT NULL COMMENT 'Branch id the loan was taken out from',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1-Pending Approval, 2-Partial_Application, 3-Approved',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1-Partial_Application, 2-Pending Approval, 3-Approved',
   `loanProductId` int(11) NOT NULL COMMENT 'Reference to the loan product',
   `requestedAmount` decimal(15,2) NOT NULL COMMENT 'Amount applied for',
   `applicationDate` int(11) NOT NULL COMMENT 'Date loan was applied for',
@@ -657,6 +666,31 @@ CREATE TABLE `loan_account` (
   `modifiedBy` int(11) NOT NULL,
   `dateModified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Accounts for the loans given out';
+
+--
+-- Dumping data for table `loan_account`
+--
+
+INSERT INTO `loan_account` (`id`, `loanNo`, `branch_id`, `status`, `loanProductId`, `requestedAmount`, `applicationDate`, `disbursedAmount`, `disbursementDate`, `interestRate`, `offSetPeriod`, `loanPeriod`, `gracePeriod`, `repaymentsFrequency`, `repaymentsMadeEvery`, `installments`, `penaltyCalculationMethodId`, `penaltyTolerancePeriod`, `penaltyRateChargedPer`, `penaltyRate`, `linkToDepositAccount`, `expectedPayback`, `dailyDefaultAmount`, `approvedBy`, `comments`, `createdBy`, `dateCreated`, `modifiedBy`, `dateModified`) VALUES
+(1, '-1706135220', 0, 1, 1, '45000.00', 1497301200, '0.00', 0, '12.00', 1, NULL, 5, 4, 2, 6, 2, 2, 1, '0.00', 1, NULL, NULL, NULL, '', 1, 1497336740, 1, '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `loan_account_approval`
+--
+
+CREATE TABLE `loan_account_approval` (
+  `id` int(11) NOT NULL,
+  `loanAccountId` int(11) NOT NULL,
+  `amountRecommended` decimal(15,2) DEFAULT NULL,
+  `justification` text NOT NULL COMMENT 'Reasons for action taken',
+  `status` tinyint(4) NOT NULL COMMENT 'approved-1, rejected-2',
+  `staffId` int(11) NOT NULL,
+  `dateCreated` int(11) NOT NULL,
+  `modifiedBy` int(11) NOT NULL,
+  `dateModified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -698,7 +732,13 @@ CREATE TABLE `loan_collateral` (
 --
 
 INSERT INTO `loan_collateral` (`id`, `loanAccountId`, `itemName`, `description`, `attachmentUrl`, `dateCreated`, `createdBy`, `dateModified`, `modifiedBy`) VALUES
-(1, 1, 'Laptop computer', 'Dell Inspiron 15". 500 GB Hard Drive. Core i5', NULL, 1496426991, 1, '0000-00-00 00:00:00', 1);
+(1, 1, 'Laptop computer', 'Dell Inspiron 15". 500 GB Hard Drive. Core i5', NULL, 1496426991, 1, '0000-00-00 00:00:00', 1),
+(2, 0, 'Land title', 'The land is located in Gayaza, Kazo zone', 'C:fakepathunra.pdf', 1497297283, 1, '0000-00-00 00:00:00', 1),
+(3, 0, 'Laptop computer', 'HP 15" Laptop in very perfect condition', 'undefined', 1497298165, 1, '0000-00-00 00:00:00', 1),
+(4, 1, 'Television set', '32" sony bravia tv', 'undefined', 1497329425, 1, '0000-00-00 00:00:00', 1),
+(5, 1, 'Mobile phone', 'Samsung Veto', 'undefined', 1497336251, 1, '0000-00-00 00:00:00', 1),
+(6, 2, 'Mobile phone', 'Samsung Veto', 'undefined', 1497336516, 1, '0000-00-00 00:00:00', 1),
+(7, 1, 'Mobile phone', 'Samsung Veto', 'undefined', 1497336740, 1, '0000-00-00 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -990,6 +1030,13 @@ CREATE TABLE `member_loan_account` (
   `modifiedBy` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `member_loan_account`
+--
+
+INSERT INTO `member_loan_account` (`id`, `memberId`, `loanAccountId`, `dateCreated`, `createdBy`, `dateModified`, `modifiedBy`) VALUES
+(1, 7, 1, 1497336740, 1, '0000-00-00 00:00:00', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -1096,7 +1143,7 @@ CREATE TABLE `person` (
 --
 
 INSERT INTO `person` (`id`, `title`, `person_type`, `person_number`, `firstname`, `lastname`, `othername`, `id_type`, `id_number`, `gender`, `dateofbirth`, `phone`, `email`, `postal_address`, `physical_address`, `occupation`, `children_no`, `dependants_no`, `CRB_card_no`, `photograph`, `comment`, `date_registered`, `registered_by`, `district`, `county`, `subcounty`, `parish`, `village`) VALUES
-(1, 'Mr', 2, 'SBFS00000001', 'Alfred', 'Platin', 'M', 0, 'B94994', 'M', '1988-08-08', '0702-771-124', 'mplat84@gmail.com', '', 'Kampala', '', 0, 0, '', '', 'First user registration', '2016-11-16 00:00:00', 1, '', '', '', '1', '1'),
+(1, 'Mr', 2, 'S161116102242', 'Alfred', 'Platin', 'M', 0, 'B94994', 'M', '1988-08-08', '0702-771-124', 'mplat84@gmail.com', '', 'Kampala', '', 0, 0, '', '', 'First user registration', '2016-11-16 00:00:00', 1, '', '', '', '1', '1'),
 (2, 'Mr', 1, 'M161116200538', 'Brayan', 'Matovu', 'W', 0, '898438948934', 'M', '1987-08-08', '(0701) 108-622', 'mplat84@gmail.com', '36211 Kampala', 'Kampala', 'IT', 0, 0, '', '', 'New member', '2016-11-16 00:00:00', 1, '', '', '', '1', '1'),
 (3, 'Mr', 1, 'M241116093854', 'Allan', 'Jesse', '', 0, '8483934', 'M', '1987-03-02', '0702 771-124', 'mplat84@gmail.com', 'Hello there', 'Kampala ', 'Consultancy', 0, 0, '', '', 'Comments from here', '2016-11-24 00:00:00', 1, '', '', '', '1', '1'),
 (4, 'Mrs', 1, 'M241116095244', 'Cissy', 'Ge', '', 0, '8382383', 'F', '1984-01-07', '0702 771-124', 'mplat84@gmail.com', '', '36211 kampala', 'Finance', 0, 0, '', '', 'Cissy buladde sacco', '2016-11-24 00:00:00', 1, '', '', '', '1', '1'),
@@ -1104,12 +1151,7 @@ INSERT INTO `person` (`id`, `title`, `person_type`, `person_number`, `firstname`
 (6, 'Mr', 2, 'S080117181259', 'Leonard', 'Kabuye', '', 0, '37838793893', 'M', '1976-02-08', '0702-711-332', 'mplat84@gmail.com', '', 'kampala', '', 0, 0, '', '', 'eweewe', '2017-01-08 00:00:00', 1, '', '', '', '1', '1'),
 (7, 'Mr', 1, 'BFS080117182251', 'Ronald', 'Matovu', '', 0, '67367367363', 'M', '1987-08-08', '0702 771-124', 'freddagates@empire.com', '256', 'kampala', 'IT Consultant', 0, 0, '', 'img/profiles/IMG_20160901_130726.jpg', 'Registered from muganzirwaza', '2017-01-08 00:00:00', 1, '', '', '', '1', '1'),
 (22, 'Mr', 0, 'BFS00000022', 'Daniel', 'Twinamatsiko ', '', 1, '949394399', 'M', '1971-01-01', '(073) 000-0000', 'mplat84@gmail.com', 'kampala', 'Kampala', '', 3, 1, NULL, '', 'Kampala Uganda', '2017-06-04 00:00:00', 1, 'kampala', 'kampala', 'kampala', 'kampala', 'kampala'),
-(23, 'Mr', 0, 'BFS00000023', 'Sulaiman', 'Katumba ', '', 1, '949394399', 'M', '1971-01-01', '(073) 000-0000', 'mplat84@gmail.com', 'kampala', 'Kampala', '', 3, 1, NULL, '', 'Kampala Uganda', '2017-06-04 00:00:00', 1, 'kampala', 'kampala', 'kampala', 'kampala', 'kampala'),
-(26, 'Mr', 1, 'SBFS00000026', 'alfred', 'platin', '', 1, '823948989', '', '1970-01-01', '(889) 898-9898', 'mplat84@gmail.com', '88898989899', '8988989899', '', 0, 0, NULL, '', '889989889', '0000-00-00 00:00:00', 1, '88898989', '889898989', '898989898989', '89898989', '8989898998'),
-(27, 'Mr', 1, 'SBFS00000027', 'Cissy', 'm', '', 1, '894738947398', 'F', '1970-01-01', '(073) 900-0000', 'cissy@buladde.or.ug', '', 'kampala', '', 0, 0, NULL, '', 'Thank you', '0000-00-00 00:00:00', 1, '', '', '', '', ''),
-(28, 'Mr', 1, 'SBFS00000028', 'Brayan', 'Matovu', '', 1, '545445', 'M', '1970-01-01', '(989) 938-9283', '54@gmail.com', '', 'jajaa', '', 0, 0, NULL, '', 'a', '0000-00-00 00:00:00', 1, '', '', '', '', ''),
-(29, 'Mr', 1, 'SBFS00000029', 'Alfred', 'Platin', '', 1, '43434434', 'M', '1970-01-01', '(344) 343-4343', 'm@gmail.com', '', 'rere', '', 0, 0, NULL, '', 're', '0000-00-00 00:00:00', 1, '', '', '', '', ''),
-(30, 'Mr', 1, 'SBFS00000030', 'Stella', 'Namata', '', 1, '849389438934', 'F', '1970-01-01', '(080) 808-0800', 'mplat84@gmail.com', '', 'kampala', '', 0, 0, NULL, '', '', '0000-00-00 00:00:00', 1, '', '', '', '', '');
+(23, 'Mr', 0, 'BFS00000023', 'Sulaiman', 'Katumba ', '', 1, '949394399', 'M', '1971-01-01', '(073) 000-0000', 'mplat84@gmail.com', 'kampala', 'Kampala', '', 3, 1, NULL, '', 'Kampala Uganda', '2017-06-04 00:00:00', 1, 'kampala', 'kampala', 'kampala', 'kampala', 'kampala');
 
 -- --------------------------------------------------------
 
@@ -1320,6 +1362,7 @@ CREATE TABLE `staff` (
   `position_id` int(11) NOT NULL,
   `username` varchar(120) NOT NULL,
   `password` text NOT NULL,
+  `access_level` int(11) NOT NULL,
   `status` int(11) NOT NULL DEFAULT '1',
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
@@ -1331,42 +1374,10 @@ CREATE TABLE `staff` (
 -- Dumping data for table `staff`
 --
 
-INSERT INTO `staff` (`id`, `personId`, `branch_id`, `position_id`, `username`, `password`, `status`, `start_date`, `end_date`, `date_added`, `added_by`) VALUES
-(2, 5, 0, 3, 'mmusoke', 'a698aac3a8775508d6a03cb9fa002a1f', 1, '0000-00-00', NULL, '2017-01-08', '1'),
-(3, 6, 0, 4, 'lkabuye', '6dd59a8d3ddd2527963b972c7014b1e9', 1, '0000-00-00', NULL, '2017-01-08', '1'),
-(4, 0, 1, 1, 'user', 'ewwew', 1, '0000-00-00', NULL, '2017-06-04', ''),
-(5, 1, 1, 1, 'alfred', 'platin65', 1, '0000-00-00', NULL, '2017-06-04', ''),
-(6, 26, 1, 1, 'alfred', 'platin65', 1, '0000-00-00', NULL, '2017-06-04', ''),
-(7, 27, 1, 1, 'cissy', 'user123', 1, '0000-00-00', NULL, '2017-06-04', '1'),
-(8, 28, 1, 3, 'brayan', 'platin65', 1, '0000-00-00', NULL, '2017-06-04', '1'),
-(9, 29, 1, 2, 'allan', 'platin65', 1, '0000-00-00', NULL, '2017-06-04', '1'),
-(10, 30, 1, 2, 'stella', 'stella', 1, '0000-00-00', NULL, '2017-06-04', '1');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `staff_roles`
---
-
-CREATE TABLE `staff_roles` (
-  `id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL,
-  `personId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `staff_roles`
---
-
-INSERT INTO `staff_roles` (`id`, `role_id`, `personId`) VALUES
-(1, 1, 26),
-(2, 4, 26),
-(3, 1, 27),
-(4, 3, 27),
-(5, 1, 28),
-(6, 3, 28),
-(7, 2, 29),
-(8, 2, 30);
+INSERT INTO `staff` (`id`, `personId`, `branch_id`, `position_id`, `username`, `password`, `access_level`, `status`, `start_date`, `end_date`, `date_added`, `added_by`) VALUES
+(1, 1, 0, 1, 'platin', '807c1c8ea54c81e6167a19275211b2a3', 1, 1, '0000-00-00', NULL, '2016-11-16', '1'),
+(2, 5, 0, 3, 'mmusoke', 'a698aac3a8775508d6a03cb9fa002a1f', 3, 1, '0000-00-00', NULL, '2017-01-08', '1'),
+(3, 6, 0, 4, 'lkabuye', '6dd59a8d3ddd2527963b972c7014b1e9', 2, 1, '0000-00-00', NULL, '2017-01-08', '1');
 
 -- --------------------------------------------------------
 
@@ -1612,6 +1623,7 @@ ALTER TABLE `deposit_account_fee`
 -- Indexes for table `deposit_account_transaction`
 --
 ALTER TABLE `deposit_account_transaction`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `person_id` (`depositAccountId`);
 
 --
@@ -1752,6 +1764,14 @@ ALTER TABLE `loan_account`
   ADD KEY `dateCreated` (`dateCreated`),
   ADD KEY `fkModifiedBy` (`modifiedBy`),
   ADD KEY `dateModified` (`dateModified`);
+
+--
+-- Indexes for table `loan_account_approval`
+--
+ALTER TABLE `loan_account_approval`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fkLoanAccountId` (`loanAccountId`),
+  ADD KEY `fkStaffAccountId` (`staffId`);
 
 --
 -- Indexes for table `loan_account_fee`
@@ -1974,12 +1994,6 @@ ALTER TABLE `staff`
   ADD KEY `person_id_3` (`personId`);
 
 --
--- Indexes for table `staff_roles`
---
-ALTER TABLE `staff_roles`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `status`
 --
 ALTER TABLE `status`
@@ -2072,12 +2086,17 @@ ALTER TABLE `countries`
 -- AUTO_INCREMENT for table `deposit_account`
 --
 ALTER TABLE `deposit_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `deposit_account_fee`
 --
 ALTER TABLE `deposit_account_fee`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `deposit_account_transaction`
+--
+ALTER TABLE `deposit_account_transaction`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `deposit_product`
 --
@@ -2157,6 +2176,11 @@ ALTER TABLE `individual_type`
 -- AUTO_INCREMENT for table `loan_account`
 --
 ALTER TABLE `loan_account`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `loan_account_approval`
+--
+ALTER TABLE `loan_account_approval`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `loan_account_fee`
@@ -2167,7 +2191,7 @@ ALTER TABLE `loan_account_fee`
 -- AUTO_INCREMENT for table `loan_collateral`
 --
 ALTER TABLE `loan_collateral`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `loan_documents`
 --
@@ -2184,150 +2208,10 @@ ALTER TABLE `loan_penalty`
 ALTER TABLE `loan_products`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
--- AUTO_INCREMENT for table `loan_products_penalty`
+-- AUTO_INCREMENT for table `member_loan_account`
 --
-ALTER TABLE `loan_products_penalty`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `loan_product_fee`
---
-ALTER TABLE `loan_product_fee`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `loan_product_feen`
---
-ALTER TABLE `loan_product_feen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `loan_product_type`
---
-ALTER TABLE `loan_product_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT for table `loan_repayment`
---
-ALTER TABLE `loan_repayment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `member`
---
-ALTER TABLE `member`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
---
--- AUTO_INCREMENT for table `member_deposit_account`
---
-ALTER TABLE `member_deposit_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `other_settings`
---
-ALTER TABLE `other_settings`
+ALTER TABLE `member_loan_account`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `parish`
---
-ALTER TABLE `parish`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `penalty_calculation_method`
---
-ALTER TABLE `penalty_calculation_method`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT for table `person`
---
-ALTER TABLE `person`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
---
--- AUTO_INCREMENT for table `persontype`
---
-ALTER TABLE `persontype`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `person_employment`
---
-ALTER TABLE `person_employment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `person_relative`
---
-ALTER TABLE `person_relative`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT for table `position`
---
-ALTER TABLE `position`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `relationship_type`
---
-ALTER TABLE `relationship_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `saccogroup`
---
-ALTER TABLE `saccogroup`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `securitytype`
---
-ALTER TABLE `securitytype`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT for table `shares`
---
-ALTER TABLE `shares`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `staff`
---
-ALTER TABLE `staff`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
---
--- AUTO_INCREMENT for table `staff_roles`
---
-ALTER TABLE `staff_roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
---
--- AUTO_INCREMENT for table `status`
---
-ALTER TABLE `status`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `subcounty`
---
-ALTER TABLE `subcounty`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `subscription`
---
-ALTER TABLE `subscription`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `systemaccesslogs`
---
-ALTER TABLE `systemaccesslogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `tax_rate_source`
---
-ALTER TABLE `tax_rate_source`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `transaction`
---
-ALTER TABLE `transaction`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `transfer`
---
-ALTER TABLE `transfer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `village`
---
-ALTER TABLE `village`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -131,7 +131,7 @@
 									<h2>Applicable Fees (<span data-bind="text: $root.filteredLoanProductFees().length"></span>)</h2>
 									<div class="row">
 										<div class="form-group">
-											<div class="table-responsive" data-bind="">
+											<div class="table-responsive">
 												<table class="table table-condensed">
 													<thead>
 														<tr>

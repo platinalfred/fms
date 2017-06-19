@@ -73,7 +73,7 @@ $person = new Person();
 		<link href="css/plugins/nouslider/jquery.nouislider.css" rel="stylesheet">
 	<?php 
 	}
-	if(in_array("datapicker", $needed_files)){ ?>
+	if(in_array("datepicker", $needed_files)){ ?>
 		<link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
 	<?php 
 	}
