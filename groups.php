@@ -5,6 +5,18 @@ include("include/header.php");
 require_once("lib/Libraries.php");
 $member = new Member();
 ?>
+	<div class="modal fade" id="DescModal" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-body">
+					 
+				</div>
+				
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
 	<div class="row">
 		<?php include("add_groups.php"); ?>
 		<div class="col-sm-8">
@@ -68,61 +80,6 @@ $member = new Member();
 									<strong>Notes</strong>
 									<p data-bind="text:description">
 									</p>
-									<!--
-									<hr/>
-									<strong>Timeline activity</strong>
-									<div id="vertical-timeline" class="vertical-container dark-timeline">
-										<div class="vertical-timeline-block">
-											<div class="vertical-timeline-icon gray-bg">
-												<i class="fa fa-briefcase"></i>
-											</div>
-											<div class="vertical-timeline-content">
-												<p>Many desktop publishing packages and web page editors now use Lorem.
-												</p>
-												<span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
-											</div>
-										</div>
-										<div class="vertical-timeline-block">
-											<div class="vertical-timeline-icon gray-bg">
-												<i class="fa fa-bolt"></i>
-											</div>
-											<div class="vertical-timeline-content">
-												<p>There are many variations of passages of Lorem Ipsum available.
-												</p>
-												<span class="vertical-date small text-muted"> 06:10 pm - 11.03.2014 </span>
-											</div>
-										</div>
-										<div class="vertical-timeline-block">
-											<div class="vertical-timeline-icon navy-bg">
-												<i class="fa fa-warning"></i>
-											</div>
-											<div class="vertical-timeline-content">
-												<p>The generated Lorem Ipsum is therefore.
-												</p>
-												<span class="vertical-date small text-muted"> 02:50 pm - 03.10.2014 </span>
-											</div>
-										</div>
-										<div class="vertical-timeline-block">
-											<div class="vertical-timeline-icon gray-bg">
-												<i class="fa fa-coffee"></i>
-											</div>
-											<div class="vertical-timeline-content">
-												<p>Conference on the sales results for the previous year.
-												</p>
-												<span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
-											</div>
-										</div>
-										<div class="vertical-timeline-block">
-											<div class="vertical-timeline-icon gray-bg">
-												<i class="fa fa-briefcase"></i>
-											</div>
-											<div class="vertical-timeline-content">
-												<p>Many desktop publishing packages and web page editors now use Lorem.
-												</p>
-												<span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
-											</div>
-										</div>
-									</div> -->
 								</div>
 							</div>
 						</div>
@@ -137,6 +94,7 @@ $member = new Member();
  ?>
 <script>
 $(document).ready(function(){
+	
 	/* PICK DATA FOR DATA TABLE  */
 	var  dTable;
 	var handleDataTableButtons = function() {
@@ -167,7 +125,7 @@ $(document).ready(function(){
 					{ data: 'groupName'},
 					{ data: 'description'}<?php 
 					if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>,
-					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <a id="'+data+'" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> View </a> ';}} <?php } ?> 
+					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <a id="'+data+'" class="btn btn-white btn-sm edit_group"><i class="fa fa-pencil"></i> Edit </a> ';}} <?php } ?> 
 					] ,
 			  buttons: [
 				{
@@ -212,7 +170,12 @@ $(document).ready(function(){
 	}();
 
 	TableManageButtons.init();
-
+	$('#groupTable').on('click', 'tr .edit_group', function () {
+		var id = $(this).attr("id")
+		 $('#DescModal').removeData('bs.modal');
+        $('#DescModal').modal({remote: 'edit_group.php?id=' + id });
+        $('#DescModal').modal('show');
+	})
 	$('.table tbody').on('click', 'tr ', function () {
 		var data = dTable.row(this).data();
 		console.log(data);

@@ -1,6 +1,39 @@
 <script>
 $(document).ready(function(){
-
+	function showStatusMessage(message='', display_type='success'){
+		new PNotify({
+			  title: "Alert",
+			  text: message,
+			  type: display_type,
+			  styling: 'bootstrap3',
+			  sound: true,
+			  hide:true,
+			  buttons: {
+				closer_hover: false,
+			},
+			confirm: {
+				confirm: true,
+				buttons: [{
+					text: 'Ok',
+					addClass: 'btn-primary',
+					click: function(notice) {
+						notice.remove();
+					}
+				},
+				null]
+			},
+			animate: {
+				animate: true,
+				in_class: 'zoomInLeft',
+				out_class: 'zoomOutRight'
+			},
+			  nonblock: {
+				  nonblock: true
+			  }
+			  
+		  });
+		
+	}
 /* ====  COMMON FUNCTIONS ==== */
 	
 	deleteDataTableRowData();
@@ -70,6 +103,66 @@ $(document).ready(function(){
     } );
 	
 	var handleDataTableButtons = function() {
+		/* -- Person Type Data Table --- */
+			if ($("#expense_types").length) {
+			  dTable['tblExpenseType'] = $('#expense_types').DataTable({
+			  dom: "lfrtipB",
+			  "processing": true,
+			  /*"serverSide": true,
+			  "deferRender": true,
+			  "order": [[ 1, 'asc' ]],*/
+			  "ajax": {
+				  "url":"settings_data.php",
+				  "dataType": "JSON",
+				  "type": "POST",
+				  "data":  function(d){
+						d.tbl = 'expense_type';
+						//d.start_date = getStartDate();
+						//d.end_date = getEndDate();
+					}
+			  },"columnDefs": [ {
+				  "targets": [2],
+				  "orderable": false,
+				  "searchable": false
+			  }/* , {
+				  "targets": [0],
+				  "orderable": false
+			  } */],
+			  "autoWidth": false,
+			  columns:[ { data: 'name'},
+					{ data: 'description'},//, render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}
+					//{ data: 'date_added', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
+					
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_person_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-expense_type-personTypeTable" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					
+					] ,
+			  buttons: [
+				{
+				  extend: "copy",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "csv",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "excel",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "pdfHtml5",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "print",
+				  className: "btn-sm"
+				},
+			  ],
+			  responsive: true,
+			});
+			//$("#datatable-buttons").DataTable();
+		  }
+	  /*-- End Expense Type--*/
 		/* -- Person Type Data Table --- */
 			if ($("#person_types").length) {
 			  dTable['personTypeTable'] = $('#person_types').DataTable({

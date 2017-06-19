@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 04, 2017 at 09:43 PM
+-- Generation Time: Jun 05, 2017 at 06:14 PM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.5.35
 
@@ -512,13 +512,23 @@ CREATE TABLE `group_loan_account` (
 
 CREATE TABLE `group_members` (
   `id` int(11) NOT NULL,
-  `member_id` int(11) NOT NULL,
+  `memberId` int(11) NOT NULL,
   `groupId` int(11) NOT NULL,
   `dateCreated` int(11) NOT NULL,
   `createdBy` int(11) NOT NULL,
   `dateModified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `modifiedBy` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `group_members`
+--
+
+INSERT INTO `group_members` (`id`, `memberId`, `groupId`, `dateCreated`, `createdBy`, `dateModified`, `modifiedBy`) VALUES
+(1, 6, 1, 1496674764, 30, '2017-06-05 15:00:20', 30),
+(2, 7, 1, 1496674764, 30, '2017-06-05 15:00:20', 30),
+(3, 8, 1, 1496674764, 30, '2017-06-05 15:00:20', 30),
+(4, 9, 1, 1496674764, 30, '2017-06-05 15:00:20', 30);
 
 -- --------------------------------------------------------
 
@@ -942,12 +952,25 @@ CREATE TABLE `member` (
 --
 
 INSERT INTO `member` (`id`, `personId`, `active`, `branch_id`, `memberType`, `dateAdded`, `addedBy`, `comment`, `dateModified`, `modifiedBy`) VALUES
-(1, 2, 1, 0, 1, 20161116, 1, 'New member', '0000-00-00 00:00:00', 0),
-(2, 3, 0, 0, 0, 20161124, 1, 'Comments from here', '0000-00-00 00:00:00', 0),
-(3, 4, 1, 0, 0, 20161124, 1, 'Cissy buladde sacco', '0000-00-00 00:00:00', 0),
-(4, 7, 1, 0, 0, 20170108, 1, 'Registered from muganzirwaza', '0000-00-00 00:00:00', 0),
-(6, 22, 1, 0, 0, 2017, 1, 'Kampala Uganda', '2017-06-04 15:07:01', 0),
-(7, 23, 1, 0, 0, 2017, 1, 'registered at muganzirwaza', '2017-06-04 17:57:39', 0);
+(1, 32, 1, 1, 0, 2017, 9, 'Thanks', '2017-06-05 08:44:24', 0),
+(2, 33, 1, 1, 0, 2017, 9, 'An already existing Member', '2017-06-05 08:46:31', 0),
+(3, 34, 1, 1, 0, 2017, 9, 'Registered without employment history', '2017-06-05 08:50:57', 0),
+(4, 35, 1, 1, 0, 2017, 9, '', '2017-06-05 08:52:59', 0),
+(5, 36, 1, 1, 0, 2017, 9, '', '2017-06-05 08:59:52', 0),
+(6, 37, 1, 1, 0, 2017, 9, 'Thank you for joining Buladde Financial Services', '2017-06-05 09:06:26', 0),
+(7, 38, 1, 1, 0, 2017, 9, 'Thank you for joing Buladde Financial Services', '2017-06-05 09:08:08', 0),
+(8, 39, 1, 1, 0, 2017, 9, 'Received', '2017-06-05 09:09:08', 0),
+(9, 40, 1, 1, 0, 2017, 9, 'Registered 05th  June 2017', '2017-06-05 09:10:09', 0),
+(10, 41, 1, 1, 0, 2017, 9, 'Thanks', '2017-06-05 09:11:27', 0),
+(11, 42, 1, 1, 0, 2017, 9, '', '2017-06-05 09:12:21', 0),
+(12, 43, 1, 1, 0, 2017, 9, '', '2017-06-05 09:14:08', 0),
+(13, 44, 1, 1, 0, 2017, 9, '', '2017-06-05 09:14:47', 0),
+(14, 45, 1, 1, 0, 2017, 9, '', '2017-06-05 09:15:44', 0),
+(15, 46, 1, 1, 0, 2017, 9, '', '2017-06-05 09:17:54', 0),
+(16, 47, 1, 1, 0, 2017, 9, '', '2017-06-05 09:18:40', 0),
+(17, 48, 1, 1, 0, 2017, 9, '', '2017-06-05 09:19:16', 0),
+(18, 49, 1, 1, 0, 2017, 9, '', '2017-06-05 09:19:45', 0),
+(19, 50, 1, 1, 0, 2017, 9, '', '2017-06-05 09:20:22', 0);
 
 -- --------------------------------------------------------
 
@@ -1096,20 +1119,27 @@ CREATE TABLE `person` (
 --
 
 INSERT INTO `person` (`id`, `title`, `person_type`, `person_number`, `firstname`, `lastname`, `othername`, `id_type`, `id_number`, `gender`, `dateofbirth`, `phone`, `email`, `postal_address`, `physical_address`, `occupation`, `children_no`, `dependants_no`, `CRB_card_no`, `photograph`, `comment`, `date_registered`, `registered_by`, `district`, `county`, `subcounty`, `parish`, `village`) VALUES
-(1, 'Mr', 2, 'SBFS00000001', 'Alfred', 'Platin', 'M', 0, 'B94994', 'M', '1988-08-08', '0702-771-124', 'mplat84@gmail.com', '', 'Kampala', '', 0, 0, '', '', 'First user registration', '2016-11-16 00:00:00', 1, '', '', '', '1', '1'),
-(2, 'Mr', 1, 'M161116200538', 'Brayan', 'Matovu', 'W', 0, '898438948934', 'M', '1987-08-08', '(0701) 108-622', 'mplat84@gmail.com', '36211 Kampala', 'Kampala', 'IT', 0, 0, '', '', 'New member', '2016-11-16 00:00:00', 1, '', '', '', '1', '1'),
-(3, 'Mr', 1, 'M241116093854', 'Allan', 'Jesse', '', 0, '8483934', 'M', '1987-03-02', '0702 771-124', 'mplat84@gmail.com', 'Hello there', 'Kampala ', 'Consultancy', 0, 0, '', '', 'Comments from here', '2016-11-24 00:00:00', 1, '', '', '', '1', '1'),
-(4, 'Mrs', 1, 'M241116095244', 'Cissy', 'Ge', '', 0, '8382383', 'F', '1984-01-07', '0702 771-124', 'mplat84@gmail.com', '', '36211 kampala', 'Finance', 0, 0, '', '', 'Cissy buladde sacco', '2016-11-24 00:00:00', 1, '', '', '', '1', '1'),
-(5, 'Mr', 2, 'S080117180211', 'Mathias', 'Musoke', '', 0, 'CM89808303939', '1', '1986-09-21', '0700-987-309', 'mmusoke@gmail.com', 'P O Box 34909 Kampala', 'Kitezi complex', '', 0, 0, '', '', 'Staff credentials accepted', '2017-01-08 00:00:00', 1, '', '', '', '1', '1'),
-(6, 'Mr', 2, 'S080117181259', 'Leonard', 'Kabuye', '', 0, '37838793893', 'M', '1976-02-08', '0702-711-332', 'mplat84@gmail.com', '', 'kampala', '', 0, 0, '', '', 'eweewe', '2017-01-08 00:00:00', 1, '', '', '', '1', '1'),
-(7, 'Mr', 1, 'BFS080117182251', 'Ronald', 'Matovu', '', 0, '67367367363', 'M', '1987-08-08', '0702 771-124', 'freddagates@empire.com', '256', 'kampala', 'IT Consultant', 0, 0, '', 'img/profiles/IMG_20160901_130726.jpg', 'Registered from muganzirwaza', '2017-01-08 00:00:00', 1, '', '', '', '1', '1'),
-(22, 'Mr', 0, 'BFS00000022', 'Daniel', 'Twinamatsiko ', '', 1, '949394399', 'M', '1971-01-01', '(073) 000-0000', 'mplat84@gmail.com', 'kampala', 'Kampala', '', 3, 1, NULL, '', 'Kampala Uganda', '2017-06-04 00:00:00', 1, 'kampala', 'kampala', 'kampala', 'kampala', 'kampala'),
-(23, 'Mr', 0, 'BFS00000023', 'Sulaiman', 'Katumba ', '', 1, '949394399', 'M', '1971-01-01', '(073) 000-0000', 'mplat84@gmail.com', 'kampala', 'Kampala', '', 3, 1, NULL, '', 'Kampala Uganda', '2017-06-04 00:00:00', 1, 'kampala', 'kampala', 'kampala', 'kampala', 'kampala'),
-(26, 'Mr', 1, 'SBFS00000026', 'alfred', 'platin', '', 1, '823948989', '', '1970-01-01', '(889) 898-9898', 'mplat84@gmail.com', '88898989899', '8988989899', '', 0, 0, NULL, '', '889989889', '0000-00-00 00:00:00', 1, '88898989', '889898989', '898989898989', '89898989', '8989898998'),
-(27, 'Mr', 1, 'SBFS00000027', 'Cissy', 'm', '', 1, '894738947398', 'F', '1970-01-01', '(073) 900-0000', 'cissy@buladde.or.ug', '', 'kampala', '', 0, 0, NULL, '', 'Thank you', '0000-00-00 00:00:00', 1, '', '', '', '', ''),
-(28, 'Mr', 1, 'SBFS00000028', 'Brayan', 'Matovu', '', 1, '545445', 'M', '1970-01-01', '(989) 938-9283', '54@gmail.com', '', 'jajaa', '', 0, 0, NULL, '', 'a', '0000-00-00 00:00:00', 1, '', '', '', '', ''),
-(29, 'Mr', 1, 'SBFS00000029', 'Alfred', 'Platin', '', 1, '43434434', 'M', '1970-01-01', '(344) 343-4343', 'm@gmail.com', '', 'rere', '', 0, 0, NULL, '', 're', '0000-00-00 00:00:00', 1, '', '', '', '', ''),
-(30, 'Mr', 1, 'SBFS00000030', 'Stella', 'Namata', '', 1, '849389438934', 'F', '1970-01-01', '(080) 808-0800', 'mplat84@gmail.com', '', 'kampala', '', 0, 0, NULL, '', '', '0000-00-00 00:00:00', 1, '', '', '', '', '');
+(30, 'Mr', 1, 'SBFS00000030', 'platin', 'alfred', '', 1, '892892389', 'M', '1980-08-08', '(073) 000-0000', 'mplat84@gmail.com', 'kampala', 'kampala', '', 0, 0, NULL, '', 'Thank you', '0000-00-00 00:00:00', 0, '', '', '', '', ''),
+(31, 'Mr', 1, 'SBFS00000031', 'Cissy', 'M', '', 1, '858945', 'F', '1987-01-01', '(073) 000-0000', 'mplat84@gmail.com', 'kampala', 'kampala', '', 0, 0, NULL, '', 'Thank you', '0000-00-00 00:00:00', 9, '', '', '', '', ''),
+(32, 'Mr', 0, 'BFS00000032', 'Sulaiman', 'Katumba ', '', 1, '9439439', 'M', '1971-01-01', '(993) 209-2309', 'mplat84@gmail.com', 'kampala', 'kampala', 'Farmer', 4, 1, NULL, '', 'Thanks', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(33, 'Mrs', 0, 'BFS00000033', 'Christine', 'Lwanga ', '', 1, '344334', 'F', '1981-01-01', '(073) 000-0000', '', '', 'kampala', '', 0, 0, NULL, '', 'An already existing Member', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(34, 'Mr', 0, 'BFS00000034', 'Simon', 'Kabogoza', '', 1, '7662278', 'M', '1987-01-01', '(073) 000-0000', '', '', 'kampala', '', 0, 0, NULL, '', 'Registered without employment history', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(35, 'Mr', 0, 'BFS00000035', 'Francis', 'Muyomba ', '', 1, '5484598', '', '1983-01-01', '(073) 000-0000', '', '', 'kampala', '', 1, 3, NULL, '', '', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(36, 'Mr', 0, 'BFS00000036', 'Mukwaba', ' Katende', '', 1, '55455455', 'M', '1987-01-01', '(073) 000-0000', '', '', 'kampala', 'BLB Staff', 0, 0, NULL, '', '', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(37, 'Mr', 0, 'BFS00000037', 'Baker', 'Namakula ', 'Namakula ', 1, '8493893489', 'M', '1987-01-01', '(073) 000-0000', '', '', 'kampala', '', 0, 0, NULL, '', 'Thank you for joining Buladde Financial Services', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(38, 'Mr', 0, 'BFS00000038', 'Daniel', 'Twinamatsiko ', '', 1, '8438934893', 'M', '1981-01-01', '(073) 000-0000', '', '', 'Kampala', '', 0, 0, NULL, '', 'Thank you for joing Buladde Financial Services', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(39, 'Mr', 0, 'BFS00000039', 'Fred', 'Tukamuhabwa ', '', 1, 'asa43554', 'M', '1970-01-01', '(073) 500-0000', '', '', 'Kampala', '', 0, 0, NULL, '', 'Received', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(40, 'Mrs', 0, 'BFS00000040', 'Christine', 'Tibagwa ', '', 1, '8899898', 'F', '1970-01-01', '(077) 799-8989', '', '', 'kampala', '', 0, 0, NULL, '', 'Registered 05th  June 2017', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(41, 'Mr', 0, 'BFS00000041', 'Eroni', 'Kikomaga ', '', 1, '8489398', 'M', '1987-01-01', '(088) 989-8990', '', '', 'kampala', '', 0, 0, NULL, '', 'Thanks', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(42, 'Mrs', 0, 'BFS00000042', 'Ruth', 'Nsamba ', '', 1, '54545', 'F', '1980-02-01', '(073) 000-0000', '', '', 'kampala', '', 0, 0, NULL, '', '', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(43, 'Mr', 0, 'BFS00000043', 'William', 'Mugejjera ', '', 1, '456665656', 'M', '2017-01-01', '(087) 645-5554', '', '', 'kampala', '', 0, 0, NULL, '', '', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(44, 'Mrs', 0, 'BFS00000044', 'Rose', 'Nakanyike ', '', 1, '43454545', 'F', '1970-01-01', '(074) 222-4565', '', '', 'kampala', '', 0, 0, NULL, '', '', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(45, 'Mrs', 0, 'BFS00000045', 'Agnes', 'Nansereko ', '', 1, '454665', 'F', '1980-07-08', '(073) 777-7777', '', '', 'k', '', 0, 0, NULL, '', '', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(46, 'Mrs', 0, 'BFS00000046', 'Christine', 'Nabaweesi ', '', 1, '45665655656', 'F', '1987-02-01', '(085) 645-4343', '', '', 'j', '', 0, 0, NULL, '', '', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(47, 'Mrs', 0, 'BFS00000047', 'Lydia', 'Namwase ', '', 1, '46577', 'F', '1970-01-01', '(097) 876-5453', '', '', 'aa', '', 0, 0, NULL, '', '', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(48, 'Mrs', 0, 'BFS00000048', 'Hanifa', 'Nabasitu ', '', 1, '6565656656', 'F', '1970-01-01', '(097) 876-6547', '', '', 'h', '', 0, 0, NULL, '', '', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(49, 'Mrs', 0, 'BFS00000049', 'Zam', 'Nalule ', '', 1, '43433434', 'F', '1970-01-01', '(075) 344-3443', '', '', 'e', '', 0, 0, NULL, '', '', '2017-06-05 00:00:00', 9, '', '', '', '', ''),
+(50, 'Mrs', 0, 'BFS00000050', 'Harriet', 'Nanyonjo ', '', 1, '32223', 'F', '1970-01-01', '(070) 122-3344', '', '', 'h', '', 0, 0, NULL, '', '', '2017-06-05 00:00:00', 9, '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -1176,7 +1206,25 @@ CREATE TABLE `person_employment` (
 
 INSERT INTO `person_employment` (`id`, `personId`, `employer`, `years_of_employment`, `nature_of_employment`, `startDate`, `endDate`, `monthlySalary`, `dateCreated`, `createdBy`, `dateModified`, `modifiedBy`) VALUES
 (1, 22, 'Airtel Uganda', 2, '0', NULL, NULL, '400000.00', 0, 0, '2017-06-04 15:07:01', 0),
-(2, 23, 'Airtel Uganda', 2, '0', NULL, NULL, '400000.00', 0, 0, '2017-06-04 15:07:49', 0);
+(2, 23, 'Airtel Uganda', 2, '0', NULL, NULL, '400000.00', 0, 0, '2017-06-04 15:07:49', 0),
+(3, 32, 'CS', 2, 'IT', NULL, NULL, '2000000.00', 0, 0, '2017-06-05 08:44:24', 0),
+(4, 33, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 08:46:31', 0),
+(5, 35, 'MTN Uganda', 2, 'Customer care', NULL, NULL, '600000.00', 0, 0, '2017-06-05 08:52:59', 0),
+(6, 36, 'BLB Staff', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 08:59:51', 0),
+(7, 37, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:06:26', 0),
+(8, 38, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:08:08', 0),
+(9, 39, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:09:08', 0),
+(10, 40, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:10:09', 0),
+(11, 41, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:11:27', 0),
+(12, 42, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:12:21', 0),
+(13, 43, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:14:08', 0),
+(14, 44, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:14:47', 0),
+(15, 45, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:15:44', 0),
+(16, 46, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:17:54', 0),
+(17, 47, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:18:40', 0),
+(18, 48, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:19:16', 0),
+(19, 49, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:19:45', 0),
+(20, 50, '', 0, '', NULL, NULL, '0.00', 0, 0, '2017-06-05 09:20:22', 0);
 
 -- --------------------------------------------------------
 
@@ -1206,7 +1254,27 @@ INSERT INTO `person_relative` (`id`, `personId`, `is_next_of_kin`, `first_name`,
 (1, 22, 0, 'Alfred', 'Platin', 'Mugasa', 0, 1, 'kampala', 'kampala', 'kampala'),
 (2, 22, 0, 'Brian', 'Matovu', '', 0, 1, 'kampala', 'k', '0808430340'),
 (3, 23, 0, 'Alfred', 'Platin', 'Mugasa', 0, 1, 'kampala', 'kampala', 'kampala'),
-(4, 23, 0, 'Brian', 'Matovu', '', 0, 1, 'kampala', 'k', '0808430340');
+(4, 23, 0, 'Brian', 'Matovu', '', 0, 1, 'kampala', 'k', '0808430340'),
+(5, 32, 0, 'A', 'A', 'A', 0, 1, 'A', 'A', 'A'),
+(6, 32, 1, 'C', 'C', 'C', 0, 2, 'C', 'C', 'C'),
+(7, 33, 0, '', '', '', 0, 0, '', '', ''),
+(8, 34, 0, '', '', '', 0, 0, '', '', ''),
+(9, 35, 1, 'Alex', 'Muyomba', '', 0, 1, 'kampala', 'Wakiso', ''),
+(10, 36, 0, '', '', '', 0, 0, '', '', ''),
+(11, 37, 0, '', '', '', 0, 0, '', '', ''),
+(12, 38, 0, '', '', '', 0, 0, '', '', ''),
+(13, 39, 0, '', '', '', 0, 0, '', '', ''),
+(14, 40, 0, '', '', '', 0, 0, '', '', ''),
+(15, 41, 1, 'c', 'c', 'c', 0, 1, '', '', ''),
+(16, 42, 0, '', '', '', 0, 0, '', '', ''),
+(17, 43, 0, '', '', '', 0, 0, '', '', ''),
+(18, 44, 0, '', '', '', 0, 0, '', '', ''),
+(19, 45, 0, '', '', '', 0, 0, '', '', ''),
+(20, 46, 0, '', '', '', 0, 0, '', '', ''),
+(21, 47, 0, '', '', '', 0, 0, '', '', ''),
+(22, 48, 0, '', '', '', 0, 0, '', '', ''),
+(23, 49, 0, '', '', '', 0, 0, '', '', ''),
+(24, 50, 0, '', '', '', 0, 0, '', '', '');
 
 -- --------------------------------------------------------
 
@@ -1270,6 +1338,13 @@ CREATE TABLE `saccogroup` (
   `modifiedBy` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `saccogroup`
+--
+
+INSERT INTO `saccogroup` (`id`, `groupName`, `description`, `dateCreated`, `createdBy`, `dateModified`, `modifiedBy`) VALUES
+(1, 'St Francis Bwaise', 'St Francis Bwaise', 1496674764, 30, '2017-06-05 15:00:20', 30);
+
 -- --------------------------------------------------------
 
 --
@@ -1324,23 +1399,17 @@ CREATE TABLE `staff` (
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
   `date_added` date NOT NULL,
-  `added_by` varchar(45) NOT NULL
+  `added_by` varchar(45) NOT NULL,
+  `modified_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `staff`
 --
 
-INSERT INTO `staff` (`id`, `personId`, `branch_id`, `position_id`, `username`, `password`, `status`, `start_date`, `end_date`, `date_added`, `added_by`) VALUES
-(2, 5, 0, 3, 'mmusoke', 'a698aac3a8775508d6a03cb9fa002a1f', 1, '0000-00-00', NULL, '2017-01-08', '1'),
-(3, 6, 0, 4, 'lkabuye', '6dd59a8d3ddd2527963b972c7014b1e9', 1, '0000-00-00', NULL, '2017-01-08', '1'),
-(4, 0, 1, 1, 'user', 'ewwew', 1, '0000-00-00', NULL, '2017-06-04', ''),
-(5, 1, 1, 1, 'alfred', 'platin65', 1, '0000-00-00', NULL, '2017-06-04', ''),
-(6, 26, 1, 1, 'alfred', 'platin65', 1, '0000-00-00', NULL, '2017-06-04', ''),
-(7, 27, 1, 1, 'cissy', 'user123', 1, '0000-00-00', NULL, '2017-06-04', '1'),
-(8, 28, 1, 3, 'brayan', 'platin65', 1, '0000-00-00', NULL, '2017-06-04', '1'),
-(9, 29, 1, 2, 'allan', 'platin65', 1, '0000-00-00', NULL, '2017-06-04', '1'),
-(10, 30, 1, 2, 'stella', 'stella', 1, '0000-00-00', NULL, '2017-06-04', '1');
+INSERT INTO `staff` (`id`, `personId`, `branch_id`, `position_id`, `username`, `password`, `status`, `start_date`, `end_date`, `date_added`, `added_by`, `modified_by`) VALUES
+(9, 30, 1, 1, 'alfred', '9e11830101b6b723ae3fb11e660a2123', 1, '0000-00-00', NULL, '2017-06-05', '<br />\r\n<b>Notice</b>:  Undefined index: user', 0),
+(10, 31, 1, 3, 'Cissy', '6ad14ba9986e3615423dfca256d04e3f', 1, '0000-00-00', NULL, '2017-06-05', '9', 0);
 
 -- --------------------------------------------------------
 
@@ -1359,14 +1428,8 @@ CREATE TABLE `staff_roles` (
 --
 
 INSERT INTO `staff_roles` (`id`, `role_id`, `personId`) VALUES
-(1, 1, 26),
-(2, 4, 26),
-(3, 1, 27),
-(4, 3, 27),
-(5, 1, 28),
-(6, 3, 28),
-(7, 2, 29),
-(8, 2, 30);
+(16, 1, 30),
+(17, 3, 31);
 
 -- --------------------------------------------------------
 
@@ -1698,7 +1761,8 @@ ALTER TABLE `group_loan_account`
 -- Indexes for table `group_members`
 --
 ALTER TABLE `group_members`
-  ADD KEY `fkMemberId` (`member_id`),
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fkMemberId` (`memberId`),
   ADD KEY `fkGroupId` (`groupId`),
   ADD KEY `fkModifiedBy` (`modifiedBy`),
   ADD KEY `fkCreatedBy` (`createdBy`);
@@ -2129,6 +2193,11 @@ ALTER TABLE `group_deposit_account`
 ALTER TABLE `group_loan_account`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `group_members`
+--
+ALTER TABLE `group_members`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
 -- AUTO_INCREMENT for table `guarantor`
 --
 ALTER TABLE `guarantor`
@@ -2212,7 +2281,7 @@ ALTER TABLE `loan_repayment`
 -- AUTO_INCREMENT for table `member`
 --
 ALTER TABLE `member`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT for table `member_deposit_account`
 --
@@ -2237,7 +2306,7 @@ ALTER TABLE `penalty_calculation_method`
 -- AUTO_INCREMENT for table `person`
 --
 ALTER TABLE `person`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 --
 -- AUTO_INCREMENT for table `persontype`
 --
@@ -2247,12 +2316,12 @@ ALTER TABLE `persontype`
 -- AUTO_INCREMENT for table `person_employment`
 --
 ALTER TABLE `person_employment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT for table `person_relative`
 --
 ALTER TABLE `person_relative`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT for table `position`
 --
@@ -2267,7 +2336,7 @@ ALTER TABLE `relationship_type`
 -- AUTO_INCREMENT for table `saccogroup`
 --
 ALTER TABLE `saccogroup`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `securitytype`
 --
@@ -2287,7 +2356,7 @@ ALTER TABLE `staff`
 -- AUTO_INCREMENT for table `staff_roles`
 --
 ALTER TABLE `staff_roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `status`
 --
