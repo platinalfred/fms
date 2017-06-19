@@ -18,17 +18,17 @@ $member = new Member();
 		<!-- /.modal-dialog -->
 	</div>
 	<div class="row">
-		<?php include("add_groups.php"); ?>
+		<?php include("add_expense.php"); ?>
 		<div class="col-sm-8">
 			<div class="ibox">
 				<div class="ibox-content">
-					<h2>Member Groups</h2>
-					<div class="col-sm-5 text-muted small pull-left" style="padding:10px;"><a data-toggle="modal" class="btn btn-primary" href="#add_group"><i class="fa fa-plus"></i> Add Group</a></div>
+					<h2>Expenses</h2>
+					<div class="col-sm-5 text-muted small pull-left" style="padding:10px;"><a data-toggle="modal" class="btn btn-primary" href="#add_expense"><i class="fa fa-plus"></i> Add Expense</a></div>
 					<div class="clear:both;"></div>
 					<div class="input-group">
-						<input type="text" placeholder="Search client " class="input form-control">
+						<input type="text" placeholder="Search Expense " class="input form-control">
 						<span class="input-group-btn">
-							<button type="button" class="btn btn btn-primary"> <i class="fa fa-search"></i> Search Group</button>
+							<button type="button" class="btn btn btn-primary"> <i class="fa fa-search"></i> Search Expense</button>
 						</span>
 					</div>
 					<div class="clients-list">

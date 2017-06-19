@@ -8,6 +8,10 @@ if(isset($_POST['tbl'])){
 			$address_type = new AddressType();
 			$output['data'] = $address_type->findAll();
 		break;
+		case "expense_type":
+			$expense_type = new ExpenseTypes();
+			$output['data'] = $expense_type->findAll();
+		break;
 		case "marital_status":
 			$marital_status = new MaritalStatus();
 			$output['data'] = $marital_status->findAll();

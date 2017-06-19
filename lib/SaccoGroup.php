@@ -7,7 +7,7 @@ class SaccoGroup extends Db {
 	protected static $group_member_fields = array("id", "groupId", "memberId", "dateCreated", "createdBy",  "modifiedBy");
 	
 	public function findById($id){
-		$result = $this->getrec(self::$table_name, "id=".$id, "");
+		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
 		return !empty($result) ? $result:false;
 	}
 	

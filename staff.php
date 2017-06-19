@@ -6,18 +6,18 @@ require_once("lib/Libraries.php");
 $staff = new Staff();
 $staff
 ?>
-<div class="modal fade" id="DescModal" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-body">
-				 
+	<div class="modal fade" id="DescModal" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-body">
+					 
+				</div>
+				
 			</div>
-			
+			<!-- /.modal-content -->
 		</div>
-		<!-- /.modal-content -->
+		<!-- /.modal-dialog -->
 	</div>
-	<!-- /.modal-dialog -->
-</div>
 	<div class="row">
 		<?php include("add_staff_modal.php"); ?>
 		<div class="col-sm-11">

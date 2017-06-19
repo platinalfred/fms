@@ -20,6 +20,21 @@ if(isset($_POST['tbl'])){
 				$output = "Group details could not be added. Please try again or contact admin for assistance!";
 			}
 		break;
+		case "update_group":
+			$data = $_POST;
+			$sacco_group = new SaccoGroup();
+			if($sacco_group->updateSaccoGroup($data)){
+				if(!empty($data['members'])){
+					foreach($data['members'] as $single){
+						$data['memberId'] = $single['memberId'];
+						$sacco_group->addSaccoGroupMembers($data);
+					}
+				}
+				$output = "success";
+			}else{ 
+				$output = "Group details could not be added. Please try again or contact admin for assistance!";
+			}
+		break;
 		//UPDATE STAFF
 		case "update_staff":
 			$data = $_POST;
@@ -272,6 +287,14 @@ if(isset($_POST['tbl'])){
 			 if($address_type->addIdAdressType($_POST)){
 				$output = "success";
 			 }
+		break;
+		case "expense_type":
+			$expense_types = new ExpenseTypes();
+			if($expense_types->addExpenseType($_POST)){
+				$output = "success";
+			}else{
+				echo "Could not add an expense type";
+			}
 		break;
 		default:
 			echo "No data submited!";

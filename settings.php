@@ -34,6 +34,7 @@ require_once("lib/Libraries.php");
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-17" href="#">Positions</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-18" href="#">Address Type</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-19" href="#">Marital Status</a></li>
+							<li class=""><a data-toggle="tab" role="tab" href="#tab-22" href="#">Expense Type</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -1195,6 +1196,73 @@ require_once("lib/Libraries.php");
 								<div class="ibox-content">
 									<div class="table-responsive">
 										<table class="table table-striped table-bordered table-hover" id="marital-status">
+											<thead>
+											<tr>
+												<th>Name</th>
+												<th>Description</th>
+												<th>Edit / Delete</th>
+											</tr>
+											</thead>
+											<tbody></tbody>
+											<tfoot>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th></th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					<!-- End Marital Status -->
+					<!-- Expense Type -->
+					<div id="tab-22" class="tab-pane">
+						<div class="panel-body">
+							<div class="col-lg-2 col-offset-sm-8">
+								<div class="text-center">
+									<a data-toggle="modal" class="btn btn-primary" href="#expense_type"><i class="fa fa-plus"></i> Add Expense Type</a>
+								</div>
+								<div id="expense_type" class="modal fade" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-body">
+												<div class="row">
+													<div class="col-sm-12">
+														<p>Add  Expense Type</p>
+														<div class="ibox-content">
+															<form class="form-horizontal" id="tblExpenseType">
+																<input type="hidden" name="tbl"  value="expense_type">
+																<div class="form-group"><label class="col-lg-2 control-label">Name</label>
+																	<div class="col-lg-10"><input type="text" name="name" placeholder="Expense Type" class="form-control"> 
+																	</div>
+																</div>
+																<div class="form-group"><label class="col-lg-2 control-label">Description</label>
+																	<div class="col-lg-10"><textarea  name="description" placeholder="Description" class="form-control"></textarea></div>
+																</div>
+																<div class="form-group">
+																	<div class="col-lg-offset-2 col-lg-10">
+																		<button class="btn btn-sm btn-primary save" type="button">Submit</button>
+																	</div>
+																</div>
+															</form>
+														</div>
+													</div>
+													
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+							<div class="col-lg-12" style="margin-top:10px;">
+								<div class="ibox-content">
+									<div class="table-responsive">
+										<table class="table table-striped table-bordered table-hover" id="expense_types">
 											<thead>
 											<tr>
 												<th>Name</th>
