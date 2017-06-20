@@ -22,7 +22,7 @@ class LoanAccount extends Db {
 	}
 	
 	public function getApplications($where = 1){
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`clientId`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" );
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`clientId`", "`clientType`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`amountApproved`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`status`" , "`installments`" );
 		
 		$member_group_union_sql = " ".self::$member_sql. " UNION ". self::$saccogroup_sql;
 		
@@ -43,10 +43,7 @@ class LoanAccount extends Db {
 		$fields = array_slice(self::$table_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
-		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){
-			return true;
-		}
-		return false;
+		return $this->updateSpecial(self::$table_name, $data, "id=".$id);
 	}
 	
 	public function deleteLoanAccount($id){

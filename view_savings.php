@@ -58,20 +58,20 @@
 				<div class="ibox-content">
 					<div class="tab-content">
 						<div id="account_details" class="tab-pane active">
-							<div class="row">
-								<div class="col-md-6"><label>Client Names</label></div>
-								<div class="col-md-6" data-bind="text: clientNames"></div>
-							</div>
-							<div class="row">
-							<div class="hr-line-dashed"></div>
-								<div class="col-md-6"><label>Account No.</label></div>
-								<div class="col-md-6" data-bind="text: (productName+'-'+id).replace(/\s/g,'')"></div>
-							</div>
-							<div class="row">
-							<div class="hr-line-dashed"></div>
-								<div class="col-md-6"><label>Savings Product</label></div>
-								<div class="col-md-6" data-bind="text: productName"></div>
-							</div>
+							<ul class="list-group clear-list">
+								<li class="list-group-item fist-item">
+									<span class="pull-right" data-bind="text: clientNames"> Matovu Gideon </span>
+									<label>Client Names</label>
+								</li>
+								<li class="list-group-item">
+									<span class="pull-right" data-bind="text: (productName+'-'+id).replace(/\s/g,'')"> 0439374938 </span>
+									<label>Account No.</label>
+								</li>
+								<li class="list-group-item">
+									<span class="pull-right" data-bind="text: productName"> Savings </span>
+									<label>Savings Product</label>
+								</li>
+							</ul>
 							<div class="row m-b-lg">
 							<div class="hr-line-dashed"></div>
 								<div class="col-md-6"><a class="btn btn-primary btn-sm" href='#enter_deposit' data-toggle="modal"><i class="fa fa-edit"></i> Enter Deposit </a></div>

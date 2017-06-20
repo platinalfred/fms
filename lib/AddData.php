@@ -5,6 +5,26 @@ if(isset($_POST['origin'])){
 	$output = 0;
 	$data = $_POST;
 	switch($_POST['origin']){
+		case "make_loan_payment":
+			if(isset($data['loanAccountId'])){
+				$loanRepayment = new LoanRepayment();
+				$data['transactionDate'] = time();
+				$data['dateModified'] = time();
+				$data['receivedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$output = $loanRepayment->addLoanRepayment($data);
+			}
+		break;
+		case "approve_loan":
+			if(isset($data['id'])){
+				$loanAccount = new LoanAccount();
+				unset($data['origin']);
+				$data['status'] = 3;
+				$data['approvalDate'] = time();
+				$data['approvedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$output = $loanAccount->updateLoanAccount($data);
+			}
+		break;
 		case "add_deposit":
 			if(isset($data['depositAccountId'])){
 				$depositAccountTransaction = new DepositAccountTransaction();

@@ -187,11 +187,19 @@ if(isset($_POST['origin'])){
 			$output['data'] = $loan_accounts;
 			echo json_encode($output);
 		break;
-		case 'pending_approval':
+		case 'rejected':
 			$loanAccount = new LoanAccount();
 			$loan_accounts = $loanAccount->getApplications("`status`=2");
 			$output['data'] = $loan_accounts;
 			echo json_encode($output);
+		break;
+		case 'loan_account_transactions':
+			if(isset($_POST['id'])&&$_POST['id']){
+				$loanAccountId = $_POST['id'];
+				$loanAccountTransaction = new LoanRepayment();
+				$transactonHistory = $depositAccountTransaction->getTransactionHistory($loanAccountId);
+				echo json_encode($transactonHistory);
+			}
 		break;
 		default:
 		echo json_encode("nothing found");

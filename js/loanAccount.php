@@ -14,6 +14,18 @@
 	var LoanAccount = function() {
 		var self = this;
 		
+		//these are required as the datatable is being loaded
+		self.transactionHistory = ko.observableArray(); //for the account transacation history display
+		self.account_details = ko.observable();
+		
+		//loan repayment section form
+		self.payment_amount = ko.observable(0);
+		self.comments = ko.observable("");
+		
+		//loan account approval section
+		self.amountApproved = ko.observable(0);
+		self.approvalNotes = ko.observable();
+		
 		//guarantors 
 		self.guarantors = ko.observableArray();
 		// Stores an array of selectedGuarantors
@@ -184,97 +196,66 @@
 			});
 			
 		};
+		
+		self.makePayment = function(){
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				data:{
+					origin:"make_loan_payment",
+					loanAccountId:(self.account_details()?self.account_details().id:undefined),
+					amount: self.payment_amount(),
+					comment: self.comments()
+				},
+				url: "lib/AddData.php",
+				success: function(response){
+					var result = parseInt(response)||0;
+					if(result){/*  */
+						showStatusMessage("Data successfully saved" ,"success");
+						setTimeout(function(){
+							$("#loanPaymentForm")[0].reset();
+							getTransactionHistory(self.account_details().id);
+						}, 3000);
+					}else{
+						showStatusMessage("Error encountered while saving data: \n"+response ,"failed");
+					}
+				}
+			});
+		};
+		
+		self.approveLoan = function(){
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				data:{
+					origin:"approve_loan",
+					id:(self.account_details()?self.account_details().id:undefined),
+					amountApproved: self.amountApproved(),
+					approvalNotes: self.approvalNotes()
+				},
+				url: "lib/AddData.php",
+				success: function(response){
+					var result = parseInt(response)||0;
+					if(result){/*  */
+						showStatusMessage("Data successfully saved" ,"success");
+						setTimeout(function(){
+							$("#loanAccountApprovalForm")[0].reset();
+							dTable['applications'].ajax.reload();
+							dTable['approved'].ajax.reload();
+							dTable['pending'].ajax.reload();
+						}, 3000);
+					}else{
+						showStatusMessage("Error encountered while approving: \n"+response ,"fail");
+					}
+				}
+			});
+		};
 	};
 
 	var loanAccountModel = new LoanAccount();
 	loanAccountModel.getServerData();// get data to be populated on the page
-	ko.applyBindings(loanAccountModel, $("#loan_account_form")[0]);
+	ko.applyBindings(loanAccountModel);
 	$("#loanAccountForm").validate({submitHandler: loanAccountModel.save});
-    /*$(document).ready(function(){
-	$("#loanAccountForm").steps({
-				labels: {
-					current: "current step:",
-					pagination: "Pagination",
-					finish: "Submit",
-					next: "Next",
-					cancel:"Reset",
-					previous: "Previous",
-					loading: "Loading ..."
-				},
-				enableCancelButton: true,
-				onCanceled: function (event){
-					loanAccountModel.resetForm();
-				},
-				transitionEffect: "slideLeft",
-                bodyTag: "fieldset",
-                onStepChanging: function (event, currentIndex, newIndex)
-                {
-                    // Always allow going backward even if the current step contains invalid fields!
-                    if (currentIndex > newIndex)
-                    {
-                        return true;
-                    }
-
-                    // Forbid suppressing "Warning" step if the user is to young
-                    if (newIndex === 3 && Number($("#age").val()) < 18)
-                    {
-                        return false;
-                    }
-
-                    var form = $(this);
-
-                    // Clean up if user went backward before
-                    if (currentIndex < newIndex)
-                    {
-                        // To remove error styles
-                        $(".body:eq(" + newIndex + ") label.error", form).remove();
-                        $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
-                    }
-
-                    // Disable validation on fields that are disabled or hidden.
-                    form.validate().settings.ignore = ":disabled,:hidden";
-
-                    // Start validation; Prevent going forward if false
-                    return form.valid();
-                },
-                onStepChanged: function (event, currentIndex, priorIndex)
-                {
-                    // Suppress (skip) "Warning" step if the user is old enough.
-                    if (currentIndex === 2 && Number($("#age").val()) >= 18)
-                    {
-                        $(this).steps("next");
-                    }
-
-                    // Suppress (skip) "Warning" step if the user is old enough and wants to the previous step.
-                    if (currentIndex === 2 && priorIndex === 3)
-                    {
-                        $(this).steps("previous");
-                    }
-                },
-                onFinishing: function (event, currentIndex)
-                {
-                    var form = $(this);
-
-                    // Disable validation on fields that are disabled.
-                    // At this point it's recommended to do an overall check (mean ignoring only disabled fields)
-                    form.validate().settings.ignore = ":disabled";
-
-                    // Start validation; Prevent form submission if false
-                    return form.valid();
-                },
-                onFinished: function (event, currentIndex)
-                {
-                    var form = $(this);
-
-                    // Submit form input
-                    form.submit();
-                }
-            }).validate({
-						submitHandler: loanAccountModel.save,
-                        errorPlacement: function (error, element)
-                        {
-                            element.before(error);
-                        }
-                    });
-       });*/
+	$("#loanPaymentForm").validate({submitHandler: loanAccountModel.makePayment});
+	$("#loanAccountApprovalForm").validate({submitHandler: loanAccountModel.approveLoan});
 	</script>

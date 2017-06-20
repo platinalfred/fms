@@ -481,6 +481,20 @@ class Db{
 		return false; 
 		
 	}
+	function addSpecial($table, $data){
+		$fields = $values = "";
+		foreach($data as $field=>$value){
+			$fields .= $field. ",";
+			$values .= "'".$this->escape_value($value). "',";
+		}
+		$ins = "INSERT INTO ".$table. " (".substr($fields,0,-1).") VALUES (".substr($values,0,-1).")";
+		 $inse = $this->conn->query($ins);
+		if($inse){
+			
+			return mysqli_insert_id($this->conn);
+		} 
+		return false; 
+	}
 	function addMultiple($table, $fields, $values){
 		$fi = implode(",", $fields);
 		
@@ -517,6 +531,18 @@ class Db{
 			return false;
 		}
 		
+	}
+	function updateSpecial($table, $data, $where){
+		$sql = "";
+		foreach($data as $field=>$value){
+			$sql .= $field. "='". $this->escape_value($value). "',";
+		}
+		$update_sql = "UPDATE ".$table. " SET ".substr($sql,0,-1)." WHERE ".$where;
+		 $updated = $this->conn->query($update_sql);
+		if($updated){
+			return true;
+		} 
+		return mysqli_error($this->conn); 
 	}
 	function getrec($table, $where, $ordby, $limit) {
 		if ($where != "") 	$sel = "SELECT * FROM ".$table." WHERE ".$where;
