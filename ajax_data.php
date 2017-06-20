@@ -197,7 +197,7 @@ if(isset($_POST['origin'])){
 			if(isset($_POST['id'])&&$_POST['id']){
 				$loanAccountId = $_POST['id'];
 				$loanAccountTransaction = new LoanRepayment();
-				$transactonHistory = $depositAccountTransaction->getTransactionHistory($loanAccountId);
+				$transactonHistory = $loanAccountTransaction->getTransactionHistory($loanAccountId);
 				echo json_encode($transactonHistory);
 			}
 		break;

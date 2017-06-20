@@ -493,7 +493,7 @@ class Db{
 			
 			return mysqli_insert_id($this->conn);
 		} 
-		return false; 
+		return mysqli_error($this->conn); 
 	}
 	function addMultiple($table, $fields, $values){
 		$fi = implode(",", $fields);

@@ -205,7 +205,7 @@
 					origin:"make_loan_payment",
 					loanAccountId:(self.account_details()?self.account_details().id:undefined),
 					amount: self.payment_amount(),
-					comment: self.comments()
+					comments: self.comments()
 				},
 				url: "lib/AddData.php",
 				success: function(response){
@@ -214,6 +214,7 @@
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
 							$("#loanPaymentForm")[0].reset();
+							dTable['approved'].ajax.reload();
 							getTransactionHistory(self.account_details().id);
 						}, 3000);
 					}else{

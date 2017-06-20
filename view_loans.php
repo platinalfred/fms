@@ -31,7 +31,7 @@
 				<div class="ibox-content">
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-list"></i> Applications</a></li>
-						<li><a data-toggle="tab" href="#tab-2"><i class="fa fa-clock-o"></i> Rejected</a></li>
+						<li><a data-toggle="tab" href="#tab-2" class="text-danger"><i class="fa fa-times"></i> Rejected</a></li>
 						<li><a data-toggle="tab" href="#tab-3"><i class="fa fa-check-circle-o"></i> Approved</a></li>
 					</ul>
 					<div class="tab-content">
@@ -207,9 +207,6 @@
 			  "type": "POST",
 			  "data":  {origin :'loan_applications'}
 		  },
-		  "initComplete": function(settings, json) {
-				$(".table tbody>tr:first").trigger('click');
-		  },
 		  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {return '<a href="members.php?client_id='+full.clientId+'&clientType='+full.clientType+'&loanId='+full.id+'" title="View details">'+data+'</a>';}},
 				{ data: 'clientNames'},
 				{ data: 'productName'},
@@ -301,6 +298,9 @@
 				d.start_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"moment().subtract(30, 'days').format('X')"; ?>;
 				d.end_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"moment().format('X')"; ?>;
 				}
+		  },
+		  "initComplete": function(settings, json) {
+				$(".table tbody>tr:first").trigger('click');
 		  },
 		  "footerCallback": function (tfoot, data, start, end, display ) {
             var api = this.api(), cols = [5,6,7];

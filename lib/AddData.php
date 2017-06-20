@@ -7,6 +7,7 @@ if(isset($_POST['origin'])){
 	switch($_POST['origin']){
 		case "make_loan_payment":
 			if(isset($data['loanAccountId'])){
+				unset($data['origin']);
 				$loanRepayment = new LoanRepayment();
 				$data['transactionDate'] = time();
 				$data['dateModified'] = time();
