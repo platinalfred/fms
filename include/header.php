@@ -170,7 +170,7 @@ $person = new Person();
                         <a href="expenses.php"><i class="fa fa-flask"></i> <span class="nav-label">Expenses</span></a>
                     </li>
 					<?php 
-					if(isset($_SESSION['admin']) ||$_SESSION['access_level'] == 1){ ?>
+					if(isset($_SESSION['admin'])){ ?>
 						<div class="menu_section">
 							<h3 style="padding-left:11%;">More</h3>
 							<ul class="nav side-menu">
