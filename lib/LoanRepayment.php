@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class LoanRepayment extends Db {
 	protected static $table_name  = "loan_repayment";
-	protected static $table_fields = array("id", "loanAccountId", "amount", "comments", "transactionType", "transactionDate", "recievedBy", "dateModified", "modifiedBy");
+	protected static $table_fields = array("id", "loanAccountId", "amount", "comments", "transactionDate", "receivedBy", "dateModified", "modifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -26,13 +26,11 @@ class LoanRepayment extends Db {
 	
 	
 	public function addLoanRepayment($data){
-		$fields = array_slice(self::$table_fields, 1);
-		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
+		$result = $this->addSpecial(self::$table_name, $data);
 		return $result;
 	}
 	
 	public function updateLoanRepayment($data){
-		
 		$fields = array_slice(self::$table_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
@@ -43,7 +41,7 @@ class LoanRepayment extends Db {
 	}
 	
 	public function deleteLoanRepayment($id){
-		$this->delete(self::$table_name, "id=".$id);
+		$this->del(self::$table_name, "id=".$id);
 	}
 }
 ?>

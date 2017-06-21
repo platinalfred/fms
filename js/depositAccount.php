@@ -34,8 +34,8 @@
 				{ data: 'clientNames'},
 				{ data: 'productName'},
 				{ data: 'dateCreated',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-				{ data: 'sumWithdrawn', render: function ( data, type, full, meta ) {return curr_format(parseInt(data?data:0));}},
-				{ data: 'sumDeposited', render: function ( data, type, full, meta ) {return curr_format(parseInt(data?data:0));}}/* ,
+				{ data: 'sumDeposited', render: function ( data, type, full, meta ) {return curr_format(parseInt(data?data:0));}},
+				{ data: 'sumWithdrawn', render: function ( data, type, full, meta ) {return curr_format(parseInt(data?data:0));}}/* ,
 				{ data: 'id', render: function ( data, type, full, meta ) {  return '<a href="#enter_deposit" class="btn btn-white btn-sm"><i class="fa fa-money"></i> Enter Deposit </a><a href="#enter_withdraw" class="btn btn-white btn-sm"><i class="fa fa-money"></i> Withdraw Cash </a>';}} */
 				] ,
 		  buttons: [
@@ -88,11 +88,7 @@
 		type: 'POST',
 		dataType: 'json',
 		success: function (response) {
-			depositAccountModel.transactionHistory(response);
-			/* if(response.transactionHistory != "false"){
-				depositAccountModel.transactionHistory(response);
-			} */
-			
+			depositAccountModel.transactionHistory(response);			
 		}
 	});
  }
@@ -112,7 +108,7 @@ function sumUpAmount(items, transactionType){
 	var DepositAccount = function() {
 		var self = this;
 		
-		//these are required before the datatabe is loaded
+		//these are required as the datatable is being loaded
 		self.transactionHistory = ko.observableArray(); //for a deposit account transacation history display
 		self.account_details = ko.observable();
 		
@@ -213,7 +209,7 @@ function sumUpAmount(items, transactionType){
 					if(result){/*  */
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
-							$("#depAccountForm")[0].reset();
+							$("#enterDepositForm")[0].reset();
 							getTransactionHistory(self.account_details().id);
 						}, 3000);
 					}else{
