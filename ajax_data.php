@@ -155,12 +155,12 @@ if(isset($_POST['origin'])){
 		case 'loan_account':
 			$loanProductObj = new LoanProduct();
 			$productFeeObj = new LoanProductFeen();
-			$memberObj = new Member();
+			$guarantorObj = new Guarantor();
 			$saccoGroupObj = new SaccoGroup();
 			
 			$data['products'] = $loanProductObj->findAll();
 			$data['productFees'] = $productFeeObj->findAllLPFDetails();
-			$data['guarantors'] = $memberObj->findGuarantors();
+			$data['guarantors'] = $guarantorObj->findGuarantors();
 			
 			$members = $memberObj->findSelectList();
 			$groups = $saccoGroupObj->findSelectList();
@@ -199,6 +199,31 @@ if(isset($_POST['origin'])){
 				$loanAccountTransaction = new LoanRepayment();
 				$transactonHistory = $loanAccountTransaction->getTransactionHistory($loanAccountId);
 				echo json_encode($transactonHistory);
+			}
+		break;
+		case 'loan_application_details':
+			if(isset($_POST['id'])&&$_POST['id']){
+				$loanAccountId = $_POST['id'];
+				if(isset($_POST['clientType'])&&isset($_POST['clientId'])){
+					$clientId = $_POST['clientId'];
+					if($_POST['clientType'] == 1){
+						$personObj = new Person();
+						$memberObj = new Member();
+						$guarantorObj = new Guarantor();
+						$collateralObj = new LoanCollateral();
+						$data['guarantors'] = $guarantorObj->findGuarantors($loanAccountId);
+						$data['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$loanAccountId);
+						$memberData = $memberObj->findById($clientId);
+						$data['member_details'] = $personObj->findById($memberData['personId']);
+						$data['relatives'] = $personObj->findPersonRelatives($memberData['personId']);
+						$data['employmentHistory'] = $personObj->findPersonEmploymentHistory($memberData['personId']);
+					}
+					if($_POST['clientType'] == 2){
+						$saccoGroupObj = new SaccoGroup();
+						$data['groupMembers'] = $saccoGroupObj->findSaccoGroupMembers($clientId);
+					}
+				}
+				echo json_encode($data);
 			}
 		break;
 		default:

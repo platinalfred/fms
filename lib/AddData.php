@@ -20,7 +20,6 @@ if(isset($_POST['origin'])){
 			if(isset($data['id'])){
 				$loanAccount = new LoanAccount();
 				unset($data['origin']);
-				$data['status'] = 3;
 				$data['approvalDate'] = time();
 				$data['approvedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				$output = $loanAccount->updateLoanAccount($data);
@@ -197,7 +196,7 @@ if(isset($_POST['origin'])){
 						
 						foreach($guarantors as $guarantorDataItem){
 							$loanAccountGuarantor['loanAccountId'] = $loanAccountId;
-							$loanAccountGuarantor['guarantorId'] = $guarantorDataItem['id'];
+							$loanAccountGuarantor['memberId'] = $guarantorDataItem['id'];
 							$loanAccountGuarantor['dateCreated'] = time();
 							$loanAccountGuarantor['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 							$loanAccountGuarantor['dateModified'] = time();
