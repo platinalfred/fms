@@ -19,23 +19,15 @@
 					</select -->
 				  </div>
 				</div>
-				<div id="add_loan_account" class="modal fade" aria-hidden="true">
-					<div class="modal-dialog modal-lg">
-						<div class="modal-content">
-							<div class="modal-body">
-								<?php include_once("add_loan_account.php");?>
-							</div>
-						</div>
-					</div>
-				</div>
+				<?php include_once("add_loan_account.php");?>
 				<div class="ibox-content">
 					<ul class="nav nav-tabs">
-						<li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-list"></i> Applications</a></li>
+						<li><a data-toggle="tab" href="#tab-1"><i class="fa fa-list"></i> Applications</a></li>
 						<li><a data-toggle="tab" href="#tab-2" class="text-danger"><i class="fa fa-times"></i> Rejected</a></li>
-						<li><a data-toggle="tab" href="#tab-3"><i class="fa fa-check-circle-o"></i> Approved</a></li>
+						<li class="active"><a data-toggle="tab" href="#tab-3"><i class="fa fa-check-circle-o"></i> Approved</a></li>
 					</ul>
 					<div class="tab-content">
-						<div id="tab-1" class="tab-pane active">
+						<div id="tab-1" class="tab-pane">
 							<div class="full-height-scroll">
 								<div class="table-responsive">
 									<table id="applications" class="table table-striped table-bordered dt-responsive nowrap">
@@ -77,7 +69,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="tab-3" class="tab-pane">
+						<div id="tab-3" class="tab-pane active">
 							<div class="full-height-scroll">
 								<div class="table-responsive">
 									<table id="approved" class="table table-striped table-bordered dt-responsive nowrap">
@@ -140,10 +132,9 @@
 								<!-- /ko -->
 								</li>
 							</ul>
-							<div class="row m-b-lg">
-								<div class="hr-line-dashed"></div>
-								<div class="col-md-6"></div>
-								<div class="col-md-6"></div>
+							<div class="row m-b-lg" data-bind="if: status==2">
+								<strong>Comments</strong>
+								<p data-bind="text: approvalNotes"></p>
 							</div>
 							<div class="row m-b-lg" data-bind="if: $parent.transactionHistory().length>0">
 								<div class="table-responsive">
@@ -300,7 +291,7 @@
 				}
 		  },
 		  "initComplete": function(settings, json) {
-				$(".table tbody>tr:first").trigger('click');
+				$(".table#approved tbody>tr:first").trigger('click');
 		  },
 		  "footerCallback": function (tfoot, data, start, end, display ) {
             var api = this.api(), cols = [5,6,7];
@@ -383,7 +374,7 @@
 		if(row.length == 0){
 			row = $(this).closest("tr").prev();
 		}
-		//||console.log(row);//
+		loanAccountModel.getLoanAccountDetails();
 		edit_data(dTable['applications'].row(row).data(), "loanAccountApprovalForm"); 
 	});
 

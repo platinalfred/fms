@@ -18,6 +18,9 @@
 		self.transactionHistory = ko.observableArray(); //for the account transacation history display
 		self.account_details = ko.observable();
 		
+		//this gets loaded when the loan is for approval
+		self.loan_account_details = ko.observable();
+		
 		//loan repayment section form
 		self.payment_amount = ko.observable(0);
 		self.comments = ko.observable("");
@@ -25,6 +28,7 @@
 		//loan account approval section
 		self.amountApproved = ko.observable(0);
 		self.approvalNotes = ko.observable();
+		self.status = ko.observable(3);
 		
 		//guarantors 
 		self.guarantors = ko.observableArray();
@@ -174,7 +178,7 @@
 					penaltyRateChargedPer : self.loanProduct()?self.loanProduct().penaltyRateChargedPer:undefined,
 					penaltyRate : self.loanProduct()?self.loanProduct().penaltyRate:undefined,
 					linkToDepositAccount : self.loanProduct()?self.loanProduct().linkToDepositAccount:undefined,
-					guarantors:self.guarantors(),//the guarantors
+					guarantors:self.selectedGuarantors(),//the chosen guarantors
 					feePostData:self.filteredLoanProductFees(), //the applicable fees
 					collateral:self.addedCollateral(), //the applicable fees
 					origin : "loan_account"
@@ -231,8 +235,9 @@
 				data:{
 					origin:"approve_loan",
 					id:(self.account_details()?self.account_details().id:undefined),
-					amountApproved: self.amountApproved(),
-					approvalNotes: self.approvalNotes()
+					amountApproved: self.status()==3?self.amountApproved():undefined,
+					approvalNotes: self.approvalNotes(),
+					status: self.status()
 				},
 				url: "lib/AddData.php",
 				success: function(response){
@@ -243,10 +248,28 @@
 							$("#loanAccountApprovalForm")[0].reset();
 							dTable['applications'].ajax.reload();
 							dTable['approved'].ajax.reload();
-							dTable['pending'].ajax.reload();
+							dTable['rejected'].ajax.reload();
 						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while approving: \n"+response ,"fail");
+					}
+				}
+			});
+		};
+		self.getLoanAccountDetails = function(){
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				data:{
+					origin:"loan_application_details",
+					id:(self.account_details()?self.account_details().id:undefined),
+					clientId: (self.account_details()?self.account_details().clientId:undefined),
+					clientType: (self.account_details()?self.account_details().clientType:undefined)
+				},
+				url: "ajax_data.php",
+				success: function(response){
+					if(response){
+						self.loan_account_details(response);
 					}
 				}
 			});
@@ -259,4 +282,4 @@
 	$("#loanAccountForm").validate({submitHandler: loanAccountModel.save});
 	$("#loanPaymentForm").validate({submitHandler: loanAccountModel.makePayment});
 	$("#loanAccountApprovalForm").validate({submitHandler: loanAccountModel.approveLoan});
-	</script>
+</script>

@@ -3,15 +3,15 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class LoanCollateral extends Db {
 	protected static $table_name  = "loan_collateral";
-	protected static $table_fields = array("id", "loanAccountId", "itemName", "attachmentUrl", "description", "dateCreated", "createdBy", "dateModified", "modifiedBy");
+	protected static $table_fields = array("id", "loanAccountId", "itemName", "description", "itemValue", "attachmentUrl", "dateCreated", "createdBy", "dateModified", "modifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
 		return !empty($result) ? $result:false;
 	}
 	
-	public function findAll(){
-		$result_array = $this->getarray(self::$table_name, "", "", "");
+	public function findAll($where = ""){
+		$result_array = $this->getarray(self::$table_name, $where, "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	
