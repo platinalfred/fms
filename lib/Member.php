@@ -14,7 +14,7 @@ class Member extends Db {
 		return !empty($result) ? $result:false;
 	}
 	public function findMemberDetails($id){
-		$result = $this->getrec(self::$table_name." m, person p", "p.id=".$id." AND m.personId=p.id", "", "");
+		$result = $this->getrec("person p, member m", "m.id=".$id." AND m.personId=p.id", "", "");
 		return !empty($result) ? $result:false;
 	}
 	public function findPersonId($id){

@@ -185,7 +185,8 @@ $(document).ready(function(){
 		self.member_employers2 = ko.observableArray();
 	}
 	var memberTableModel = new MemberTable();
-  
+	$("#subTable").DataTable({ dom: "lfrtipB" });
+			  
   /* PICK DATA FOR DATA TABLE  */
 	var handleDataTableButtons = function() {
 		  if ($("#member_table").length ) {
@@ -218,7 +219,7 @@ $(document).ready(function(){
 					{ data: 'id_number'},
 					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}}<?php 
 					if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>,
-					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <a href="member_details.php?id='+data+'" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a> ';}} <?php } ?> 
+					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <a href="member_details.php?id='+data+'" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> more </a> ';}} <?php } ?> 
 					] ,
 			  buttons: [
 				{
@@ -285,6 +286,41 @@ $(document).ready(function(){
 			}
 		});
 	}
+	function showStatusMessage(message='', display_type='success'){
+		new PNotify({
+			  title: "Alert",
+			  text: message,
+			  type: display_type,
+			  styling: 'bootstrap3',
+			  sound: true,
+			  hide:true,
+			  buttons: {
+				closer_hover: false,
+			},
+			confirm: {
+				confirm: true,
+				buttons: [{
+					text: 'Ok',
+					addClass: 'btn-primary',
+					click: function(notice) {
+						notice.remove();
+					}
+				},
+				null]
+			},
+			animate: {
+				animate: true,
+				in_class: 'zoomInLeft',
+				out_class: 'zoomOutRight'
+			},
+			  nonblock: {
+				  nonblock: true
+			  }
+			  
+		  });
+		
+	}
+	
 	
 });
 </script>

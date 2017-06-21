@@ -139,10 +139,10 @@ class Db{
 					}
 					
 				}
-				
+				$this->setSessions("user_id", $results['id']);
+				return $_SESSION;
 			}  
-			$this->setSessions("user_id", $results['id']);
-			return $_SESSION;
+			
 		}
 		return false;
 	}

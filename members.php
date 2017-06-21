@@ -3,6 +3,7 @@ $needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knock
 $page_title = "Members";
 include("include/header.php"); 
 require_once("lib/Libraries.php");
+print_r($_SESSION);
 $member = new Member();
 ?>
 	<div class="row">

@@ -7,11 +7,32 @@ require_once("lib/Reports.php");
 $member = new Member();
 $accounts = new Accounts();
 $shares = new Shares();
+$client  = array();
 $member_data  = $member->findMemberDetails($_GET['id']);
 $names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_data['othername']; 
-$data['relatives'] = $person->findPersonRelatives($_GET['id']);
+$data['relatives'] = $person->findPersonRelatives($member_data['id']);
+$client['clientType'] = 1;
+$client['clientNames'] = $names;
+$client['id'] = $_GET['id'];
+if(!$member_data){
+	echo "<p>No member details found</p>";
+	return;
+}
 ?>
-
+<style>
+p{
+	margin: 0 0 3px;
+}
+</style>
+<div id="add_loan_account" class="modal fade" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-body">
+				<?php include_once("add_loan_account.php");?>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="row">
 	<div class="col-lg-12">
 		<div class="wrapper wrapper-content animated fadeInUp">
@@ -20,7 +41,7 @@ $data['relatives'] = $person->findPersonRelatives($_GET['id']);
 				<div class="ibox-title">
 					<h5><?php echo $names; ?> <small> - <?php echo $member->findPersonNumber($member_data['id']);?> </small></h5>
 					<div class="ibox-tools">
-						<a href="#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+						<a href="#" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Edit </a>
 						<a href="#" class="btn btn-danger btn-sm" style="color:#fff;"><i class="fa fa-trash"></i> Delete</a>
 					</div>
 				</div>
@@ -51,7 +72,7 @@ $data['relatives'] = $person->findPersonRelatives($_GET['id']);
 										</div>
 										<div class="modal-footer">
 										  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-										  <button type="submit" class="btn btn-primary photo_upload">Upload a Photo</button>
+										  <button type="submit" class="btn btn-info photo_upload">Upload a Photo</button>
 										</div>
 									</form>
 									
@@ -137,34 +158,25 @@ $data['relatives'] = $person->findPersonRelatives($_GET['id']);
 					<div class="clearboth"></div>
 					<div class="col-md-12 col-sm-12 col-xs-12 " style="border-top:1px solid #09A; padding-top:10px;">
 						<p>
-							<a  href="add_loan_account.php?id=<?php echo $member_data['personId']; ?>&type=1" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Apply for a loan</a>
-							<a  href="?id=<?php echo  $member_data['personId']; ?>&task=subscription.add" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Subscribe</a>
-							<a  href="?id=<?php echo  $member_data['personId']; ?>&task=shares.add" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Buy Shares</a>
-							<a  href="add_deposit_account.php?id=<?php echo  $member_data['personId']; ?>&type=1" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Deposit</a>
-							<a  href="?id=<?php echo  $member_data['personId']; ?>&task=withdraw.add" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Withdraw</a>
-                        </p>
-					</div>
-					<div class="col-md-12 col-sm-12 col-xs-12  " >
-						<p class="pull-right">
-							<a  href="?id=<?php echo  $_GET['id']; ?>&view=client_loans" class="btn btn-info btn-sm"> <i class="fa fa-folder-open-o"></i> View Loans</a>
+							<a  href="#add_loan_account" class="btn btn-sm btn-info" data-toggle="modal" class="btn btn-info btn-sm"> <i class="fa fa-plus"></i> Apply for a loan</a>
 							<a  href="?id=<?php echo  $_GET['id']; ?>&view=mysubscriptions" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Subscriptions</a>
-							<a  href="?id=<?php echo  $_GET['id']; ?>&view=mysavings" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> My Savings</a>
+							<a  href="?id=<?php echo  $_GET['id']; ?>&view=myshares" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Shares</a>
 							<a  href="?id=<?php echo  $_GET['id']; ?>&view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-calculator"></i> Ledger</a>
                         </p>
 					</div>
 					<div class="clearboth"></div>
-					
+					<?php 
+					if(isset($_GET['task'])){
+						$task = $_GET['task']; 
+						$forms = new Forms($task);
+					}elseif(isset($_GET['view'])){
+						$view = $_GET['view'];
+						$reports = new Reports($view);
+					}
+					?>
 				</div>
 			
-				<?php 
-				if(isset($_GET['task'])){
-					$task = $_GET['task']; 
-					$forms = new Forms($task);
-				}elseif(isset($_GET['view'])){
-					$view = $_GET['view'];
-					$reports = new Reports($view);
-				}
-				?>
+				
 				
 			</div>
 		</div>

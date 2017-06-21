@@ -69,321 +69,8 @@ Class Reports{
 		<p>This is a test report</p>
 		<?php	
 	}
-	public function clientLoan(){
-		$member = new Member();
-		$accounts = new Accounts();
-		$loans = new Loans();
-		$member_data = $member->findById($_GET['member_id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
-		$loan_data = $loans->findById($_GET['lid']); 
-		$interest = 0;
-		if($loan_data['interest_rate'] > 0){
-			$interest = ($loan_data['loan_amount'] * ($loan_data['interest_rate']/100));
-		}
-		$payments_sum = $loans->findAmountPaid("loan_id = {$_GET['lid']}");
-		$defaults_sum = $loans->findDefaultAmount("`loan`.`id` = {$_GET['lid']}");
-		$default_days = $loans->findDefaultDays("`loan`.`id` = {$_GET['lid']}");
-		?>
-		<div class="col-md-12 col-sm-12 col-xs-12">
-			<div class="x_panel">
-				<div class="x_title">
-					<h2>Loan <small> <?php echo $loan_data['loan_number']; ?>  details</small></h2>
-					<div class="clearfix"></div>
-				</div>
-				<div class="x_content">
-					<div class="col-md-3 col-sm-12 col-xs-12 form-group">
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".add_document"><i class="fa fa-plus"></i> Attach  Loan Documents</button> 
-						<br/>
-						<div class="col-md-12 col-sm-12 col-xs-12 details">
-							
-							<?php 
-							$loan_documents = $loans->findLoanDocuments($_GET['lid']);
-							if($loan_documents){ ?>
-								<h2 class="x_title">Loan Documents</h2>
-								<?php
-								foreach($loan_documents as $single){
-									?>
-									<div class="col-md-12 col-sm-12 col-xs-12">
-										<a href="<?php $single['doc_path']; ?>"><i class="fa fa-file"></i> <?php echo $single['name']; ?></a>
-									</div>
-									<?php 
-								}
-							}
-							?>
-						</div>
-						<div class="modal fade add_document" tabindex="-1" role="dialog" aria-hidden="true">
-							<div class="modal-dialog modal-sm">
-							  <div class="modal-content">
-									<form method="post" action="doc_upload.php" id="document">
-										<div class="modal-header">
-										  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-										  </button>
-										  <h4 class="modal-title" id="myModalLabel2">Attach document</h4>
-										</div>
-										<div class="modal-body">
-											<input type="hidden" name="add_document" >
-											  <input type="hidden" name="loan_id" value="<?php echo $_GET['lid']; ?>">
-											  <div class="item form-group">
-												<label class="control-label col-md-3 col-sm-3 col-xs-12" for="comments">Name 
-												</label>
-												<div class="col-md-12 col-sm-12 col-xs-12">
-												  <input type="text" name="name">
-												</div>
-											  </div>
-											  <div style="clear:both;"></div>
-											  <div class="item form-group">
-												<label class="control-label col-md-3 col-sm-3 col-xs-12" for="comments">Comment 
-												</label>
-												<div class="col-md-12 col-sm-12 col-xs-12">
-												  <textarea id="comments" required="required" name="description" class="form-control col-md-12 col-xs-12"></textarea>
-												</div>
-											  </div>
-											  <div style="clear:both;"></div>
-											  <br/>
-											  <div class="item form-group">
-												<input id="myFileInput" type="file" name="file" accept="image/*;capture=camera">
-											   </div>
-											  <div style="clear:both;"></div>
-										</div>
-										
-										<div class="modal-footer">
-										  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-										  <button type="submit" class="btn btn-primary upload_document">Upload</button>
-										</div>
-									</form>
-									
-							  </div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-9 col-sm-12 col-xs-12 form-group">
-						<div class="table-responsive">
-							<table class="table table-stripped">
-								<tr>
-									<th>Loan Type</th><th>Loan Date</th><th>Loan Amount</th><th>Interest</th><th>Total PayBack</th><th>Amount Paid</th>
-								</tr>
-								<tr>
-									<td><?php echo $loans->findLoanType($loan_data['loan_type']); ?></td>
-									<td><?php echo date("j F, Y", strtotime($loan_data['loan_date'])); ?></td>
-									<td><?php echo number_format($loan_data["loan_amount"],2,".",","); ?></td>
-									<td><?php echo number_format($interest,2,".",","); ?></td>
-									<td><?php echo number_format(($loan_data['loan_amount'] + $interest),2,".",","); ?></td>
-									<td><?php echo number_format($payments_sum,2,".",","); ?></td>
-								</tr>
-								<tr>
-									<th>End Date</th><th>Loan Duration</th><th>Daily Default Rate</th><th>Default Days</th><th>Default Amount</th><th>Balance</th>
-								</tr>
-								<tr>
-									<td><?php echo date("F j, Y", strtotime($loan_data['loan_end_date'])); ?></td>
-									<td><?php $months = round((($loan_data['loan_duration']>0)?($loan_data['loan_duration']/30):0),1); echo $months; ?> month<?php echo $months==1?"":"s"; ?></td>
-									<td><?php echo number_format($loan_data["daily_default_amount"],2,".",","); ?>%</td>
-									<td><?php echo number_format($default_days); ?></td>
-									<td><?php echo number_format($defaults_sum,2,".",","); ?></td>
-									<td><?php echo number_format($loan_data['loan_amount'] + $interest + $defaults_sum - $payments_sum,2,".",","); ?></td>
-								</tr>
-								<tr>
-									<th>Comments</th>
-									<th colspan="5"><?php  echo $loan_data["comments"]; ?></th>
-								</tr>
-							</table>
-						</div>
-					</div>
-					
-					<div class="modal fade add_repayment" tabindex="-1" role="dialog" aria-hidden="true">
-						<div class="modal-dialog ">
-							<div class="modal-content">
-								<div class="modal-header">
-								  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-								  </button>
-								  <h4 class="modal-title" id="myModalLabel2">Add Loan Repayment</h4>
-								</div>
-								<form class="form-horizontal form-label-left"   novalidate>
-									<input type="hidden" name="loan_id" id="loan_id" value=""/>
-									<input type="hidden" name="loan_repayment"  value="loan_repayment"/>
-									<input type="hidden" name="branch_id"  value="<?php echo $_SESSION['branch_id']; ?>"/>
-									<input type="hidden" name="person_id"  value="<?php echo $member_data['person_id']; ?>"/>
-									
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Loan Being Repaid<span class="required">*</span>
-										</label>
-										<br/>
-										<div class="col-md-6 col-sm-6 col-xs-12">
-											<input type="tel" id="telephone" readonly = "readonly" name="" value="<?php echo $loans->findLoanType($loan_data['loan_type']); ?>" class="form-control col-md-7 col-xs-12">
-											<input type="hidden" value="<?php echo $loan_data['loan_type']; ?>" name="loan_type">
-										</div>
-									</div>		
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Amount<span class="required">*</span>
-										</label>
-										<div class="col-md-6 col-sm-6 col-xs-12">
-										  <input type="money"  id="loan_repayment" name="amount" required="required"  class="form-control col-md-7 col-xs-12">
-										  <p id="number_words"></p>
-										  <input type="hidden"  class="amount_description" name="amount_description"  class="form-control col-md-7 col-xs-12">
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Deposited By<span class="required">*</span>
-										</label>
-										<div class="col-md-6 col-sm-6 col-xs-12">
-										  <input type="text"  name="transacted_by" required="required"  class="form-control col-md-7 col-xs-12">
-										  <p id="number_words"></p>
-										</div>
-									</div>
-									
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12" for="comments">Justification 
-										</label>
-										<div class="col-md-6 col-sm-6 col-xs-12">
-										  <textarea id="comments"  name="comments" class="form-control col-md-7 col-xs-12"></textarea>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Receiving Staff 
-										</label>
-										<div class="col-md-6 col-sm-6 col-xs-12">
-										  <input type="tel" id="telephone" readonly = "readonly" name="" value="<?php echo $member->findMemberNames($_SESSION['person_id']); ?>"  class="form-control col-md-7 col-xs-12">
-										  <input type="hidden" value="<?php echo $_SESSION['person_id']; ?>" name="receiving_staff">
-										</div>
-									</div>
-									<div class="ln_solid"></div>
-									<div class="form-group">
-										<div class="col-md-6 col-md-offset-3">
-										  <button type="button" class="btn btn-primary">Cancel</button>
-										  <button id="send" type="button" class="btn btn-success save_data">Pay Loan</button>
-										</div>
-									</div>
-								</form>						
-							</div>
-						</div>
-					</div>
-				
-					<div class="col-md-12 col-sm-12 col-xs-12 form-group" style="border-top:1px solid #09A; padding-top:10px;">
-						<ul class="nav navbar-left panel_toolbox">
-						  <li>
-							<a data-toggle="modal" data-id="<?php echo $_GET['lid']; ?>" title="Add this item" class="open-AddRepaymentDialog btn btn-primary"data-target=".add_repayment"  href="">Add Repayment</a>
-						</ul>
-					</div>
-					<?php 
-					$loan_repaymens = $loans->findPayments($_GET['lid']);
-					if($loan_repaymens){ ?>
-						<div class="col-md-12 col-sm-12 col-xs-12 form-group" style="border-top:1px solid #09A; padding-top:10px;">
-							<div class="x_panel">
-							  <div class="x_title">
-								<h2>Loan Payment History</small></h2>
-								<div class="clearfix"></div>
-							  </div>
-							  <div class="x_content">
-									<div class="table-responsive">
-									  <table id="datatable-buttons" class="table table-striped jambo_table">
-										<thead>
-										  <tr class="headings">
-											
-											<?php 
-											$header_keys = array("Branch", "Loan Number", "Amount", "Date Paid", "Receiving Staff","Comments");
-											foreach($header_keys as $key){ ?>
-												<th><?php echo $key; ?></th>
-												<?php
-											}
-											?>
-											
-											</th>
-										  </tr>
-										</thead>
 
-										<tbody>
-											<?php 
-											$total_amount_paid = 0;
-											foreach($loan_repaymens as $single){
-												?>
-												
-												<tr class="even pointer ">
-													<td class=""><?php echo $single['branch_number']; ?></td>
-													<td class=""><?php echo $loans->findLoanNumber($single['loan_id']); ?> </td>
-													<td class=""><?php $total_amount_paid += $single['amount']; echo number_format($single['amount'],2,".",","); ?> </td>
-													<td class="a-right a-right"><?php echo date("j F, Y", strtotime($single['transaction_date'])); ?></td>
-													<td class="a-right a-right"><?php echo $member->findMemberNames($single['recieving_staff']); ?></td>
-													<td class="a-right a-right"><?php echo $single['comments']; ?></td>
-												</tr>
-												<?php
-											}
-											?>
-										</tbody>
-										<tfoot>
-												<tr class="even pointer ">
-													<th colspan="2">Total</th>
-													<th><?php echo number_format($total_amount_paid,2,".",","); ?> </th>
-													<td colspan="3">&nbsp;</td>
-												</tr>
-										</tfoot>
-									  </table>
-									</div>
-							  </div>
-							</div>
-						</div>
-					<?php 
-					}
-					
-					?>
-				</div>
-			</div>
-		</div>
-		<?php
-	}
-	public function clientTransactionHistory(){ 
-		$accounts  = new Accounts();
-		//This will prevent data tables js from showing on every page for speed increase
-		$show_table_js = true;
-		?>
-		<div class="page-title" >
-		  <div class="title_left" style="width:35%;">
-			<h3>Transactions <small>your transactions</small></h3> 
-		  </div>
-		  <div class="title_right" style="width:55%;">
-			<div class="col-md-12 col-sm-12 col-xs-12 form-group">
-				<div id="reportrange" class="pull-left" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
-				  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-				  <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
-				</div>
-				<span style="margin-top: 40px; margin-left:10px;">Select a transaction period</span>
-			</div>
-		  </div>
-		</div>
-		<div class="clearfix"></div>
-		<div class="row">
-		  <div class="col-md-12 col-sm-12 col-xs-12">
-			<div class="x_panel">
-			  <div class="x_content">
-				<div class="table-responsive">
-				  <table id="transactions_table" class="table table-striped">
-					<thead>
-					  <tr class="headings">
-						<?php 
-						$header_keys = array("Account Number", "Transaction Type", "Amount", "Transaction Date", "Transacted By");
-						foreach($header_keys as $key){ ?>
-							<th><?php echo $key; ?></th>
-							<?php
-						}
-						?>
-					  </tr>
-					</thead>
-					<tbody>
-					</tbody>
-					<!--
-					<tfoot>
-							<tr>
-								<th colspan="2">Total (UGX)</th>
-								<th>&nbsp;</th>
-								<th  colspan="2">&nbsp;</th>
-							</tr>
-					</tfoot>-->
-				  </table>
-				</div>
-			  </div>
-			</div>
-		  </div>
-		</div>
-		<?php
-	}
+
 	public function ledger(){ 
 		$loan = new Loans();
 		$expense = new Expenses();
@@ -993,25 +680,36 @@ Class Reports{
 		$member = new Member();
 		$accounts = new Accounts();
 		$subscription = new Subscription();
-		$member_data = $member->findById($_GET['member_id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
-		$all_client_subscriptions = $subscription->findMemberSubscriptions($member_data['person_id']); 
+		if(isset($_POST['tbl']) && $_POST['tbl'] == "add_subscription"){
+			if($subscription->addSubscription($_POST)){
+				$msg = "Subscription Successful added";
+			}else{
+				$msg = "Failed to add subscrition";
+			}
+		}
+	
+		$member_data = $member->findById($_GET['id']);
+		$all_client_subscriptions = $subscription->findMemberSubscriptions($member_data['id']); 
 		
-		?>
-		 <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2><?php echo $account_names['firstname']." ".$account_names['lastname']; ?> <small> Subscriptions </small></h2>
-                    <div class="clearfix"></div>
-                  </div>
+		include("subscribe.php"); ?>
+		 <div class="row">
+			<div class="ibox">
+			  <div class="ibox-title">
+				<h2> <small>My Subscriptions </small></h2>
+				<div class="ibox-tools">
+					<a data-toggle="modal" class="btn btn-sm btn-primary" href="#add_subscription"><i class="fa fa-plus"></i> Subscribe</a>
+				</div>
+				<div class="clearfix"></div>
+				<span class="label-warning"><?php echo @$msg; ?></span>
+			  </div>
 
-                  <div class="x_content">
-						<?php 
-						if($all_client_subscriptions){  ?>
-							<div class="table-responsive">
-							  <table id="datatable-buttons" class="table table-striped">
-								<thead>
-								  <tr class="headings">
+			  <div class="ibox-content">
+					<?php 
+					if($all_client_subscriptions){  ?>
+						<div class="table-responsive">
+						  <table id="subTable" class="table table-striped">
+							<thead>
+								<tr class="headings">
 									<?php 
 									$header_keys = array("Date Subscribed", "Year", "Amount");
 									foreach($header_keys as $key){ ?>
@@ -1019,48 +717,49 @@ Class Reports{
 										<?php
 									}
 									?>
-								  </tr>
-								</thead>
+								</tr>
+							</thead>
 
-								<tbody>
-									<?php
-									$subscription_sum = 0;
-									foreach($all_client_subscriptions as $single){ 
-										?>
-										<tr class="even pointer " >
-											<td class="a-right a-right "><?php echo date("j F, Y", strtotime($single['date_paid'])); ?></td>
-											<td class=" "><?php echo $single['subscription_year']; ?> </td>
-											<td class=" "><?php $subscription_sum += $single['amount']; echo number_format($single['amount'],2,".",","); ?></td>
-										</tr>
-										<?php
-									}
+							<tbody>
+								<?php
+								$subscription_sum = 0;
+								foreach($all_client_subscriptions as $single){ 
 									?>
-								</tbody>
-								<tfoot>
-									<tr class="headings">
-										<th colspan="2">Total</th>
-										<th class=" "><?php echo number_format($subscription_sum,2,".",","); ?></th>
+									<tr class="even pointer " >
+										<td class="a-right a-right "><?php echo date("j F, Y",$single['datePaid']); ?></td>
+										<td class=" "><?php echo $single['subscriptionYear']; ?> </td>
+										<td class=" "><?php $subscription_sum += $single['amount']; echo number_format($single['amount'],2,".",","); ?></td>
 									</tr>
-								</tfoot>
-							  </table>
-							</div>
-						<?php 
-						}else{
-							echo "This member has not yet subscribed, please add subscription.";
-						}
-						?>
+									<?php
+								}
+								?>
+							</tbody>
+							<tfoot>
+								<tr class="headings">
+									<th colspan="2">Total</th>
+									<th class=" "><?php echo number_format($subscription_sum,2,".",","); ?></th>
+								</tr>
+							</tfoot>
+						  </table>
+						</div>
+					<?php 
+					}else{
+						echo "This member has not yet subscribed, please add subscription.";
+					}
+					?>
                   </div>
-                </div>
-              </div>
+				</div>
+		  </div>
+		  
 		<?php
 	}
 	public function viewMemberShares(){
 		$member = new Member();
 		$accounts = new Accounts();
 		$shares = new Shares();
-		$member_data = $member->findById($_GET['member_id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
-		$all_client_shares = $shares->findMemberShares($member_data['person_id']); 
+		$member_data = $member->findById($_GET['id']);
+		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['personId']);
+		$all_client_shares = $shares->findMemberShares($member_data['personId']); 
 		?>
 		 <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">

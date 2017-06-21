@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Subscription extends Db {
 	protected static $table_name  = "subscription";
-	protected static $db_fields = array("id", "amount", "person_number", "subscription_year", "paid_by", "received_by", "date_paid");
+	protected static $db_fields = array("id", "amount", "memberId", "subscriptionYear", "receivedBy", "datePaid", "modifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -15,7 +15,7 @@ class Subscription extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findMemberSubscriptions($pno){
-		$result_array = $this->getarray(self::$table_name, "", "personId=".$pno, "");
+		$result_array = $this->getarray(self::$table_name, "", "id=".$pno, "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findSubscriptionAmount($id){
@@ -27,7 +27,7 @@ class Subscription extends Db {
 		return !empty($result) ? $result['amount'] : false;
 	}
 	public function isSubscribedForYear($pno, $year){
-		$result = $this->getrec(self::$table_name, "subscription_year=".$year." AND person_number=".$pno, "", "");
+		$result = $this->getrec(self::$table_name, "subscriptionYear=".$year." AND memberId=".$pno, "", "");
 		if($result > 0){
 			return true;
 		}

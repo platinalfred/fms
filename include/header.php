@@ -2,6 +2,9 @@
 session_start();
 require_once("lib/Libraries.php"); 
 $person = new Person();
+if(!isset($_SESSION['Logged'])){
+	header("Location:logout.php");
+}
 ?>
 <!DOCTYPE html>
 <html>

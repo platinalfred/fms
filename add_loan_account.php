@@ -1,10 +1,4 @@
-		<?php 
-		if(isset($_GET['id']) && $_GET['type'] == 1){
-			$member = new Member();
-			$client  = $member->findPersonList($_GET['id']);
-			
-		}
-		?>
+		
 			<div class="row" id="loan_account_form">
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
