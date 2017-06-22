@@ -34,7 +34,8 @@
 										<thead>
 											<tr>
 												<?php 
-												$header_keys = array("Loan No", "Client", "Loan Product","Appn Date", "Amount Requested", "Approval");
+												$header_keys = array("Loan No", "Client", "Loan Product","Appn Date", "Amount Requested");
+												if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])) array_push($header_keys,"Approval");
 												foreach($header_keys as $key){ ?>
 													<th><?php echo $key; ?></th>
 													<?php
@@ -127,9 +128,11 @@
 								<!-- ko if: status==3-->
 									<a class="btn btn-info btn-sm" href='#make_payment-modal' data-toggle="modal"><i class="fa fa-edit"></i> Make Payment </a>
 								<!-- /ko -->
+								<?php if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])):?>
 								<!-- ko if: status==1-->
 									<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-edit"></i> Approve Loan </a>
 								<!-- /ko -->
+								<?php endif;?>
 								</li>
 							</ul>
 							<div class="row m-b-lg" data-bind="if: status==2">
@@ -160,7 +163,7 @@
 											<th>Total (UGX)</th>
 											<th>&nbsp;</th>
 											<th>&nbsp;</th>
-											<th data-bind="text: curr_format(parseInt(sumUpAmount($parent.transactionHistory(),2)))">&nbsp;</th>
+											<th data-bind="text: curr_format(parseInt(array_total($parent.transactionHistory(),2)))">&nbsp;</th>
 										</tfoot>
 									</table>
 								</div>
@@ -170,15 +173,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="make_payment-modal" class="modal fade" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-body">
-						<?php include_once("make_payment_modal.php");?>
-					</div>
-				</div>
-			</div>
-		</div>
+		<?php include_once("make_payment_modal.php");?>
 		<?php include_once("loan_approval_modal.php");?>
 	</div>	
 <?php 
@@ -186,6 +181,7 @@
  ?>
 <!-- Datatables -->
 <script>
+	var user_props = <?php echo json_encode($_SESSION); ?>;
 	var dTable = new Object();
 	$(document).ready(function() {
 	var handleDataTableButtons = function() {
@@ -202,8 +198,21 @@
 				{ data: 'clientNames'},
 				{ data: 'productName'},
 				{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} ,
-				{ data: 'id', render: function ( data, type, full, meta ) {  return '<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_me" data-toggle="modal"><i class="fa fa-edit"></i> Approve </a>';}}
+				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} 
+				<?php if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])){?>,
+				{ data: 'id', render: function ( data, type, full, meta ) {
+					var authorized =  false;
+					if(user_props['branch_credit']&&parseInt(full.requestedAmount)<1000001){
+						authorized = true;
+					}
+					if(user_props['management_credit']&&parseInt(full.requestedAmount)>1000000&&parseInt(full.requestedAmount)<5000001){
+						authorized = true;
+					}
+					if(user_props['executive_board']&&parseInt(full.requestedAmount)>5000000){
+						authorized = true;
+					}
+					return authorized?'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_me" data-toggle="modal"><i class="fa fa-edit"></i> Approve </a>':'';}}
+				<?php }?>
 				] ,
 		  buttons: [
 			{

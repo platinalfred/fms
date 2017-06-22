@@ -46,6 +46,12 @@
 														<td data-bind="text: outstanding_loan"></td>
 													</tr>
 												</tbody>
+												<tfoot>
+													<th>Total (UGX)</th>
+													<th data-bind="text: curr_format(parseInt(array_total($parent.loan_account_details().guarantors,2)">&nbsp;</th>
+													<th data-bind="text: curr_format(parseInt(array_total($parent.loan_account_details().guarantors,3)">&nbsp;</th>
+													<th data-bind="text: curr_format(parseInt(array_total($parent.loan_account_details().guarantors,4)"></th>
+												</tfoot>
 											</table>
 										</div>
 									</div>
@@ -64,13 +70,13 @@
 													<tr>
 														<td data-bind="text: itemName"></td>
 														<td data-bind="text: description"></td>
-														<td data-bind="text: itemValue"></td>
+														<td data-bind="text: curr_format(parseInt(itemValue))"></td>
 													</tr>
 												</tbody>
 												<tfoot>
 													<th>Total</th>
 													<th></th>
-													<th data-bind="text: curr_format(parseInt(sumUpAmount($parent.loan_account_details().collateral_items,2)))"></th>
+													<th data-bind="text: curr_format(parseInt(array_total($parent.loan_account_details().collateral_items,4)))"></th>
 												</tfoot>
 											</table>
 										</div>
@@ -84,14 +90,14 @@
 														<th>Names</th>
 														<th>Gender</th>
 														<th>Relationship</th>
-														<th>Number</th>
+														<th>Contact</th>
 														<th>Address</th>
 													</tr>
 												</thead>
 												<tbody data-bind="foreach: $parent.loan_account_details().relatives">
 													<tr>
 														<td data-bind="text: first_name + ' ' + last_name + ' ' + other_names"></td>
-														<td data-bind="text: gender==1?'Male':'Female'"></td>
+														<td data-bind="text: relative_gender==1?'Male':'Female'"></td>
 														<td data-bind="text: rel_type"></td>
 														<td data-bind="text: telephone"></td>
 														<td data-bind="text: address + ', ' + address2"></td>
@@ -142,30 +148,28 @@
 									  <div class="form-group" data-bind="with: account_details">
 										<label class="control-label col-sm-4">Approve/reject</label>
 										<div class="col-sm-4">
-											<label class="control-label text-danger"><input type="radio" name="status" value="2" data-bind="checked: $parent.status"/> Rejected</label>
+											<label class="control-label text-danger"><input type="radio" name="status" value="2" data-bind="checked: $parent.applicationStatus"/> Rejected</label>
 										</div>
 										<div class="col-sm-4">
-											<label class="control-label text-info"><input type="radio" name="status" value="3" data-bind="checked: $parent.status" required data-msg-required="Please select option"/> Approved</label>
+											<label class="control-label text-info"><input type="radio" name="status" value="3" data-bind="checked: $parent.applicationStatus" required data-msg-required="Please select option"/> Approved</label>
 										</div>
 									  </div>
-									<!-- ko if: status==3 -->
-									  <div class="form-group">
+									  <div class="form-group" data-bind="with: account_details">
 										<label class="control-label col-sm-4" for="amountApproved">Amount approved<span class="required">*</span></label>
 										<div class="col-sm-8">
-										  <input type="number"  id="amountApproved" name="amountApproved" class="form-control col-sm-7" data-bind='value: $parent.amountApproved, attr: {"data-rule-max":requestedAmount, "data-msg-max":"Amount cannot be greater than requested amount"}' data-msg-required="Enter approved amount" required>
+										  <input type="number"  id="amountApproved" name="amountApproved" class="form-control col-sm-7" data-bind='value: $parent.amountApproved, attr: {"data-rule-max":parseInt(requestedAmount), "data-msg-max":"Amount cannot be greater than requested amount "+requestedAmount}' data-msg-required="Enter approved amount" required>
 										</div>
 									  </div>
-									  <!-- /ko-->
-									  <div class="form-group" data-bind="if: status==3">
+									  <div class="form-group">
 										<label class="control-label col-sm-4"></label>
 										<div class="col-sm-8">
-											<i><span data-bind="text: getWords($parent.amountApproved())+' Uganda shillings only'"></span></i>
+											<i><span data-bind="text: getWords(amountApproved())+' Uganda shillings only'"></span></i>
 										</div>
 									  </div>
 									  <div class="form-group" data-bind="with: account_details">
 										<label class="control-label col-sm-4" for="textarea">Justification </label>
 										<div class="col-sm-8">
-										  <textarea id="approvalNotes"  name="approvalNotes" class="form-control" data-bind="value: $parent.approvalNotes" required data-msg-required="Justification is required"></textarea>
+										  <textarea id="approvalNotes"  name="approvalNotes" class="form-control" data-bind="value: approvalNotes" required data-msg-required="Justification is required"></textarea>
 										</div>
 									  </div>
 								  </div>

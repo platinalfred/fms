@@ -17,13 +17,12 @@ class LoanRepayment extends Db {
 	
 	public function getTransactionHistory($accountId = false){
 		$where = "";
-		if(!$accountId){
+		if($accountId){
 			$where = "`loanAccountId` = ".$accountId;
 		}
 		$result_array = $this->getarray(self::$table_name, $where, "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
-	
 	
 	public function addLoanRepayment($data){
 		$result = $this->addSpecial(self::$table_name, $data);

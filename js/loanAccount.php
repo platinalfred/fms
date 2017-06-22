@@ -28,7 +28,7 @@
 		//loan account approval section
 		self.amountApproved = ko.observable(0);
 		self.approvalNotes = ko.observable();
-		self.status = ko.observable(3);
+		self.applicationStatus = ko.observable(3);
 		
 		//guarantors 
 		self.guarantors = ko.observableArray();
@@ -235,9 +235,9 @@
 				data:{
 					origin:"approve_loan",
 					id:(self.account_details()?self.account_details().id:undefined),
-					amountApproved: self.status()==3?self.amountApproved():undefined,
+					amountApproved: self.applicationStatus()==3?self.amountApproved():undefined,
 					approvalNotes: self.approvalNotes(),
-					status: self.status()
+					status: self.applicationStatus()
 				},
 				url: "lib/AddData.php",
 				success: function(response){
