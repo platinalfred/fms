@@ -29,7 +29,7 @@ function addCommas(nStr){
 				
 				<div class="ibox">
 					<div class="ibox-title">
-						<h5>Add Member</h5>
+						<h1><strong>Add Member</strong></h1>
 						<div class="ibox-tools">
 							<a class="collapse-link">
 								<i class="fa fa-chevron-up"></i>
@@ -81,7 +81,7 @@ function addCommas(nStr){
 											</div>
 										</div>
 									</div>
-									<div class="col-lg-8">
+									<div class="col-lg-10">
 										<div class="col-sm-12">&nbsp;</div>
 											<div class="col-sm-12 no_padding">
 											<div class="form-group">
@@ -97,15 +97,29 @@ function addCommas(nStr){
 												</div>
 											</div>
 										</div>
-										<div class="col-sm-12 no_padding" style="margin-top:8px;margin-bottom:8px;">
+										<div class="col-sm-7 no_padding" style="margin-top:8px;margin-bottom:8px;">
 											<div class="form-group">
-												<div class="col-sm-3 no_padding"><label class="col-lg-12" >Gender</label></div>
-												<div class="col-sm-9">
+												<div class="col-sm-5 no_padding"><label class="col-lg-12" >Gender</label></div>
+												<div class="col-sm-7">
 													<label > <input name="gender" class="i-checks" type="radio" value="M" >Male</label>
 													<label > <input name="gender" class="i-checks" type="radio" value="F"> Female</label>
 												</div>
 											</div>											
 												
+										</div>
+										<div class="col-sm-5">
+											<div class="form-group">
+												<label class="col-sm-3 control-label no_padding">Marital Status</label>
+												<div class="col-sm-9">
+													<select class="form-control m-b" name="marital_status" >
+														<option >Please select</option>
+														<option value="Single">Single</option>
+														<option value="Married">Married</option>
+														<option value="Divorced">Divorced</option>
+														<option value="Windowed">Windowed</option>
+													</select>
+												</div>
+											</div>
 										</div>
 										<div class="col-sm-12 no_padding">
 											<div class="form-group">

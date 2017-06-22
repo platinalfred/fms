@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Shares extends Db {
 	protected static $table_name  = "shares";
-	protected static $db_fields = array("id", "amount", "personId",  "paid_by", "received_by", "date_paid");
+	protected static $db_fields = array("id", "amount", "memberId", "noShares", "paid_by", "recordedBy", "datePaid");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -15,7 +15,7 @@ class Shares extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findMemberShares($pno){
-		$result_array = $this->getarray(self::$table_name, "personId=".$pno, "", "");
+		$result_array = $this->getarray(self::$table_name, "memberId=".$pno, "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findSubscriptionAmount($id){
@@ -26,9 +26,15 @@ class Shares extends Db {
 		$result = $this->getfrec(self::$table_name, "amount", "year=".$id, "", "");
 		return !empty($result) ? $result['amount'] : false;
 	}
-	public function isSubscribedForYear($pno, $year){
-		$result = $this->getrec(self::$table_name, "subscription_year=".$year." AND person_number=".$pno, "", "");
-		if($result > 0){
+	
+	public function findShareRate(){
+		$result = $this->getrec("share_rate", "", "id DESC", "");
+		return !empty($result)? $result : false;
+	}
+	public function addShareRate($data){
+		$fields = array("amount", "date_added", "added_by");
+		$data['amount'] = $this->stripCommasOnNumber($data['amount']);
+		if($this->add("share_rate", $fields, $this->generateAddFields($fields, $data))){
 			return true;
 		}
 		return false;

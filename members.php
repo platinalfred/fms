@@ -3,7 +3,6 @@ $needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knock
 $page_title = "Members";
 include("include/header.php"); 
 require_once("lib/Libraries.php");
-print_r($_SESSION);
 $member = new Member();
 ?>
 	<div class="row">
@@ -146,8 +145,6 @@ $member = new Member();
 								<div class="col-lg-12" data-bind="with: member_details">
 									<strong>Comments</strong>
 									<p class="comments"  data-bind="text:comment">
-										Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-										tempor incididunt ut labore et dolore magna aliqua.
 									</p>
 								</div>
 								<hr/>

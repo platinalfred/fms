@@ -15,7 +15,7 @@
 								<form id="form" name="register_group" action="" method="post" class="wizard-big">
 									<input name ="receivedBy" type="hidden" value="<?php echo $_SESSION['personId']; ?>">
 									<input name ="modifiedBy" type="hidden" value="<?php echo $_SESSION['personId']; ?>">
-									<input name ="memberId" type="hidden" value="<?php echo $member_data['id']; ?>">
+									<input name ="memberId" type="hidden" value="<?php echo $_GET['id']; ?>">
 									<input name ="datePaid" type="hidden" value="<?php echo time(); ?>">
 									<input name ="tbl" type="hidden" value="add_subscription">
 									<fieldset>
@@ -24,7 +24,7 @@
 												<div class="form-group">
 													<label >Subscription Amount<span class="required">*</span>
 													</label>
-													<input type="number" onkeyup = "return curr_format(this);" name="amount"  required="required" class="form-control">
+													<input type="text"  name="amount"  required="required" class="form-control athousand_separator">
 												</div>
 												<div class="form-group">
 													<label  for="textarea">Subscription Year <span class="required">*</span>
@@ -67,7 +67,4 @@
 			</div>
 		</div>
 	</div>
-</div>
-<script>
-
-</script>         
+</div>      

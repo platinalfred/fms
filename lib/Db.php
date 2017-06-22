@@ -30,6 +30,13 @@ class Db{
 			exit();
 		}
 	}
+	function stripCommasOnNumber($a){
+		$b = str_replace(',','',$a);
+		if(is_numeric($b)){
+			$a = $b;
+		}
+		return $a;
+	}
 	//returns a count of records according to the custom query passed to the function
 	function countCustom($query){
 		$res  = $this->conn->query($query);
@@ -472,7 +479,7 @@ class Db{
 			if ($i < (count($fields) - 1)) $va = $va.",";
 		}
 		$ins = "INSERT INTO ".$table. " (".$fi.") VALUES (".$va.")";
-		//echo $ins;
+		echo $ins;
 		 $inse = $this->conn->query($ins);
 		if($inse){
 			

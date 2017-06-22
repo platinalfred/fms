@@ -3,6 +3,24 @@ require_once('lib/Libraries.php');
 $output = "";
 if(isset($_POST['tbl'])){
 	switch($_POST['tbl']){
+		case "add_share":
+			$data = $_POST;
+			$shares = new Shares();
+			if($shares->addShares($data)){
+				$output = "success";
+			}else{ 
+				$output = "Member Share could not be added. Please try again or contact admin for assistance!";
+			}
+		break;
+		case "share_rate":
+			$data = $_POST;
+			$shares = new Shares();
+			if($shares->addShareRate($data)){
+				$output = "success";
+			}else{ 
+				$output = "Share rate could not be added. Please try again or contact admin for assistance!";
+			}
+		break;
 		case "add_group":
 			$data = $_POST;
 			$sacco_group = new SaccoGroup();

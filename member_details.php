@@ -122,12 +122,12 @@ p{
 										foreach($all_client_shares as $single){ 
 											?>
 											<tr class="even pointer " >
-												<td><?php echo date("j F, Y", strtotime($single['date_paid'])); ?></td>
-												<td><?php  echo $single['no_of_shares']; ?></td>
+												<td><?php echo date("j F, Y", $single['datePaid']); ?></td>
+												<td><?php  echo $single['noShares']; ?></td>
 												<td><?php $shares_sum += $single['amount']; echo number_format($single['amount'],0,".",","); ?></td>
 											</tr>
 											<?php
-											$no = $no+$single['no_of_shares'];
+											$no = $no+$single['noShares'];
 										}
 										?>
 									</p>
@@ -160,7 +160,12 @@ p{
 						<p>
 							<a  href="#add_loan_account" class="btn btn-sm btn-info" data-toggle="modal" class="btn btn-info btn-sm"> <i class="fa fa-plus"></i> Apply for a loan</a>
 							<a  href="?id=<?php echo  $_GET['id']; ?>&view=mysubscriptions" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Subscriptions</a>
-							<a  href="?id=<?php echo  $_GET['id']; ?>&view=myshares" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Shares</a>
+							<?php 
+							if($member_data['memberType'] == 1){ ?>
+								<a  href="?id=<?php echo  $_GET['id']; ?>&view=myshares" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Shares</a>
+								<?php
+							}
+							?>
 							<a  href="?id=<?php echo  $_GET['id']; ?>&view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-calculator"></i> Ledger</a>
                         </p>
 					</div>

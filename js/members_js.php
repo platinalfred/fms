@@ -1,4 +1,91 @@
 <script>
+$(document).ready(function(){ 
+	$('input.athousand_separator').keyup(function(event) {
+
+	  // skip for arrow keys
+	  if(event.which >= 37 && event.which <= 40){
+	   event.preventDefault();
+	  }
+
+	  $(this).val(function(index, value) {
+		  value = value.replace(/,/g,'');
+		  return numberWithCommas(value);
+	  });
+	});
+
+	function numberWithCommas(x) {
+		var parts = x.toString().split(".");
+		parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		return parts.join(".");
+	}
+	function getWords(s){
+		// American Numbering System
+		var th = ['', 'Thousand', 'Million', 'Billion', 'Trillion'];
+
+		var dg = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+
+		var tn = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+
+		var tw = ['Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+		
+		s = s.toString();
+		s = s.replace(/[\, ]/g, '');
+		if (s != parseFloat(s)) return 'not a number';
+		var x = s.indexOf('.');
+		if (x == -1) x = s.length;
+		if (x > 15) return 'too big';
+		var n = s.split('');
+		var str = '';
+		var sk = 0;
+		for (var i = 0; i < x; i++) {
+			if ((x - i) % 3 == 2) {
+				if (n[i] == '1') {
+					str += tn[Number(n[i + 1])] + ' ';
+					i++;
+					sk = 1;
+				} else if (n[i] != 0) {
+					str += tw[n[i] - 2] + ' ';
+					sk = 1;
+				}
+			} else if (n[i] != 0) {
+				str += dg[n[i]] + ' ';
+				if ((x - i) % 3 == 0) str += 'hundred ';
+				sk = 1;
+			}
+			if ((x - i) % 3 == 1) {
+				if (sk) str += th[(x - i - 1) / 3] + ' ';
+				sk = 0;
+			}
+		}
+		if (x != s.length) {
+			var y = s.length;
+			str += 'point ';
+			for (var i = x + 1; i < y; i++) str += dg[n[i]] + ' ';
+		}
+		return str.replace(/\s+/g, ' ');
+	}
+	$("#no_of_shares").on('keyup change',function(){
+		var currentInput  = parseInt($(this).val());
+		var one_share_amount  = parseInt($("#rate_amount").val());
+		var total_share_amount  = currentInput * one_share_amount;
+		if(!isNaN(currentInput)){
+			var words  = getWords(total_share_amount);
+			if(currentInput != 1){
+				s = "shares";
+			}else{
+				s = "share";
+			}
+			$("#share_amount").val(total_share_amount);
+			$("#share_rate_amount").html("You are buying "+currentInput+" "+ s+ " which is equivalent to "+ words +" Uganda Shillings Only");
+			
+		}else{
+			$("#share_rate_amount").html("");
+			$("#share_amount").val("");
+		}
+		
+	});
+});
 <?php $relationshipTypeObj = new RelationshipType();?>
 	var relationships = <?php echo json_encode($relationshipTypeObj->findAll());?>;
 	
