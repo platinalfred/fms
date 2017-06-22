@@ -112,7 +112,7 @@ function addCommas(nStr){
 												<label class="col-sm-3 control-label no_padding">Marital Status</label>
 												<div class="col-sm-9">
 													<select class="form-control m-b" name="marital_status" >
-														<option >Please select</option>
+														<option value="">Please select</option>
 														<option value="Single">Single</option>
 														<option value="Married">Married</option>
 														<option value="Divorced">Divorced</option>
@@ -260,7 +260,7 @@ function addCommas(nStr){
 									<div class="col-lg-6">
 										<div class="form-group">
 											<label>Name of Business</label>
-											<textarea   data-bind="attr: {name:'business['+$index()+'][businessName]'}"  class="form-control"></textarea>
+											<textarea   data-bind="attr: {name:'business['+$index()+'][natureOfBusiness]'}"  class="form-control"></textarea>
 										</div>
 										
 									</div>

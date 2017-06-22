@@ -326,8 +326,8 @@ $(document).ready(function(){
     // in the "action" attribute of the form when valid
     submitHandler: function(form, event) {
 		event.preventDefault();
-		//var form =  $("form[name='registration']");
-		var frmdata = new FormData(form);
+		
+		var frmdata = new FormData($("form#form1")[0]);
 		//var frmdata = form.serialize();
 		$.ajax({
 			url: "save_data.php",

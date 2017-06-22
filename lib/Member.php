@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Member extends Db {
 	protected static $table_name  = "member";
-	protected static $db_fields = array("id","personId","branch_id","memberType","comment", "addedBy","dateAdded", "active", "ModifiedBy");
+	protected static $db_fields = array("id","personId","branch_id","memberType","comment", "addedBy","dateAdded", "active", "modifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
@@ -92,7 +92,7 @@ class Member extends Db {
 		return $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
 	}
 	public function updateMember($data){
-		$fields = array("comment");
+		$fields =  array("comment","modifiedBy");
 		$id = $data['id'];
 		unset($data['id']);
 		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){

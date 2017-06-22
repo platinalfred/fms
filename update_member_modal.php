@@ -44,6 +44,8 @@ function addCommas(nStr){
 						<form id="form1" action="" method="post" name="registration"  class="wizard-big">
 							<input type="hidden" name="modifiedBy" value="<?php echo $_SESSION['personId'];?>">
 							<input type="hidden" name="tbl" value="update_member">
+							<input type="hidden" name="id" value="<?php echo $member_data["id"]; ?>">
+							<input type="hidden" name="personId" value="<?php echo $member_data["personId"]; ?>">
 							<h1>Demographic Information</h1>
 							<fieldset>
 								<div class="row">
@@ -168,6 +170,14 @@ function addCommas(nStr){
 											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Id Number <span class="req">*</span></label>
 											<div class="col-md-9 col-sm-9 col-xs-12">
 												<input name="id_number" type="text" value="<?php echo $member_data['id_number']; ?>" class="form-control" required>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-12">
+										<div class="form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Attach Id specimen <span class="required">*</span></label>
+											<div class="col-md-9 col-sm-9 col-xs-12"><span><?php if($member_data['id_specimen'] != ""){?> <img src="<?php echo $member_data['id_specimen']; ?>" style="width:30%;"> <input type="hidden" name="existing_specimen" value="<?php echo $member_data['id_specimen']; ?>" > <?php } ?> </span>
+												<input name="id_specimen" type="file" class="form-control" >
 											</div>
 										</div>
 									</div>
@@ -397,12 +407,11 @@ function addCommas(nStr){
 							
 							<fieldset>
 								<div class="row" data-bind="foreach: $root.member_relatives2">
-									
-									<h3 data-bind="text:'Relative '+($index()+init)"></h3>
+									<h3 data-bind="text:'Relative '+($index()+1)"></h3>
 									<div class="col-lg-3">
 										<div class="form-group">
 											<label>Relationship</label>
-											<select class="form-control"  data-bind="attr: {name:'relative['+$index()+'][relationship]'}, options: relationships, optionsText: 'rel_type', optionsCaption: 'Select...', optionsValue: 'id', value: relationship" data-msg-required="Relationship is required"></select>
+											<select class="form-control"  data-bind="attr: {name:'relative['+$index() + '][relationship]'}, options: relationships, optionsText: 'rel_type', optionsCaption: 'Select...', optionsValue: 'id', value: relationship" data-msg-required="Relationship is required"></select>
 										</div>
 									</div>
 									<div class="col-sm-3">

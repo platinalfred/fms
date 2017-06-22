@@ -1,5 +1,7 @@
 <?php
 require_once('lib/Libraries.php');
+require_once("lib/SimpleImage.php");
+$images = new SimpleImage();
 $output = "";
 if(isset($_POST['tbl'])){
 	switch($_POST['tbl']){
@@ -114,11 +116,10 @@ if(isset($_POST['tbl'])){
 			$data['dateAdded'] = time();
 			$data['photograph'] = "";
 			$data['active']=1;
-			print_r($_POST);
-			print_r($_FILES);
-			$person_id = false; //$person->addPerson($data);
+		
+			$person_id = $person->addPerson($data);
 			if($person_id){
-				/* $data['personId'] = $person_id;
+				$data['personId'] = $person_id;
 				$person->updatePersonNumber($person_id);
 				$data["personId"] = $person_id;
 				$data['branchId'] = $data['branch_id'];
@@ -137,12 +138,136 @@ if(isset($_POST['tbl'])){
 						$person->addPersonEmployment($single);
 					} 	 
 				}
+				if(!empty($data['business'])){
+					foreach($data['business'] as $single){
+						$single['dateAdded'] = $data['dateAdded'];
+						$single['addedBy'] = $data['addedBy'];
+						$single['personId'] = $person_id;
+						$person->addPersonBusiness($single);
+					} 	 
+				}
 				if($member->addMember($data)){
 					$output = "success";
-				} */
+				} 
+				if ($_FILES['id_specimen']['error'] > 0) {
+					$output =  "Error: " . $_FILES['id_specimen']['error'] . "<br />";
+				} else {
+					$allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "PNG", "GIF", "application/pdf");
+					$extension = end(explode(".", $_FILES["id_specimen"]["name"]));
+					if(($_FILES["id_specimen"]["size"] < 200000000) && in_array($extension, $allowedExts)){ 							
+						if($_FILES["id_specimen"]["error"] > 0){
+							$output =  "Return Code: " . $_FILES["id_specimen"]["error"] . "<br>";
+						}else{
+							$normal = 'img/ids/'.$_FILES['id_specimen']['name'];
+							if(file_exists($normal)){
+								$data['id_specimen'] = $normal;
+								$data['id'] = $person_id;
+								if($person->updateSpecimen($data)){					
+									 $output =  'success';
+								}else{
+									$output =  "Oooooops!! there was an error! ";
+								}
+							}else{		
+								$data['id_specimen'] = $normal;
+								$data['id'] = $person_id;
+								$images->load($_FILES['id_specimen']['tmp_name']);
+								$images->resize(131, 120); 
+								$images->output($_FILES["id_specimen"]["type"]);
+								$images->save('img/ids/'.$_FILES['id_specimen']['name']);
+								if($person->updateSpecimen($data)){					
+									 $output =  'success';
+								}else{
+									$output =  "Oooooops!! there was an error! ";
+								}
+								
+							}
+						}
+					} 
+					
+				}
 			}else{ 
 				$output = "Member details could not be added. Please try again!";
 			} 
+		break;
+		case "update_member":
+			$data = $_POST;
+			$member = new Member();
+			$person = new Person();
+			
+			if(empty($_FILES["id_specimen"]["tmp_name"])){
+				$data['id_specimen'] = $data["existing_specimen"];	
+			}
+			if($person->updatePerson($data)){
+				if(!empty($data['relative'])){
+					$person->deleteRelatives($data['personId']);
+					foreach($data['relative'] as $single){
+						$single['personId'] = $data['personId'];
+						$person->addRelative($single);
+					} 	 
+				}
+				if(!empty($data['employment'])){
+					$person->deleteEmployment($data['personId']);
+					foreach($data['employment'] as $single){
+						$single['dateCreated'] = time();
+						$single['createdBy'] = $data['modifiedBy'];
+						$single['personId'] = $data['personId'];
+						$single['modifiedBy'] = $data['modifiedBy'];
+						$person->addPersonEmployment($single);
+					} 	 
+				}
+				if(!empty($data['business'])){
+					$person->deleteBusiness($data['personId']);
+					foreach($data['business'] as $single){
+						$single['dateAdded'] = time();
+						$single['addedBy'] = $data['modifiedBy'];
+						$single['personId'] = $data['personId'];
+						$person->addPersonBusiness($single);
+					} 	 
+				}
+				if($member->updateMember($data)){
+					$output = "success";
+				} 
+				if(!empty($_FILES["id_specimen"]["tmp_name"])) {
+					if ($_FILES['id_specimen']['error'] > 0) {
+						$output =  "Error: " . $_FILES['id_specimen']['error'] . "<br />";
+					} else {
+						$allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "PNG", "GIF", "application/pdf");
+						$extension = end(explode(".", $_FILES["id_specimen"]["name"]));
+						if(($_FILES["id_specimen"]["size"] < 200000000) && in_array($extension, $allowedExts)){ 							
+							if($_FILES["id_specimen"]["error"] > 0){
+								$output =  "Return Code: " . $_FILES["id_specimen"]["error"] . "<br>";
+							}else{
+								$normal = 'img/ids/'.$_FILES['id_specimen']['name'];
+								if(file_exists($normal)){
+									$data['id_specimen'] = $normal;
+									$data['id'] = $data['personId'];
+									if($person->updateSpecimen($data)){					
+										 $output =  'success';
+									}else{
+										$output =  "Oooooops!! there was an error! ";
+									}
+								}else{		
+									$data['id_specimen'] = $normal;
+									$data['id'] = $data['personId'];
+									$images->load($_FILES['id_specimen']['tmp_name']);
+									$images->resize(131, 120); 
+									$images->output($_FILES["id_specimen"]["type"]);
+									$images->save('img/ids/'.$_FILES['id_specimen']['name']);
+									if($person->updateSpecimen($data)){					
+										 $output =  'success';
+									}else{
+										$output =  "Oooooops!! there was an error! ";
+									}
+									
+								}
+							}
+						} 
+						
+					}
+				}
+			}else{ 
+				$output = "Member details could not be updated. Please try again!";
+			}  
 		break;
 		case "subscription":
 			$data = $_POST;
