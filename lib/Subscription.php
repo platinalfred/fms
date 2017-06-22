@@ -15,7 +15,8 @@ class Subscription extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findMemberSubscriptions($pno){
-		$result_array = $this->getarray(self::$table_name, "", "id=".$pno, "");
+		$result_array = $this->getarray(self::$table_name, "memberId=".$pno, "", "");
+		
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findSubscriptionAmount($id){
@@ -35,6 +36,7 @@ class Subscription extends Db {
 	}
 	public function addSubscription($data){
 		$fields = array_slice(self::$db_fields, 1);
+		$data['amount'] = $this->stripCommasOnNumber($data['amount']);
 		if($this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data))){
 			return true;
 		}
@@ -44,6 +46,8 @@ class Subscription extends Db {
 		$fields = array_slice(1, self::$db_fields);
 		$id = $data['id'];
 		unset($data['id']);
+		$data['amount'] = $this->stripCommasOnNumber($data['amount']);
+		
 		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){
 			return true;
 		}

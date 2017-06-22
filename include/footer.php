@@ -25,6 +25,9 @@
     <script src="js/plugins/pace/pace.min.js"></script>
 	<!-- Pricing Format -->
 	<script type="text/javascript" src="js/jquery.priceformat.min.js"></script>
+	 <!-- Sweet alert -->
+    <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
+	
 	<?php if(in_array("knockout", $needed_files)){ ?>
 		<!-- Knockout js -->
 		<script src="js/knockout/knockout-min.js"></script>

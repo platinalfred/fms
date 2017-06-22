@@ -14,18 +14,20 @@ require_once("lib/Libraries.php");
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#tab-20" href="#">Loan Products</a></li>
 					<li><a data-toggle="tab" href="#tab-21" href="#">Deposit Products</a></li>
+					<li><a data-toggle="tab" href="#tab-23" href="#">Share Rate</a></li>
 					<li><a data-toggle="tab" href="#tab-1" href="#">Person Types</a></li>
 					<li class=""><a data-toggle="tab" href="#tab-2" href="#">Account Types</a></li>
 					<li class=""><a data-toggle="tab" href="#tab-3" href="#">Branches</a></li>
 					<li class=""><a data-toggle="tab" href="#tab-5" href="#">Access Levels</a></li>
-					<li class=""><a data-toggle="tab" href="#tab-6" href="#">Id Card Types</a></li>
+					
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">More <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<!--<li class=""><a data-toggle="tab" role="tab" href="#tab-11" href="#">Loan Types</a></li>-->
-							<li class=""><a data-toggle="tab" href="#tab-7" href="#">Income Sources</a></li>
-							<li class=""><a data-toggle="tab" href="#tab-8" href="#">Individual Types</a></li>
-							<li class=""><a data-toggle="tab" href="#tab-9" href="#">Loan Product Types</a></li>
+							<li class=""><a data-toggle="tab"role="tab"  href="#tab-6" href="#">Id Card Types</a></li>
+							<li class=""><a data-toggle="tab" role="tab" href="#tab-7" href="#">Income Sources</a></li>
+							<li class=""><a data-toggle="tab" role="tab" href="#tab-8" href="#">Individual Types</a></li>
+							<li class=""><a data-toggle="tab" role="tab" href="#tab-9" href="#">Loan Product Types</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-12" href="#">Penalty Calculation Method</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-13" href="#">Loan Product Penalties</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-14" href="#">Relationhip Types </a></li>
@@ -119,6 +121,53 @@ require_once("lib/Libraries.php");
 							
 						</div>
 					</div>
+					<!---  Person Type Start   --->
+					<div id="tab-23" class="tab-pane">
+						<div class="panel-body">
+							<div class="col-lg-6 col-offset-sm-8">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-body">
+											<div class="alert  alert-dismissable " id="notice_message"  style="display:none;">
+												<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+												<div id="notice"></div>
+											</div>
+											<div class="row">
+												<div class="col-sm-12">
+													<p>Manage Share Rate </p>
+													<div class="ibox-content">
+														<?php 
+														$shares = new Shares();
+														$share_rate = $shares->findShareRate();
+														?>
+														<form class="form-horizontal" method="post" action="save_data.php" id="personTypeTable">
+															<input name="tbl" value="share_rate" type="hidden">
+															<div class="form-group"><label class="col-lg-4 control-label">Share Amount</label>
+																<div class="col-lg-8"><input name="amount" type="text" value="<?php echo number_format($share_rate['amount'],0,".",","); ?>" class="form-control athousand_separator"> <span class="help-block m-b-none">An amount that is paid for a share.</span>
+																</div>
+															</div>
+															<div class="form-group"><label class="col-lg-4 control-label">Changed By</label>
+																<div class="col-lg-8"><?php echo $person->findNamesById($_SESSION['personId']); ?></div>
+																<input name="added_by" type="hidden" value="<?php echo $_SESSION['personId']; ?>">
+																<input name="date_added" type="hidden" value="<?php echo time(); ?>">
+															</div>
+															<div class="form-group">
+																<div class="col-lg-offset-2 col-lg-10">
+																	<button class="btn btn-sm btn-primary save" type="button"><i class="ti-save"></i>Save</button>
+																</div>
+															</div>
+														</form>
+													</div>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
 					<!-- Account Type -->
 					<div id="tab-2" class="tab-pane">
 						<div class="panel-body">

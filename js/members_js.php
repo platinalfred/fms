@@ -1,9 +1,149 @@
 <script>
-<?php $relationshipTypeObj = new RelationshipType();?>
+$(document).ready(function(){ 
+	<?php 
+	if(isset($_GET['id'])){ ?>
+		$('.delete_member').click(function () {
+			swal({
+					title: "Are you sure you would like to delete this member?",
+					text: "<?php echo $names; ?> will no longer be visible in the system!",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Yes, Delete!",
+					cancelButtonText: "No, Thank you!",
+					closeOnConfirm: false,
+					closeOnCancel: false },
+				function (isConfirm) {
+					if (isConfirm) {
+						swal("Deleted!", "Your imaginary file has been deleted.", "success");
+					} else {
+						swal("Cancelled", "Thank you, member will not be deleted :)", "error");
+					}
+				});
+		});
+	<?php
+	}
+	?>
+	$('input.athousand_separator').keyup(function(event) {
+
+	  // skip for arrow keys
+	  if(event.which >= 37 && event.which <= 40){
+	   event.preventDefault();
+	  }
+
+	  $(this).val(function(index, value) {
+		  value = value.replace(/,/g,'');
+		  return numberWithCommas(value);
+	  });
+	});
+
+	function numberWithCommas(x) {
+		var parts = x.toString().split(".");
+		parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		return parts.join(".");
+	}
+	function getWords(s){
+		// American Numbering System
+		var th = ['', 'Thousand', 'Million', 'Billion', 'Trillion'];
+
+		var dg = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+
+		var tn = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+
+		var tw = ['Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+		
+		s = s.toString();
+		s = s.replace(/[\, ]/g, '');
+		if (s != parseFloat(s)) return 'not a number';
+		var x = s.indexOf('.');
+		if (x == -1) x = s.length;
+		if (x > 15) return 'too big';
+		var n = s.split('');
+		var str = '';
+		var sk = 0;
+		for (var i = 0; i < x; i++) {
+			if ((x - i) % 3 == 2) {
+				if (n[i] == '1') {
+					str += tn[Number(n[i + 1])] + ' ';
+					i++;
+					sk = 1;
+				} else if (n[i] != 0) {
+					str += tw[n[i] - 2] + ' ';
+					sk = 1;
+				}
+			} else if (n[i] != 0) {
+				str += dg[n[i]] + ' ';
+				if ((x - i) % 3 == 0) str += 'hundred ';
+				sk = 1;
+			}
+			if ((x - i) % 3 == 1) {
+				if (sk) str += th[(x - i - 1) / 3] + ' ';
+				sk = 0;
+			}
+		}
+		if (x != s.length) {
+			var y = s.length;
+			str += 'point ';
+			for (var i = x + 1; i < y; i++) str += dg[n[i]] + ' ';
+		}
+		return str.replace(/\s+/g, ' ');
+	}
+	$("#no_of_shares").on('keyup change',function(){
+		var currentInput  = parseInt($(this).val());
+		var one_share_amount  = parseInt($("#rate_amount").val());
+		var total_share_amount  = currentInput * one_share_amount;
+		if(!isNaN(currentInput)){
+			var words  = getWords(total_share_amount);
+			if(currentInput != 1){
+				s = "shares";
+			}else{
+				s = "share";
+			}
+			$("#share_amount").val(total_share_amount);
+			$("#share_rate_amount").html("You are buying "+currentInput+" "+ s+ " which is equivalent to "+ words +" Uganda Shillings Only");
+			
+		}else{
+			$("#share_rate_amount").html("");
+			$("#share_amount").val("");
+		}
+		
+	});
+	$(".photo_upload").click(function(){
+		var formData = new FormData($("form#photograph")[0]);
+		$.ajax({
+			url: "photo_upload.php",
+			type: 'POST',
+			data: formData,
+			async: false,
+			success: function (response) {
+				if(response.trim() == "success"){
+					showStatusMessage("Successfully uploaded member photo", "success");
+					setTimeout(function(){
+						window.location.reload(true);
+					},2000)
+					
+				}else{
+					showStatusMessage(response, "error");
+				}
+			},
+			cache: false,
+			contentType: false,
+			processData: false
+		});
+
+		return false;
+	});
+});
+<?php $relationshipTypeObj = new RelationshipType();
+?>
 	var relationships = <?php echo json_encode($relationshipTypeObj->findAll());?>;
 	
 	/*MEMBER EMPLOYMENT HISTORY KO*/
 	var MemberEmployment = function() {
+		var self = this;
+	}
+	var MemberBusiness = function() {
 		var self = this;
 	}
 	/*MEMBER RELATIVE KO*/
@@ -21,23 +161,52 @@
 		};
 	var Member = function() {
 		var self = this;
-		self.member_employment = ko.observableArray([new MemberEmployment()]);
+		self.member_employment = ko.observableArray(<?php if(!isset($_GET['id'])){ ?> [new MemberEmployment()]<?php } ?>);
 		self.addEmployment = function() { self.member_employment.push(new MemberEmployment()) };
 		self.removeEmployment = function(relative) {
 			self.member_employment.remove(relative);
 		};
+		self.member_business = ko.observableArray(<?php if(!isset($_GET['id'])){ ?> [new MemberBusiness()]<?php } ?>);
+		self.addBusinnes = function() { self.member_business.push(new MemberBusiness()) };
+		self.removeBusiness = function(relative) {
+			self.member_business.remove(relative);
+		};
 		//Keeps track of member relatives, observing any changes
-		self.member_relatives = ko.observableArray([new MemberRelative()]);
+		self.member_relatives = ko.observableArray(<?php if(!isset($_GET['id'])){ ?> [new MemberRelative()]<?php } ?> );
 		//Add a relative
 		self.addRelative = function() { self.member_relatives.push(new MemberRelative()) };
 		//remove relative
 		self.removeRelative = function(relative) {
 			self.member_relatives.remove(relative);
 		};
+		<?php 
+		if(isset($_GET['id'])){ 
+			?>
+			self.member_business2 = ko.observableArray(<?php echo json_encode($member_business);  ?>);
+			
+			self.removeBusiness2 = function(relative) {
+				self.member_business2.remove(relative);
+			};
+			//Keeps track of member relatives, observing any changes
+			self.member_relatives2 = ko.observableArray(<?php echo json_encode($member_relatives);  ?>);
+			
+			//remove relative
+			self.removeRelative2 = function(relative) {
+				self.member_relatives2.remove(relative);
+			}
+			self.member_employment2 = ko.observableArray(<?php echo json_encode($member_employment_history);  ?>);
+			self.removeEmployment2 = function(relative) {
+				self.member_employment2.remove(relative);
+			
+			}; 
+		<?php 
+		}
+		?>
 		//reset the form
 		self.resetForm = function() {
 			self.member_relatives.removeAll();
 			self.member_employment.removeAll();
+			self.member_business.removeAll();
 			$("#form1")[0].reset();
 		};
 		//set options value afterwards
@@ -157,12 +326,14 @@ $(document).ready(function(){
     // in the "action" attribute of the form when valid
     submitHandler: function(form, event) {
 		event.preventDefault();
-		var form =  $("form[name='registration']");
-		var frmdata = form.serialize();
+		//var form =  $("form[name='registration']");
+		var frmdata = new FormData(form);
+		//var frmdata = form.serialize();
 		$.ajax({
 			url: "save_data.php",
 			type: 'POST',
 			data: frmdata,
+			async: false,
 			success: function (response) {
 				if($.trim(response) == "success"){
 					showStatusMessage("Successfully added new record" ,"success");
@@ -173,7 +344,10 @@ $(document).ready(function(){
 					showStatusMessage(response, "fail");
 				}
 				
-			}
+			},
+			cache: false,
+			contentType: false,
+			processData: false
 		});
     }
   });

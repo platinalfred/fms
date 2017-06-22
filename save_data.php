@@ -3,6 +3,24 @@ require_once('lib/Libraries.php');
 $output = "";
 if(isset($_POST['tbl'])){
 	switch($_POST['tbl']){
+		case "add_share":
+			$data = $_POST;
+			$shares = new Shares();
+			if($shares->addShares($data)){
+				$output = "success";
+			}else{ 
+				$output = "Member Share could not be added. Please try again or contact admin for assistance!";
+			}
+		break;
+		case "share_rate":
+			$data = $_POST;
+			$shares = new Shares();
+			if($shares->addShareRate($data)){
+				$output = "success";
+			}else{ 
+				$output = "Share rate could not be added. Please try again or contact admin for assistance!";
+			}
+		break;
 		case "add_group":
 			$data = $_POST;
 			$sacco_group = new SaccoGroup();
@@ -96,9 +114,11 @@ if(isset($_POST['tbl'])){
 			$data['dateAdded'] = time();
 			$data['photograph'] = "";
 			$data['active']=1;
-			 $person_id = $person->addPerson($data);
+			print_r($_POST);
+			print_r($_FILES);
+			$person_id = false; //$person->addPerson($data);
 			if($person_id){
-				$data['personId'] = $person_id;
+				/* $data['personId'] = $person_id;
 				$person->updatePersonNumber($person_id);
 				$data["personId"] = $person_id;
 				$data['branchId'] = $data['branch_id'];
@@ -119,7 +139,7 @@ if(isset($_POST['tbl'])){
 				}
 				if($member->addMember($data)){
 					$output = "success";
-				}
+				} */
 			}else{ 
 				$output = "Member details could not be added. Please try again!";
 			} 

@@ -682,14 +682,27 @@ Class Reports{
 		$subscription = new Subscription();
 		if(isset($_POST['tbl']) && $_POST['tbl'] == "add_subscription"){
 			if($subscription->addSubscription($_POST)){
-				$msg = "Subscription Successful added";
+				$msg = "Subscription Successful added"; ?>
+				<script>
+				setTimeout(function(){
+					document.getElementsByClassName("label-warning").innerHTML = "";
+				}, 3000);
+				</script>
+				<?php
 			}else{
 				$msg = "Failed to add subscrition";
+				?>
+				<script>
+				setTimeout(function(){
+					document.getElementsByClassName("label-warning").innerHTML = "";
+				}, 3000);
+				</script>
+				<?php
 			}
 		}
 	
 		$member_data = $member->findById($_GET['id']);
-		$all_client_subscriptions = $subscription->findMemberSubscriptions($member_data['id']); 
+		$all_client_subscriptions = $subscription->findMemberSubscriptions($_GET['id']); 
 		
 		include("subscribe.php"); ?>
 		 <div class="row">
@@ -757,18 +770,43 @@ Class Reports{
 		$member = new Member();
 		$accounts = new Accounts();
 		$shares = new Shares();
+		if(isset($_POST['tbl']) && $_POST['tbl'] == "add_share"){
+			if($shares->addShares($_POST)){
+				$msg = "Shares details successful added"; ?>
+				<script>
+				setTimeout(function(){
+					document.getElementsByClassName("label-warning").innerHTML = "";
+				}, 3000);
+				</script>
+				<?php
+			}else{
+				$msg = "Failed to add shares";
+				?>
+				<script>
+				setTimeout(function(){
+					document.getElementsByClassName("label-warning").innerHTML = "";
+				}, 3000);
+				</script>
+				<?php
+			}
+		}
 		$member_data = $member->findById($_GET['id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['personId']);
-		$all_client_shares = $shares->findMemberShares($member_data['personId']); 
+		$all_client_shares = $shares->findMemberShares($member_data['id']); 
+		include("add_share.php");
 		?>
-		 <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2><?php echo $account_names['firstname']." ".$account_names['lastname']; ?> <small> Shares </small></h2>
+		 <div class="row">
+		 
+                <div class="ibox">
+                  <div class="ibox-title">
+                    <h2><small>My Shares </small></h2>
+					<div class="ibox-tools">
+						<a data-toggle="modal" class="btn btn-sm btn-primary" href="#add_shares"><i class="fa fa-plus"></i> Buy Share</a>
+					</div>
                     <div class="clearfix"></div>
+					<span class="label-warning"><?php echo @$msg; ?></span>
                   </div>
 
-                  <div class="x_content">
+                  <div class="ibox-content">
 						<?php 
 						if($all_client_shares){  ?>
 							<div class="table-responsive">
@@ -794,12 +832,12 @@ Class Reports{
 									foreach($all_client_shares as $single){ 
 										?>
 										<tr class="even pointer " >
-											<td><?php echo date("j F, Y", strtotime($single['date_paid'])); ?></td>
-											<td><?php  echo $single['no_of_shares']; ?></td>
+											<td><?php echo date("j F, Y", $single['datePaid']); ?></td>
+											<td><?php  echo $single['noShares']; ?></td>
 											<td><?php $shares_sum += $single['amount']; echo number_format($single['amount'],0,".",","); ?></td>
 										</tr>
 										<?php
-										$no = $no+$single['no_of_shares'];
+										$no = $no+$single['noShares'];
 									}
 									?>
 								</tbody>
@@ -823,133 +861,5 @@ Class Reports{
            
 		<?php
 	}
-	public function viewNok(){
-		$member = new Member();
-		$accounts = new Accounts();
-		$nok = new Nok();
-		$member_data = $member->findById($_GET['member_id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
-		$noks = $nok->findMemberNextOfKin($member_data['person_id']); 
-		?>
-		 <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2><?php echo $account_names['firstname']." ".$account_names['lastname']; ?> <small> Next of Kin </small></h2>
-                    <div class="clearfix"></div>
-                  </div>
 
-                  <div class="x_content">
-						<?php 
-						if($noks){  ?>
-							<div class="table-responsive">
-							  <table class="table table-striped jambo_table bulk_action">
-								<thead>
-								  <tr class="headings">
-									<th>
-									  <input type="checkbox" id="check-all" class="flat">
-									</th>
-									<?php 
-									$header_keys = array("Name", "Gender", "Relationship", "Status", "Phone","Address","Edit");
-									foreach($header_keys as $key){ ?>
-										<th><?php echo $key; ?></th>
-										<?php
-									}
-									?>
-									<th class="column-title no-link last"><span class="nobr">Action</span>
-									</th>
-								  </tr>
-								  <tr>
-									<th class="bulk-actions" colspan="8">
-									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-									</th>
-								  </tr>
-								</thead>
-
-								<tbody>
-									<?php 
-									foreach($noks as $single){ 
-										?>
-										<tr class="even pointer " >
-											<td class="a-center ">
-												<input type="checkbox" value="<?php echo $single['id']; ?>" class="flat" name="table_records">
-											</td>
-											<td class=" "><?php echo $single['name']; ?></td>
-											<td class=" "><?php echo $single['gender']; ?> </td>
-											<td class=" "><?php  echo $single['relationship']; ?></td>
-											<td class=" "><?php echo $single['marital_status']; ?></td>
-											<td class="a-right a-right "><?php echo $single['phone']; ?></td>
-											<td class="a-right a-right "><?php  echo $single['physical_address']; ?></td>
-											<td class=" last"><a href="?member_id=<?php echo $_GET['member_id']; ?>&edit=nok&nok_id=<?php echo $single['id']; ?>" class="btn btn-success">Edit</a></td>
-										</tr>
-										<?php
-									}
-									?>
-								</tbody>
-							  </table>
-							</div>
-						<?php 
-						}else{
-							echo "<p>There is currently no Next of Kin added to this member.</p>";
-						}
-						?>
-                  </div>
-                </div>
-              </div>
-           
-		<?php
-	}
-	public function viewMemberSaving(){
-		$member = new Member();
-		$accounts = new Accounts();
-		$member_data = $member->findById($_GET['member_id']);
-		
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
-		?>
-		 <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-					  <div class="col-md-6">
-						<h2><?php echo $account_names['firstname']." ".$account_names['lastname']; ?> <small> Personal Account</small></h2>
-					  </div>
-					  <div class="col-md-6">
-						<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
-						  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-						  <span>November 20, 2016 - December 19, 2016</span> <b class="caret"></b>
-						</div>
-					  </div>
-                    <div class="clearfix"></div>
-                  </div>
-
-                  <div class="x_content">
-						<div class="table-responsive">
-						  <table id="savings_table" class="table table-striped dt-responsive jambo_table bulk">
-							<thead>
-								<tr>
-									<?php 
-									$header_keys = array("Date", "Deposit", "Withdraw", "Balance");
-									foreach($header_keys as $key){ ?>
-										<th><?php echo $key; ?></th>
-										<?php
-									}
-									?>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-							<tfoot>
-								<tr>
-									<th class="right_remove">Bal c/f </th>
-									<th class="right_remove left_remove"></th>
-									<th class="right_remove left_remove"></th>
-									<th class="right_remove left_remove"></th>
-								</tr>
-							</tfoot>
-						  </table>
-						</div>
-                  </div>
-                </div>
-              </div>
-           
-		<?php
-	}
 }

@@ -1,5 +1,25 @@
 <script>
 $(document).ready(function(){
+	/* Number inputs a thousandsSeparator separator */
+		$('input.athousand_separator').keyup(function(event) {
+
+		  // skip for arrow keys
+		  if(event.which >= 37 && event.which <= 40){
+		   event.preventDefault();
+		  }
+
+		  $(this).val(function(index, value) {
+			  value = value.replace(/,/g,'');
+			  return numberWithCommas(value);
+		  });
+		});
+
+		function numberWithCommas(x) {
+			var parts = x.toString().split(".");
+			parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			return parts.join(".");
+		}
+	/* End a thousandsSeparator on an input*/
 	function showStatusMessage(message='', display_type='success'){
 		new PNotify({
 			  title: "Alert",
