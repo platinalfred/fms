@@ -215,9 +215,9 @@
 										<div class="hr-line-dashed"></div>
 										<div class="form-group" data-bind="visible: $root.addedCollateral().length > 0">
 											<div class="col-md-12">
-												<div class="col-sm-6">Total Collateral: UGX <span data-bind="text: curr_format($root.totalCollateral()), css: {'text-danger': $root.totalCollateral()<(($root.loanProduct().minCollateral/100)*$root.requestedAmount()), 'text-info': $root.totalCollateral()>(($root.loanProduct().minCollateral/100)*$root.requestedAmount())}"></span> <i  data-bind="css: {'fa fa-check text-info':$root.totalCollateral()>(($root.loanProduct().minCollateral/100)*$root.requestedAmount())}"></i></div>
+												<div class="col-sm-6">Total Collateral: UGX <span data-bind="text: curr_format($root.totalCollateral()), css: {'text-danger': $root.totalCollateral()<(($root.loanProduct().minCollateral/100)($root.requestedAmount()+$root.requestedAmount()*$root.interestRate/100)), 'text-info': $root.totalCollateral()>(($root.loanProduct().minCollateral/100)($root.requestedAmount()+$root.requestedAmount()*$root.interestRate/100))}"></span> <i  data-bind="css: {'fa fa-check text-info':$root.totalCollateral()>(($root.loanProduct().minCollateral/100)($root.requestedAmount()+$root.requestedAmount()*$root.interestRate/100))}"></i></div>
 												<div class="col-sm-6" class="text-info">
-												Required Minimum: UGX <span data-bind='text: curr_format(($root.loanProduct().minCollateral/100)*$root.requestedAmount())'> </span>
+												Required Minimum: UGX <span data-bind='text: curr_format(($root.loanProduct().minCollateral/100)*($root.requestedAmount()+$root.requestedAmount()*$root.interestRate/100))'> </span>
 												</div>
 											</div>
 										<div class="hr-line-dashed"></div>

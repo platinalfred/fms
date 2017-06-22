@@ -157,6 +157,7 @@ if(isset($_POST['origin'])){
 			$productFeeObj = new LoanProductFeen();
 			$guarantorObj = new Guarantor();
 			$saccoGroupObj = new SaccoGroup();
+			$memberObj = new Member();
 			
 			$data['products'] = $loanProductObj->findAll();
 			$data['productFees'] = $productFeeObj->findAllLPFDetails();
