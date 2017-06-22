@@ -114,9 +114,11 @@ if(isset($_POST['tbl'])){
 			$data['dateAdded'] = time();
 			$data['photograph'] = "";
 			$data['active']=1;
-			 $person_id = $person->addPerson($data);
+			print_r($_POST);
+			print_r($_FILES);
+			$person_id = false; //$person->addPerson($data);
 			if($person_id){
-				$data['personId'] = $person_id;
+				/* $data['personId'] = $person_id;
 				$person->updatePersonNumber($person_id);
 				$data["personId"] = $person_id;
 				$data['branchId'] = $data['branch_id'];
@@ -137,7 +139,7 @@ if(isset($_POST['tbl'])){
 				}
 				if($member->addMember($data)){
 					$output = "success";
-				}
+				} */
 			}else{ 
 				$output = "Member details could not be added. Please try again!";
 			} 

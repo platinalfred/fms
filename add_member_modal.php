@@ -45,7 +45,7 @@ function addCommas(nStr){
 							Capture information about a member
 						</p>
 							
-						<form id="form1" action="" method="post" name="registration"  class="wizard-big">
+						<form id="form1" action="" method="post" name="registration"  class="wizard-big" enctype="multipart/form-data">
 							<input type="hidden" name="registered_by" value="<?php echo $_SESSION['user_id'];?>">
 							<input type="hidden" name="modifiedBy" value="<?php echo $_SESSION['user_id'];?>">
 							<input type="hidden" name="addedBy" value="<?php echo $_SESSION['user_id'];?>">
@@ -86,7 +86,7 @@ function addCommas(nStr){
 											<div class="col-sm-12 no_padding">
 											<div class="form-group">
 												<div class="col-sm-3 no_padding">
-													<label style=""class="">Name <span class="req">*</span></label>
+													<label style=""class="">Name <span class="required">*</span></label>
 												</div>
 												<div class="col-sm-9">
 													<input type="text" class="form-control" name="firstname" data-msg-require="Please enter name" placeholder="First Name" required/>
@@ -123,7 +123,7 @@ function addCommas(nStr){
 										</div>
 										<div class="col-sm-12 no_padding">
 											<div class="form-group">
-												<label class="col-sm-3 control-label no_padding" >Date of Birth <span class="req">*</span></label>
+												<label class="col-sm-3 control-label no_padding" >Date of Birth <span class="required">*</span></label>
 												<div class="col-sm-9">
 													<input id="dateofbirth" name="dateofbirth" type="text" data-mask="99/99/9999" class="form-control" >
 													<span class="help-block">(dd/mm/yyyy)</span>
@@ -176,9 +176,17 @@ function addCommas(nStr){
 									</div>
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Id Number <span class="req">*</span></label>
+											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Id Number <span class="required">*</span></label>
 											<div class="col-md-9 col-sm-9 col-xs-12">
 												<input name="id_number" type="text" class="form-control" required>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-12">
+										<div class="form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Attach Id specimen <span class="required">*</span></label>
+											<div class="col-md-9 col-sm-9 col-xs-12">
+												<input name="id_specimen" type="file" class="form-control" required>
 											</div>
 										</div>
 									</div>
@@ -245,86 +253,58 @@ function addCommas(nStr){
 									</div>
 								</div>
 							</fieldset>
-							<h1>Relatives</h1>
+							<h1>Business</h1>
 							<fieldset>
-								<div class="row" data-bind="foreach: $root.member_relatives">
-									<div class="col-lg-3">
+								<div class="row" data-bind="foreach: $root.member_business">
+									<h3 data-bind="text:'Business '+($index()+1)"></h3>
+									<div class="col-lg-6">
 										<div class="form-group">
-											<label>Relationship</label>
-											<select class="form-control"  data-bind="attr: {name:'relative['+$index()+'][relationship]'}, options: relationships, optionsText: 'rel_type', optionsCaption: 'Select...', , optionsAfterRender: $parent.setOptionValue('id'), value: relationship" data-msg-required="Relationship is required"></select>
+											<label>Name of Business</label>
+											<textarea   data-bind="attr: {name:'business['+$index()+'][businessName]'}"  class="form-control"></textarea>
 										</div>
-									</div>
-									<div class="col-sm-3">
-										<div class="form-group"><label class="col-lg-12" >Gender</label>
-											<label > <input  data-bind="attr: {name:'relative['+$index()+'][relative_gender]'}, value: relative_gender" class="i-checks" type="radio" value="1"  >Male</label>
-											<label > <input  data-bind="attr: {name:'relative['+$index()+'][relative_gender]'}, value: relative_gender"  class="i-checks" type="radio" value="0" > Female</label>
-										</div>
-									</div>
-									<div class="col-lg-3">
-										 <div class="form-group">
-											<label  >Is Direct Next of Kin?</label>
-											<label > <input  class="i-checks" type="radio" value="1" data-bind="attr: {name:'relative['+$index()+'][is_next_of_kin]'}, checked: is_next_of_kin">Yes</label>
-											<label > <input data-bind="attr: {name:'relative['+$index()+'][is_next_of_kin]'}, checked: is_next_of_kin" class="i-checks" type="radio" value="0" > No</label>
 										
-										</div>
 									</div>
-									<div class="col-lg-12">
+									<div class="col-lg-6">
 										<div class="form-group">
-											<div class="col-sm-2 no_padding">
-												<label style=""class="">Name <span class="req">*</span></label>
-											</div>
-											<div class="col-sm-9">
-												<div class="col-sm-4">
-													<input type="text" class="form-control" placeholder="First Name" data-bind="attr: {name:'relative['+$index()+'][first_name]'}, value: first_name" />
-													<span class="input-group-btn" style="width:2px;"></span>
-												</div>
-												<div class="col-sm-4">
-													<input type="text" class="form-control" data-bind="attr: {name:'relative['+$index()+'][last_name]'}, value: last_name" placeholder="Last Name" />
-													<span class="input-group-btn" style="width:2px;"></span>
-												</div>
-												<div class="col-sm-4">
-													<input type="text" class="form-control" data-bind="attr: {name:'relative['+$index()+'][other_names]'}, value: other_names"   placeholder="Other Name" />
-												</div>
-											</div>
+											<label>Business Location</label>
+											<textarea data-bind="attr: {name:'business['+$index()+'][businessLocation]'}"  class="form-control "></textarea>
 										</div>
 									</div>
 									<div class="col-lg-3">
 										<div class="form-group">
-											<label>Address</label>
-											<input id=""  data-bind="attr: {name:'relative['+$index()+'][address]'}, value: address" type="text" class="form-control " >
+											<label>Number Of Employees</label>
+											<input data-bind="attr: {name:'business['+$index()+'][numberOfEmployees]'}"  type="number" class="form-control ">
 										</div>
 									</div>
-									<div class="col-lg-3">
+									<div class="col-lg-2">
 										<div class="form-group">
-											<label>Address 2</label>
-											<input  type="text" class="form-control"  data-bind="attr: {name:'relative['+$index()+'][address2]'}, value: address2">
+											<label>Business Worth</label>
+											<input data-bind="attr: {name:'business['+$index()+'][businessWorth]'}"  type="text" class="form-control athousand_separator">
 										</div>
 									</div>
-									<div class="col-lg-3">
+									<div class="col-lg-2">
 										<div class="form-group">
-											<label>Phone </label>
-											<input ="relative[]['telephone']" data-mask="(999) 999-9999" data-bind="attr: {name:'relative['+$index()+'][telephone]'}, value: telephone" type="text" class="form-control ">
+											<label>URSB Number</label>
+											<input data-bind="attr: {name:'business['+$index()+'][ursbNumber]'}"  type="text" class="form-control ">
 										</div>
 									</div>
-									<div class="col-lg-3"><span title="Remove relative" class="btn text-danger btn-lg" data-bind='click: $root.removeRelative'><i class="fa fa-minus"></i></span></div>
+									<div class="col-lg-1"><span title="Remove Business" class="btn text-danger btn-lg" data-bind='click: $root.removeBusiness'><i class="fa fa-minus"></i></span></div>
 									<div class="clearboth"></div>
-									
-										
 								</div>
 								<div class="row">
 									<div class="clearboth"></div>
 									<div class="col-lg-12">
 										 <div class="form-group">
-											<span class="btn btn-info btn-sm pull-right" data-bind='click: addRelative'><i class="fa fa-plus"></i> Add more</span>
+											<span class="btn btn-info btn-sm pull-right" data-bind='click: addBusinnes'><i class="fa fa-plus"></i> Add more</span>
 										</div>
 									</div>
 								</div>
 								
 							</fieldset>
-							
-							<h1>Employment History</h1>
+							<h1>Employment</h1>
 							<fieldset>
 								<div class="row" data-bind="foreach: $root.member_employment">
+									<h3 data-bind="text:'Employer '+($index()+1)"></h3>
 									<div class="col-lg-3">
 										<div class="form-group">
 											<label>Name of Employer</label>
@@ -361,6 +341,84 @@ function addCommas(nStr){
 									</div>
 								</div>
 							<fieldset>
+							
+							<h1>Relatives</h1>
+							<fieldset>
+								<div class="row" data-bind="foreach: $root.member_relatives">
+									<h3 data-bind="text:'Relative '+($index()+1)"></h3>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label>Relationship</label>
+											<select class="form-control"  data-bind="attr: {name:'relative['+$index()+'][relationship]'}, options: relationships, optionsText: 'rel_type', optionsCaption: 'Select...', , optionsAfterRender: $parent.setOptionValue('id')" data-msg-required="Relationship is required"></select>
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group"><label class="col-lg-12" >Gender</label>
+											<label > <input  data-bind="attr: {name:'relative['+$index()+'][relative_gender]'}" class="i-checks" type="radio" value="1"  >Male</label>
+											<label > <input  data-bind="attr: {name:'relative['+$index()+'][relative_gender]'}"  class="i-checks" type="radio" value="0" > Female</label>
+										</div>
+									</div>
+									<div class="col-lg-3">
+										 <div class="form-group">
+											<label  >Is Direct Next of Kin?</label>
+											<label > <input  class="i-checks" type="radio" value="1" data-bind="attr: {name:'relative['+$index()+'][is_next_of_kin]'}">Yes</label>
+											<label > <input data-bind="attr: {name:'relative['+$index()+'][is_next_of_kin]'}" class="i-checks" type="radio" value="0" > No</label>
+										
+										</div>
+									</div>
+									<div class="col-lg-12">
+										<div class="form-group">
+											<div class="col-sm-2 no_padding">
+												<label style=""class="">Name <span class="req">*</span></label>
+											</div>
+											<div class="col-sm-9">
+												<div class="col-sm-4">
+													<input type="text" class="form-control" placeholder="First Name" data-bind="attr: {name:'relative['+$index()+'][first_name]'}" />
+													<span class="input-group-btn" style="width:2px;"></span>
+												</div>
+												<div class="col-sm-4">
+													<input type="text" class="form-control" data-bind="attr: {name:'relative['+$index()+'][last_name]'}" placeholder="Last Name" />
+													<span class="input-group-btn" style="width:2px;"></span>
+												</div>
+												<div class="col-sm-4">
+													<input type="text" class="form-control" data-bind="attr: {name:'relative['+$index()+'][other_names]'}"   placeholder="Other Name" />
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label>Address</label>
+											<input id=""  data-bind="attr: {name:'relative['+$index()+'][address]'}" type="text" class="form-control " >
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label>Address 2</label>
+											<input  type="text" class="form-control"  data-bind="attr: {name:'relative['+$index()+'][address2]'}">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label>Phone </label>
+											<input ="relative[]['telephone']" data-mask="(999) 999-9999" data-bind="attr: {name:'relative['+$index()+'][telephone]'}" type="text" class="form-control ">
+										</div>
+									</div>
+									<div class="col-lg-3"><span title="Remove relative" class="btn text-danger btn-lg" data-bind='click: $root.removeRelative'><i class="fa fa-minus"></i></span></div>
+									<div class="clearboth"></div>
+									
+										
+								</div>
+								<div class="row">
+									<div class="clearboth"></div>
+									<div class="col-lg-12">
+										 <div class="form-group">
+											<span class="btn btn-info btn-sm pull-right" data-bind='click: addRelative'><i class="fa fa-plus"></i> Add more</span>
+										</div>
+									</div>
+								</div>
+								
+							</fieldset>
 							<h1>Dependants</h1>
 							<fieldset>
 								<div class="row">
@@ -385,7 +443,7 @@ function addCommas(nStr){
 								<label>Comment</label>
 								<textarea name="comment" class="form-control " rows="5"></textarea>
 								
-								<div class="row">
+								<div class="row" style="margin-top:10px;">
 									<div class="col-lg-12">
 										<span class="alert-danger" id="accept_msg"></span>
 										<div class="col-lg-1"><input id="acceptTerms" name="acceptTerms" type="radio" class="i-checks" required> </div><br/>

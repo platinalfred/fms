@@ -1,5 +1,29 @@
 <script>
 $(document).ready(function(){ 
+	<?php 
+	if(isset($_GET['id'])){ ?>
+		$('.delete_member').click(function () {
+			swal({
+					title: "Are you sure you would like to delete this member?",
+					text: "<?php echo $names; ?> will no longer be visible in the system!",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Yes, Delete!",
+					cancelButtonText: "No, Thank you!",
+					closeOnConfirm: false,
+					closeOnCancel: false },
+				function (isConfirm) {
+					if (isConfirm) {
+						swal("Deleted!", "Your imaginary file has been deleted.", "success");
+					} else {
+						swal("Cancelled", "Thank you, member will not be deleted :)", "error");
+					}
+				});
+		});
+	<?php
+	}
+	?>
 	$('input.athousand_separator').keyup(function(event) {
 
 	  // skip for arrow keys
@@ -85,12 +109,41 @@ $(document).ready(function(){
 		}
 		
 	});
+	$(".photo_upload").click(function(){
+		var formData = new FormData($("form#photograph")[0]);
+		$.ajax({
+			url: "photo_upload.php",
+			type: 'POST',
+			data: formData,
+			async: false,
+			success: function (response) {
+				if(response.trim() == "success"){
+					showStatusMessage("Successfully uploaded member photo", "success");
+					setTimeout(function(){
+						window.location.reload(true);
+					},2000)
+					
+				}else{
+					showStatusMessage(response, "error");
+				}
+			},
+			cache: false,
+			contentType: false,
+			processData: false
+		});
+
+		return false;
+	});
 });
-<?php $relationshipTypeObj = new RelationshipType();?>
+<?php $relationshipTypeObj = new RelationshipType();
+?>
 	var relationships = <?php echo json_encode($relationshipTypeObj->findAll());?>;
 	
 	/*MEMBER EMPLOYMENT HISTORY KO*/
 	var MemberEmployment = function() {
+		var self = this;
+	}
+	var MemberBusiness = function() {
 		var self = this;
 	}
 	/*MEMBER RELATIVE KO*/
@@ -108,23 +161,52 @@ $(document).ready(function(){
 		};
 	var Member = function() {
 		var self = this;
-		self.member_employment = ko.observableArray([new MemberEmployment()]);
+		self.member_employment = ko.observableArray(<?php if(!isset($_GET['id'])){ ?> [new MemberEmployment()]<?php } ?>);
 		self.addEmployment = function() { self.member_employment.push(new MemberEmployment()) };
 		self.removeEmployment = function(relative) {
 			self.member_employment.remove(relative);
 		};
+		self.member_business = ko.observableArray(<?php if(!isset($_GET['id'])){ ?> [new MemberBusiness()]<?php } ?>);
+		self.addBusinnes = function() { self.member_business.push(new MemberBusiness()) };
+		self.removeBusiness = function(relative) {
+			self.member_business.remove(relative);
+		};
 		//Keeps track of member relatives, observing any changes
-		self.member_relatives = ko.observableArray([new MemberRelative()]);
+		self.member_relatives = ko.observableArray(<?php if(!isset($_GET['id'])){ ?> [new MemberRelative()]<?php } ?> );
 		//Add a relative
 		self.addRelative = function() { self.member_relatives.push(new MemberRelative()) };
 		//remove relative
 		self.removeRelative = function(relative) {
 			self.member_relatives.remove(relative);
 		};
+		<?php 
+		if(isset($_GET['id'])){ 
+			?>
+			self.member_business2 = ko.observableArray(<?php echo json_encode($member_business);  ?>);
+			
+			self.removeBusiness2 = function(relative) {
+				self.member_business2.remove(relative);
+			};
+			//Keeps track of member relatives, observing any changes
+			self.member_relatives2 = ko.observableArray(<?php echo json_encode($member_relatives);  ?>);
+			
+			//remove relative
+			self.removeRelative2 = function(relative) {
+				self.member_relatives2.remove(relative);
+			}
+			self.member_employment2 = ko.observableArray(<?php echo json_encode($member_employment_history);  ?>);
+			self.removeEmployment2 = function(relative) {
+				self.member_employment2.remove(relative);
+			
+			}; 
+		<?php 
+		}
+		?>
 		//reset the form
 		self.resetForm = function() {
 			self.member_relatives.removeAll();
 			self.member_employment.removeAll();
+			self.member_business.removeAll();
 			$("#form1")[0].reset();
 		};
 		//set options value afterwards
@@ -244,12 +326,14 @@ $(document).ready(function(){
     // in the "action" attribute of the form when valid
     submitHandler: function(form, event) {
 		event.preventDefault();
-		var form =  $("form[name='registration']");
-		var frmdata = form.serialize();
+		//var form =  $("form[name='registration']");
+		var frmdata = new FormData(form);
+		//var frmdata = form.serialize();
 		$.ajax({
 			url: "save_data.php",
 			type: 'POST',
 			data: frmdata,
+			async: false,
 			success: function (response) {
 				if($.trim(response) == "success"){
 					showStatusMessage("Successfully added new record" ,"success");
@@ -260,7 +344,10 @@ $(document).ready(function(){
 					showStatusMessage(response, "fail");
 				}
 				
-			}
+			},
+			cache: false,
+			contentType: false,
+			processData: false
 		});
     }
   });

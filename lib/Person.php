@@ -16,6 +16,18 @@ class Person extends Db {
 		}
 		return false;
 	}
+	public function findRelatives($id){
+		$result = $this->getarray("person_relative", "personId=".$id, "", "");
+		return !empty($result) ? $result : false;
+	}
+	public function findEmploymentHistory($id){
+		$result = $this->getarray("person_employment", "personId=".$id, "", "");
+		return !empty($result) ? $result : false;
+	}
+	public function findMemberBusiness($id){
+		$result = $this->getarray("person_business", "personId=".$id, "", "");
+		return !empty($result) ? $result : false;
+	}
 	public function updateStaffNumber($id){
 		$pno = "SBFS". sprintf('%08d',$id);
 		if($this->update(self::$table_name, array("person_number"), array("person_number"=>$pno), "id=".$id)){
