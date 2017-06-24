@@ -479,7 +479,8 @@ class Db{
 			if ($i < (count($fields) - 1)) $va = $va.",";
 		}
 		$ins = "INSERT INTO ".$table. " (".$fi.") VALUES (".$va.")";
-		echo $ins;
+		
+			//echo $ins;
 		 $inse = $this->conn->query($ins);
 		if($inse){
 			
@@ -531,7 +532,6 @@ class Db{
 			if ($i < (count($fields) - 1)) $va = $va.",";
 		}
 		$upd = "UPDATE ".$table. " SET ".$va." WHERE ".$where;
-		//echo $upd;
 		if($this->conn->query($upd)){
 			return true;
 		}else {

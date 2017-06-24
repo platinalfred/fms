@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Person extends Db {
 	protected static $table_name  = "person";
-	protected static $db_fields = array("id","person_number","person_type","title","marital_status", "firstname", "lastname", "othername","gender", "dateofbirth", "phone", "email","district","county","subcounty","parish","village","id_type", "id_number","physical_address","postal_address", "occupation", "photograph", "comment", "date_registered", "registered_by", "children_no", "dependants_no");
+	protected static $db_fields = array("id","person_number","person_type","id_specimen", "title","marital_status", "firstname", "lastname", "othername","gender", "dateofbirth", "phone", "email","district","county","subcounty","parish","village","id_type", "id_number","physical_address","postal_address", "occupation", "photograph", "comment", "date_registered", "registered_by", "children_no", "dependants_no");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
@@ -48,6 +48,7 @@ class Person extends Db {
 		$result_array = $this->getarray(self::$table_name, "","id DESC", "");
 		return !empty($result_array) ? $result_array : false;
 	}
+	
 	public function findPersonEmploymentHistory($id){
 		$result_array = $this->getarray("person_employment", "personId=".$id,"", "");
 		return !empty($result_array) ? $result_array : false;
@@ -76,6 +77,14 @@ class Person extends Db {
 			return false;
 		}
 	}
+	public function updateSpecimen($data){
+		if($this->update(self::$table_name, array('id_specimen'), array('id_specimen'=>$data['id_specimen']), "id=".$data['id'])){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 	public function addPerson($data){
 		
 		$fields = array_slice(self::$db_fields, 1);
@@ -88,16 +97,30 @@ class Person extends Db {
 		return $this->add("person_employment", $fields, $this->generateAddFields($fields, $data)); 
 			
 	}
+	
+	public function deleteEmployment($pid){
+		$this->del("person_employment", "personId=".$pid);
+	}
+	public function addPersonBusiness($data){
+		$fields = array("personId", "businessName", "natureOfBusiness", "businessLocation", "numberOfEmployees", "businessWorth", "ursbNumber", "dateAdded", "addedBy");
+		
+		return $this->add("person_business", $fields, $this->generateAddFields($fields, $data)); 
+			
+	}
+	public function deleteBusiness($pid){
+		$this->del("person_business", "personId=".$pid);
+	}
+	public function deleteRelatives($pid){
+		$this->del("person_relative", "personId=".$pid);
+	}
 	public function addRelative($data){
 		$fields = array("personId",  "is_next_of_kin", "first_name", "last_name", "other_names", "telephone", "relative_gender", "relationship", "address", "address2");
 		return $this->add("person_relative", $fields, $this->generateAddFields($fields, $data)); 
 			
 	}
 	public function updatePerson($data){
-		$fields = array_slice(self::$db_fields,1);
-		$id = $data['id'];
-		unset($data['id']);
-		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){
+		$fields = array("id_specimen", "title","marital_status", "firstname", "lastname", "othername","gender", "dateofbirth", "phone", "email","district","county","subcounty","parish","village","id_type", "id_number","physical_address","postal_address", "occupation", "comment",  "children_no", "dependants_no", "modifiedBy");
+		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$data['personId'])){
 			return true;
 		}
 		return false;
