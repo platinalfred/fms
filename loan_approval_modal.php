@@ -21,7 +21,7 @@
 										<!--ko if: clientType==1&&$parent.loan_account_details()-->,
 										<i class="fa fa-mobile"></i> <span data-bind="text: $parent.loan_account_details().member_details.phone"></span>,  
 										<i class="fa fa-at"></i> <span data-bind="text: $parent.loan_account_details().member_details.email"></span>,  
-										<i class="fa fa-map-envelope"></i> <span data-bind="text: $parent.loan_account_details().member_details.postal_address">Kawempe, Kazo</span>
+										<i class="fa fa-map-envelope-square"></i> <span data-bind="text: $parent.loan_account_details().member_details.postal_address">Kawempe, Kazo</span>
 										<i class="fa fa-map-marker"></i> <span data-bind="text: $parent.loan_account_details().member_details.physical_address">Kawempe, Kazo</span>
 										<!--/ko-->
 									</div>
@@ -47,10 +47,12 @@
 													</tr>
 												</tbody>
 												<tfoot>
-													<th>Total (UGX)</th>
-													<th data-bind="text: curr_format(parseInt(array_total($parent.loan_account_details().guarantors,2)">&nbsp;</th>
-													<th data-bind="text: curr_format(parseInt(array_total($parent.loan_account_details().guarantors,3)">&nbsp;</th>
-													<th data-bind="text: curr_format(parseInt(array_total($parent.loan_account_details().guarantors,4)"></th>
+													<tr>
+														<th>Total (UGX)</th>
+														<th data-bind="text: curr_format(parseInt(array_total($parent.loan_account_details().guarantors,2)">&nbsp;</th>
+														<th data-bind="text: curr_format(parseInt(array_total($parent.loan_account_details().guarantors,3)">&nbsp;</th>
+														<th data-bind="text: curr_format(parseInt(array_total($parent.loan_account_details().guarantors,4)"></th>
+													</tr>
 												</tfoot>
 											</table>
 										</div>
@@ -61,7 +63,7 @@
 											<table class="table table-condensed">
 												<thead>
 													<tr>
-														<th>Item</strong></th>
+														<th>Item</th>
 														<th>Description</th>
 														<th>Item Value</th>
 													</tr>
@@ -74,9 +76,11 @@
 													</tr>
 												</tbody>
 												<tfoot>
-													<th>Total</th>
-													<th></th>
-													<th data-bind="text: curr_format(parseInt(array_total($parent.loan_account_details().collateral_items,4)))"></th>
+													<tr>
+														<th>Total</th>
+														<th></th>
+														<th data-bind="text: curr_format(parseInt(array_total($parent.loan_account_details().collateral_items,4)))"></th>
+													</tr>
 												</tfoot>
 											</table>
 										</div>

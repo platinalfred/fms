@@ -16,28 +16,28 @@
                         </div>
                         <div class="ibox-content">
                             <form id="loanAccountForm" class="form-horizontal wizard-big">
-                                <h1>Loan Account</h1>
+                                <h1>Loan Account <small>Account Information</small></h1>
                                 <fieldset>
-                                    <h2>Account Information</h2>
+                                    
 									<div class="row">
-										<div class="form-group">
 										<?php 
 										if(!isset($client)):?>
+										<div class="form-group">
 											<div class="col-sm-6">
 												<label class="control-label">Customer/Member Group</label>
 													<select data-placeholder="Select customer/member group..." class="form-control chosen-select" data-bind='options: customers, optionsText: "clientNames", optionsCaption: "Select customer/member group...", optionsAfterRender: setOptionValue("id"), value: client' data-msg-required="Client name is required" required>
 													</select>
 											</div>
-										<?php endif;?>
 										</div>
+										<?php endif;?>
 										<div class="form-group">
 											<div class="col-md-6" data-bind='with: client'>
 												<label class="control-label">Product</label>
 												<select class="form-control" id="loanProduct" name="loanProduct" data-bind='options: $root.filteredLoanProducts, optionsText: "productName", optionsCaption: "Select product...", optionsAfterRender: $root.setOptionValue("id"), value: $root.loanProduct' data-msg-required="Loan product is required" required>
-												<span class="help-block m-b-none">
+												</select>
+												<span class="help-block m-b-none" data-bind="with: $root.loanProduct">
 												<small data-bind="text: description">Product description goes here.</small>
 												</span>
-												</select>
 											</div>
 											<div class="col-md-6" data-bind="with: loanProduct">
 												<div class="col-sm-2">
@@ -83,7 +83,7 @@
 											</div>
 											<div class="hr-line-dashed"></div>
 											<div class="form-group">
-												<label class="col-md-3 control-label">First installment Offset Period <sup data-toggle="tooltip" title="Period of time before which a client can start paying up the loan amount" data-placement="right"><i class="fa fa-question-circle"></i><sup></label>
+												<label class="col-md-3 control-label">First installment Offset Period <sup data-toggle="tooltip" title="Period of time before which a client can start paying up the loan amount" data-placement="right"><i class="fa fa-question-circle"></i></sup></label>
 												<div class="col-md-3">
 													<input type="number" class="form-control input-sm" name="offSetPeriod" id="offSetPeriod" data-bind='value: $root.offSetPeriod, attr: {"data-rule-min":(parseFloat(minOffSet)>0?minOffSet:null), "data-rule-max": (parseFloat(maxOffSet)>0?maxOffSet:null), "data-msg-min":"Offset period is less than "+minOffSet, "data-msg-max":"Offset period is more than "+maxOffSet, value:defOffSet}'>
 													<div>
@@ -93,7 +93,7 @@
 														<label class="col-sm-4" data-bind="visible: parseFloat(maxOffSet)>0, text: maxOffSet"></label>
 													</div>
 												</div>
-												<label class="col-md-3 control-label">Grace Period <sup data-toggle="tooltip" title="Number of days the client is given to pay up upon default of the payment contract" data-placement="right"><i class="fa fa-question-circle"></i><sup></label>
+												<label class="col-md-3 control-label">Grace Period <sup data-toggle="tooltip" title="Number of days the client is given to pay up upon default of the payment contract" data-placement="right"><i class="fa fa-question-circle"></i></sup></label>
 												<div class="col-md-3">
 													<input type="number" class="form-control input-sm" name="gracePeriod" id="gracePeriod" data-bind='value: $root.gracePeriod, attr: {"data-rule-min":(parseFloat(minGracePeriod)>0?minGracePeriod:null), "data-rule-max": (parseFloat(maxGracePeriod)>0?maxGracePeriod:null), "data-msg-min":"Grace Period is less than "+minGracePeriod, "data-msg-max":"Grace Period is more than "+maxGracePeriod, value:defGracePeriod}'>
 													<div>
@@ -124,9 +124,9 @@
                                 </fieldset>
 								<!--ko with: loanProduct -->
 								<!--ko if: $root.filteredLoanProductFees().length>0 -->
-								<h1>Loan Fees</h1>
+								<h1>Loan Fees <small>Applicable Fees (<span data-bind="text: $root.filteredLoanProductFees().length"></span>)</small></h1>
 								<fieldset>
-									<h2>Applicable Fees (<span data-bind="text: $root.filteredLoanProductFees().length"></span>)</h2>
+									
 									<div class="row">
 										<div class="form-group">
 											<div class="table-responsive">
@@ -158,9 +158,9 @@
 								<!-- /ko -->
 								<!--ko with: loanProduct -->
 								<!--ko if: ((parseInt($root.client().clientType)==1)&&$root.filteredGuarantors().length>0) -->
-								<h1>Guarantors</h1>
+								<h1>Guarantors <small>Choose Guarantors</small></h1>
 								<fieldset>
-									<h2>Choose Guarantors</h2>
+									
 									<div class="row">
 										<div class="form-group">
 											<div class="table-responsive">
@@ -208,16 +208,16 @@
 								<!-- /ko -->
 								<!--ko with: loanProduct -->
 								<!--ko if: (parseInt($root.client().clientType)==1) -->
-								<h1>Collateral</h1>
+								<h1>Collateral <small>Add Collateral</small></h1>
 								<fieldset>
-									<h2>Add Collateral</h2>
+									
 									<div class="row">
 										<div class="hr-line-dashed"></div>
 										<div class="form-group" data-bind="visible: $root.addedCollateral().length > 0">
 											<div class="col-md-12">
-												<div class="col-sm-6">Total Collateral: UGX <span data-bind="text: curr_format($root.totalCollateral()), css: {'text-danger': $root.totalCollateral()<(($root.loanProduct().minCollateral/100)($root.requestedAmount()+$root.requestedAmount()*$root.interestRate/100)), 'text-info': $root.totalCollateral()>(($root.loanProduct().minCollateral/100)($root.requestedAmount()+$root.requestedAmount()*$root.interestRate/100))}"></span> <i  data-bind="css: {'fa fa-check text-info':$root.totalCollateral()>(($root.loanProduct().minCollateral/100)($root.requestedAmount()+$root.requestedAmount()*$root.interestRate/100))}"></i></div>
+												<div class="col-sm-6">Total Collateral: UGX <span data-bind="text: curr_format($root.totalCollateral()), css: {'text-danger': $root.totalCollateral()<(($root.loanProduct().minCollateral/100)*($root.requestedAmount()+$root.requestedAmount()*$root.interestRate()/100)), 'text-info': $root.totalCollateral()>(($root.loanProduct().minCollateral/100)*($root.requestedAmount()+$root.requestedAmount()*$root.interestRate()/100))}"></span> <i  data-bind="css: {'fa fa-check text-info':$root.totalCollateral()>(($root.loanProduct().minCollateral/100)*($root.requestedAmount()+$root.requestedAmount()*$root.interestRate()/100))}"></i></div>
 												<div class="col-sm-6" class="text-info">
-												Required Minimum: UGX <span data-bind='text: curr_format(($root.loanProduct().minCollateral/100)*($root.requestedAmount()+$root.requestedAmount()*$root.interestRate/100))'> </span>
+												Required Minimum: UGX <span data-bind='text: curr_format(parseInt(($root.loanProduct().minCollateral/100)*($root.requestedAmount()+$root.requestedAmount()*$root.interestRate()/100)))+" at a rate of "+$root.loanProduct().minCollateral+"%"'> </span>
 												</div>
 											</div>
 										<div class="hr-line-dashed"></div>
@@ -234,9 +234,9 @@
 													</thead>
 													<tbody data-bind="foreach: $root.addedCollateral">
 														<tr>
-															<td><input class="form-control input-sm required" name="itemName[]" data-bind='value: itemName, uniqueName: true' data-msg-required="Item name is required" required/></td>
-															<td><textarea class="form-control input-sm required" name="description[]" data-bind='value: description' required></textarea></td>
-															<td><input class="form-control input-sm required" name="itemValue[]" type="number" data-bind='value: itemValue' required/></td>
+															<td><input class="form-control input-sm" name="itemName[]" data-bind='value: itemName' data-msg-required="Item name is required" required/></td>
+															<td><textarea class="form-control input-sm" name="description[]" data-bind='value: description' required></textarea></td>
+															<td><input class="form-control input-sm" name="itemValue[]" type="number" data-bind='value: itemValue' required/></td>
 															<td><input class="input-sm" name="attachmentUrl[]" type="file" data-bind='value: attachmentUrl'/></td>
 															<td><span title="Remove item" class="btn text-danger" data-bind='click: $root.removeCollateral'><i class="fa fa-minus"></i></span></td>
 														</tr>

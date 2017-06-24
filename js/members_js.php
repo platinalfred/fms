@@ -222,10 +222,10 @@ $(document).ready(function(){
 	};
 	
 	var memberModel = new Member();
-	ko.applyBindings(memberModel, $("#form1")[0]);
+	ko.applyBindings(memberModel, $("#update_member, #add_member")[0]);
 	
 $(document).ready(function(){
-	var dTable;
+	<?php if(!isset($_GET['view'])):?>var dTable;<?php endif;?>
 	
 	$(".save").click(function(){
 		var frmdata = $(this).closest("form").serialize();
@@ -238,7 +238,7 @@ $(document).ready(function(){
 					showStatusMessage("Successfully added new record" ,"success");
 					setTimeout(function(){
 						memberModel.resetForm();
-						dTable.ajax.reload();
+						<?php if(!isset($_GET['view'])):?>dTable.ajax.reload();<?php endif;?>
 					}, 2000);
 				}else{
 					
@@ -339,7 +339,7 @@ $(document).ready(function(){
 					showStatusMessage("Successfully added new record" ,"success");
 					form[0].reset();
 					$('input[type="radio"]').removeAttr('checked').iCheck('update');
-					dTable.ajax.reload();
+					<?php if(!isset($_GET['view'])):?>dTable.ajax.reload();<?php endif;?>
 				}else{
 					showStatusMessage(response, "fail");
 				}
@@ -362,6 +362,7 @@ $(document).ready(function(){
 	$("#subTable").DataTable({ dom: "lfrtipB" });
 			  
   /* PICK DATA FOR DATA TABLE  */
+  <?php if(!isset($_GET['view'])):?>
 	var handleDataTableButtons = function() {
 		  if ($("#member_table").length ) {
 			  dTable = $('#member_table').DataTable({
@@ -460,6 +461,7 @@ $(document).ready(function(){
 			}
 		});
 	}
+	<?php endif;?>
 	function showStatusMessage(message='', display_type='success'){
 		new PNotify({
 			  title: "Alert",

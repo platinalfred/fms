@@ -76,7 +76,7 @@ function addCommas(nStr){
 											<div class="col-sm-12 no_padding">
 											<div class="form-group">
 												<div class="col-sm-3 no_padding">
-													<label style=""class="">Name <span class="req">*</span></label>
+													<label class="">Name <span class="req">*</span></label>
 												</div>
 												<div class="col-sm-9">
 													<input type="text" value="<?php echo $member_data['firstname']; ?>" class="form-control" name="firstname" data-msg-require="Please enter name" placeholder="First Name" required/>
@@ -189,7 +189,7 @@ function addCommas(nStr){
 									<div class="col-lg-6">
 										<div class="form-group">
 											<label>Telephone <span class="req">*</span></label>
-											<input id="phone" value="<?php echo $member_data['phone']; ?>" type="text" class="form-control" data-mask="(999) 999-9999" placeholder="" name="phone"required ><span class="help-block">(073) 000-0000</span>
+											<input id="phone" value="<?php echo $member_data['phone']; ?>" type="text" class="form-control" data-mask="(999) 999-9999" placeholder="" name="phone" required ><span class="help-block">(073) 000-0000</span>
 										</div>
 									</div>
 									<div class="col-lg-3">
@@ -322,7 +322,7 @@ function addCommas(nStr){
 										</div>
 									</div>
 								</div>
-							<fieldset>
+							</fieldset>
 							<h1>Employment</h1>
 							<fieldset>
 								<div class="row" data-bind="foreach: $root.member_employment2">
@@ -391,14 +391,14 @@ function addCommas(nStr){
 										</div>
 									</div>
 								</div>
-							<fieldset>
+							</fieldset>
 							
 							<h1>Relatives</h1>
 							
 							<fieldset>
 								<div class="row" data-bind="foreach: $root.member_relatives2">
 									
-									<h3 data-bind="text:'Relative '+($index()+init)"></h3>
+									<h3 data-bind="text:'Relative '+($index()+1)"></h3>
 									<div class="col-lg-3">
 										<div class="form-group">
 											<label>Relationship</label>
@@ -422,7 +422,7 @@ function addCommas(nStr){
 									<div class="col-lg-12">
 										<div class="form-group">
 											<div class="col-sm-2 no_padding">
-												<label style=""class="">Name <span class="req">*</span></label>
+												<label>Name <span class="req">*</span></label>
 											</div>
 											<div class="col-sm-9">
 												<div class="col-sm-4">
@@ -454,7 +454,7 @@ function addCommas(nStr){
 									<div class="col-lg-3">
 										<div class="form-group">
 											<label>Phone </label>
-											<input ="relative[]['telephone']" data-mask="(999) 999-9999" data-bind="attr: {name:'relative['+$index()+'][telephone]'}, value: telephone" type="text" class="form-control ">
+											<input data-mask="(999) 999-9999" data-bind="attr: {name:'relative['+$index()+'][telephone]'}, value: telephone" type="text" class="form-control ">
 										</div>
 									</div>
 									<div class="col-lg-3"><span title="Remove relative" class="btn text-danger btn-lg" data-bind='click: $root.removeRelative2'><i class="fa fa-minus"></i></span></div>
@@ -487,7 +487,7 @@ function addCommas(nStr){
 									<div class="col-lg-12">
 										<div class="form-group">
 											<div class="col-sm-2 no_padding">
-												<label style=""class="">Name <span class="req">*</span></label>
+												<label>Name <span class="req">*</span></label>
 											</div>
 											<div class="col-sm-9">
 												<div class="col-sm-4">

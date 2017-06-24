@@ -1,5 +1,5 @@
 <?php
-$needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout");
+$needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout", "datepicker");
 $page_title = "Member Details";
 include("include/header.php");
 require_once("lib/Forms.php");
@@ -8,6 +8,7 @@ $member = new Member();
 $accounts = new Accounts();
 $shares = new Shares();
 $person = new Person();
+global $client;
 $client  = array();
 $member_data  = $member->findMemberDetails($_GET['id']);
 $names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_data['othername']; 
@@ -28,15 +29,6 @@ p{
 	margin: 0 0 3px;
 }
 </style>
-<div id="add_loan_account" class="modal fade" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-body">
-				<?php include_once("add_loan_account.php");?>
-			</div>
-		</div>
-	</div>
-</div>
 <?php include("update_member_modal.php");?>
 <div class="row">
 	
@@ -186,8 +178,8 @@ p{
 					<div class="clearboth"></div>
 					<div class="col-md-12 col-sm-12 col-xs-12 " style="border-top:1px solid #09A; padding-top:10px;">
 						<p>
-							<a  href="#add_loan_account" class="btn btn-sm btn-info" data-toggle="modal" class="btn btn-info btn-sm"> <i class="fa fa-plus"></i> Apply for a loan</a>
-							<a  href="?id=<?php echo  $_GET['id']; ?>&view=mysubscriptions" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Savings</a>
+							<a  href="?id=<?php echo  $_GET['id']; ?>&view=loan_accs" class="btn btn-sm btn-info" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Loan Accounts</a>
+							<a  href="?id=<?php echo  $_GET['id']; ?>&view=savings_accs" class="btn btn-info btn-sm"> <i class="fa fa-dollar"></i> Saving Accounts</a>
 							<a  href="?id=<?php echo  $_GET['id']; ?>&view=mysubscriptions" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Subscriptions</a>
 							<?php 
 							if($member_data['memberType'] == 1){ ?>
@@ -205,7 +197,7 @@ p{
 						$forms = new Forms($task);
 					}elseif(isset($_GET['view'])){
 						$view = $_GET['view'];
-						$reports = new Reports($view);
+						$reports = new Reports($view, $client);
 					}
 					?>
 				</div>
@@ -219,4 +211,14 @@ p{
 <?php
  include("include/footer.php");
   include("js/members_js.php");
+  if(isset($_GET['view'])){
+	  switch($_GET['view']){
+		case 'loan_accs':
+			include("js/loanAccount.php");
+		break;
+		case 'savings_accs':
+			include("js/depositAccount.php");
+		break;
+	  }
+  }
 ?>

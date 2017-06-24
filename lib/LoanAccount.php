@@ -8,6 +8,7 @@ class LoanAccount extends Db {
 	protected static $member_sql = "SELECT `members`.`id` `clientId`, loanAccountId, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType` FROM `member_loan_account` JOIN (SELECT `member`.`id`, `firstname`, `lastname`, `othername` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`)`members` ON `memberId` = `members`.`id`";
 	
 	protected static $saccogroup_sql = "SELECT `saccogroup`.`id` `clientId`, `loanAccountId`, `groupName` `clientNames`, 2 as `clientType` FROM `group_loan_account` JOIN `saccogroup` ON `saccoGroupId` = `saccogroup`.`id`";
+	protected static $loan_payments_sql = "SELECT `loanAccountId`, COALESCE(SUM(amount),0) `amountPaid` FROM `loan_repayment` GROUP BY `loanAccountId`";
 	
 	
 	
@@ -27,6 +28,17 @@ class LoanAccount extends Db {
 		$member_group_union_sql = self::$member_sql. " UNION ". self::$saccogroup_sql;
 		
 		$table = self::$table_name." JOIN (".$member_group_union_sql.") `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id`";
+	
+		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
+		return !empty($result_array) ? $result_array : false;
+	}
+	
+	public function getApprovedLoans($where = 1){
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`" );
+		
+		$member_group_union_sql = self::$member_sql. " UNION ". self::$saccogroup_sql;
+		
+		$table = self::$table_name." JOIN (".$member_group_union_sql.") `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN (". self::$loan_payments_sql. ") `loan_payments` ON `loan_account`.`id` = `loan_payments`.`loanAccountId`";
 	
 		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
 		return !empty($result_array) ? $result_array : false;

@@ -285,7 +285,7 @@ function sumUpAmount(items, transactionType){
 
 	var depositAccountModel = new DepositAccount();
 	depositAccountModel.getServerData();// get data to be populated on the page
-	ko.applyBindings(depositAccountModel);
+	ko.applyBindings(depositAccountModel, $("#deposit_account_details")[0]);
 	$("#enterDepositForm").validate({ submitHandler: depositAccountModel.addDeposit });
 	$("#enterWithdrawForm").validate({ submitHandler: depositAccountModel.addWithdraw });
 	$("#depAccountForm").validate({ submitHandler: depositAccountModel.save });//, $("#deposit_account_form")[0]

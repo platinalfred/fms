@@ -70,7 +70,7 @@
 		self.addCollateral = function() { self.addedCollateral.push(new Collateral()) };
 		self.removeCollateral = function(addedCollateral) { self.addedCollateral.remove(addedCollateral) };
 		
-		self.customers = ko.observableArray([{"id":1,"clientNames":"Kiwatule Womens Savings Group","clientType":2}]);
+		<?php if(!isset($client)):?>self.customers = ko.observableArray([{"id":1,"clientNames":"Kiwatule Womens Savings Group","clientType":2}]); <?php endif;?>
 		// Stores an array of all the Data for viewing on the page
 		self.loanProducts = ko.observableArray([{"id":1,"productName":"Group Savings Loan","description":"Suitable for group savings", "availableTo":"2"}]);
 		self.productFees = ko.observableArray();
@@ -151,7 +151,7 @@
 					self.loanProducts(response.products);
 					self.productFees(response.productFees);
 					self.guarantors(response.guarantors);
-					self.customers(response.customers);
+					<?php if(!isset($client)):?>self.customers(response.customers); <?php endif;?>
 				}
 			})
 		};
@@ -278,8 +278,251 @@
 
 	var loanAccountModel = new LoanAccount();
 	loanAccountModel.getServerData();// get data to be populated on the page
-	ko.applyBindings(loanAccountModel);
+	ko.applyBindings(loanAccountModel, $("#loan_account_details")[0]);
 	$("#loanAccountForm").validate({submitHandler: loanAccountModel.save});
 	$("#loanPaymentForm").validate({submitHandler: loanAccountModel.makePayment});
 	$("#loanAccountApprovalForm").validate({submitHandler: loanAccountModel.approveLoan});
+	
+	
+<!-- Datatables -->
+
+
+	var user_props = <?php echo json_encode($_SESSION); ?>;
+	var dTable = new Object();
+	$(document).ready(function() {
+		  var post_data = new Object();
+		  <?php if(isset($client)):?> post_data=<?php echo json_encode($client);?>; <?php endif;?>
+	var handleDataTableButtons = function() {
+	  if ($("#applications").length) {
+		  post_data['origin']='loan_applications';
+		dTable['applications'] = $('#applications').DataTable({
+		  dom: "Bfrtip",
+		  "order": [ [3, 'asc' ]],
+		  "ajax": {
+			  "url":"ajax_data.php",
+			  "type": "POST",
+			  "data":  post_data
+		  },
+		  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {return '<a href="members.php?client_id='+full.clientId+'&clientType='+full.clientType+'&loanId='+full.id+'" title="View details">'+data+'</a>';}},
+				{ data: 'clientNames'},
+				{ data: 'productName'},
+				{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} 
+				<?php if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])){?>,
+				{ data: 'id', render: function ( data, type, full, meta ) {
+					var authorized =  false;
+					if(user_props['branch_credit']&&parseInt(full.requestedAmount)<1000001){
+						authorized = true;
+					}
+					if(user_props['management_credit']&&parseInt(full.requestedAmount)>1000000&&parseInt(full.requestedAmount)<5000001){
+						authorized = true;
+					}
+					if(user_props['executive_board']&&parseInt(full.requestedAmount)>5000000){
+						authorized = true;
+					}
+					return authorized?'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_me" data-toggle="modal"><i class="fa fa-edit"></i> Approve </a>':'';}}
+				<?php }?>
+				] ,
+		  buttons: [
+			{
+			  extend: "copy",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "csv",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "excel",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "pdfHtml5",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "print",
+			  className: "btn-sm"
+			},
+		  ],
+		  responsive: true/*, */
+		  
+		});
+		//$("#datatable-buttons").DataTable();
+	  }
+	  if ($("#rejected").length) {
+		  post_data['origin']='rejected';
+		  post_data['type']=<?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>;
+		  
+		dTable['rejected'] = $('#rejected').DataTable({
+		  dom: "Bfrtip",
+		  "order": [ [3, 'asc' ]],
+		  "ajax": {
+			  "url":"ajax_data.php",
+			  "type": "POST",
+			  "data":  post_data
+		  },
+		  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {return '<a href="members.php?client_id='+full.clientId+'&clientType='+full.clientType+'&loanId='+full.id+'" title="View details">'+data+'</a>';}},
+				{ data: 'clientNames'},
+				{ data: 'productName'},
+				{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
+				] ,
+		  buttons: [
+			{
+			  extend: "copy",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "csv",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "excel",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "pdfHtml5",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "print",
+			  className: "btn-sm"
+			},
+		  ],
+		  responsive: true/*, */
+		  
+		});
+	  }
+	  if ($("#approved").length) {
+		  post_data['origin']='loan_accounts';
+		  post_data['status']=3;
+		dTable['approved'] = $('#approved').DataTable({
+		  dom: "Bfrtip",
+		  <?php if(!isset($client)): ?>
+		  "order": [ [3, 'asc' ]],
+		  "processing": true,
+		  "serverSide": true,
+		  "deferRender": true,
+		  <?php endif; ?>
+		  "ajax": {
+			  "url":"<?php if(!isset($client)): ?>server_processing<?php else: ?>ajax_data<?php endif; ?>.php",
+			  "type": "POST",
+			  "data":  <?php if(!isset($client)): ?>function(d){
+				d.page = 'loan_accounts';
+				d.type = <?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>; //loan_type for the datatable;
+				d.start_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"moment().subtract(30, 'days').format('X')"; ?>;
+				d.end_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"moment().format('X')"; ?>;
+				}
+				<?php else: ?> post_data<?php endif; ?>
+		  },
+		  "initComplete": function(settings, json) {
+				$(".table#approved tbody>tr:first").trigger('click');
+		  },
+		  "footerCallback": function (tfoot, data, start, end, display ) {
+            var api = this.api(), cols = [5,6,7];
+			$.each(cols, function(key, val){
+				var total = api.column(val).data().sum();
+				$(api.column(val).footer()).html( curr_format(total) );
+			});
+		  },columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {return '<a href="members.php?client_id='+full.clientId+'&clientType='+full.clientType+'&loanId='+full.id+'" title="View details">'+data+'</a>';}},
+				{ data: 'clientNames'},
+				{ data: 'productName'},
+				{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+				{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.repaymentsFrequency)) + ' ' + getDescription(4,data);}},
+				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
+				{ data: 'amountPaid', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
+				{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
+				] ,
+		  buttons: [
+			{
+			  extend: "copy",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "csv",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "excel",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "pdfHtml5",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "print",
+			  className: "btn-sm"
+			},
+		  ],
+		  responsive: true/*, */
+		  
+		});
+		//$("#datatable-buttons").DataTable();
+	  }
+	};
+	TableManageButtons = function() {
+	  "use strict";
+	  return {
+		init: function() {
+		  handleDataTableButtons();
+		}
+	  };
+	}();
+	TableManageButtons.init();
+  });
+	  
+	$('.table tbody').on('click', 'tr .delete_me', function () {
+		var confirmation = confirm("Are sure you would like to delete this loan application?");
+		if(confirmation){
+			var tbl;
+			var id;
+			var d_id = $(this).attr("id")
+			var arr = d_id.split("-");
+			id = arr[0];//This is the row id
+			tbl = arr[1]; //This is the table to delete from 
+			 $.ajax({ // create an AJAX call...
+				type: 'POST',
+				url: "delete.php",
+				data: {id:id, tbl:tbl}, // the file to call
+				success: function(response) { // on success..
+					showStatusMessage(response, "success");
+					setTimeout(function(){
+						dTable['applications'].ajax.reload();
+					}, 300);
+				}			
+			}); 
+		}
+	});
+	$('.table#applications tbody').on('click', 'tr .edit_me', function () {
+		var row = $(this).closest("tr[role=row]");
+		if(row.length == 0){
+			row = $(this).closest("tr").prev();
+		}
+		loanAccountModel.getLoanAccountDetails();
+		edit_data(dTable['applications'].row(row).data(), "loanAccountApprovalForm"); 
+	});
+
+	$('.table tbody').on('click', 'tr[role=row]', function () {
+		var tbl = $(this).parent().parent();
+		var dt = dTable[$(tbl).attr("id")];
+		var data = dt.row(this).data();
+		loanAccountModel.account_details(data);
+		loanAccountModel.amountApproved(parseInt(data.requestedAmount));
+		//ajax to retrieve transactions history//
+		getTransactionHistory(data.id);
+	});
+	
+	 function getTransactionHistory(loanAccountId){
+		 $.ajax({
+			url: "ajax_data.php",
+			data: {id:loanAccountId, origin:'loan_account_transactions'},
+			type: 'POST',
+			dataType: 'json',
+			success: function (response) {
+				loanAccountModel.transactionHistory(response);			
+			}
+		});
+	 }
 </script>
