@@ -13,12 +13,26 @@ class LoanAccount extends Db {
 	
 	
 	public function findById($id){
-		$result = $this->getrec(self::$table_name, "id=".$id, "");
+		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
 		return !empty($result) ? $result:false;
 	}
 	
 	public function findAll($where = 1){
 		$result_array = $this->getarray(self::$table_name, $where, "", "");
+		return !empty($result_array) ? $result_array : false;
+	}
+	
+	public function getLoanAmounts($where = ""){
+			$in_part_string = "";
+			$where_clause = "";
+		if(is_array($where)){
+			foreach($where as $depositAccount){
+				$in_part_string .= $depositAccount['loanAccountId'].",";
+			}
+			$where_clause .= " AND `id` IN (".substr($in_part_string, 0, -1).")";
+		}
+		$fields = "COALESCE(SUM(`amountApproved`),0) `approved`, COALESCE(SUM(`disbursedAmount`),0) `disbursed`, COALESCE(SUM(`interestRate`),0) `interest`";
+		$result_array = $this->getfrec(self::$table_name, $fields, $where, "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	
@@ -34,7 +48,7 @@ class LoanAccount extends Db {
 	}
 	
 	public function getApprovedLoans($where = 1){
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`" );
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`offSetPeriod`", "`amountApproved`" , "`approvalNotes`" ,"`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`" );
 		
 		$member_group_union_sql = self::$member_sql. " UNION ". self::$saccogroup_sql;
 		

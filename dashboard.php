@@ -19,12 +19,17 @@ include("include/header.php");
 						</div>
 						<div class="ibox-content">
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-4">
 									<small>Portfolio</small>
 									<h3 class="no-margins"><a href="view_loan_payments.php" title="Details" data-bind="text:figures.loan_portfolio">40,642</a></h3>
 									<div class="font-bold text-navy"> <span data-bind="text: percents.loan_portfolio">44</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.loan_portfolio < 1, 'fa-level-up': percents.loan_portfolio > 0}"></i> </div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-4">
+									<small>Penalties</small>
+									<h3 class="no-margins"><a href="view_loan_payments.php" title="Details" data-bind="text:figures.loan_portfolio">40,642</a></h3>
+									<div class="font-bold text-navy"> <span data-bind="text: percents.penalties">44</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.penalties < 1, 'fa-level-up': percents.penalties > 0}"></i> </div>
+								</div>
+								<div class="col-md-4">
 									<small>Payments</small>
 									<h3 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text:figures.loan_payments">20,612</a></h3>
 									<div class="font-bold text-navy"><span data-bind="text:percents.loan_payments">22</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.loan_payments < 1, 'fa-level-up': percents.loan_payments > 0}"></i> </div>

@@ -15,6 +15,11 @@ class MemberLoanAccount extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
+	public function findSpecifics($fields, $where = ""){ //pick out data for specific fields
+		$where .= " AND `loanAccountId` IN (SELECT `id` FROM `loan_account` WHERE `status`=3)";
+		$result_array = $this->getfarray(self::$table_name, $fields, $where, "", "");
+		return !empty($result_array) ? $result_array : false;
+	}
 	
 	public function addMemberLoanAccount($data){
 		$fields = array_slice(self::$table_fields, 1);

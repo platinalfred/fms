@@ -2,10 +2,8 @@
 $needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout", "datepicker");
 $page_title = "Member Details";
 include("include/header.php");
-require_once("lib/Forms.php");
-require_once("lib/Reports.php");
+include("lib/Reports.php");
 $member = new Member();
-$accounts = new Accounts();
 $shares = new Shares();
 $person = new Person();
 global $client;
@@ -45,13 +43,13 @@ p{
 				</div>
 				<div class="ibox-content" style="padding-top:3px;">
 					<div class="col-lg-12">
-						<div class="ibox collapsed" style="margin-bottom:0px;     margin-top: 0px;">
+						<div class="ibox<?php if(isset($_GET['view'])):?> collapsed<?php endif;?>" style="margin-bottom:0px;     margin-top: 0px;">
 							<div class="ibox-title" style="border-top:none;">
 								<div class="col-lg-2">
 									<h5>Member Details</h5>
 									<div class="ibox-tools">
 										<a class="collapse-link">
-											<i class="fa fa-chevron-up" style="color:#23C6C8;"></i>
+											<i class="fa fa-chevron-<?php if(isset($_GET['view'])):?>up<?php else:?>down<?php endif;?>" style="color:#23C6C8;"></i>
 										</a>
 									</div>
 								</div>
@@ -151,24 +149,49 @@ p{
 											}
 											?>
 										</div>
+											<div class="col-md-12 col-sm-12 col-xs-12 details">
 										<?php
-										$balance =  $accounts->findByAccountBalance($member_data['id']); 
-										if($balance > 1){
-											$minimum_amount = $accounts->findMinimumBalance();
-											$available = $balance - $minimum_amount;
-										}else{
-											$available = 0;
-										} ?>
-										
-										<div class="col-md-12 col-sm-12 col-xs-12 details">
-											<div class="col-md-5 col-sm-12 col-xs-12 ">
-												<p class="p"><b>Actual balance: <?php  echo number_format($balance,2,".",",");  ?> UGX</b></p>
-											</div>
-											<div class="col-md-5 col-sm-12 col-xs-12 ">
-												<p class="p"><b>Available Balance: <?php   echo number_format($available,2,".",","); ?> UGX</b></p>
-											</div>
+										$member_deposit_account_obj = new MemberDepositAccount();
+										$deposit_account_obj = new DepositAccount();
+										$deposit_account_transaction_obj = new DepositAccountTransaction();
+										$depositAccountIds = $member_deposit_account_obj->findSpecifics("`depositAccountId`", "`memberId`=".$member_data['id']);
+										if($depositAccountIds){
+											$initial_balances_sum = $deposit_account_obj->findSpecifics("COALESCE(SUM(`openingBalance`),0) `initial_balances`",$depositAccountIds);
+											$deposits_sum = $deposit_account_transaction_obj->getMoneySum(1,$depositAccountIds);
+											$withdraws_sum = $deposit_account_transaction_obj->getMoneySum(2,$depositAccountIds);
 											
-										</div>
+											$balance =  $deposits_sum - $withdraws_sum; 
+											if($balance > 1){
+												$minimum_amount = $initial_balances_sum['initial_balances'];
+												$available = $balance - $minimum_amount;
+											}else{
+												$available = 0;
+											} ?>
+												<div class="col-md-5 col-sm-12 col-xs-12 ">
+													<p class="p"><b>Savings (UGX): <?php   echo number_format($available,2,".",","); ?></b></p>
+												</div>
+										<?php }?>
+										<?php
+										$member_loan_account_obj = new MemberLoanAccount();
+										$loan_account_obj = new LoanAccount();
+										$loan_repayment_obj = new LoanRepayment();
+										$loanAccountIds = $member_loan_account_obj->findSpecifics("`loanAccountId`", "`memberId`=".$member_data['id']);
+										if($loanAccountIds){
+											$loan_amounts = $loan_account_obj->getLoanAmounts($loanAccountIds[0]["loanAccountId"]);
+											//$loan_penalties = $loan_account_obj->getAppliedPenalties($loanAccountIds);
+											//$loan_fees = $loan_account_obj->getLeviedFees($loanAccountIds);
+											
+											$loan_amount =  $loan_amounts['disbursed'] + ($loan_amounts['disbursed']*$loan_amounts['interest']/100);
+											$balances = 0;
+											if($loan_amount > 1){
+												$amount_paid = $loan_repayment_obj->getPaidAmount("`loanAccountId`=".$loanAccountIds[0]["loanAccountId"]);
+												$balances = $loan_amount - $amount_paid['paidAmount'];
+											} ?>
+												<div class="col-md-5 col-sm-12 col-xs-12 ">
+													<p class="p"><b>Unpaid Loan Balances (UGX): <?php  echo number_format($balances,2,".",",");  ?></b></p>
+												</div>
+										<?php }?>												
+											</div>
 									</div>
 									
 								</div>
@@ -197,13 +220,17 @@ p{
 						$forms = new Forms($task);
 					}elseif(isset($_GET['view'])){
 						$view = $_GET['view'];
-						$reports = new Reports($view, $client);
+						$item_view = array();
+						if(isset($_GET['loanId'])){
+							$item_view['loanId'] = $_GET['loanId'];
+						}
+						if(isset($_GET['depAcId'])){
+							$item_view['depAcId'] = $_GET['depAcId'];
+						}
+						$reports = new Reports($view, $item_view, $client);
 					}
 					?>
 				</div>
-			
-				
-				
 			</div>
 		</div>
 	</div>

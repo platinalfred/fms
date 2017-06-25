@@ -1,9 +1,10 @@
 <?php 
 require_once("lib/Libraries.php");
 Class Reports{
-	public function __construct($task, $data=false){
+	public function __construct($task, $item_view, $data=false){
 	   $this->task = $task;
 	   $this->data = $data;
+	   $this->item_view = $item_view;
 	  
 	   $this->displayOption();
 	   
@@ -23,10 +24,10 @@ Class Reports{
 				$this->viewMemberShares();
 			break;
 			case 'savings_accs';
-				$this->viewSavingsAccs($this->data);
+				$this->viewSavingsAccs($this->data, $this->item_view);
 			break;
 			case 'loan_accs';
-				$this->clientLoan($this->data);
+				$this->clientLoan($this->data, $this->item_view);
 			break;
 			default:
 				$this->defaultDisplay();
@@ -40,11 +41,24 @@ Class Reports{
 		<?php	
 	}
 
-	public function clientLoan($client){
-		include_once('./loans_page.php');
+	public function clientLoan($client, $loanAccount){
+		if(empty($loanAccount)){
+			include_once('./loans_page.php');
+		}
+		else{
+			//$loanAccountId = $loanAccount['loanId']);
+			include_once('./loan_account_detail.php');
+		}
 	}
-	public function viewSavingsAccs($client){
-		include_once('./savings_page.php');
+	public function viewSavingsAccs($client, $depositAccount){
+		
+		if(empty($depositAccount)){
+			include_once('./savings_page.php');
+		}
+		else{
+			//$depositAccountId = $depositAccount['loanId']);
+			include_once('./deposit_account_detail.php');
+		}
 	}
 	public function ledger(){ 
 		$loan = new Loans();

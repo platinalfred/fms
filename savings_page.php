@@ -53,14 +53,14 @@
 									<label>Account No.</label>
 								</li>
 								<li class="list-group-item">
-									<span class="pull-right" data-bind="text: productName"> Savings </span>
+									<span class="pull-right" data-bind="text: productName"> Savings</span>
 									<label>Savings Product</label>
 								</li>
 							</ul>
 							<div class="row m-b-lg">
 							<div class="hr-line-dashed"></div>
 								<div class="col-md-6"><a class="btn btn-primary btn-sm" href='#enter_deposit' data-toggle="modal"><i class="fa fa-edit"></i> Enter Deposit </a></div>
-								<div class="col-md-6"><a data-bind="attr: {href:(sumUpAmount($parent.transactionHistory(),1)>0?'#enter_withdraw':undefined)}" class="btn btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Withdraw Cash </a></div>
+								<div class="col-md-6"><a data-bind="attr: {href:((sumDeposited-sumWithdrawn)>0?'#enter_withdraw':undefined)}" class="btn btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Withdraw Cash </a></div>
 							</div>
 							<div class="row m-b-lg" data-bind="if: $parent.transactionHistory().length>0">
 								<div class="table-responsive">
