@@ -29,7 +29,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "loan_accounts" ) {
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where1 = "(`date_added` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}
-	$where = "`loan_account`.`status`=3";
+	$where = "`loan_account`.`status`=4";
 	
 	$member_sql = "(SELECT `members`.`id` `clientId`, loanAccountId, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType` FROM `member_loan_account` JOIN (SELECT `member`.`id`, `firstname`, `lastname`, `othername` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`)`members` ON `memberId` = `members`.`id`)";
 	$saccogroup_sql = "(SELECT `saccogroup`.`id` `clientId`, `loanAccountId`, `groupName` `clientNames`, 2 as `clientType` FROM `group_loan_account` JOIN `saccogroup` ON `saccoGroupId` = `saccogroup`.`id`)";
@@ -101,6 +101,9 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loan_payments" ) {
 if ( isset($_POST['page']) && $_POST['page'] == "deposit_accounts" ) {	
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where1 = " AND (`deposit_account`.`dateCreated` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
+	}
+	if((isset($_POST['clientId'])&& strlen($_POST['clientId'])>0)){
+		$where = " `clientId` = ".$_POST['clientId'];
 	}
 	
 	$member_sql = "(SELECT `members`.`id` `clientId`, depositAccountId, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType` FROM `member_deposit_account` JOIN (SELECT `member`.`id`, `firstname`, `lastname`, `othername` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`)`members` ON `memberId` = `members`.`id`)";

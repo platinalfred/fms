@@ -6,7 +6,7 @@ class DepositAccount extends Db {
 	protected static $table_fields = array("id", "depositProductId", "recomDepositAmount", "maxWithdrawalAmount", "interestRate", "openingBalance", "termLength", "dateCreated", "createdBy", "dateModified", "modifiedBy");
 	
 	public function findById($id){
-		$result = $this->getrec(self::$table_name, "id=".$id, "");
+		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
 		return !empty($result) ? $result:false;
 	}
 	
@@ -14,7 +14,18 @@ class DepositAccount extends Db {
 		$result_array = $this->getarray(self::$table_name, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
-	
+	public function findSpecifics($fields, $where = ""){ //pick out data for specific fields
+			$in_part_string = "";
+			$where_clause = "";
+		if(is_array($where)){
+			foreach($where as $depositAccount){
+				$in_part_string .= $depositAccount['depositAccountId'].",";
+			}
+			$where_clause .= " AND `id` IN (".substr($in_part_string, 0, -1).")";
+		}
+		$result_array = $this->getfrec(self::$table_name, $fields, $where_clause, "", "");
+		return !empty($result_array) ? $result_array : false;
+	}
 	public function getTransactionHistory($accountId = false){
 		$where = "";
 		if(!$accountId){
@@ -23,7 +34,6 @@ class DepositAccount extends Db {
 		$result_array = $this->getfrec(self::$table_name, $where, "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
-	
 	
 	public function addDepositAccount($data){
 		$fields = array_slice(self::$table_fields, 1);

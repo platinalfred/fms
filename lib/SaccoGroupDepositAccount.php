@@ -15,7 +15,11 @@ class SaccoGroupDepositAccount extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
-	
+	public function findSpecifics($fields, $where = ""){ //pick out data for specific fields
+		$result_array = $this->getfarray(self::$table_name, $fields, $where, "", "");
+		return !empty($result_array) ? $result_array : false;
+	}
+
 	public function addSaccoGroupDepositAccount($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));

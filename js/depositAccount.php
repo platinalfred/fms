@@ -16,6 +16,7 @@
 			  "type": "POST",
 			  "data":  function(d){
 				d.page = 'deposit_accounts';
+				<?php if(isset($client)):?> d.clientId=<?php echo $client['id'];?>; <?php endif;?>
 				d.type = <?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>; //loan_type for the datatable;
 				d.start_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"moment().subtract(30, 'days').format('X')"; ?>;
 				d.end_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"moment().format('X')"; ?>;
@@ -30,7 +31,15 @@
 				var total = api.column(val).data().sum();
 				$(api.column(val).footer()).html( curr_format(total) );
 			});
-		  },columns:[ { data: 'id', render: function ( data, type, full, meta ) {return '<a href="members.php?client_id='+full.clientId+'&clientType='+full.clientType+'&depositAccountId='+full.id+'" title="View details">'+(full.productName + '-'+data).replace(/\s/g,'')+'</a>';}},
+		  },columns:[ { data: 'id', render: function ( data, type, full, meta ) {
+			  var page = "";
+			  if(full.clientType==1){
+				  page = "member_details.php?id=";
+			  }
+			  if(full.clientType==2){
+				  page = "sacco_group_details.php?id=";
+			  }
+			  return '<a href="'+page+full.clientId+'&view=savings_accs&depAcId='+data+'" title="View details">'+(full.productName + '-'+data).replace(/\s/g,'')+'</a>';}},
 				{ data: 'clientNames'},
 				{ data: 'productName'},
 				{ data: 'dateCreated',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
@@ -78,7 +87,9 @@
 		var data = dTable.row(this).data();
 		depositAccountModel.account_details(data);
 		//ajax to retrieve transactions history
-		getTransactionHistory(data.id);
+		if(data){
+			getTransactionHistory(data.id);
+		}
 	});
   });
  function getTransactionHistory(depositAccountId){
@@ -111,6 +122,11 @@ function sumUpAmount(items, transactionType){
 		//these are required as the datatable is being loaded
 		self.transactionHistory = ko.observableArray(); //for a deposit account transacation history display
 		self.account_details = ko.observable();
+		<?php if(isset($_GET['depAcId'])){
+			$account_details = $deposit_account_obj->findById($_GET['depAcId']);
+			if(!empty($account_details)){?>
+			self.account_details(<?php echo json_encode($account_details);?>);
+		<?php } }?>
 		
 		//then these for the deposit entry form
 		self.deposit_amount = ko.observable(0);
@@ -175,6 +191,10 @@ function sumUpAmount(items, transactionType){
 		//reset the whole form
 		self.resetForm = function() {
 			$("#depAccountForm")[0].reset();
+			self.depositProduct(undefined);
+			self.openingBal(0);
+			self.termLength(0);
+			self.interestRate(0);
 			dTable.ajax.reload();
 		};
 		
@@ -206,11 +226,12 @@ function sumUpAmount(items, transactionType){
 				url: "lib/AddData.php",
 				success: function(response){
 					var result = parseInt(response)||0;
-					if(result){/*  */
+					if(result){
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
 							$("#enterDepositForm")[0].reset();
 							getTransactionHistory(self.account_details().id);
+							dTable.ajax.reload();
 						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while saving data: \n"+response ,"failed");
@@ -224,7 +245,7 @@ function sumUpAmount(items, transactionType){
 				type: "post",
 				dataType: "json",
 				data:{
-					origin:"add_deposit",
+					origin:"add_withdraw",
 					depositAccountId:(self.account_details()?self.account_details().id:undefined),
 					amount: self.deposit_amount(),
 					comment: self.comments()
@@ -235,8 +256,9 @@ function sumUpAmount(items, transactionType){
 					if(result){/*  */
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
-							$("#withdrawForm")[0].reset();
+							$("#enterWithdrawForm")[0].reset();
 							getTransactionHistory(self.account_details().id);
+							dTable.ajax.reload();
 						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while saving data: \n"+response ,"failed");
@@ -263,9 +285,8 @@ function sumUpAmount(items, transactionType){
 				},
 				url: "lib/AddData.php",
 				success: function(response){
-					// if it was an OK response, get the id of the inserted product and insert the product fees
 					var result = parseInt(response)||0;
-					if(result){/*  */
+					if(result){
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
 							self.resetForm();

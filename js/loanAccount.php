@@ -17,6 +17,12 @@
 		//these are required as the datatable is being loaded
 		self.transactionHistory = ko.observableArray(); //for the account transacation history display
 		self.account_details = ko.observable();
+		<?php if(isset($_GET['loanId'])){
+			$account_details = $loan_account_obj->findById($_GET['loanId']);
+			if($account_details){?>
+			self.account_details(<?php echo json_encode($account_details);?>);
+			<?php }
+		}?>
 		
 		//this gets loaded when the loan is for approval
 		self.loan_account_details = ko.observable();
@@ -29,6 +35,10 @@
 		self.amountApproved = ko.observable(0);
 		self.approvalNotes = ko.observable();
 		self.applicationStatus = ko.observable(3);
+		
+		//loan amount disbursement section
+		self.disbursedAmount = ko.observable(0);
+		self.disbursementNotes = ko.observable();
 		
 		//guarantors 
 		self.guarantors = ko.observableArray();
@@ -256,6 +266,34 @@
 				}
 			});
 		};
+		self.disburseLoan = function(){
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				data:{
+					origin:"disburse_loan",
+					id:(self.account_details()?self.account_details().id:undefined),
+					disbursedAmount: self.applicationStatus()==3?self.disbursedAmount():undefined,
+					disbursementNotes: self.disbursementNotes(),
+					status: 4
+				},
+				url: "lib/AddData.php",
+				success: function(response){
+					var result = parseInt(response)||0;
+					if(result){/*  */
+						showStatusMessage("Data successfully saved" ,"success");
+						setTimeout(function(){
+							$("#loanAccountApprovalForm")[0].reset();
+							dTable['applications'].ajax.reload();
+							dTable['approved'].ajax.reload();
+							dTable['rejected'].ajax.reload();
+						}, 3000);
+					}else{
+						showStatusMessage("Error encountered while approving: \n"+response ,"fail");
+					}
+				}
+			});
+		};
 		self.getLoanAccountDetails = function(){
 			$.ajax({
 				type: "post",
@@ -294,7 +332,8 @@
 		  <?php if(isset($client)):?> post_data=<?php echo json_encode($client);?>; <?php endif;?>
 	var handleDataTableButtons = function() {
 	  if ($("#applications").length) {
-		  post_data['origin']='loan_applications';
+		  post_data['origin']='loan_accounts';
+		  post_data['status']=1;
 		dTable['applications'] = $('#applications').DataTable({
 		  dom: "Bfrtip",
 		  "order": [ [3, 'asc' ]],
@@ -303,7 +342,16 @@
 			  "type": "POST",
 			  "data":  post_data
 		  },
-		  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {return '<a href="members.php?client_id='+full.clientId+'&clientType='+full.clientType+'&loanId='+full.id+'" title="View details">'+data+'</a>';}},
+		  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
+			  var page = "";
+			  if(full.clientType==1){
+				  page = "member_details.php?id=";
+			  }
+			  if(full.clientType==2){
+				  page = "sacco_group_details.php?id=";
+			  }
+			  return '<a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>';}
+			  },
 				{ data: 'clientNames'},
 				{ data: 'productName'},
 				{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
@@ -351,8 +399,8 @@
 		//$("#datatable-buttons").DataTable();
 	  }
 	  if ($("#rejected").length) {
-		  post_data['origin']='rejected';
-		  post_data['type']=<?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>;
+		  post_data['origin']='loan_accounts';
+		  post_data['status']=2;
 		  
 		dTable['rejected'] = $('#rejected').DataTable({
 		  dom: "Bfrtip",
@@ -362,7 +410,15 @@
 			  "type": "POST",
 			  "data":  post_data
 		  },
-		  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {return '<a href="members.php?client_id='+full.clientId+'&clientType='+full.clientType+'&loanId='+full.id+'" title="View details">'+data+'</a>';}},
+		  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
+			  var page = "";
+			  if(full.clientType==1){
+				  page = "member_details.php?id=";
+			  }
+			  if(full.clientType==2){
+				  page = "sacco_group_details.php?id=";
+			  }
+			  return '<a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>';}},
 				{ data: 'clientNames'},
 				{ data: 'productName'},
 				{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
@@ -397,7 +453,61 @@
 	  if ($("#approved").length) {
 		  post_data['origin']='loan_accounts';
 		  post_data['status']=3;
+		  
 		dTable['approved'] = $('#approved').DataTable({
+		  dom: "Bfrtip",
+		  "order": [ [3, 'asc' ]],
+		  "ajax": {
+			  "url":"ajax_data.php",
+			  "type": "POST",
+			  "data":  post_data
+		  },
+		  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
+			  var page = "";
+			  if(full.clientType==1){
+				  page = "member_details.php?id=";
+			  }
+			  if(full.clientType==2){
+				  page = "sacco_group_details.php?id=";
+			  }
+			  return '<a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>';}},
+				{ data: 'clientNames'},
+				{ data: 'productName'},
+				{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+				{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.repaymentsFrequency)) + ' ' + getDescription(4,data);}},
+				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
+				{ data: 'amountApproved', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
+				] ,
+		  buttons: [
+			{
+			  extend: "copy",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "csv",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "excel",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "pdfHtml5",
+			  className: "btn-sm"
+			},
+			{
+			  extend: "print",
+			  className: "btn-sm"
+			},
+		  ],
+		  responsive: true/*, */
+		  
+		});
+	  }
+	  if ($("#disbursed").length) {
+		  post_data['origin']='loan_accounts';
+		  post_data['status']=4;
+		dTable['disbursed'] = $('#disbursed').DataTable({
 		  dom: "Bfrtip",
 		  <?php if(!isset($client)): ?>
 		  "order": [ [3, 'asc' ]],
@@ -410,7 +520,7 @@
 			  "type": "POST",
 			  "data":  <?php if(!isset($client)): ?>function(d){
 				d.page = 'loan_accounts';
-				d.type = <?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>; //loan_type for the datatable;
+				 //d.status = 4;status of the loan;
 				d.start_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"moment().subtract(30, 'days').format('X')"; ?>;
 				d.end_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"moment().format('X')"; ?>;
 				}
@@ -425,11 +535,19 @@
 				var total = api.column(val).data().sum();
 				$(api.column(val).footer()).html( curr_format(total) );
 			});
-		  },columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {return '<a href="members.php?client_id='+full.clientId+'&clientType='+full.clientType+'&loanId='+full.id+'" title="View details">'+data+'</a>';}},
+		  },columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
+			  var page = "";
+			  if(full.clientType==1){
+				  page = "member_details.php?id=";
+			  }
+			  if(full.clientType==2){
+				  page = "sacco_group_details.php?id=";
+			  }
+			  return '<a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>';}},
 				{ data: 'clientNames'},
 				{ data: 'productName'},
-				{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-				{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.repaymentsFrequency)) + ' ' + getDescription(4,data);}},
+				{ data: 'disbursementDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+				{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.installments)) + ' ' + getDescription(4,data);}},
 				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
 				{ data: 'amountPaid', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
 				{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}

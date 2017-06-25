@@ -24,7 +24,7 @@
 									  <div class="form-group" data-bind="with: account_details">
 										<label class="control-label col-md-4" for="name">Withdraw limit
 										</label>
-										<label class="col-md-8" data-bind="text: 'UGX '+curr_format(maxWithdrawalAmount)">
+										<label class="col-md-8" data-bind="text: 'UGX '+curr_format(sumDeposited-sumWithdrawn)">
 										</label>
 									  </div>			
 									  <div class="form-group" data-bind="with: account_details">
@@ -34,7 +34,7 @@
 										</div>
 									  </div>
 									  <div class="form-group" data-bind="with: account_details">
-										<label class="control-label col-md-4" for="amount">Amount Description<span class="required">*</span></label>
+										<label class="control-label col-md-4" for="amount"></label>
 										<div class="col-md-8">
 											<i><span data-bind="text: getWords($parent.deposit_amount())"></span></i>
 										</div>
@@ -49,7 +49,7 @@
 									  <div class="form-group">
 										<div class="col-md-8 col-md-offset-4">
 										  <button type="button" class="btn btn-white">Cancel</button>
-										  <button type="button" class="btn btn-primary">Withdraw</button>
+										  <button type="submit" class="btn btn-primary">Withdraw</button>
 										</div>
 									  </div>
 									</form>

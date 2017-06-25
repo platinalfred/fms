@@ -24,6 +24,19 @@ class DepositAccountTransaction extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
+	public function getMoneySum($transactionType, $depositAccountIds = false){
+		$where = "`transactionType`=".$transactionType;
+		$in_part_string = "";
+		if($depositAccountIds){
+			foreach($depositAccountIds as $depositAccount){
+				$in_part_string .= $depositAccount['depositAccountId'].",";
+			}
+			$where .= " AND `depositAccountId` IN (".substr($in_part_string, 0, -1).")";
+		}
+		$field = "COALESCE(SUM(`amount`),0) `money_sum`";
+		$result = $this->getfrec(self::$table_name, $field, $where, "", "");
+		return !empty($result) ? $result['money_sum'] : false;
+	}
 	
 	public function addDepositAccountTransaction($data){
 		$fields = array_slice(self::$table_fields, 1);

@@ -25,6 +25,15 @@ if(isset($_POST['origin'])){
 				$output = $loanAccount->updateLoanAccount($data);
 			}
 		break;
+		case "disburse_loan":
+			if(isset($data['id'])){
+				$loanAccount = new LoanAccount();
+				unset($data['origin']);
+				$data['disbursementDate'] = time();
+				//$data['disbursedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$output = $loanAccount->updateLoanAccount($data);
+			}
+		break;
 		case "add_deposit":
 			if(isset($data['depositAccountId'])){
 				$depositAccountTransaction = new DepositAccountTransaction();
@@ -124,7 +133,7 @@ if(isset($_POST['origin'])){
 			
 			if($data['clientType']==1){
 				//create deposit account for member
-				$data['member_id'] = $data['clientId'] ;
+				$data['memberId'] = $data['clientId'] ;
 				unset($data['clientId']);
 				$memberDepositAccount = new MemberDepositAccount();
 				$memberDepositAccountId = $memberDepositAccount->addMemberDepositAccount($data);
@@ -133,12 +142,12 @@ if(isset($_POST['origin'])){
 				$data['groupId'] = $data['clientId'] ;
 				unset($data['clientId']);
 				$saccoGroupDepositAccount = new SaccoGroupDepositAccount();
-				$accoGroupDepositAccountId = $saccoGroupDepositAccount->addSaccoGroupDepositAccount($data);
+				$saccoGroupDepositAccountId = $saccoGroupDepositAccount->addSaccoGroupDepositAccount($data);
 			}
 			
 				
 			if(isset($data['feePostData'])){
-				if(!$data['feePostData'] == "false"){
+				if($data['feePostData'] != "false"){
 					$feePostData = $data['feePostData'];
 					unset($data['feePostData']);
 					//insert account fees

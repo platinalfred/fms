@@ -182,28 +182,6 @@ if(isset($_POST['origin'])){
 				echo json_encode($transactonHistory);
 			}
 		break;
-		case 'loan_applications':
-			$loanAccount = new LoanAccount();
-			$where="`status`=1";
-			if(isset($_POST['clientType'])&&isset($_POST['id'])){
-				$where .= " AND `clientId`=".$_POST['id'];
-				$where .= " AND `clientType`=".$_POST['clientType'];
-			}
-			$loan_accounts = $loanAccount->getApplications($where);
-			$output['data'] = $loan_accounts;
-			echo json_encode($output);
-		break;
-		case 'rejected':
-			$loanAccount = new LoanAccount();
-			$where="`status`=2";
-			if(isset($_POST['clientType'])&&isset($_POST['id'])){
-				$where .= " AND `clientId`=".$_POST['id'];
-				$where .= " AND `clientType`=".$_POST['clientType'];
-			}
-			$loan_accounts = $loanAccount->getApplications($where);
-			$output['data'] = $loan_accounts;
-			echo json_encode($output);
-		break;
 		case 'loan_accounts':
 			$loanAccount = new LoanAccount();
 			$where="`status`=".$_POST['status'];
@@ -211,8 +189,12 @@ if(isset($_POST['origin'])){
 				$where .= " AND `clientId`=".$_POST['id'];
 				$where .= " AND `clientType`=".$_POST['clientType'];
 			}
-			$loan_accounts = $loanAccount->getApprovedLoans($where);
-			$output['data'] = $loan_accounts;
+			if($_POST['status']==3||$_POST['status']==4){
+				$output['data'] = $loanAccount->getApprovedLoans($where);
+			}else{
+				$output['data'] = $loanAccount->getApplications($where);
+			}
+			
 			echo json_encode($output);
 		break;
 		case 'loan_account_transactions':
