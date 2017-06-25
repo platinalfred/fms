@@ -14,7 +14,7 @@
 .bottom_pad{
 	margin-bottom:11px;
 }
-.required {
+.req {
     color: red;
     font-size: 16px;
 }

@@ -1,5 +1,7 @@
 <script>
 $(document).ready(function(){
+	
+	
 	/* Number inputs a thousandsSeparator separator */
 		$('input.athousand_separator').keyup(function(event) {
 
@@ -22,7 +24,7 @@ $(document).ready(function(){
 	/* End a thousandsSeparator on an input*/
 	function showStatusMessage(message='', display_type='success'){
 		new PNotify({
-			  title: "Alert",
+			  title: "Action response",
 			  text: message,
 			  type: display_type,
 			  styling: 'bootstrap3',
@@ -63,16 +65,22 @@ $(document).ready(function(){
 	//With this one function all settings will be sent to save_data.php for saving
 	function saveData(){
 		$(".save").click(function(){
-			var frmdata = $(this).closest("form").serialize();
+			var frm = $(this).closest("form");
+			var frmdata = frm.serialize();
+			var frmId = frm.attr('id');
+			var id_input = frm.find("input[name = 'id']").val();
 			$.ajax({
 				url: "save_data.php",
 				type: 'POST',
 				data: frmdata,
 				success: function (response) {
+					if(id_input == ""){
+						frm[0].reset();
+					}
 					if($.trim(response) == "success"){
-						showStatusMessage("Successfully added new record" ,"success");
+						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
-							dTable.ajax.reload();
+							dTable[frmId].ajax.reload();
 						}, 2000);
 					}else{
 						
@@ -117,10 +125,6 @@ $(document).ready(function(){
 	});
 /* ====  END COMMON FUNCTIONS ==== */
 	
-	$('#person_types tbody').on('click', 'tr', function () {
-		row(this ).data();
-        alert( 'You clicked on '+data[0]+'\'s row' );
-    } );
 	
 	var handleDataTableButtons = function() {
 		/* -- Person Type Data Table --- */
@@ -153,7 +157,7 @@ $(document).ready(function(){
 					{ data: 'description'},//, render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}
 					//{ data: 'date_added', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
 					
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_person_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-expense_type-personTypeTable" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#expense_type"  id="'+data+'-expense_types-tblExpenseType" data-toggle="modal" href="#edit_person_type" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-expense_type-personTypeTable" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -213,7 +217,7 @@ $(document).ready(function(){
 					{ data: 'description'},//, render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}
 					//{ data: 'date_added', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
 					
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_person_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-person_type-personTypeTable" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a id="'+data+'-person_types-personTypeTable" data-toggle="modal" href="#person_type" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-person_type-personTypeTable" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -273,7 +277,7 @@ $(document).ready(function(){
 					{ data: 'minimum_balance'},
 					{ data: 'description'},
 					
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_account_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-account_type-tblAccountType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a  id="'+data+'-account_types-tblAccountType" data-toggle="modal" href="#account_type" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-account_type-tblAccountType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -334,7 +338,7 @@ $(document).ready(function(){
 					{ data: 'email_address'},
 					{ data: 'physical_address'},
 					{ data: 'postal_address'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_account_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-branch-tblbranch" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a id="'+data+'-branches_tbl-tblbranch" data-toggle="modal" href="#branches" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-branch-tblbranch" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -662,7 +666,6 @@ $(document).ready(function(){
 			  } */],
 			  "autoWidth": false,
 			  columns:[ { data: 'description'},
-						{ data: 'penalty'},
 						{ data: 'penaltyChargedAs'},
 						{ data: 'penaltyTolerancePeriod'},
 						{ data: 'defaultAmount'},
@@ -1266,7 +1269,21 @@ $(document).ready(function(){
 	
 	TableManageButtons.init();
 	
-	
+	/* Editing Several tables */
+		$('.table tbody').on('click', 'tr .edit_me', function () {
+			//id="'+data+'-person_type-personTypeTable" 
+			var tbl, id , frm, dt;
+			var d_id = $(this).attr("id");
+			var arr = d_id.split("-");
+			id = arr[0]; //The  row id 
+			tbl = arr[1]; // The table , 
+			frm = arr[2]; //The form id
+			dt = dTable[frm];
+			var row = $(this).parent().parent(); 
+			edit_data(dt.row(row).data(), frm);
+			
+		});
+	/*  */
 	
 });
 	<?php include("depositProduct.php");?>

@@ -295,15 +295,23 @@ if(isset($_POST['tbl'])){
 			if($person_type->addExpense($_POST)){
 				$output = "success";
 			}else{
-				$output ="Person type could not be added";
+				$output ="Expense could not be added";
 			}
 		break;
 		case "person_type":
 			$person_type = new PersonType();
-			if($person_type->addPersonType($_POST)){
-				$output = "success";
+			if(isset($_POST['id']) && $_POST['id'] != ""){
+				if($person_type->updatePersonType($_POST)){
+					$output = "success";
+				}else{
+					$output ="Person type could not be updated";
+				}
 			}else{
-				$output ="Person type could not be added";
+				if($person_type->addPersonType($_POST)){
+					$output = "success";
+				}else{
+					$output ="Person type could not be added";
+				}
 			}
 		break;
 		case "marital_status":
@@ -317,18 +325,36 @@ if(isset($_POST['tbl'])){
 		
 		case "account_type":
 			$account_type = new AccountType();
-			if($account_type->addAccountType($_POST)){
-				$output = "success";
+			$data = $_POST;
+			if(isset($data['id']) && $data['id'] != ""){
+				if($account_type->updateAccountType($data)){
+					$output = "success";
+				}else{
+					$output ="Account type could not be updated";
+				}
 			}else{
-				$output ="Account type could not be added";
+				if($account_type->addAccountType($data)){
+					$output = "success";
+				}else{
+					$output ="Account type could not be added";
+				}
 			}
 		break;
 		case "branch":
 			$branch = new Branch();
-			if($branch->addBranch($_POST)){
-				$output = "success";
+			$data  = $_POST;
+			if(isset($data['id']) && $data['id'] != ""){
+				if($branch->updateBranch($data )){
+					$output = "success";
+				}else{
+					$output ="Branch type could not be updated";
+				}
 			}else{
-				$output ="Branch type could not be added";
+				if($branch->addBranch($data )){
+					$output = "success";
+				}else{
+					$output ="Branch type could not be added";
+				}
 			}
 		break;
 		case "access_level":
@@ -435,10 +461,38 @@ if(isset($_POST['tbl'])){
 		break;
 		case "expense_type":
 			$expense_types = new ExpenseTypes();
-			if($expense_types->addExpenseType($_POST)){
-				$output = "success";
+			$data = $_POST;
+			if(isset($data['id']) && $data['id'] != ""){
+				if($expense_types->updateExpenseType($data)){
+					$output = "success";
+				}else{
+					echo "Could not update an expense type";
+				}
 			}else{
-				echo "Could not add an expense type";
+				if($expense_types->addExpenseType($data)){
+					$output = "success";
+				}else{
+					echo "Could not add an expense type";
+				}
+					
+			}
+		break;
+		case "add_expense":
+			$expenses = new Expenses();
+			$data = $_POST;
+			if(isset($data['id']) && $data['id'] != ""){
+				if($expenses->updateExpense($data)){
+					$output = "success";
+				}else{
+					echo "Could not update an expense";
+				}
+			}else{
+				if($expenses->addExpense($data)){
+					$output = "success";
+				}else{
+					echo "Could not add an expense";
+				}
+					
 			}
 		break;
 		default:

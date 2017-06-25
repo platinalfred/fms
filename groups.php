@@ -106,11 +106,11 @@ $(document).ready(function(){
 			  "deferRender": true,
 			  "order": [[ 1, 'asc' ]],
 			  "ajax": {
-				  "url":"find_groups.php",
+				  "url":"find_data.php",
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
-						d.page = 'view_group';
+						d.page = 'view_groups';
 					}
 			  },"columnDefs": [ {
 				  "targets": [0],
@@ -158,7 +158,6 @@ $(document).ready(function(){
 			});
 			//$("#datatable-buttons").DataTable();
 		}
-
 	};
 	TableManageButtons = function() {
 	  "use strict";
@@ -168,7 +167,6 @@ $(document).ready(function(){
 		}
 	  };
 	}();
-
 	TableManageButtons.init();
 	$('#groupTable').on('click', 'tr .edit_group', function () {
 		var id = $(this).attr("id")
@@ -314,5 +312,4 @@ var Group = function() {
 var groupModel = new Group();
 groupModel.findMembers();
 //ko.applyBindings(groupModel, $("#form")[0]);
-
 </script>

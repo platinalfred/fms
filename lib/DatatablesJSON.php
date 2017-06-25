@@ -22,6 +22,7 @@ class DataTable extends Db{
 		
 		// Ordering
 		$sOrder = "";
+		
 		if ( isset( $_POST['order'][0]['column'] ) && $_POST['columns'][$_POST['order'][0]['column']]['orderable'] == "true" ) {
 			$sOrder = "ORDER BY ".$columns[$_POST['order'][0]['column']]." ".$_POST['order'][0]['dir'];
 		}

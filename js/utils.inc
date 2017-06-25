@@ -1,4 +1,24 @@
 <script>//format numbers with thousands separator
+	/*PICK DATA FOR DATA TABLE  */
+
+$('input.athousand_separator').keyup(function(event) {
+
+  // skip for arrow keys
+  if(event.which >= 37 && event.which <= 40){
+   event.preventDefault();
+  }
+
+  $(this).val(function(index, value) {
+	  value = value.replace(/,/g,'');
+	  return numberWithCommas(value);
+  });
+});
+
+function numberWithCommas(x) {
+	var parts = x.toString().split(".");
+	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	return parts.join(".");
+}
 function curr_format(n) {
 	var formatted = "";
 	if(n<0){
@@ -232,7 +252,7 @@ function showStatusMessage(message='', display_type='success'){
 	}
 	$(".modal").on("hide.bs.modal", function () {
 		// put your default event here
-		//$('form', this)[0].reset();
+		$('form', this)[0].reset();
 		$('input[name="id"]', this).val('');
 	});
 /*$(function () {

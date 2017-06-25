@@ -18,15 +18,16 @@ class PersonType extends Db {
 		$result = $this->getfrec(self::$table_name, "name", "id=".$id, "", "");
 		return !empty($result) ? $result['name'] : false;
 	}
+	
 	public function addPersonType($data){
-		$fields = self::$db_fields;
+		$fields = array_slice(self::$db_fields, 1);
 		if($this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data))){
 			return true;
 		}
 		return false;
 	}
 	public function updatePersonType($data){
-		$fields = array_slice(1, self::$db_fields);
+		$fields = array_slice(self::$db_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
 		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){
