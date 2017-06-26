@@ -2,7 +2,6 @@
 require_once("lib/Libraries.php");
 $output = array();
 if(isset($_POST['tbl'])){
-	
 	switch($_POST['tbl']){
 		case "address_type":
 			$address_type = new AddressType();

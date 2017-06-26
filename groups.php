@@ -1,6 +1,6 @@
 <?php 
 $needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout");
-$page_title = "Members";
+$page_title = "Groups";
 include("include/header.php"); 
 require_once("lib/Libraries.php");
 $member = new Member();
@@ -23,42 +23,26 @@ $member = new Member();
 			<div class="ibox">
 				<div class="ibox-content">
 					<h2>Member Groups</h2>
-					<div class="col-sm-5 text-muted small pull-left" style="padding:10px;"><a data-toggle="modal" class="btn btn-primary" href="#add_group"><i class="fa fa-plus"></i> Add Group</a></div>
+					<div class="col-sm-12 text-muted small pull-left" style="padding:10px;"><a data-toggle="modal" class="btn btn-primary" href="#add_group"><i class="fa fa-plus"></i> Add Group</a></div>
 					<div class="clear:both;"></div>
-					<div class="input-group">
-						<input type="text" placeholder="Search client " class="input form-control">
-						<span class="input-group-btn">
-							<button type="button" class="btn btn btn-primary"> <i class="fa fa-search"></i> Search Group</button>
-						</span>
-					</div>
-					<div class="clients-list">
-						<div class="tab-content">
-							<div class="full-height-scroll">
-								<div class="table-responsive">
-									<table class="table table-striped table-hover" id="groupTable">
-										<thead>
-											<tr>
-												<th>Id</th>
-												<th>Group Name</th>
-												<th>Description</th>
-												<?php 
-												if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>
-													<th>Edit/Delete</th>
-												<?php 
-												}
-												?>
-											</tr>
-										</thead>
-										<tbody>
-											
-										</tbody>
-									</table>
-								</div>
-							</div>
-						
-						</div>
-
-					</div>
+					<table class="table table-striped table-hover" id="groupTable">
+						<thead>
+							<tr>
+								<th>Id</th>
+								<th>Group Name</th>
+								<th>Description</th>
+								<?php 
+								if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>
+									<th>Edit/Delete</th>
+								<?php 
+								}
+								?>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
@@ -125,7 +109,7 @@ $(document).ready(function(){
 					{ data: 'groupName'},
 					{ data: 'description'}<?php 
 					if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>,
-					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <a id="'+data+'" class="btn btn-white btn-sm edit_group"><i class="fa fa-pencil"></i> Edit </a> ';}} <?php } ?> 
+					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle">Action <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="group_details.php?id='+ data +'"><i class="fa fa-folder"></i> Manage Group</a></li><li><a id="'+data+'"  class="delete_me"><i class="fa fa-trash" style="color:#ff0000"></i> Delete</a></li>   </ul></div>  ';}} <?php } ?> 
 					] ,
 			  buttons: [
 				{
@@ -174,9 +158,8 @@ $(document).ready(function(){
         $('#DescModal').modal({remote: 'edit_group.php?id=' + id });
         $('#DescModal').modal('show');
 	})
-	$('.table tbody').on('click', 'tr ', function () {
+	$('#groupTable tbody').on('click', 'tr ', function () {
 		var data = dTable.row(this).data();
-		console.log(data);
 		groupModel.group_details(data);
 		//ajax to retrieve other member details
 		findGroupDetails(data.id);
@@ -187,6 +170,7 @@ $(document).ready(function(){
 			type: 'GET',
 			dataType: 'json',
 			success: function (data) {
+				console.log(data.group_members);
 				if(data.group_members != "false"){
 					groupModel.all_group_members(data.group_members);
 				}
@@ -260,8 +244,9 @@ $(document).ready(function(){
 					if($.trim(response) == "success"){
 						showStatusMessage("Successfully added new record" ,"success");
 						form[0].reset();
+						//groupModel.group_members(null);
 						dTable.ajax.reload();
-						groupModel.group_members(null);
+						
 					}else{
 						showStatusMessage(response, "fail");
 					}

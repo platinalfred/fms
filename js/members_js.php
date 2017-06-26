@@ -337,7 +337,7 @@ $(document).ready(function(){
 			success: function (response) {
 				if($.trim(response) == "success"){
 					showStatusMessage("Successfully added new record" ,"success");
-					form[0].reset();
+					$("form#form1")[0].reset();
 					$('input[type="radio"]').removeAttr('checked').iCheck('update');
 					<?php if(!isset($_GET['view'])):?>dTable.ajax.reload();<?php endif;?>
 				}else{
@@ -380,11 +380,8 @@ $(document).ready(function(){
 					}
 			  },"columnDefs": [ {
 				  "targets": [0],
-				  "orderable": false,
+				  "orderable": true,
 				  "searchable": false
-			  } , {
-				  "targets": [0],
-				  "orderable": false
 			  }],
 			  columns:[  
 					{ data: 'id'},
@@ -443,7 +440,7 @@ $(document).ready(function(){
 		var data = dTable.row(this).data();
 		memberTableModel.member_details(data);
 		//ajax to retrieve other member details
-		findMemberDetails(data.id);
+		findMemberDetails(data.personId);
 	});
 	function findMemberDetails(id){
 		$.ajax({

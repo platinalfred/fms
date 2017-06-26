@@ -11,7 +11,7 @@ class MaritalStatus extends Db {
 	}
 	
 	public function findAll(){
-		$result_array = $this->getarray(self::$table_name, "active=1", "", "");
+		$result_array = $this->getarray(self::$table_name, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findMaritalStatus($id){

@@ -38,7 +38,7 @@ if(isset($_POST['tbl'])){
 				$output = "success";
 			}else{ 
 				$output = "Group details could not be added. Please try again or contact admin for assistance!";
-			}
+			} 
 		break;
 		case "update_group":
 			$data = $_POST;

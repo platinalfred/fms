@@ -209,7 +209,7 @@
 							showStatusMessage("Data successfully saved" ,"success");
 							setTimeout(function(){
 								self.resetForm();
-								var dt = dTable[tblLoanProduct];
+								var dt = dTable["loanProductForm"];
 								dt.ajax.reload();
 							}, 3000);
 					}else{

@@ -54,7 +54,7 @@ class Person extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findPersonRelatives($id){
-		$result_array = $this->getarray("person_relative p, relationship_type r", "p.relationship=r.id AND p.personId=".$id,"", "");
+		$result_array = $this->queryData("SELECT * FROM person_relative p JOIN relationship_type r ON p.relationship=r.id WHERE p.personId=".$id);
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findPersonsPosition($pid){

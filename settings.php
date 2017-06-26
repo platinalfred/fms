@@ -3,7 +3,7 @@
 	include specific plugin files that you need on a page by  adding the names as below in the array
 	dataTables, ChartJs,iCheck,daterangepicker,clockpicker,colorpicker,datapicker,easypiechart,fullcalendar,idle-timer,morris, nouslider, summernote,validate,wow,video,touchspin,Sparkline,Flot, Peity, Jvectormap, touchspin, select2, daterangepicker, clockpicker, ionRangeSlider, datapicker, nouslider, jasny, switchery, cropper, colorpicker, steps, dropzone, bootstrap-markdown
 */
-$needed_files = array("dataTables", "iCheck", "jasny", "knockout");
+$needed_files = array("dataTables", "iCheck", "jasny", "knockout", "moment");
 $page_title = "Settings";
 include("include/header.php");
 require_once("lib/Libraries.php");
@@ -29,13 +29,12 @@ require_once("lib/Libraries.php");
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-7" href="#">Income Sources</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-8" href="#">Individual Types</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-9" href="#">Loan Product Types</a></li>
-							<li class=""><a data-toggle="tab" role="tab" href="#tab-12" href="#">Penalty Calculation Method</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-13" href="#">Loan Product Penalties</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-14" href="#">Relationhip Types </a></li>
-							<li class=""><a data-toggle="tab" role="tab" href="#tab-15" href="#">Repayment Duration</a></li>
+							<!--<li class=""><a data-toggle="tab" role="tab" href="#tab-15" href="#">Repayment Duration</a></li> -->
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-16" href="#">Security Types</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-17" href="#">Positions</a></li>
-							<li class=""><a data-toggle="tab" role="tab" href="#tab-18" href="#">Address Type</a></li>
+							<!--<li class=""><a data-toggle="tab" role="tab" href="#tab-18" href="#">Address Type</a></li>-->
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-19" href="#">Marital Status</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-22" href="#">Expense Type</a></li>
 						</ul>
@@ -904,7 +903,7 @@ require_once("lib/Libraries.php");
 						</div>
 					</div>
 					<!-- End Security Type-->
-					<!-- Repayment Duration -->
+					<!-- Repayment Duration 
 					<div id="tab-15" class="tab-pane">
 						<div class="panel-body">
 							<div class="col-lg-2 col-offset-sm-8">

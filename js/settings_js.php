@@ -1,7 +1,6 @@
 <script>
+var dTable = new Object();
 $(document).ready(function(){
-	
-	
 	/* Number inputs a thousandsSeparator separator */
 		$('input.athousand_separator').keyup(function(event) {
 
@@ -61,7 +60,7 @@ $(document).ready(function(){
 	deleteDataTableRowData();
 	saveData();
 	//This is an object that will hold data table names acrross the settings insterface
-	var dTable = new Object();
+
 	//With this one function all settings will be sent to save_data.php for saving
 	function saveData(){
 		$(".save").click(function(){
@@ -612,7 +611,7 @@ $(document).ready(function(){
 			  } */],
 			  "autoWidth": false,
 			  columns:[ { data: 'methodDescription'},
-						{ data: 'dateCreated'},
+						{ data: 'dateCreated', render:function (data, type, full, meta){  return moment(data, "YYYY-MM-DD").format('LL'); }},
 					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_penalty_calculation" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-penalty_calculation_method-tblPenaltyCalculation" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
@@ -702,61 +701,7 @@ $(document).ready(function(){
 		}
 		/*END Product PENALTY - --*/
 	
-		/*Loan repaymentduratio  */
-	  	if ($("#loan_repayment_durations").length) {
-			  dTable['tblRepaymentDuration'] = $('#loan_repayment_durations').DataTable({
-			  dom: "lfrtipB",
-			  "processing": true,
-			  "ajax": {
-				  "url":"settings_data.php",
-				  "dataType": "JSON",
-				  "type": "POST",
-				  "data":  function(d){
-						d.tbl = 'loan_repayment_durations';
-						//d.start_date = getStartDate();
-						//d.end_date = getEndDate();
-					}
-			  },"columnDefs": [ {
-				  "targets": [2],
-				  "orderable": false,
-				  "searchable": false
-			  }/* , {
-				  "targets": [0],
-				  "orderable": false
-			  } */],
-			  "autoWidth": false,
-			  columns:[ { data: 'name'},
-					{ data: 'no_of_days'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_account_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-repaymentduration-tblRepaymentDuration" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
-					
-					] ,
-			  buttons: [
-				{
-				  extend: "copy",
-				  className: "btn-sm"
-				},
-				{
-				  extend: "csv",
-				  className: "btn-sm"
-				},
-				{
-				  extend: "excel",
-				  className: "btn-sm"
-				},
-				{
-				  extend: "pdfHtml5",
-				  className: "btn-sm"
-				},
-				{
-				  extend: "print",
-				  className: "btn-sm"
-				},
-			  ],
-			  responsive: true,
-			});
-			//$("#datatable-buttons").DataTable();
-		}
-		/*END loan repayment - --*/
+	
 		/*Position */
 	  	if ($("#positions").length) {
 			  dTable['tblPosition'] = $('#positions').DataTable({
@@ -1115,7 +1060,7 @@ $(document).ready(function(){
 			  "autoWidth": false,
 			  columns:[ { data: 'name'},
 			  { data: 'description'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_marital_status" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-marital_status-tblMaritalStatus" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) { return '<a data-toggle="modal" href="#edit_marital_status" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-marital_status-tblMaritalStatus" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -1147,7 +1092,7 @@ $(document).ready(function(){
 		/*End Marital Status --*/
 		/* Loan Product */
 		if ($("#loan-product").length) {
-			  dTable['tblLoanProduct'] = $('#loan-product').DataTable({
+			  dTable['loanProductForm'] = $('#loan-product').DataTable({
 			  dom: "lfrtipB",
 			  "processing": true,
 			  "ajax": {
@@ -1171,7 +1116,7 @@ $(document).ready(function(){
 			  columns:[ { data: 'productName'},
 				  { data: 'description'},
 				  { data: 'typeName'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_loan_product" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-loan_product-tblLoanProduct" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_loan_product" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-loan_product-loanProductForm" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [

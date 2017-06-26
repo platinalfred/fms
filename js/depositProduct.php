@@ -139,6 +139,7 @@
 					whenInterestIsPaid : self.whenInterestIsPaid()?self.whenInterestIsPaid().id:undefined,
 					daysInYear : self.daysInYear()?self.daysInYear().id:undefined,
 					allowArbitraryFees : self.allowArbitraryFee,
+					feePostData:feePostData,
 					origin : "deposit_product"
 				},
 				url: "lib/AddData.php",
@@ -146,27 +147,12 @@
 					// if it was an OK response, get the id of the inserted product and insert the product fees
 					var result = parseInt(response)||0;
 					if(result){/*  */
-						if(self.productFees().length>0){
-							$.ajax({
-								type: "post",
-								data:{feePostData:feePostData, productId: result, origin: "deposit_product_fee"},
-								url: "lib/AddData.php",
-								success: function(innerResponse){
-									if(innerResponse===true){
-										showStatusMessage("Data successfully saved" ,"success");
-										setTimeout(function(){
-											self.resetForm();
-											var dt = dTable[tblDepositProduct];
-											dt.ajax.reload();
-										}, 3000);
-									}
-									else{
-										console.log(innerResponse);
-										showStatusMessage("Error saving data: \n"+innerResponse ,"failed");
-									}						
-								}
-							});
-						}
+						showStatusMessage("Data successfully saved" ,"success");
+						setTimeout(function(){
+							self.resetForm();
+							var dt = dTable["tblDepositProduct"];
+							dt.ajax.reload();
+						}, 3000);
 					}else{
 						//inform the user what went wrong
 						console.log(response);
