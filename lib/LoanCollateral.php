@@ -33,8 +33,8 @@ class LoanCollateral extends Db {
 		return false;
 	}
 	
-	public function deleteLoanCollateral($id){
-		$this->delete(self::$table_name, "id=".$id);
+	public function deleteLoanCollateral($loanAccountId){
+		$this->del(self::$table_name, "loanAccountId=".$loanAccountId);
 	}
 }
 ?>

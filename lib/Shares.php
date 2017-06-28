@@ -18,13 +18,13 @@ class Shares extends Db {
 		$result_array = $this->getarray(self::$table_name, "memberId=".$pno, "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
-	public function findSubscriptionAmount($id){
-		$result = $this->getfrec(self::$table_name, "amount", "id=".$id, "", "");
-		return !empty($result) ? $result['amount'] : false;
+	public function findShareAmount($where = ""){
+		$result = $this->getfrec(self::$table_name, "amount", $where, "", "");
+		return !empty($result) ? $result['amount'] : 0;
 	}
-	public function findSubscriptionAmountForYear($year){
+	public function findShareAmountForYear($year){
 		$result = $this->getfrec(self::$table_name, "amount", "year=".$id, "", "");
-		return !empty($result) ? $result['amount'] : false;
+		return !empty($result) ? $result['amount'] : 0;
 	}
 	
 	public function findShareRate(){

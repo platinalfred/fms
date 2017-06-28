@@ -15,6 +15,28 @@ class LoanAccountFee extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
+	public function findAllDetailsByLoanAccountId($loanAccountId){
+		$table_product_fees = "(SELECT `loan_product_feen`.`id`, `feeName`, `loanProductId`, `amountCalculatedAs`, `requiredFee`, `amount` FROM `loan_product_feen` JOIN `loan_product_fee` ON `loan_product_feen`.`loanProductFeeId` = `loan_product_fee`.`id`) `productFees`";
+		
+		$fields = "`loanProductId`,`loanProductFeenId` `id`, `amount`, `amountCalculatedAs`, `requiredFee`";
+		$table = self::$table_name. " JOIN ".$table_product_fees. " ON ".self::$table_name.".`loanProductFeenId`=`productFees`.`id`";
+		$result_array = $this->getfarray($table, $fields, "`loanAccountId`=".$loanAccountId, "", "");
+		return !empty($result_array) ? $result_array : false;
+	}
+	
+	public function getSum($loanAccountIds = false){
+		$where = "";
+		$in_part_string = "";
+		if($loanAccountIds){
+			foreach($loanAccountIds as $loanAccountId){
+				$in_part_string .= $loanAccountId['loanAccountId'].",";
+			}
+			$where .= " `loanAccountId` IN (".substr($in_part_string, 0, -1).")";
+		}
+		$field = "COALESCE(SUM(`feAmount`),0) `feeSum`";
+		$result = $this->getfrec(self::$table_name, $field, $where, "", "");
+		return !empty($result) ? $result['feeSum'] : 0;
+	}
 	
 	public function addLoanAccountFee($data){
 		$fields = array_slice(self::$table_fields, 1);
@@ -32,8 +54,8 @@ class LoanAccountFee extends Db {
 		return false;
 	}
 	
-	public function deleteLoanAccountFee($id){
-		$this->delete(self::$table_name, "id=".$id);
+	public function deleteLoanAccountFee($loanAccountId){
+		$this->del(self::$table_name, "loanAccountId=".$loanAccountId);
 	}
 }
 ?>

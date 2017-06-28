@@ -103,16 +103,6 @@
 		}
 	});
  }
-function sumUpAmount(items, transactionType){
-	var total = 0;
-	if(items){
-		$.map(items, function(item){
-			total += (parseInt(item['transactionType']) == transactionType)?item['amount']:0;
-		});
-	}
-	
-	return total;
-}
 </script>
 <script type="text/javascript">
 	
@@ -122,11 +112,6 @@ function sumUpAmount(items, transactionType){
 		//these are required as the datatable is being loaded
 		self.transactionHistory = ko.observableArray(); //for a deposit account transacation history display
 		self.account_details = ko.observable();
-		<?php if(isset($_GET['depAcId'])){
-			$account_details = $deposit_account_obj->findById($_GET['depAcId']);
-			if(!empty($account_details)){?>
-			self.account_details(<?php echo json_encode($account_details);?>);
-		<?php } }?>
 		
 		//then these for the deposit entry form
 		self.deposit_amount = ko.observable(0);
@@ -203,12 +188,19 @@ function sumUpAmount(items, transactionType){
 			$.ajax({
 				type: "post",
 				dataType: "json",
-				data:{origin:"deposit_account"},
+				data:{origin:"deposit_account"<?php if(isset($_GET['depAcId'])):?>, depositAccountId:<?php echo $_GET['depAcId'];?> <?php endif;?>},
 				url: "ajax_data.php",
 				success: function(response){
 					self.depositProducts(response.products);
-					self.customers(response.customers);
 					self.productFees(response.productFees);
+					<?php if(!isset($client)):?>self.customers(response.customers); <?php endif;?>
+					<?php if(isset($_GET['depAcId'])){
+						$clientId = $client['id'];
+						$client['clientId'] = $client['id'];
+						unset($client['id'],$clientId);?>
+						var client_data = <?php echo json_encode($client);?>;
+						self.account_details($.extend(client_data, response.account_details));
+					<?php } ?>
 				}
 			})
 		};
@@ -230,7 +222,11 @@ function sumUpAmount(items, transactionType){
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
 							$("#enterDepositForm")[0].reset();
+							<?php if(isset($_GET['depAcId'])): ?>
+							self.getServerData();
+							<?php else: ?>
 							getTransactionHistory(self.account_details().id);
+							<?php endif; ?>
 							dTable.ajax.reload();
 						}, 3000);
 					}else{
@@ -257,7 +253,11 @@ function sumUpAmount(items, transactionType){
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
 							$("#enterWithdrawForm")[0].reset();
+							<?php if(isset($_GET['depAcId'])): ?>
+							self.getServerData();
+							<?php else: ?>
 							getTransactionHistory(self.account_details().id);
+							<?php endif; ?>
 							dTable.ajax.reload();
 						}, 3000);
 					}else{

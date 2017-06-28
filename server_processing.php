@@ -41,7 +41,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "loan_accounts" ) {
 	
 	$primary_key = "`loan_account`.`id`";
 
-	$columns = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`" );
+	$columns = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`interestRate`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`" );
 }
 //list of the income transactions
 if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {

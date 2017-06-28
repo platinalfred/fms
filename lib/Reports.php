@@ -29,6 +29,9 @@ Class Reports{
 			case 'loan_accs';
 				$this->clientLoan($this->data, $this->item_view);
 			break;
+			case 'ledger';
+				$this->ledger($this->data, $this->item_view);
+			break;
 			default:
 				$this->defaultDisplay();
 			break;
@@ -61,7 +64,8 @@ Class Reports{
 		}
 	}
 	public function ledger(){ 
-		$loan = new Loans();
+		include_once('./ledger.php');
+		/* $loan = new Loans();
 		$expense = new Expenses();
 		$member = new Member();
 		$accounts = new Accounts();
@@ -70,11 +74,11 @@ Class Reports{
 		$show_table_js = true;
 		
 		$member_data = $member->findById($_GET['member_id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
+		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']); */
 		?>
-		<div class="page-title" >
+		<!--div class="page-title" >
 		  <div class="col-md-5">
-			<h2>Ledger Accounts <small> <?php echo $account_names['firstname']." ".$account_names['lastname']; ?></small></h2>
+			<h2>Ledger Accounts <small> <?php // echo $account_names['firstname']." ".$account_names['lastname']; ?></small></h2>
 		  </div>
 		  <div class="col-md-7">
 			<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
@@ -144,10 +148,10 @@ Class Reports{
 						<thead>
 							<tr>
 								<?php
-								foreach($header_keys as $key){ ?>
+								/*foreach($header_keys as $key){ ?>
 									<th><?php echo $key; ?></th>
 									<?php 
-								} ?>
+								} */?>
 							</tr>
 						</thead>
 						<tbody>
@@ -159,14 +163,14 @@ Class Reports{
 							</tr>
 							<!--tr>
 								<th>Expenses</th><td></td><td id="expenses">0.0</td>
-							</tr-->
+							</tr>
 						</tbody>
                     </table>
                   </div>
                 </div>
-              </div>
+              </div-->
 			  
-            <div class="col-md-4 col-sm-4 col-xs-12">
+            <!--div class="col-md-4 col-sm-4 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
                     <h2>Loans <small>Account</small></h2>
@@ -183,11 +187,11 @@ Class Reports{
 						<thead>
 							<tr>
 								<?php 
-								$header_keys = array("&nbsp;", "Dr", "Cr");
-								foreach($header_keys as $key){ ?>
-									<th><?php echo $key; ?></th>
+								//$header_keys = array("&nbsp;", "Dr", "Cr");
+								//foreach($header_keys as $key){ ?>
+									<th><?php //echo $key; ?></th>
 									<?php 
-								} ?>
+								//} ?>
 							</tr>
 						</thead>
 						<tbody>
@@ -202,7 +206,7 @@ Class Reports{
                   </div>
                 </div>
               </div>
-		</div>
+		</div -->
 		<?php
 	}
 	

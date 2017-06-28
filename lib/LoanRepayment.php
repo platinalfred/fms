@@ -15,10 +15,22 @@ class LoanRepayment extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
-	public function getPaidAmount($loanAccountId=""){
+	public function getPaidAmount($loanAccountIds){
+		$where = "";
+		$in_part_string = "";
+		if(is_array($loanAccountIds)){
+			foreach($loanAccountIds as $loanAccountId){
+				$in_part_string .= $loanAccountId['loanAccountId'].",";
+			}
+			$where .= " `loanAccountId` IN (".substr($in_part_string, 0, -1).")";
+		}
+		else{
+			$where = "loanAccountId=".$loanAccountIds;
+		}
+		
 		$fields = "SUM(`amount`) `paidAmount`";
-		$result_array = $this->getfrec(self::$table_name, $fields, "loanAccountId=".$loanAccountId, "", "");
-		return !empty($result_array) ? $result_array : false;
+		$result_array = $this->getfrec(self::$table_name, $fields, $where, "", "");
+		return !empty($result_array) ? $result_array['paidAmount'] : 0;
 	}
 	
 	public function getTransactionHistory($accountId = false){

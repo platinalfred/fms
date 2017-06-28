@@ -3,7 +3,7 @@
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
 					<h5>Loan Accounts <small>loans list</small></h5>
-				  <div class="pull-right"><a href="#add_loan_account" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i> New Loan Application</a>
+				  <div class="pull-right"><a href="#add_loan_account-modal" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i> New Loan Application</a>
 					<!-- select id="loan_types" class="form-control">
 					  <option>All loans</option>
 					  <option value="1" <?php echo (isset($_GET['type'])&&$_GET['type']==1)?"selected":"";?>>Performing loans</option>
@@ -28,8 +28,7 @@
 										<thead>
 											<tr>
 												<?php 
-												$header_keys = array("Loan No", "Client", "Loan Product","Appn Date", "Amount Requested");
-												if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])) array_push($header_keys,"Approval");
+												$header_keys = array("Loan No", "Client", "Loan Product","Appn Date", "Amount Requested","Action");
 												foreach($header_keys as $key){ ?>
 													<th><?php echo $key; ?></th>
 													<?php
@@ -99,7 +98,7 @@
 										<thead>
 											<tr>
 												<?php 
-												$header_keys = array("Loan No", "Client", "Loan Product","Date Disbursed", "Duration", "Loan Amount", "Amount Paid", "Interest");
+												$header_keys = array("Loan No", "Client", "Loan Product","Date Disbursed", "Loan Amount", "Installments", "Duration", "Interest Rate", "Principle", "Interest", "Total Installment", "Total Interest Expected", "Principle & Interest", "Amount Paid");
 												foreach($header_keys as $key){ ?>
 													<th><?php echo $key; ?></th>
 													<?php
@@ -111,7 +110,12 @@
 										</tbody>
 										<tfoot>
 											<tr>
-												<th colspan="5">Total (UGX)</th>
+												<th colspan="4">Total (UGX)</th>
+												<th>&nbsp;</th>
+												<th colspan="3">&nbsp;</th>
+												<th>&nbsp;</th>
+												<th>&nbsp;</th>
+												<th>&nbsp;</th>
 												<th>&nbsp;</th>
 												<th>&nbsp;</th>
 												<th>&nbsp;</th>

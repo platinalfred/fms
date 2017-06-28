@@ -9,7 +9,7 @@ class LoanProduct extends Db {
 	//"penaltyApplicable", 
 	
 	public function findById($id){
-		$result = $this->getrec(self::$table_name, "id=".$id, "");
+		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
 		return !empty($result) ? $result:false;
 	}
 	

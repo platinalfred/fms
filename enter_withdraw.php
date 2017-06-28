@@ -24,19 +24,19 @@
 									  <div class="form-group" data-bind="with: account_details">
 										<label class="control-label col-md-4" for="name">Withdraw limit
 										</label>
-										<label class="col-md-8" data-bind="text: 'UGX '+curr_format(sumDeposited-sumWithdrawn)">
+										<label class="col-md-8" data-bind="text: 'UGX '+curr_format(typeof(sumDeposited)!='undefined'?(sumDeposited-sumWithdrawn):(sumUpAmount(statement,1)-sumUpAmount(statement,2)))">
 										</label>
 									  </div>			
 									  <div class="form-group" data-bind="with: account_details">
 										<label class="control-label col-md-4" for="amount">Amount<span class="required">*</span></label>
 										<div class="col-md-8">
-										  <input type="number"  id="deposit_amount" name="amount"  required class="form-control col-md-7 col-xs-12" data-bind='value: $parent.deposit_amount, attr: {"data-rule-max": (parseFloat(maxWithdrawalAmount)>0?maxWithdrawalAmount:null), "data-msg-max":"Amount is more than maximum allowed "+maxWithdrawalAmount}' data-msg-required="Amount is required">
+										  <input type="number"  id="deposit_amount" name="amount"  required class="form-control col-md-7 col-xs-12" data-bind='value: $parent.deposit_amount, attr: {"data-rule-max": (typeof(sumDeposited)!="undefined"?(sumDeposited-sumWithdrawn):(sumUpAmount(statement,1)-sumUpAmount(statement,2))), "data-msg-max":"Amount is more than maximum allowed "+(typeof(sumDeposited)!="undefined"?(sumDeposited-sumWithdrawn):(sumUpAmount(statement,1)-sumUpAmount(statement,2)))}' data-msg-required="Amount is required">
 										</div>
 									  </div>
 									  <div class="form-group" data-bind="with: account_details">
 										<label class="control-label col-md-4" for="amount"></label>
 										<div class="col-md-8">
-											<i><span data-bind="text: getWords($parent.deposit_amount())"></span></i>
+											<i><span data-bind="text: getWords($parent.deposit_amount())+' Uganda Shillings'"></span></i>
 										</div>
 									  </div>
 									  <div class="form-group" data-bind="with: account_details">

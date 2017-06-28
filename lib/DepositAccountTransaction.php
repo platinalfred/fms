@@ -35,7 +35,7 @@ class DepositAccountTransaction extends Db {
 		}
 		$field = "COALESCE(SUM(`amount`),0) `money_sum`";
 		$result = $this->getfrec(self::$table_name, $field, $where, "", "");
-		return !empty($result) ? $result['money_sum'] : false;
+		return !empty($result) ? $result['money_sum'] :0;
 	}
 	
 	public function addDepositAccountTransaction($data){

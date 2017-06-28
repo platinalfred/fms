@@ -14,6 +14,10 @@ class SaccoGroupLoanAccount extends Db {
 		$result_array = $this->getarray(self::$table_name, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
+	public function getAccountIds($groupId){
+		$result_array = $this->getfarray(self::$table_name, "loanAccountId", "saccoGroupId=".$groupId, "", "");
+		return !empty($result_array) ? $result_array : false;
+	}
 	
 	public function findSpecifics($fields, $where = ""){ //pick out data for specific fields
 		$result_array = $this->getfarray(self::$table_name, $fields, $where, "", "");

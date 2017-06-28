@@ -22,6 +22,17 @@ function array_total(arr, idx) {
 	});
 	return total;
 }
+//given array, get the total for the transaction type
+function sumUpAmount(items, transactionType){
+	var total = 0;
+	if(items){
+		$.map(items, function(item){
+			total += (parseInt(item['transactionType']) == transactionType)?parseInt(item['amount']):0;
+		});
+	}
+	
+	return total;
+}
 //Bar chart
 function draw_bar_chart(url_data){
 	$("#barChart").replaceWith('<canvas id="barChart"></canvas>');
@@ -234,6 +245,9 @@ function showStatusMessage(message='', display_type='success'){
 		// put your default event here
 		//$('form', this)[0].reset();
 		$('input[name="id"]', this).val('');
+		if(typeof loanAccountModal!=='undefined'){
+			loanAccountModel.edit_client(0);
+		}
 	});
 /*$(function () {
   $('[data-toggle="tooltip"]').tooltip()

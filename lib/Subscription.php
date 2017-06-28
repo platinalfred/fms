@@ -19,13 +19,13 @@ class Subscription extends Db {
 		
 		return !empty($result_array) ? $result_array : false;
 	}
-	public function findSubscriptionAmount($id){
-		$result = $this->getfrec(self::$table_name, "amount", "id=".$id, "", "");
-		return !empty($result) ? $result['amount'] : false;
+	public function findSubscriptionAmount($where = ""){
+		$result = $this->getfrec(self::$table_name, "amount", $where, "", "");
+		return !empty($result) ? $result['amount'] : 0;
 	}
 	public function findSubscriptionAmountForYear($year){
 		$result = $this->getfrec(self::$table_name, "amount", "year=".$id, "", "");
-		return !empty($result) ? $result['amount'] : false;
+		return !empty($result) ? $result['amount'] : 0;
 	}
 	public function isSubscribedForYear($pno, $year){
 		$result = $this->getrec(self::$table_name, "subscriptionYear=".$year." AND memberId=".$pno, "", "");
