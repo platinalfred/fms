@@ -120,6 +120,7 @@ if(!isset($_SESSION['Logged'])){
 	<?php 
 	}
 	?>
+	
 	 <!-- Sweet Alert -->
     <link href="css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
 
@@ -128,7 +129,6 @@ if(!isset($_SESSION['Logged'])){
 	<link href="js/plugins/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
 	
 </head>
-
 <body>
 
     <div id="wrapper">
@@ -156,14 +156,19 @@ if(!isset($_SESSION['Logged'])){
                         <a href="dashboard.php"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
                     </li>
                     <li >
-                        <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Reports</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse in <?php if(isset($_SESSION['branch_manager']) || isset($_SESSION['management_credit']) || isset($_SESSION['branch_credit']) || isset($_SESSION['executive_board'])){ echo "in"; } ?>">
-                            <li><a href="view_loans.php"><i class="fa fa-calculator"></i> <span class="nav-label">Loans</span>  </a></a></li>
-                            <li><a href="view_subscriptions.php"><i class="fa fa-money"></i> <span class="nav-label">Subscriptions</span>  </a></li>
-                            <li><a href="view_savings.php"><i class="fa fa-dollar"></i> <span class="nav-label">Savings</span>  </a></li>
-                            <li><a href="view_shares.php"><i class="fa fa-money"></i> <span class="nav-label">Shares</span>  </a></li>
-                            <li><a href="view_reports.php?view=general"><i class="fa fa-list"> </i><span class="nav-label">General</span>  </a></li>
-                        </ul>
+                        <a href="view_reports.php?view=general"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Reports</span><span class="fa arrow-right"></span></a>
+                       
+                    </li>
+					<!--
+					 <ul class="nav nav-second-level collapse in <?php /* if(isset($_SESSION['branch_manager']) || isset($_SESSION['management_credit']) || isset($_SESSION['branch_credit']) || isset($_SESSION['executive_board'])){ echo "in"; } */ ?>">
+                            
+                        </ul>-->
+					
+					 <li>
+                        <a href="view_loans.php"><i class="fa fa-calculator"></i> <span class="nav-label">Loans</span>  </a>
+                    </li>
+					 <li>
+                        <a href="view_savings.php"><i class="fa fa-dollar"></i> <span class="nav-label">Savings</span>  </a>
                     </li>
                     <li>
                         <a href="members.php"><i class="fa fa-group"></i> <span class="nav-label">Members</span>  </a>

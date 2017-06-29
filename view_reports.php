@@ -8,10 +8,12 @@ include("lib/Reports.php");?>
 		<div class="row">
 			<div class="col-lg-12">
 				<p>
-					<a  href="?view=general" class="btn btn-sm btn-info"> <i class="fa fa-money"></i> Loans</a>
+					<a  href="?view=general" class="btn btn-sm btn-info"> <i class="fa fa-calculator"></i> Loans</a>
 					<a  href="?view=savings_accs" class="btn btn-sm btn-info"> <i class="fa fa-dollar"></i> Savings</a>
 					<a  href="?view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-dollar"></i> Income Statement</a>
 					<!--a  href="?view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-calculator"></i> Ledger</a-->
+					<a href="?view=subscriptions" class="btn btn-info btn-sm"><i class="fa fa-money"></i> <span class="nav-label">Subscriptions</span>  </a>
+					<a href="?view=shares" class="btn btn-info btn-sm"><i class="fa fa-money"></i> <span class="nav-label">Shares</span>  </a>
 				</p>
 			</div>
 		</div>
@@ -38,6 +40,12 @@ include("lib/Reports.php");?>
 		break;
 		case 'ledger':
 			include("js/ledger_js.php");
+		break;
+		case 'subscriptions':
+			include("js/subscriptions_js.inc");
+		break;
+		case 'shares':
+			include("js/shares_js.inc");
 		break;
 	  }
   }

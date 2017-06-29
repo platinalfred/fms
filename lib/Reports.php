@@ -35,6 +35,12 @@ Class Reports{
 			case 'general';
 				$this->viewGeneral($this->data);
 			break;
+			case 'subscriptions';
+				$this->generalSubsriptions();
+			break;
+			case 'shares';
+				$this->generalShares();
+			break;
 			default:
 				$this->defaultDisplay();
 			break;
@@ -68,6 +74,12 @@ Class Reports{
 	}
 	public function viewGeneral(){
 		include_once('./general_reports.php');
+	}
+	public function generalSubsriptions(){
+		include_once('./general_subscriptions.php');
+	}
+	public function generalShares(){
+		include_once('./general_shares.php');
 	}
 	public function ledger(){ 
 		include_once('./ledger.php');
