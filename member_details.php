@@ -247,7 +247,7 @@ p{
 			include("js/depositAccount.php");
 		break;
 		case 'ledger':
-			include("js/ledger.php");
+			include("js/ledger_js.php");
 		break;
 	  }
   }

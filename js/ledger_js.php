@@ -21,6 +21,6 @@
 
 	var viewModel = new ViewModel();
 	viewModel.getLedgerData();// get data to be populated on the page
-	ko.applyBindings(viewModel, $("#ledger")[0]);
+	ko.applyBindings(viewModel, $("#ledger_data")[0]);
 	
 </script>

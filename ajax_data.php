@@ -97,7 +97,7 @@ if(isset($_POST['origin'])){
 			//Expenses"
 			$tables['expenses'] = $expense->findAllExpenses("`expenseDate` BETWEEN ".$start_date." AND ".$end_date, "amountUsed DESC", "10");
 
-			$products_sql = "SELECT `productName`, SUM(`disbursedAmount`) `loan_amount`, SUM(`disbursedAmount`*`interestRate`/100) `interest`, SUM(`penalty`) `penalties`, `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_product`.`id` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `paidAmount`, `loanAccountId` FROM `loan_repayment` WHERE `transaactionDate` <= ".$end_date." GROUP BY `loanAccountId`) `payments` `loan_account`.`id`=`payments`.`loanAccountId` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `penalty`, `loanAccountId` FROM `loan_repayment` WHERE `dateCreated` <= ".$end_date." GROUP BY `loanAccountId`) `penalt` ON `loan_account`.`id` = `penalt`.`loanAccountId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3 GROUP BY `productName` ORDER BY `productName`";
+			$products_sql = "SELECT `productName`, SUM(`disbursedAmount`) `loan_amount`, SUM(`disbursedAmount`*`interestRate`/100) `interest`, `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `paidAmount`, `loanAccountId` FROM `loan_repayment` WHERE `transactionDate` <= ".$end_date." GROUP BY `loanAccountId`) `payments` ON `loan_account`.`id`=`payments`.`loanAccountId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4 GROUP BY `productName` ORDER BY `productName`";
 			
 			$tables['loan_products'] = $loan->findLoans($products_sql);
 
@@ -213,19 +213,21 @@ if(isset($_POST['origin'])){
 			}else{
 				$sharesObj = new Shares();
 				$subscriptionsObj = new Subscription();
+				$expensesObj = new Expenses();
 				$data['subscriptions'] = $subscriptionsObj->findSubscriptionAmount();
 				$data['shares'] = $sharesObj->findShareAmount();
 				$data['shares'] = $sharesObj->findShareAmount();
+				$data['expenses'] = $expensesObj->findExpensesSum();
 			}
 			
-			$data['opening_balances'] = empty($deposit_account_ids_array)?0:$depositAccountObj->getSumOfFields($deposit_account_ids_array);
-			$data['deposits'] = empty($deposit_account_ids_array)?0:$depositAccountTransactionObj->getMoneySum(1, $deposit_account_ids_array);
-			$data['withdraws'] = empty($deposit_account_ids_array)?0:$depositAccountTransactionObj->getMoneySum(2, $deposit_account_ids_array);
-			$data['deposit_account_fees'] = empty($deposit_account_ids_array)?0:$depositAccountFeeObj->getSum($deposit_account_ids_array);
+			$data['opening_balances'] = $depositAccountObj->getSumOfFields($deposit_account_ids_array);
+			$data['deposits'] = $depositAccountTransactionObj->getMoneySum(1, $deposit_account_ids_array);
+			$data['withdraws'] = $depositAccountTransactionObj->getMoneySum(2, $deposit_account_ids_array);
+			$data['deposit_account_fees'] = $depositAccountFeeObj->getSum($deposit_account_ids_array);
 			
-			$data['disbursedLoan'] = empty($loan_account_ids_array)?array('loanAmount'=>0,'interestAmount'=>0):$loanAccountObj->getSumOfFields($loan_account_ids_array);
-			$data['loan_payments'] = empty($loan_account_ids_array)?0:$loanAccountPaymentObj->getPaidAmount($loan_account_ids_array);
-			$data['loan_account_fees'] = empty($loan_account_ids_array)?0:$loanAccountFeeObj->getSum($loan_account_ids_array);
+			$data['disbursedLoan'] = $loanAccountObj->getSumOfFields($loan_account_ids_array);
+			$data['loan_payments'] = $loanAccountPaymentObj->getPaidAmount($loan_account_ids_array);
+			$data['loan_account_fees'] = $loanAccountFeeObj->getSum($loan_account_ids_array);
 			
 			echo json_encode($data);
 		break;
@@ -433,9 +435,6 @@ function getGraphData($start_date, $end_date){
 				$datasets['data'][] = $dashboard->getSumOfLoans($between." AND ".$product['id']);
 			}
 			$graph_data['datasets'][] = array_merge($datasets, getGraphProps());
-		}
-		foreach($weeks as $week){
-			$data_points[] = date('M, Y', $month['start']);
 		}
 	}
 	if(!empty($graph_data)){

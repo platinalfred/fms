@@ -162,7 +162,7 @@ if(!isset($_SESSION['Logged'])){
                             <li><a href="view_subscriptions.php"><i class="fa fa-money"></i> <span class="nav-label">Subscriptions</span>  </a></li>
                             <li><a href="view_savings.php"><i class="fa fa-dollar"></i> <span class="nav-label">Savings</span>  </a></li>
                             <li><a href="view_shares.php"><i class="fa fa-money"></i> <span class="nav-label">Shares</span>  </a></li>
-                            <li><a href="reports.php"><i class="fa fa-list"> </i><span class="nav-label">General</span>  </a></li>
+                            <li><a href="view_reports.php?view=general"><i class="fa fa-list"> </i><span class="nav-label">General</span>  </a></li>
                         </ul>
                     </li>
                     <li>

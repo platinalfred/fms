@@ -27,11 +27,16 @@ class DepositAccount extends Db {
 		$fields = array( "COALESCE(SUM(`openingBalance`),0) `openingBalances`");
 		$where = "";
 		$in_part_string = "";
-		if(is_array($depositAccountIds)){
-			foreach($depositAccountIds as $depositAccountId){
-				$in_part_string .= $depositAccountId['depositAccountId'].",";
+		if($depositAccountIds){
+			if(is_array($depositAccountIds)){
+				foreach($depositAccountIds as $depositAccountId){
+					$in_part_string .= $depositAccountId['depositAccountId'].",";
+				}
+				$where .= " `id` IN (".substr($in_part_string, 0, -1).")";
 			}
-			$where .= " `id` IN (".substr($in_part_string, 0, -1).")";
+			else{
+				return 0;
+			}
 		}
 		$result_array = $this->getfrec(self::$table_name, implode(",",$fields), $where, "", "");
 		return !empty($result_array) ? $result_array['openingBalances'] : false;

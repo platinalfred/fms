@@ -1,20 +1,4 @@
-<?php
-$needed_files = array("dataTables"/*, "iCheck", "steps", "jasny", "moment", "knockout", "datepicker"*/);
-$page_title = "Reports";
-include("include/header.php");?>
-<div class="wrapper wrapper-content animated fadeInUp">
-	<div id="reports">
-		<div class="row">
-			<div class="col-lg-12">
-				<p>
-					<a  href="reports.php" class="btn btn-sm btn-info" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Loans</a>
-					<a  href="?id=2&view=savings" class="btn btn-sm btn-info" class="btn btn-info btn-sm"> <i class="fa fa-dollar"></i> Savings</a>
-					<a  href="?id=3&view=income_stmt" class="btn btn-info btn-sm"> <i class="fa fa-dollar"></i> Income Statement</a>
-					<a  href="?id=4&view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-calculator"></i> Ledger</a>
-				</p>
-			</div>
-		</div>
-		<div class="row" data-bind="with: account_details">
+
 			<div class="col-lg-12">
 				<div class="ibox">
 					<div class="ibox-title" style="border-top:none;">
@@ -27,7 +11,7 @@ include("include/header.php");?>
 					</div>
 					<div class="ibox-content collapse in">
 						<div class="table-responsive">
-							<table id="loan_report" class="table table-bordered data">
+							<table id="loan_report" class="table table-bordered">
 								<thead>
 									<tr>
 										<?php 
@@ -53,10 +37,3 @@ include("include/header.php");?>
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-</div>
-<?php
- include("include/footer.php");
- include("js/reports_js.inc");//
-?>
