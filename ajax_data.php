@@ -345,6 +345,9 @@ function getGraphData($start_date, $end_date){
 	$period = new DatePeriod( new DateTime(date("Y-m-d",$start_date)), new DateInterval('P1D'), $_end );
 	$period_dates = iterator_to_array($period);
 	
+	$graph_data['title']['text'] = "Total product sales, ".date('F, Y',$start_date)." to ".date('F, Y',$end_date);
+	$graph_data['yAxis']['title']['text'] = "UGX '000";
+	
 	$loan_products = $loanProduct->findAll();
 	
 	//if days are 7 or less
@@ -352,12 +355,12 @@ function getGraphData($start_date, $end_date){
 		$period = new DatePeriod( new DateTime(date("Y-m-d",$start_date)), new DateInterval('P1D'), $_end->modify( '+1 day' ) );
 		foreach($loan_products as $product){
 			$datasets = array();
-			$datasets['label'] = $product['productName'];
+			$datasets['name'] = $product['productName'];
 			
 			foreach($period as $date){
 				$datasets['data'][] = $dashboard->getSumOfLoans("`disbursementDate` = ".$date." AND ".$product['id']);
 			}
-			$graph_data['datasets'][] = array_merge($datasets, getGraphProps());
+			$graph_data['datasets'][] = $datasets;
 		}
 		foreach($period as $date){
 			$data_points[] = $date->format("D, j/n");
@@ -389,13 +392,13 @@ function getGraphData($start_date, $end_date){
 		}
 		foreach($loan_products as $product){
 			$datasets = array();
-			$datasets['label'] = $product['productName'];
+			$datasets['name'] = $product['productName'];
 			
 			foreach($weeks as $week){
 				$between = "BETWEEN ".$week['start']." AND ".$week['end'].")";
 				$datasets['data'][] = $dashboard->getSumOfLoans("`disbursementDate` <= ".$week['end']." AND ".$product['id']);
 			}
-			$graph_data['datasets'][] = array_merge($datasets, getGraphProps());;
+			$graph_data['datasets'][] = $datasets;
 		}
 		foreach($weeks as $week){
 			$data_points[] = date('j/M', $week['start'])."-".date('j/M', $week['end']);
@@ -428,18 +431,17 @@ function getGraphData($start_date, $end_date){
 		}
 		foreach($loan_products as $product){
 			$datasets = array();
-			$datasets['label'] = $product['productName'];
+			$datasets['name'] = $product['productName'];
 			
 			foreach($months as $month){
 				$between = "BETWEEN ".$month['start']." AND ".$month['end'].")";
 				$datasets['data'][] = $dashboard->getSumOfLoans($between." AND ".$product['id']);
 			}
-			$graph_data['datasets'][] = array_merge($datasets, getGraphProps());
+			$graph_data['datasets'][] = $datasets;
 		}
 	}
 	if(!empty($graph_data)){
-		
-		$graph_data['labels'] = $data_points;
+		$graph_data['xAxis']['categories'] = $data_points;
 		return $graph_data;
 	}
 	else return false;	
@@ -454,14 +456,12 @@ function getPieChartData($start_date, $end_date){
 	$products_sum = 0;
 	
 	$between = "BETWEEN ".$start_date." AND ".$end_date.")";
+	$pie_chart_data['series']['name'] = 'Loan Products';
 	foreach($loan_products as $product){
-		$pie_chart_data['labels'][] = $product['productName'];
-		$products_sum += $total_amount = $dashboard->getSumOfLoans("(`disbursementDate` ".$between." AND ".$product['id']);
-		$pie_chart_data['datasets']['data'][] = $total_amount;
-		
-		$pie_chart_data['datasets']['backgroundColor'][] = "#".dechex(rand(0,15)).dechex(rand(0,15)).dechex(rand(0,15)).dechex(rand(0,15)).dechex(rand(0,15)).dechex(rand(0,15));
-	}
-	//$pie_chart_data['label'] = "Loan products";
+		$products_sum += $total_amount = $dashboard->getSumOfLoans("(`disbursementDate` ".$between." AND `loanProductId=".$product['id']);
+		$pie_chart_data['series']['data'][] = array('name'=>$product['productName'],'y'=>$total_amount?$total_amount:320);
+	}//
+	$pie_chart_data['title']['text'] = "Total product sales, ".date('F, Y',$start_date)." to ".date('F, Y',$end_date);
 	
 	if($loan_products){
 		$pie_chart = array('total_product_sales'=>$products_sum,'chart_data'=>$pie_chart_data);

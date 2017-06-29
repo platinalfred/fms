@@ -100,21 +100,56 @@ function draw_line_chart(url_data){
 		data: url_data,
 		options: lineOptions
 	});
-	/* //var ctx = document.getElementById("lineChart").getContext("2d"); 
-	
-	var myNewChart = new Chart(ctx).Line(url_data, lineOptions);*/
+}
+function draw_line_highchart(url_data){
+	Highcharts.chart('lineChart', {
+
+		title: url_data.title,
+
+		yAxis: url_data.yAxis,
+		legend: {
+			layout: 'vertical',
+			align: 'right',
+			verticalAlign: 'middle'
+		},
+		xAxis: {categories: url_data.xAxis.categories},
+		plotOptions: {
+			line: {
+				dataLabels: {enabled: true}
+			}
+		},
+		series: url_data.datasets
+	});
 }
 // Pie chart
 function draw_pie_chart(url_data){
-	$("#pieChart").replaceWith('<canvas id="pieChart"></canvas>');
-	var ctx = $("#pieChart").get(0).getContext("2d");
-	
-	var pieChart = new Chart(ctx, {
-		type: 'pie',
-		data: url_data,
-    options: {
-        responsive: true
-    }
+	// Build the chart
+	Highcharts.chart('pieChart', {
+		chart: {
+			plotBackgroundColor: null,
+			plotBorderWidth: null,
+			plotShadow: false,
+			type: 'pie'
+		},
+		title: url_data.title,
+		tooltip: {
+			pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+		},
+		plotOptions: {
+			pie: {
+				allowPointSelect: true,
+				cursor: 'pointer',
+				dataLabels: {
+					enabled: false
+				},
+				showInLegend: true
+			}
+		},
+		series: [{
+			name: url_data.series.name,
+			colorByPoint: true,
+			data: url_data.series.data
+		}]
 	});
 }
 

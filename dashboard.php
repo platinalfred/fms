@@ -3,7 +3,7 @@
 	include specific plugin files that you need on a page by  adding the names as below in the array
 	dataTables, ChartJs,iCheck,daterangepicker,clockpicker,colorpicker,datapicker,easypiechart,fullcalendar,idle-timer,morris, nouslider, summernote,validate,wow,video,touchspin,Sparkline,Flot, Peity, Jvectormap, touchspin, select2, daterangepicker, clockpicker, ionRangeSlider, datapicker, nouslider, jasny, switchery, cropper, colorpicker, steps, dropzone, bootstrap-markdown
 */
-$needed_files = array("daterangepicker", "iCheck", "jasny", "knockout", "moment", "ChartJS");
+$needed_files = array("daterangepicker", "iCheck", "jasny", "knockout", "moment", "highcharts");
 
 $page_title = "Dashboard";
 include("include/header.php"); 
@@ -109,7 +109,7 @@ include("include/header.php");
 							<div class="m-t-sm">
 
 								<div class="row">
-									<canvas id="lineChart"></canvas>
+									<div id="lineChart"></div>
 								</div>
 
 							</div>
@@ -119,16 +119,7 @@ include("include/header.php");
 				<div class="col-lg-6">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
-							<div>
-								<span class="pull-right text-right">
-									<small>Average value of sales for this <strong>period</strong></small>
-										<br/>
-										Total product sales: <span data-bind="text: figures.total_product_sales">162,862</span>
-								</span>
-							</div>
-							<div>
-								<div style="max-height:300px;"><canvas id="pieChart"></canvas></div>
-							</div>
+								<div style="max-height:300px; height:300px; max-width:600px; margin: 0 auto" id="pieChart"></div>
 						</div>
 					</div>
 				</div>
@@ -242,67 +233,6 @@ include("include/header.php");
 			</div>
 
 		</div>
-<!-- default table
-							<div class="row">
-								<div class="col-sm-9 m-b-xs">
-									<div data-toggle="buttons" class="btn-group">
-										<label class="btn btn-sm btn-white">
-											<input type="radio" id="option1" name="options"> Day </label>
-										<label class="btn btn-sm btn-white active">
-											<input type="radio" id="option2" name="options"> Week </label>
-										<label class="btn btn-sm btn-white">
-											<input type="radio" id="option3" name="options"> Month </label>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="input-group">
-										<input type="text" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
-									<button type="button" class="btn btn-sm btn-primary"> Go!</button> </span></div>
-								</div>
-							</div>
-							<div class="table-responsive">
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<th>#</th>
-											<th>Project </th>
-											<th>Name </th>
-											<th>Phone </th>
-											<th>Company </th>
-											<th>Completed </th>
-											<th>Task</th>
-											<th>Date</th>
-											<th>Action</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>1</td>
-											<td>Project <small>This is example of project</small></td>
-											<td>Patrick Smith</td>
-											<td>0800 051213</td>
-											<td>Inceptos Hymenaeos Ltd</td>
-											<td><span class="pie">0.52/1.561</span></td>
-											<td>20%</td>
-											<td>Jul 14, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
-										<tr>
-											<td>2</td>
-											<td>Alpha project</td>
-											<td>Alice Jackson</td>
-											<td>0500 780909</td>
-											<td>Nec Euismod In Company</td>
-											<td><span class="pie">6,9</span></td>
-											<td>40%</td>
-											<td>Jul 16, 2013</td>
-											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-
--->
 <?php
 include("include/footer.php"); 
 include("js/dash.php");

@@ -2,7 +2,7 @@
 	var Dashboard = function() {
 		var self = this;
 		// Stores an array of all the Data for viewing in the Dashboard
-		self.dashboardData = ko.observable({"figures":{"no_members":"0","no_members":"0"},"percents":{"members_percent":10},"tables":{"income":[],"expenses":[]}});
+		self.dashboardData = ko.observable({"figures":{"no_members":"0","portfolio":"0"},"percents":{"members_percent":10},"tables":{"income":[],"expenses":[]}});
 		self.startDate = ko.observable(moment().subtract(30, 'days').format('X'));
 		self.endDate = ko.observable(moment().format('X'));
 		
@@ -20,43 +20,18 @@
 					
 					if(response.graph_data){
 						draw_pie_chart(response.pie_chart_data);
-						draw_line_chart(response.graph_data);
+						draw_line_highchart(response.graph_data);//
 					}
 					
 				}
 			})
 		};
-		self.updateData();
 	};
 
 	var dashModel = new Dashboard();
+	dashModel.updateData();
 	ko.applyBindings(dashModel);
 	
  $(document).ready(function() {
-	//draw loans table
-	function draw_loans_table(loans_data){
-		var amount = balance = 0;
-		var html_data = "<thead>"+
-						"<tr><th>Loan No</th><th>Amount</th><!--th>Balance</th--></tr>"+
-					"</thead>"+
-					  "<tbody>";
-		$.each(loans_data, function(key, value){
-		html_data += "<tr>"+
-						"<td><a href='member-details.php?member_id="+value.member_id+"&view=client_loan&lid="+value.id+"' title='View details'>"+value.loan_number+"</a></td>"+
-						"<td>"+format1(parseInt(value.expected_payback))+"</td>"+
-							"</tr>";
-							amount += parseInt(value.expected_payback); 
-						//balance += parseInt(value.balance);
-		});
-		html_data += "</tbody>"+
-					"<tfoot>"+
-						"<tr>"+
-						  "<th scope='row'>Total</th>"+
-						  "<th>"+format1(amount)+"</th>"+
-						  //"<th>"+((balance<0)?"("+format1(balance * -1)+")":format1(balance))+"</th>"+
-						"</tr>"+
-					  "</tfoot>";
-		return html_data;
-	}
  });
 </script>

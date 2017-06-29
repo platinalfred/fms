@@ -130,6 +130,15 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 	<?php 
 	}
+	if(in_array("highcharts", $needed_files)){ ?>
+		<!-- HighCharts-->
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+		<script src="https://code.highcharts.com/highcharts-more.js"></script>
+		<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+	<?php 
+	}
 	if(in_array("c3", $needed_files)){ ?>
 	<!-- d3 and c3 charts -->
 		<script src="js/plugins/d3/d3.min.js"></script>
