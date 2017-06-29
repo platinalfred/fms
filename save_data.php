@@ -5,6 +5,15 @@ $images = new SimpleImage();
 $output = "";
 if(isset($_POST['tbl'])){
 	switch($_POST['tbl']){
+		case "add_subscription":
+			$data = $_POST;
+			$subscribe = new Subscription();
+			if($subscribe->addSubscription($data)){
+				$output = "success";
+			}else{ 
+				$output = "Member subscription could not be added. Please try again or contact admin for assistance!";
+			}
+		break;
 		case "add_share":
 			$data = $_POST;
 			$shares = new Shares();

@@ -9,6 +9,10 @@ class Subscription extends Db {
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
 		return !empty($result) ? $result:false;
 	}
+	public function findGeneralSubscriptions(){
+		$resultt = $this->getfarray(self::$table_name."s, memebers.m, person p", "CONCAT(p.firstname,' ',p.lastname,' ',p.othername) as member_names, s.amount, .s.subscriptionYear, s.datePaid", "s.memberId = m.memberId AND m.personId=p.id", "", "");
+		return !empty($result_array) ? $result_array : false;
+	}
 	
 	public function findAll(){
 		$result_array = $this->getarray(self::$table_name, "", "", "");

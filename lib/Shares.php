@@ -9,7 +9,10 @@ class Shares extends Db {
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
 		return !empty($result) ? $result:false;
 	}
-	
+	public function findGeneralShares(){
+		$resultt = $this->getfarray(self::$table_name."s, memebers.m, person p", "sum(s.noShares) as total_shares, sum(s.amount) as total_amount, .s.paid_by, s.datePaid", "s.memberId = m.memberId AND m.personId=p.id", "memberId DESC", "");
+		return !empty($result_array) ? $result_array : false;
+	}
 	public function findAll($where = 1){
 		$result_array = $this->getarray(self::$table_name, $where, "", "");
 		return !empty($result_array) ? $result_array : false;

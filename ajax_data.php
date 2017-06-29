@@ -209,6 +209,13 @@ if(isset($_POST['origin'])){
 						}
 						$loanAccountIds = substr($loanAccountIds,0,-1).")";
 					} */
+					
+					$data['deposits'] = empty($deposit_account_ids_array) ? 0 : $depositAccountTransactionObj->getMoneySum(1, $deposit_account_ids_array);
+					$data['withdraws'] = empty($deposit_account_ids_array) ? 0 :  $depositAccountTransactionObj->getMoneySum(2, $deposit_account_ids_array);
+					$data['deposit_account_fees'] = empty($deposit_account_ids_array) ? 0 :  $depositAccountFeeObj->getSum($deposit_account_ids_array);
+					$data['disbursedLoan'] = empty($loan_account_ids_array) ? 0 :  $loanAccountObj->getSumOfFields($loan_account_ids_array);
+					$data['loan_payments'] = empty($loan_account_ids_array) ? 0 :  $loanAccountPaymentObj->getPaidAmount($loan_account_ids_array);
+					$data['loan_account_fees'] = empty($loan_account_ids_array) ? 0 :  $loanAccountFeeObj->getSum($loan_account_ids_array);
 				}
 			}else{
 				$sharesObj = new Shares();
@@ -218,17 +225,15 @@ if(isset($_POST['origin'])){
 				$data['shares'] = $sharesObj->findShareAmount();
 				$data['shares'] = $sharesObj->findShareAmount();
 				$data['expenses'] = $expensesObj->findExpensesSum();
+				$data['opening_balances'] = $depositAccountObj->getSumOfFields($deposit_account_ids_array);
+				
+				$data['deposits'] = $depositAccountTransactionObj->getMoneySum(1, $deposit_account_ids_array);
+				$data['withdraws'] = $depositAccountTransactionObj->getMoneySum(2, $deposit_account_ids_array);
+				$data['deposit_account_fees'] = $depositAccountFeeObj->getSum($deposit_account_ids_array);
+				$data['disbursedLoan'] = $loanAccountObj->getSumOfFields($loan_account_ids_array);
+				$data['loan_payments'] = $loanAccountPaymentObj->getPaidAmount($loan_account_ids_array);
+				$data['loan_account_fees'] = $loanAccountFeeObj->getSum($loan_account_ids_array);
 			}
-			
-			$data['opening_balances'] = $depositAccountObj->getSumOfFields($deposit_account_ids_array);
-			$data['deposits'] = $depositAccountTransactionObj->getMoneySum(1, $deposit_account_ids_array);
-			$data['withdraws'] = $depositAccountTransactionObj->getMoneySum(2, $deposit_account_ids_array);
-			$data['deposit_account_fees'] = $depositAccountFeeObj->getSum($deposit_account_ids_array);
-			
-			$data['disbursedLoan'] = $loanAccountObj->getSumOfFields($loan_account_ids_array);
-			$data['loan_payments'] = $loanAccountPaymentObj->getPaidAmount($loan_account_ids_array);
-			$data['loan_account_fees'] = $loanAccountFeeObj->getSum($loan_account_ids_array);
-			
 			echo json_encode($data);
 		break;
 		case 'loan_account':
@@ -326,6 +331,16 @@ if(isset($_POST['origin'])){
 				}
 				echo json_encode($data);
 			}
+		break;
+		case 'general_subscription':
+			$subscription = new Subscription();
+			$subscription_data['data'] = $subscription->findGeneralSubscriptions();
+			echo json_encode($subscription_data);
+		break;
+		case 'general_shares':
+			$shares = new Shares();
+			$shares_data['data'] = $shares->findGeneralShares();
+			echo json_encode($shares_data);
 		break;
 		default:
 		echo json_encode("nothing found");

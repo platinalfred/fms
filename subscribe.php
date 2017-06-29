@@ -12,7 +12,7 @@
 								</h2>
 							</div>
 							<div class="ibox-content">
-								<form id="form" name="register_group" action="" method="post" class="wizard-big">
+								<form id="subTable" name="register_group" action="" method="post" class="wizard-big">
 									<input name ="receivedBy" type="hidden" value="<?php echo $_SESSION['personId']; ?>">
 									<input name ="modifiedBy" type="hidden" value="<?php echo $_SESSION['personId']; ?>">
 									<input name ="memberId" type="hidden" value="<?php echo $_GET['id']; ?>">

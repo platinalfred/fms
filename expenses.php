@@ -23,40 +23,25 @@ $member = new Member();
 			<div class="ibox">
 				<div class="ibox-content">
 					<h2>Expenses</h2>
-					<div class="col-sm-5 text-muted small pull-left" style="padding:10px;"><a data-toggle="modal" class="btn btn-primary" href="#add_expense"><i class="fa fa-plus"></i> Add Expense</a></div>
+					<div class="col-sm-12 col-lg-12 text-muted small pull-left" style="padding:10px;"><a data-toggle="modal" class="btn btn-primary" href="#add_expense"><i class="fa fa-plus"></i> Add Expense</a></div>
 					<div class="clear:both;"></div>
-					<div class="input-group">
-						<input type="text" placeholder="Search Expense " class="input form-control">
-						<span class="input-group-btn">
-							<button type="button" class="btn btn btn-primary"> <i class="fa fa-search"></i> Search Expense</button>
-						</span>
-					</div>
-					<div class="clients-list">
-						<div class="tab-content">
-							<div class="full-height-scroll">
-								<div class="table-responsive">
-									<table class="table table-striped table-hover" id="expenses">
-										<thead>
-											<tr>
-												<th>Expense Name</th>
-												<th>Amount Used</th>
-												<th>Amount Description</th>
-												<th>Attached Staff</th>
-												<th>Expense Date</th>
-												
-											</tr>
-										</thead>
-										<tbody>
-											
-										</tbody>
-									</table>
-								</div>
-							</div>
-						
-						</div>
-
-					</div>
-				</div>
+					
+					<table class="table table-striped table-hover" id="expenses">
+						<thead>
+							<tr>
+								<th>Expense Name</th>
+								<th>Amount Used</th>
+								<th>Amount Description</th>
+								<th>Attached Staff</th>
+								<th>Expense Date</th>
+								
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
+								
 			</div>
 		</div>
 	</div>
