@@ -653,6 +653,7 @@ class Db{
 			return $res;
 		}
 		return false;
+		//return mysqli_error($this->conn);
 	}
 	function getarrayunique($table, $where, $ordby, $limit) {
 		$out = array();
@@ -693,7 +694,7 @@ class Db{
 			$q->close();
 			return $res;
 		}
-		return false;
+		return mysqli_error($this->conn);
 	}
 	function buildOut($res){
 		$out = array();

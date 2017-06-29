@@ -10,10 +10,38 @@ class DepositAccount extends Db {
 		return !empty($result) ? $result:false;
 	}
 	
+	public function findAllDetailsById($id){
+		$fields = array( "`deposit_account`.`id`", "`productName`", "`deposit_account`.`recomDepositAmount`", "`deposit_account`.`maxWithdrawalAmount`", "`interestRate`", "`deposit_account`.`openingBalance`", "`termLength`", "`deposit_account`.`dateCreated`", "`deposit_account`.`createdBy`");
+		
+		$table = self::$table_name." JOIN `deposit_product` ON `deposit_account`.`depositProductId` = `deposit_product`.`id`";
+		
+		$result = $this->getfrec($table, implode(",",$fields), "`deposit_account`.`id`=".$id, "", "");
+		return $result;
+	}
+	
 	public function findAll(){
 		$result_array = $this->getarray(self::$table_name, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
+	public function getSumOfFields($depositAccountIds = false){
+		$fields = array( "COALESCE(SUM(`openingBalance`),0) `openingBalances`");
+		$where = "";
+		$in_part_string = "";
+		if($depositAccountIds){
+			if(is_array($depositAccountIds)){
+				foreach($depositAccountIds as $depositAccountId){
+					$in_part_string .= $depositAccountId['depositAccountId'].",";
+				}
+				$where .= " `id` IN (".substr($in_part_string, 0, -1).")";
+			}
+			else{
+				return 0;
+			}
+		}
+		$result_array = $this->getfrec(self::$table_name, implode(",",$fields), $where, "", "");
+		return !empty($result_array) ? $result_array['openingBalances'] : false;
+	}
+	
 	public function findSpecifics($fields, $where = ""){ //pick out data for specific fields
 			$in_part_string = "";
 			$where_clause = "";

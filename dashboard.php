@@ -99,7 +99,24 @@ include("include/header.php");
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-lg-8">
+				<div class="col-lg-6">
+					<div class="ibox float-e-margins">
+						<div class="ibox-content">
+							<div>
+								<h3 class="font-bold no-margins">Performance of Loan Products</h3>
+								<small>Product Sales</small>
+							</div>
+							<div class="m-t-sm">
+
+								<div class="row">
+									<canvas id="lineChart"></canvas>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
 							<div>
@@ -107,82 +124,10 @@ include("include/header.php");
 									<small>Average value of sales for this <strong>period</strong></small>
 										<br/>
 										Total product sales: <span data-bind="text: figures.total_product_sales">162,862</span>
-									</span>
-								<h3 class="font-bold no-margins">Performance of Loan Products</h3>
-								<small>Product Sales</small>
+								</span>
 							</div>
-
-							<div class="m-t-sm">
-
-								<div class="row">
-									<div class="col-md-8">
-										<div>
-											<canvas id="lineChart"></canvas>
-										</div>
-									</div>
-									<div class="col-md-4">
-										<div>
-											<canvas id="pieChart"></canvas>
-										</div>
-									</div>
-								</div>
-
-							</div>
-
-							<div class="m-t-md">
-								<small class="pull-right">
-							<i class="fa fa-clock-o"> </i>
-							Update on <span data-bind="text: moment.unix($parent.endDate()).format('MMM D, YYYY HH:mm')"></span>
-						</small>
-								<small>
-							<strong>Analysis of sales:</strong> The value has been changed over time, and last month reached a level over $50,000.
-						</small>
-							</div>
-
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4">
-					<div class="ibox float-e-margins">
-						<div class="ibox-title">
-							<span class="label label-warning pull-right">Product revenue</span>
-							<h5>Loan Products</h5>
-						</div>
-						<div class="ibox-content">
-							<div class="table-responsive">
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<th>Product</th>
-											<th>Amount Disbursed</th>
-											<th>Interest</th>
-											<th>Penalties</th>
-											<th>Amount Paid</th>
-											<th>Balance</th>
-										</tr>
-									</thead>
-									<tbody data-bind="foreach: tables.loan_products">
-										<tr>
-											<td data-bind="text: productName">1</td>
-											<td data-bind="text: curr_format(parseInt(loan_amount))"></td>
-											<td data-bind="text: curr_format(parseInt(interest))"></td>
-											<td data-bind="text: curr_format(parseInt(penalties))"></td>
-											<td data-bind="text: curr_format(parseInt(paidAmount))"></td>
-											<td data-bind="text: curr_format(parseInt(loan_amount)+parseInt(interest)+parseInt(penalties)-parseInt(paidAmount))"></td>
-										</tr>
-									</tbody>
-									<tfoot data-bind="if: tables.loan_products">
-										<tr>
-											<th scope='row'>Total</th>
-											<th data-bind="text: curr_format(array_total(tables.loan_products,1))"></th>
-											<th data-bind="text: curr_format(array_total(tables.loan_products,2))"></th>
-											<th data-bind="text: curr_format(array_total(tables.loan_products,3))"></th>
-											<th data-bind="text: curr_format(array_total(tables.loan_products,4))"></th>
-											<th data-bind="text: curr_format(array_total(tables.loan_products,1)+array_total(tables.loan_products,2)+array_total(tables.loan_products,3)-array_total(tables.loan_products,4))"></th>
-										</tr>
-									</tfoot>
-								</table>
-								<p data-bind="if: tables.loan_products" class="pull-right"><a data-bind="attr: { href: 'view_loans.php?start_date='+$parent.startDate()+'&end_date='+$parent.endDate()}" class="btn btn-info" title="View all loans">View all...</a></p>
+							<div>
+								<div style="max-height:300px;"><canvas id="pieChart"></canvas></div>
 							</div>
 						</div>
 					</div>
@@ -254,55 +199,41 @@ include("include/header.php");
 				<div class="col-lg-6">
 					<div class="ibox float-e-margins">
 						<div class="ibox-title">
-							<h5>Income </h5>
-							<span class="label label-primary">Top 10</span>
-							<div class="ibox-tools">
-								<a class="collapse-link">
-									<i class="fa fa-chevron-up"></i>
-								</a>
-								<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-									<i class="fa fa-wrench"></i>
-								</a>
-								<ul class="dropdown-menu dropdown-user">
-									<li><a href="#">Config option 1</a>
-									</li>
-									<li><a href="#">Config option 2</a>
-									</li>
-								</ul>
-								<a class="close-link">
-									<i class="fa fa-times"></i>
-								</a>
-							</div>
+							<span class="label label-warning pull-right">Product revenue</span>
+							<h5>Loan Products</h5>
 						</div>
 						<div class="ibox-content">
 							<div class="table-responsive">
 								<table class="table table-striped">
 									<thead>
 										<tr>
-											<th>#</th>
-											<th>Date</th>
-											<th>Income type</th>
-											<th>Amount</th>
+											<th>Product</th>
+											<th>Amount Disbursed</th>
+											<th>Interest</th>
+											<th>Amount Paid</th>
+											<th>Balance</th>
 										</tr>
 									</thead>
-									<tbody data-bind="foreach: tables.income">
+									<tbody data-bind="foreach: tables.loan_products">
 										<tr>
-											<td data-bind="text: id">1</td>
-											<td data-bind="text: moment(dateAdded).format('D MMMM, YYYY')"></td>
-											<td data-bind="text: description"></td>
-											<td data-bind="text: curr_format(amount)"></td>
+											<td data-bind="text: productName">1</td>
+											<td data-bind="text: curr_format(parseInt(loan_amount))"></td>
+											<td data-bind="text: curr_format(parseInt(interest))"></td>
+											<td data-bind="text: curr_format(parseInt(paidAmount))"></td>
+											<td data-bind="text: curr_format(parseInt(loan_amount)+parseInt(interest)-parseInt(paidAmount))"></td>
 										</tr>
 									</tbody>
-									<tfoot data-bind="if: tables.income">
+									<tfoot data-bind="if: tables.loan_products">
 										<tr>
 											<th scope='row'>Total</th>
-											<th>&nbsp;</th>
-											<th>&nbsp;</th>
-											<th data-bind="text: curr_format(tables.income,2)"></th>
+											<th data-bind="text: curr_format(array_total(tables.loan_products,1))"></th>
+											<th data-bind="text: curr_format(array_total(tables.loan_products,2))"></th>
+											<th data-bind="text: curr_format(array_total(tables.loan_products,3))"></th>
+											<th data-bind="text: curr_format(array_total(tables.loan_products,1)+array_total(tables.loan_products,2)-array_total(tables.loan_products,3))"></th>
 										</tr>
 									</tfoot>
 								</table>
-								<p data-bind="if: tables.income" class="pull-right"><a data-bind="attr: { href: 'view_income.php?start_date='+$parent.startDate()+'&end_date='+$parent.endDate()}" class="btn btn-info" title="View income in this period">View all...</a></p>
+								<p data-bind="if: tables.loan_products" class="pull-right"><a data-bind="attr: { href: 'view_loans.php?start_date='+$parent.startDate()+'&end_date='+$parent.endDate()}" class="btn btn-info" title="View all loans">View all...</a></p>
 							</div>
 						</div>
 					</div>

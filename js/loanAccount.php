@@ -17,15 +17,11 @@
 		//these are required as the datatable is being loaded
 		self.transactionHistory = ko.observableArray(); //for the account transacation history display
 		self.account_details = ko.observable();
-		<?php if(isset($_GET['loanId'])){
-			$account_details = $loan_account_obj->findById($_GET['loanId']);
-			if($account_details){?>
-			self.account_details(<?php echo json_encode($account_details);?>);
-			<?php }
-		}?>
 		
-		//this gets loaded when the loan is for approval
+		//this gets loaded when the loan is for approval/editing
+		self.edit_client = ko.observable(0);
 		self.loan_account_details = ko.observable();
+		self.loanAccountId = ko.observable();
 		
 		//loan repayment section form
 		self.payment_amount = ko.observable(0);
@@ -145,7 +141,7 @@
 		//reset the whole form after saving data in the database
 		self.resetForm = function() {
 			//self.client(null);
-			//self.loanProduct(null);
+			//self.loanProduct(null);//
 			$("#loanAccountForm")[0].reset();
 			dTable['applications'].ajax.reload();
 		};
@@ -155,22 +151,35 @@
 			$.ajax({
 				type: "post",
 				dataType: "json",
-				data:{origin:"loan_account"},
+				data:{origin:"loan_account"<?php if(isset($_GET['loanId'])):?>, loanAccountId:<?php echo $_GET['loanId'];?> <?php endif;?>},
 				url: "ajax_data.php",
 				success: function(response){
 					self.loanProducts(response.products);
 					self.productFees(response.productFees);
 					self.guarantors(response.guarantors);
 					<?php if(!isset($client)):?>self.customers(response.customers); <?php endif;?>
+					<?php if(isset($_GET['loanId'])){
+						$clientId = $client['id'];
+						$client['clientId'] = $client['id'];
+						unset($client['id'],$clientId);?>
+						var client_data = <?php echo json_encode($client);?>;
+						self.account_details($.extend(client_data, response.account_details));
+					<?php } ?>
 				}
 			})
 		};
 		
 		//send the items to the server for saving
 		self.save = function(form) {
+			var guarantors = $.map(self.selectedGuarantors(), function(current_guarantor) {
+				return current_guarantor.guarantor() ? {
+					id: current_guarantor.guarantor().id
+				} : undefined
+			});
 			$.ajax({
 				type: "post",
 				data:{
+					id : self.loanAccountId(),
 					clientId : (self.client()?self.client().id:undefined),
 					clientType : (self.client()?self.client().clientType:undefined),
 					status : (self.loanProduct()?self.loanProduct().initialAccountState:undefined),
@@ -188,7 +197,7 @@
 					penaltyRateChargedPer : self.loanProduct()?self.loanProduct().penaltyRateChargedPer:undefined,
 					penaltyRate : self.loanProduct()?self.loanProduct().penaltyRate:undefined,
 					linkToDepositAccount : self.loanProduct()?self.loanProduct().linkToDepositAccount:undefined,
-					guarantors:self.selectedGuarantors(),//the chosen guarantors
+					guarantors:guarantors,//the chosen guarantors
 					feePostData:self.filteredLoanProductFees(), //the applicable fees
 					collateral:self.addedCollateral(), //the applicable fees
 					origin : "loan_account"
@@ -294,20 +303,36 @@
 				}
 			});
 		};
-		self.getLoanAccountDetails = function(){
+		self.getLoanAccountDetails = function(edit){
 			$.ajax({
 				type: "post",
 				dataType: "json",
 				data:{
 					origin:"loan_application_details",
 					id:(self.account_details()?self.account_details().id:undefined),
+					edit_loan:edit,
 					clientId: (self.account_details()?self.account_details().clientId:undefined),
 					clientType: (self.account_details()?self.account_details().clientType:undefined)
 				},
 				url: "ajax_data.php",
 				success: function(response){
 					if(response){
-						self.loan_account_details(response);
+						if(edit){
+							self.loanAccountId(response.loan_account_details.id);
+							self.client({id:self.account_details().clientId, clientNames:self.account_details().clientNames, clientType:self.account_details().clientType});
+							self.loanProduct(response.loan_product);
+							self.selectedGuarantors(response.guarantors);
+							//self.addedCollateral(response.collateral_items);
+							self.requestedAmount(response.loan_account_details.requestedAmount);
+							self.interestRate(response.loan_account_details.interestRate);
+							self.offSetPeriod(response.loan_account_details.offSetPeriod);
+							self.gracePeriod(response.loan_account_details.gracePeriod);
+							self.installments(response.loan_account_details.installments);
+							self.applicationDate(moment(response.loan_account_details.applicationDate,'X').format('DD-MM-YYYY'));
+						}
+						else{
+							self.loan_account_details(response);
+						}
 					}
 				}
 			});
@@ -336,7 +361,7 @@
 		  post_data['status']=1;
 		dTable['applications'] = $('#applications').DataTable({
 		  dom: "Bfrtip",
-		  "order": [ [3, 'asc' ]],
+		  "order": [ [3, 'desc' ]],
 		  "ajax": {
 			  "url":"ajax_data.php",
 			  "type": "POST",
@@ -355,10 +380,10 @@
 				{ data: 'clientNames'},
 				{ data: 'productName'},
 				{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} 
-				<?php if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])){?>,
+				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} ,
 				{ data: 'id', render: function ( data, type, full, meta ) {
 					var authorized =  false;
+				<?php if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])){?>
 					if(user_props['branch_credit']&&parseInt(full.requestedAmount)<1000001){
 						authorized = true;
 					}
@@ -368,8 +393,9 @@
 					if(user_props['executive_board']&&parseInt(full.requestedAmount)>5000000){
 						authorized = true;
 					}
-					return authorized?'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_me" data-toggle="modal"><i class="fa fa-edit"></i> Approve </a>':'';}}
-				<?php }?>
+				<?php } else { ?>
+					return '<a href="#'+(authorized?'approve_loan':'add_loan_account')+'-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> '+(authorized?'Approve':'Edit')+' </a>';}}
+				<?php } ?>
 				] ,
 		  buttons: [
 			{
@@ -527,10 +553,10 @@
 				<?php else: ?> post_data<?php endif; ?>
 		  },
 		  "initComplete": function(settings, json) {
-				$(".table#approved tbody>tr:first").trigger('click');
+				$(".table#disbursed tbody>tr:first").trigger('click');
 		  },
 		  "footerCallback": function (tfoot, data, start, end, display ) {
-            var api = this.api(), cols = [5,6,7];
+            var api = this.api(), cols = [4,8,9,10,11,12,13];
 			$.each(cols, function(key, val){
 				var total = api.column(val).data().sum();
 				$(api.column(val).footer()).html( curr_format(total) );
@@ -547,10 +573,16 @@
 				{ data: 'clientNames'},
 				{ data: 'productName'},
 				{ data: 'disbursementDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+				{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
+				{ data: 'installments', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
 				{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.installments)) + ' ' + getDescription(4,data);}},
-				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
-				{ data: 'amountPaid', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
-				{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
+				{ data: 'interestRate'},
+				{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)/parseInt(full.installments));}},
+				{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)/parseInt(full.installments));}},
+				{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format((parseInt(data)/parseInt(full.installments))+parseInt(full.disbursedAmount)/parseInt(full.installments));}},
+				{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
+				{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)+parseInt(full.interest));}},
+				{ data: 'amountPaid', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
 				] ,
 		  buttons: [
 			{
@@ -613,13 +645,18 @@
 			}); 
 		}
 	});
-	$('.table#applications tbody').on('click', 'tr .edit_me', function () {
+	$('.table#applications').on('click', '.edit_loan', function () {
+		<?php if(!isset($_GET['loanId'])):?>
 		var row = $(this).closest("tr[role=row]");
 		if(row.length == 0){
 			row = $(this).closest("tr").prev();
 		}
-		loanAccountModel.getLoanAccountDetails();
-		edit_data(dTable['applications'].row(row).data(), "loanAccountApprovalForm"); 
+		var data = dTable['applications'].row(row).data() ;
+		<?php endif;?>
+		//var loanAccountId = <?php if(isset($_GET['loanId'])):?><?php echo $_GET['loanId']; else:?>data.id<?php endif;?>;
+		var editing = 0
+		<?php if((isset($_SESSION['loan_officer'])&&$_SESSION['loan_officer'])):?>editing = 1; loanAccountModel.edit_client(1);<?php endif;?>
+		loanAccountModel.getLoanAccountDetails(editing);
 	});
 
 	$('.table tbody').on('click', 'tr[role=row]', function () {

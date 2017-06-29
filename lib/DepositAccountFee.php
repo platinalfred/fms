@@ -2,8 +2,8 @@
 $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class DepositAccountFee extends Db {
-	protected static $table_name  = "deposit_accountfee";
-	protected static $table_fields = array("id", "depositProductFeeId", "amount", "dateCreated", "createdBy", "dateModified", "modifiedBy");
+	protected static $table_name  = "deposit_account_fee";
+	protected static $table_fields = array("id", "depositProductFeeId", "depositAccountId", "amount", "dateCreated", "createdBy", "dateModified", "modifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -22,6 +22,20 @@ class DepositAccountFee extends Db {
 		return $result;
 	}
 	
+	public function getSum($depositAccountIds = false){
+		$where = "";
+		$in_part_string = "";
+		if($depositAccountIds){
+			foreach($depositAccountIds as $depositAccount){
+				$in_part_string .= $depositAccount['depositAccountId'].",";
+			}
+			$where .= " `depositAccountId` IN (".substr($in_part_string, 0, -1).")";
+		}
+		$field = "COALESCE(SUM(`amount`),0) `feeSum`";
+		$result = $this->getfrec(self::$table_name, $field, $where, "", "");
+		return !empty($result) ? $result['feeSum'] : 0;
+	}
+	
 	public function updateDepositAccountFee($data){
 		
 		$fields = array_slice(self::$table_fields, 1);
@@ -33,8 +47,8 @@ class DepositAccountFee extends Db {
 		return false;
 	}
 	
-	public function deleteDepositAccountFee($id){
-		$this->delete(self::$table_name, "id=".$id);
+	public function deleteDepositAccountFee($depositAccountId){
+		$this->del(self::$table_name, "depositAccountId=".$depositAccountId);
 	}
 }
 ?>

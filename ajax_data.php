@@ -97,7 +97,7 @@ if(isset($_POST['origin'])){
 			//Expenses"
 			$tables['expenses'] = $expense->findAllExpenses("`expenseDate` BETWEEN ".$start_date." AND ".$end_date, "amountUsed DESC", "10");
 
-			$products_sql = "SELECT `productName`, SUM(`disbursedAmount`) `loan_amount`, SUM(`disbursedAmount`*`interestRate`/100) `interest`, SUM(`penalty`) `penalties`, `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_product`.`id` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `paidAmount`, `loanAccountId` FROM `loan_repayment` WHERE `transaactionDate` <= ".$end_date." GROUP BY `loanAccountId`) `payments` `loan_account`.`id`=`payments`.`loanAccountId` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `penalty`, `loanAccountId` FROM `loan_repayment` WHERE `dateCreated` <= ".$end_date." GROUP BY `loanAccountId`) `penalt` ON `loan_account`.`id` = `penalt`.`loanAccountId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3 GROUP BY `productName` ORDER BY `productName`";
+			$products_sql = "SELECT `productName`, SUM(`disbursedAmount`) `loan_amount`, SUM(`disbursedAmount`*`interestRate`/100) `interest`, `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `paidAmount`, `loanAccountId` FROM `loan_repayment` WHERE `transactionDate` <= ".$end_date." GROUP BY `loanAccountId`) `payments` ON `loan_account`.`id`=`payments`.`loanAccountId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4 GROUP BY `productName` ORDER BY `productName`";
 			
 			$tables['loan_products'] = $loan->findLoans($products_sql);
 
@@ -146,9 +146,88 @@ if(isset($_POST['origin'])){
 			$data['products'] = $depositProductObj->findAll();
 			$data['productFees'] = $productFeeObj->findAll();
 			
-			$members = $memberObj->findSelectList();
-			$groups = $saccoGroupObj->findSelectList();
-			$data['customers'] = array_merge($members,$groups);
+			if(isset($_POST['depositAccountId'])&&is_numeric($_POST['depositAccountId'])){
+				$depositAccountObj = new DepositAccount();
+				$depositAccountTransactionObj = new DepositAccountTransaction();
+				$data['account_details'] = $depositAccountObj->findAllDetailsById($_POST['depositAccountId']);
+				$data['account_details']['statement'] = $depositAccountTransactionObj->getTransactionHistory($_POST['depositAccountId']);
+			}else{
+				$members = $memberObj->findSelectList();
+				$groups = $saccoGroupObj->findSelectList();
+				$data['customers'] = array_merge($members,$groups);
+			}
+			
+			echo json_encode($data);
+		break;
+		case 'ledger':
+			$depositAccountObj = new DepositAccount();
+			$depositAccountTransactionObj = new DepositAccountTransaction();
+			$depositAccountFeeObj = new DepositAccountFee();
+			$loanAccountObj = new LoanAccount();
+			$loanAccountPaymentObj = new LoanRepayment();
+			$loanAccountFeeObj = new LoanAccountFee();
+			
+			$depositAccountIds = $loanAccountIds = $deposit_account_where  = $loan_account_where = "";
+			$deposit_account_ids_array = $loan_account_ids_array = false;
+			$member_id = 0;
+			if(isset($_POST['id'])&&is_numeric($_POST['id'])){
+				if(isset($_POST['clientType'])&&is_numeric($_POST['clientType'])){
+					switch($_POST['clientType']){
+						case 1:
+						$member_id = $_POST['id'];
+						$sharesObj = new Shares();
+						$subscriptionsObj = new Subscription();
+						$member_loan_account_obj = new MemberLoanAccount();
+						$member_deposit_account_obj = new MemberDepositAccount();
+						
+						$deposit_account_ids_array = $member_deposit_account_obj->getAccountIds($member_id);
+						$loan_account_ids_array = $member_loan_account_obj->getAccountIds($member_id);
+						
+						$data['subscriptions'] = $subscriptionsObj->findSubscriptionAmount('memberid='.$member_id);
+						$data['shares'] = $sharesObj->findShareAmount('memberid='.$member_id);
+						break;
+						
+						case 2:
+						$group_id = $_POST['id'];
+						$sacco_group_loan_account_obj = new SaccoGroupLoanAccount();
+						$sacco_group_deposit_account_obj = new SaccoGroupDepositAccount();
+						$deposit_account_ids_array = $sacco_group_deposit_account_obj->getAccountIds($group_id);
+						$loan_account_ids_array = $sacco_group_loan_account_obj->getAccountIds($group_id);
+						break;						
+					}
+					/* if(!empty($deposit_account_ids_array)){
+						$depositAccountIds = "(";
+						foreach($deposit_account_ids_array as $deposit_account_id_array){
+							$depositAccountIds .= $deposit_account_id_array['depositAccountId'].",";
+						}
+						$depositAccountIds = substr($depositAccountIds,0,-1).")";
+					}
+					if(!empty($loan_account_ids_array)){
+						$depositAccountIds = "(";
+						foreach($loan_account_ids_array as $loan_account_id_array){
+							$loanAccountIds .= $loan_account_id_array['loanAccountId'].",";
+						}
+						$loanAccountIds = substr($loanAccountIds,0,-1).")";
+					} */
+				}
+			}else{
+				$sharesObj = new Shares();
+				$subscriptionsObj = new Subscription();
+				$expensesObj = new Expenses();
+				$data['subscriptions'] = $subscriptionsObj->findSubscriptionAmount();
+				$data['shares'] = $sharesObj->findShareAmount();
+				$data['shares'] = $sharesObj->findShareAmount();
+				$data['expenses'] = $expensesObj->findExpensesSum();
+			}
+			
+			$data['opening_balances'] = $depositAccountObj->getSumOfFields($deposit_account_ids_array);
+			$data['deposits'] = $depositAccountTransactionObj->getMoneySum(1, $deposit_account_ids_array);
+			$data['withdraws'] = $depositAccountTransactionObj->getMoneySum(2, $deposit_account_ids_array);
+			$data['deposit_account_fees'] = $depositAccountFeeObj->getSum($deposit_account_ids_array);
+			
+			$data['disbursedLoan'] = $loanAccountObj->getSumOfFields($loan_account_ids_array);
+			$data['loan_payments'] = $loanAccountPaymentObj->getPaidAmount($loan_account_ids_array);
+			$data['loan_account_fees'] = $loanAccountFeeObj->getSum($loan_account_ids_array);
 			
 			echo json_encode($data);
 		break;
@@ -161,12 +240,23 @@ if(isset($_POST['origin'])){
 			
 			$data['products'] = $loanProductObj->findAll();
 			$data['productFees'] = $productFeeObj->findAllLPFDetails();
-			$data['guarantors'] = $guarantorObj->findGuarantors();
+			$data['guarantors'] = $guarantorObj->getLoanGuarantors();
+			if(isset($_POST['loanAccountId'])&&is_numeric($_POST['loanAccountId'])){
+				$loanAccountObj = new LoanAccount();
+				$data['account_details'] = $loanAccountObj->findAllDetailsById($_POST['loanAccountId']);
+				$data['account_details']['statement'] = $loanAccountObj->getStatement($_POST['loanAccountId']);
+			}else{
+				$members = $memberObj->findSelectList();
+				$groups = $saccoGroupObj->findSelectList();
+				$data['customers'] = array_merge($members,$groups);
+			}
 			
-			$members = $memberObj->findSelectList();
-			$groups = $saccoGroupObj->findSelectList();
-			$data['customers'] = array_merge($members,$groups);
 			
+			echo json_encode($data);
+		break;
+		case 'loan_report':
+			$loanReportObj = new LoanAccount();
+			$data['data'] = $loanReportObj->getReport("`status`=4");
 			echo json_encode($data);
 		break;
 		case 'loan_products':
@@ -204,26 +294,35 @@ if(isset($_POST['origin'])){
 			echo json_encode($transactonHistory);
 		break;
 		case 'loan_application_details':
-			if(isset($_POST['id'])&&$_POST['id']){
+			if(isset($_POST['id'])&&$_POST['id']&&isset($_POST['clientType'])&&isset($_POST['clientId'])){
 				$loanAccountId = $_POST['id'];
-				if(isset($_POST['clientType'])&&isset($_POST['clientId'])){
-					$clientId = $_POST['clientId'];
-					if($_POST['clientType'] == 1){
+				$clientId = $_POST['clientId'];
+				if($_POST['clientType'] == 1){
+					$guarantorObj = new Guarantor();
+					$collateralObj = new LoanCollateral();
+					$data['guarantors'] = $guarantorObj->getLoanGuarantors($loanAccountId);
+					$data['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$loanAccountId);
+					if(isset($_POST['edit_loan'])&&$_POST['edit_loan']==1){
+						
+						$loanAccountObj = new LoanAccount();
+						$loanAccountFeeObj = new LoanAccountFee();
+						$loanProductObj = new LoanProduct();
+						
+						$data['loan_account_details'] = $loanAccountObj->findById($loanAccountId);
+						$data['loan_product'] = $loanProductObj->findById($data['loan_account_details']['loanProductId']);
+						$data['loan_account_fees'] = $loanAccountFeeObj->findAllDetailsByLoanAccountId($loanAccountId);
+					}else{
 						$personObj = new Person();
 						$memberObj = new Member();
-						$guarantorObj = new Guarantor();
-						$collateralObj = new LoanCollateral();
-						$data['guarantors'] = $guarantorObj->findGuarantors($loanAccountId);
-						$data['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$loanAccountId);
 						$memberData = $memberObj->findById($clientId);
 						$data['member_details'] = $personObj->findById($memberData['personId']);
 						$data['relatives'] = $personObj->findPersonRelatives($memberData['personId']);
 						$data['employmentHistory'] = $personObj->findPersonEmploymentHistory($memberData['personId']);
 					}
-					if($_POST['clientType'] == 2){
-						$saccoGroupObj = new SaccoGroup();
-						$data['groupMembers'] = $saccoGroupObj->findSaccoGroupMembers($clientId);
-					}
+				}
+				if($_POST['clientType'] == 2){
+					$saccoGroupObj = new SaccoGroup();
+					$data['groupMembers'] = $saccoGroupObj->findSaccoGroupMembers($clientId);
 				}
 				echo json_encode($data);
 			}
@@ -336,9 +435,6 @@ function getGraphData($start_date, $end_date){
 				$datasets['data'][] = $dashboard->getSumOfLoans($between." AND ".$product['id']);
 			}
 			$graph_data['datasets'][] = array_merge($datasets, getGraphProps());
-		}
-		foreach($weeks as $week){
-			$data_points[] = date('M, Y', $month['start']);
 		}
 	}
 	if(!empty($graph_data)){

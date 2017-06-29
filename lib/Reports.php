@@ -1,7 +1,7 @@
 <?php 
 require_once("lib/Libraries.php");
 Class Reports{
-	public function __construct($task, $item_view, $data=false){
+	public function __construct($task, $item_view=1, $data=false){
 	   $this->task = $task;
 	   $this->data = $data;
 	   $this->item_view = $item_view;
@@ -28,6 +28,12 @@ Class Reports{
 			break;
 			case 'loan_accs';
 				$this->clientLoan($this->data, $this->item_view);
+			break;
+			case 'ledger';
+				$this->ledger($this->data);
+			break;
+			case 'general';
+				$this->viewGeneral($this->data);
 			break;
 			default:
 				$this->defaultDisplay();
@@ -60,150 +66,11 @@ Class Reports{
 			include_once('./deposit_account_detail.php');
 		}
 	}
+	public function viewGeneral(){
+		include_once('./general_reports.php');
+	}
 	public function ledger(){ 
-		$loan = new Loans();
-		$expense = new Expenses();
-		$member = new Member();
-		$accounts = new Accounts();
-		$dashboard = new Dashboard();
-		//This will prevent data tables js from showing on every page for speed increase
-		$show_table_js = true;
-		
-		$member_data = $member->findById($_GET['member_id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
-		?>
-		<div class="page-title" >
-		  <div class="col-md-5">
-			<h2>Ledger Accounts <small> <?php echo $account_names['firstname']." ".$account_names['lastname']; ?></small></h2>
-		  </div>
-		  <div class="col-md-7">
-			<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
-			  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-			  <span>November 20, 2016 - December 19, 2016</span> <b class="caret"></b>
-			</div>
-		  </div>
-		</div>
-		<div class="clearfix"></div>
-		<div class="row">
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Personal <small>Account</small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <table id="ledger" class="table table-hover">
-						<thead>
-							<tr>
-								<?php 
-								$header_keys = array("&nbsp;", "Dr", "Cr");
-								foreach($header_keys as $key){ ?>
-									<th><?php echo $key; ?></th>
-									<?php 
-								} ?>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th>Subscription</th><td></td><td id="subscriptions">0.0</td>
-							</tr>
-							<tr>
-								<th>Shares</th><td></td><td id="shares">0.0</td>
-							</tr>
-							<tr>
-								<th>Deposits</th><td></td><td id="deposits">0.0</td>
-							</tr>
-							<tr>
-								<th>Withdraws</th><td id="withdraws">0.0</td><td></td>
-							</tr>
-						</tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Income <small>Account</small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <table id="income_account" class="table table-hover">
-						<thead>
-							<tr>
-								<?php
-								foreach($header_keys as $key){ ?>
-									<th><?php echo $key; ?></th>
-									<?php 
-								} ?>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th>Subscription</th><td></td><td id="subscriptionss">0.0</td>
-							</tr>
-							<tr>
-								<th>Deposits</th><td id="depositss">0.0</td><td></td>
-							</tr>
-							<!--tr>
-								<th>Expenses</th><td></td><td id="expenses">0.0</td>
-							</tr-->
-						</tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-			  
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Loans <small>Account</small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <table id="loans_account" class="table table-hover">
-						<thead>
-							<tr>
-								<?php 
-								$header_keys = array("&nbsp;", "Dr", "Cr");
-								foreach($header_keys as $key){ ?>
-									<th><?php echo $key; ?></th>
-									<?php 
-								} ?>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th>Principle + Expected Interest</th><td id="expected_payback">0</td><td></td>
-							</tr>
-							<tr>
-								<th>Amount Paid</th><td></td><td id="amount_paid">0</td>
-							</tr>
-						</tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-		</div>
-		<?php
+		include_once('./ledger.php');
 	}
 	
 
