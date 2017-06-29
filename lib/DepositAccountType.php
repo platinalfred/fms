@@ -2,7 +2,7 @@
 $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class AccountType extends Db {
-	protected static $table_name  = "accounttype";
+	protected static $table_name  = "deposit_product_type";
 	protected static $db_fields = array("id", "title","minimum_balance", "description");
 	
 	public function findById($id){

@@ -1,6 +1,7 @@
 <?php
 require_once("lib/Db.php");
 $db = new Db();
+print_r($_GET);
 if(isset($_GET['tbl'])){
 	$msg = "Item could not be deleted.Please try again";
 	switch($_GET['tbl']){
@@ -71,10 +72,11 @@ if(isset($_GET['tbl'])){
 		case "loan_product_types":
 		break;
 		case "relationship_type":
-		/* break;
-		case "address_type":
 		break;
-		case "":
+		case "person_type":
+			
+		break;
+		/*case "":
 		break;
 		case "":
 		break;

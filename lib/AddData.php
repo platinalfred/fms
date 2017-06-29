@@ -61,18 +61,22 @@ if(isset($_POST['origin'])){
 			$data['dateModified'] = time();
 			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			$output = $depositProduct->addDepositProduct($data);
-		break;
-		case "deposit_product_fee":
-			$depositProductFee = new DepositProductFee();
-			$productId = $data['productId'];
-			foreach($data['feePostData'] as $feeDataItem){
-				$feeDataItem['depositProductID'] = $productId;
-				$feeDataItem['dateCreated'] = time();
-				$feeDataItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-				$feeDataItem['dateModified'] = time();
-				$feeDataItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-				$output = $depositProductFee->addDepositProductFee($feeDataItem);
+			if(is_numeric($output)){
+				//insert the product fees afterwards
+				$depositProductFee = new DepositProductFee();
+				$productId = $output;
+				if(isset($data['feePostData'])&&!empty($data['feePostData'])){
+					foreach($data['feePostData'] as $feeDataItem){
+						$feeDataItem['depositProductID'] = $productId;
+						$feeDataItem['dateCreated'] = time();
+						$feeDataItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						$feeDataItem['dateModified'] = time();
+						$feeDataItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						$output = $depositProductFee->addDepositProductFee($feeDataItem);
+					}
+				}
 			}
+			
 		break;
 		case "loan_product":
 			$loanProduct = new LoanProduct();

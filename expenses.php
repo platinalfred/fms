@@ -1,6 +1,6 @@
 <?php 
 $needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout");
-$page_title = "Members";
+$page_title = "Expenses";
 include("include/header.php"); 
 require_once("lib/Libraries.php");
 $member = new Member();
@@ -19,7 +19,7 @@ $member = new Member();
 	</div>
 	<div class="row">
 		<?php include("add_expense.php"); ?>
-		<div class="col-sm-8">
+		<div class="col-sm-12">
 			<div class="ibox">
 				<div class="ibox-content">
 					<h2>Expenses</h2>
@@ -35,18 +35,15 @@ $member = new Member();
 						<div class="tab-content">
 							<div class="full-height-scroll">
 								<div class="table-responsive">
-									<table class="table table-striped table-hover" id="groupTable">
+									<table class="table table-striped table-hover" id="expenses">
 										<thead>
 											<tr>
-												<th>Id</th>
-												<th>Group Name</th>
-												<th>Description</th>
-												<?php 
-												if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>
-													<th>Edit/Delete</th>
-												<?php 
-												}
-												?>
+												<th>Expense Name</th>
+												<th>Amount Used</th>
+												<th>Amount Description</th>
+												<th>Attached Staff</th>
+												<th>Expense Date</th>
+												
 											</tr>
 										</thead>
 										<tbody>
@@ -62,31 +59,6 @@ $member = new Member();
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-4">
-			<div class="ibox ">
-				<div class="ibox-content">
-					<div class="tab-content">
-						<div id="company-3" class="tab-pane active" data-bind="with: group_details">
-							<div class="m-b-lg">
-								<h2 data-bind="text:groupName"></h2>
-							</div>
-							<div class="client-detail">
-								<div class="full-height-scroll" >
-									<strong>Group Members</strong>
-									<ul class="list-group clear-list" data-bind="foreach: $root.all_group_members">
-										<li class="list-group-item fist-item" data-bind="text:memberNames">
-										</li>
-									</ul>
-									<strong>Notes</strong>
-									<p data-bind="text:description">
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 	</div>
 	<?php 
 	
@@ -95,39 +67,38 @@ $member = new Member();
 <script>
 $(document).ready(function(){
 	
-	/* PICK DATA FOR DATA TABLE  */
 	var  dTable;
 	var handleDataTableButtons = function() {
-		  if ($("#groupTable").length ) {
-			  dTable = $('#groupTable').DataTable({
-			  dom: "lfrtipB",
+		if ($("#expenses").length ) {
+			dTable = $('#expenses').DataTable({
+				dom: "lfrtipB",
 				"processing": true,
-			  "serverSide": true,
-			  "deferRender": true,
-			  "order": [[ 1, 'asc' ]],
-			  "ajax": {
-				  "url":"find_groups.php",
+				"serverSide": true,
+				"deferRender": true,
+				"order": [[ 1, 'asc' ]],
+				"ajax": {
+				  "url":"find_data.php",
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
-						d.page = 'view_group';
+						d.page = 'view_expenses';
 					}
-			  },"columnDefs": [ {
+				},"columnDefs": [ {
 				  "targets": [0],
 				  "orderable": false,
 				  "searchable": false
-			  } , {
+				} , {
 				  "targets": [0],
 				  "orderable": false
-			  }],
-			  columns:[  
-					{ data: 'id'},
-					{ data: 'groupName'},
-					{ data: 'description'}<?php 
-					if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>,
-					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <a id="'+data+'" class="btn btn-white btn-sm edit_group"><i class="fa fa-pencil"></i> Edit </a> ';}} <?php } ?> 
+				}],
+				columns:[  
+					{ data: 'expenseName'},
+					{ data: 'amountUsed', render:function(data, type, full, meta ){ return curr_format(parseInt(data)); }},
+					{ data: 'amountDescription'}, 
+					{ data: 'staff_names'} , 
+					{ data: 'expenseDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD MMM, YYYY');}} 
 					] ,
-			  buttons: [
+				buttons: [
 				{
 				  extend: "copy",
 				  className: "btn-sm"
@@ -148,17 +119,17 @@ $(document).ready(function(){
 				  extend: "print",
 				  className: "btn-sm"
 				},
-			  ],
-			  
-			   "initComplete": function(settings, json) {
-				   
-					$(".table tbody>tr:first").trigger('click');
-					ko.applyBindings(groupModel);
-			  }
+				],
+
+				"initComplete": function(settings, json) {
+					/* ko.applyBindings(memberTableModel, $("#member_details")[0]);
+					$(".table tbody>tr:first").trigger('click'); */
+				}
 			});
+
 			//$("#datatable-buttons").DataTable();
 		}
-
+		
 	};
 	TableManageButtons = function() {
 	  "use strict";
@@ -168,35 +139,13 @@ $(document).ready(function(){
 		}
 	  };
 	}();
-
 	TableManageButtons.init();
-	$('#groupTable').on('click', 'tr .edit_group', function () {
+	$('#expenses').on('click', 'tr .edit_expense', function () {
 		var id = $(this).attr("id")
 		 $('#DescModal').removeData('bs.modal');
         $('#DescModal').modal({remote: 'edit_group.php?id=' + id });
         $('#DescModal').modal('show');
-	})
-	$('.table tbody').on('click', 'tr ', function () {
-		var data = dTable.row(this).data();
-		console.log(data);
-		groupModel.group_details(data);
-		//ajax to retrieve other member details
-		findGroupDetails(data.id);
 	});
-	function findGroupDetails(id){
-		$.ajax({
-			url: "find_group_details.php?id="+id,
-			type: 'GET',
-			dataType: 'json',
-			success: function (data) {
-				if(data.group_members != "false"){
-					groupModel.all_group_members(data.group_members);
-				}
-				
-				
-			}
-		});
-	}
 	function showStatusMessage(message='', display_type='success'){
 		new PNotify({
 			  title: "Alert",
@@ -232,13 +181,14 @@ $(document).ready(function(){
 		
 	}
 	// It has the name attribute "registration"
-	$("form[name='register_group']").validate({
+	$("form[name='register_expense']").validate({
 		// Specify validation rules
 		rules: {
 		  // The key name on the left side is the name attribute
 		  // of an input field. Validation rules are defined
 		  // on the right side
-		  groupName: "required"
+		  expenseName: "required",
+		  amountUsed: "required"
 		},
 		errorPlacement: function(error, element) {
 			error.insertAfter(element);
@@ -246,13 +196,14 @@ $(document).ready(function(){
 		},
 		// Specify validation error messages
 		messages: {
-		  groupName: "Please give this group a name",
+		  amountUsed: "Please give the expense amount.",
+		  expenseName: "Please give a name to this expense",
 		},
 		// Make sure the form is submitted to the destination defined
 		// in the "action" attribute of the form when valid
 		submitHandler: function(form, event) {
 			event.preventDefault();
-			var form =  $("form[name='register_group']");
+			var form =  $("form[name='register_expense']");
 			var frmdata = form.serialize();
 			$.ajax({
 				url: "save_data.php",
@@ -260,10 +211,9 @@ $(document).ready(function(){
 				data: frmdata,
 				success: function (response) {
 					if($.trim(response) == "success"){
-						showStatusMessage("Successfully added new record" ,"success");
+						showStatusMessage("Successfully saved your expense" ,"success");
 						form[0].reset();
 						dTable.ajax.reload();
-						groupModel.group_members(null);
 					}else{
 						showStatusMessage(response, "fail");
 					}
@@ -271,48 +221,6 @@ $(document).ready(function(){
 				}
 			});
 		}
-	  });
-});
-	 
-var GroupMember = function() {
-	var self = this;
-}
-var Group = function() {
-	var self = this;
-	self.sacco_members = ko.observableArray();
-	self.group_details = ko.observableArray();
-	self.all_group_members = ko.observableArray();
-	self.group_members = ko.observableArray([new GroupMember()]);
-	self.addMember = function() { self.group_members.push(new GroupMember()) };
-	self.removeMember = function(selected_member) {
-		self.group_members.remove(selected_member);
-	};
-	//Operations
-	//set options value afterwards
-	self.setOptionValue = function(propId) {
-		return function (option, item) {
-			if (item === undefined) {
-				option.value = "";
-			} else {
-				option.value = item[propId];
-			}
-		}
-	};
-	//Retrieve page data from the server
-	self.findMembers = function() { 
-		$.ajax({
-			url: "all_members.php",
-			type: 'POST',
-			data:{group:"view_members"},
-			dataType: 'json',
-			success: function (data) {
-				groupModel.sacco_members(data.customers);			
-			}
-		});
-	};
-}
-var groupModel = new Group();
-groupModel.findMembers();
-//ko.applyBindings(groupModel, $("#form")[0]);
-
+	});
+})	
 </script>

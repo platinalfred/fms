@@ -10,7 +10,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 	//members, person, person relative, person employment, account,
 	$table = "`member` JOIN `person` ON `member`.`personId` = `person`.`id`"; 
 	$primary_key = "`member`.`id`";
-	$columns = array( "`member`.`id`","`person`.`person_number`", "`person`.`comment`","`firstname`", "`lastname`", "`othername`", "`phone`", "`id_number`" ,"`dateAdded`", "`memberType`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`", "`date_registered`", "`branch_id`" );
+	$columns = array( "`member`.`id`","`person`.`person_number`", "`person`.`comment`","`firstname`", "`lastname`", "`othername`", "`phone`", "`id_number`" ,"`dateAdded`", "`memberType`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`","`personId`", "`date_registered`", "`branch_id`" );
 	$group_by = "person.id DESC";
 }
 

@@ -23,7 +23,7 @@ td .right_remove{
 .table>tbody>tr>td>.left_remove{
 	border-right:0px solid #ff0000 !important;
 }
-.required{
+.req{
 	color:red;
 	font-size:16px;
 }

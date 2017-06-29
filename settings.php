@@ -3,7 +3,7 @@
 	include specific plugin files that you need on a page by  adding the names as below in the array
 	dataTables, ChartJs,iCheck,daterangepicker,clockpicker,colorpicker,datapicker,easypiechart,fullcalendar,idle-timer,morris, nouslider, summernote,validate,wow,video,touchspin,Sparkline,Flot, Peity, Jvectormap, touchspin, select2, daterangepicker, clockpicker, ionRangeSlider, datapicker, nouslider, jasny, switchery, cropper, colorpicker, steps, dropzone, bootstrap-markdown
 */
-$needed_files = array("dataTables", "iCheck", "jasny", "knockout");
+$needed_files = array("dataTables", "iCheck", "jasny", "knockout", "moment");
 $page_title = "Settings";
 include("include/header.php");
 require_once("lib/Libraries.php");
@@ -12,29 +12,29 @@ require_once("lib/Libraries.php");
 		<div class="col-lg-12  m-b-md" style="padding-top:10px;">
 			<div class="tabs-container">
 				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#tab-20" href="#">Loan Products</a></li>
-					<li><a data-toggle="tab" href="#tab-21" href="#">Deposit Products</a></li>
-					<li><a data-toggle="tab" href="#tab-23" href="#">Share Rate</a></li>
-					<li><a data-toggle="tab" href="#tab-1" href="#">Person Types</a></li>
-					<li class=""><a data-toggle="tab" href="#tab-2" href="#">Account Types</a></li>
-					<li class=""><a data-toggle="tab" href="#tab-3" href="#">Branches</a></li>
-					<li class=""><a data-toggle="tab" href="#tab-5" href="#">Access Levels</a></li>
+					<li class="active"><a data-toggle="tab" href="#tab-20" >Loan Products</a></li>
+					<li><a data-toggle="tab" href="#tab-21" >Deposit Products</a></li>
+					<li><a data-toggle="tab" href="#tab-23" >Share Rate</a></li>
+					<li><a data-toggle="tab" href="#tab-1" >Person Types</a></li>
+					<!--<li class=""><a data-toggle="tab" href="#tab-2" href="#">Account Types</a></li>-->
+					<li class=""><a data-toggle="tab" href="#tab-3" >Branches</a></li>
+					<li class=""><a data-toggle="tab" href="#tab-5" >Access Levels</a></li>
+					<li class=""><a data-toggle="tab" href="#tab-6" >Id Card Types</a></li>
 					
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">More <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<!--<li class=""><a data-toggle="tab" role="tab" href="#tab-11" href="#">Loan Types</a></li>-->
-							<li class=""><a data-toggle="tab"role="tab"  href="#tab-6" href="#">Id Card Types</a></li>
+							
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-7" href="#">Income Sources</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-8" href="#">Individual Types</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-9" href="#">Loan Product Types</a></li>
-							<li class=""><a data-toggle="tab" role="tab" href="#tab-12" href="#">Penalty Calculation Method</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-13" href="#">Loan Product Penalties</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-14" href="#">Relationhip Types </a></li>
-							<li class=""><a data-toggle="tab" role="tab" href="#tab-15" href="#">Repayment Duration</a></li>
+							<!--<li class=""><a data-toggle="tab" role="tab" href="#tab-15" href="#">Repayment Duration</a></li> -->
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-16" href="#">Security Types</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-17" href="#">Positions</a></li>
-							<li class=""><a data-toggle="tab" role="tab" href="#tab-18" href="#">Address Type</a></li>
+							<!--<li class=""><a data-toggle="tab" role="tab" href="#tab-18" href="#">Address Type</a></li>-->
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-19" href="#">Marital Status</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-22" href="#">Expense Type</a></li>
 						</ul>
@@ -58,10 +58,11 @@ require_once("lib/Libraries.php");
 												</div>
 												<div class="row">
 													<div class="col-sm-12">
-														<p>Add Person Type.</p>
+														<p>Add/Update Person Type.</p>
 														<div class="ibox-content">
 															<form class="form-horizontal" method="post" action="save_data.php" id="personTypeTable">
 																<input name="tbl" value="person_type" type="hidden">
+																<input name="id"  type="hidden">
 																<div class="form-group"><label class="col-lg-2 control-label">Name</label>
 																	<div class="col-lg-10"><input name="name" type="text" placeholder="Name" class="form-control"> <span class="help-block m-b-none">Name of the person type.</span>
 																	</div>
@@ -83,15 +84,7 @@ require_once("lib/Libraries.php");
 										</div>
 									</div>
 								</div>
-								<div id="edit_person_type" class="modal fade" aria-hidden="true">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-body">
-												
-											</div>
-										</div>
-									</div>
-								</div>
+								
 							</div>
 							<div class="col-lg-12" style="margin-top:10px;">
 								<div class="ibox-content">
@@ -121,7 +114,7 @@ require_once("lib/Libraries.php");
 							
 						</div>
 					</div>
-					<!---  Person Type Start   --->
+					<!---  Share Rate Start   --->
 					<div id="tab-23" class="tab-pane">
 						<div class="panel-body">
 							<div class="col-lg-6 col-offset-sm-8">
@@ -168,7 +161,7 @@ require_once("lib/Libraries.php");
 						</div>
 					</div>
 					
-					<!-- Account Type -->
+					<!-- Account Type 
 					<div id="tab-2" class="tab-pane">
 						<div class="panel-body">
 							<div class="col-lg-2 col-offset-sm-8">
@@ -185,10 +178,11 @@ require_once("lib/Libraries.php");
 												</div>
 												<div class="row">
 													<div class="col-sm-12">
-														<p>Add Account Type.</p>
+														<p>Account Type</p>
 														<div class="ibox-content">
 															<form class="form-horizontal" method="post" id="tblAccountType"> 
 																<input type="hidden" name="tbl" value="account_type">
+																<input type="hidden" name="id" >
 																<div class="form-group"><label class="col-lg-2 control-label">Title</label>
 																	<div class="col-lg-10"><input name="title" type="text" placeholder="Name" class="form-control"> <span class="help-block m-b-none">Account type name.</span>
 																	</div>
@@ -251,12 +245,13 @@ require_once("lib/Libraries.php");
 											<div class="modal-body">
 												<div class="row">
 													<div class="col-sm-12">
-														<p>Add Branch.</p>
+														<p>Branch</p>
 														<div class="ibox-content">
 															<form class="form-horizontal" method="post" id="tblbranch">
 																<input type="hidden" name="tbl" value="branch">
+																<input type="hidden" name="id" >
 																<div class="form-group"><label class="col-lg-2 control-label">Branch Name</label>
-																	<div class="col-lg-10"><input type="text" name="branch_name"  placeholder="Branch Name" class="form-control"> 
+																	<div class="col-lg-10"><input type="text" name="branch_name"  placeholder="Branch Name" class="form-control" required > 
 																	</div>
 																</div>
 																
@@ -268,11 +263,11 @@ require_once("lib/Libraries.php");
 																	
 																</div>
 																<div class="form-group"><label class="col-lg-2 control-label">Email Address</label>
-																	<div class="col-lg-10"><input type="email" name="email_address"  placeholder="mail@example.com" class="form-control"> 
+																	<div class="col-lg-10"><input type="email" name="email_address"  placeholder="mail@example.com" class="form-control" > 
 																	</div>
 																</div>
 																<div class="form-group"><label class="col-lg-2 control-label">Physical Address</label>
-																	<div class="col-lg-10"><textarea  name="physical_address" placeholder="Physical Address" class="form-control"></textarea></div>
+																	<div class="col-lg-10"><textarea required name="physical_address" placeholder="Physical Address" class="form-control"></textarea></div>
 																</div>
 																<div class="form-group"><label class="col-lg-2 control-label">Postal Address</label>
 																	<div class="col-lg-10"><input type="text" name="postal_address"  placeholder="Postal Address" class="form-control"> 
@@ -813,7 +808,6 @@ require_once("lib/Libraries.php");
 											<thead>
 											<tr>
 												<th>Description</th>
-												<th>Penalty</th>
 												<th>penaltyChargedAs</th>
 												<th>penaltyTolerancePeriod</th>
 												<th>defaultAmount</th>
@@ -827,7 +821,6 @@ require_once("lib/Libraries.php");
 											</tbody>
 											<tfoot>
 												<th>Description</th>
-												<th>Penalty</th>
 												<th>penaltyChargedAs</th>
 												<th>penaltyTolerancePeriod</th>
 												<th>defaultAmount</th>
@@ -910,7 +903,7 @@ require_once("lib/Libraries.php");
 						</div>
 					</div>
 					<!-- End Security Type-->
-					<!-- Repayment Duration -->
+					<!-- Repayment Duration 
 					<div id="tab-15" class="tab-pane">
 						<div class="panel-body">
 							<div class="col-lg-2 col-offset-sm-8">
@@ -1281,10 +1274,11 @@ require_once("lib/Libraries.php");
 											<div class="modal-body">
 												<div class="row">
 													<div class="col-sm-12">
-														<p>Add  Expense Type</p>
+														<p>Expense Type</p>
 														<div class="ibox-content">
 															<form class="form-horizontal" id="tblExpenseType">
 																<input type="hidden" name="tbl"  value="expense_type">
+																<input type="hidden" name="id" id="id_field">
 																<div class="form-group"><label class="col-lg-2 control-label">Name</label>
 																	<div class="col-lg-10"><input type="text" name="name" placeholder="Expense Type" class="form-control"> 
 																	</div>

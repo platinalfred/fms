@@ -18,50 +18,44 @@ $member = new Member();
 						<?php
 					}
 					?>
-					<div class="clear:both;"></div>
-					<div class="input-group">
-						<input type="text" placeholder="Search client " class="input form-control">
-						<span class="input-group-btn">
-							<button type="button" class="btn btn btn-primary"> <i class="fa fa-search"></i> Search Member</button>
-						</span>
-					</div>
-					<div class="clients-list">
-					<ul class="nav nav-tabs">
-						<span class="pull-right small text-muted"><?php echo $member->findNoOfMembers(); ?> members</span>
-						<li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> Members</a></li>
-					</ul>
-					<div class="tab-content">
-						<div id="tab-1" class="tab-pane active">
-							<div class="full-height-scroll" style="margin-top:10px;">
-								<!--<div class="table-responsive"> -->
-									<table class="table table-striped table-hover" id="member_table">
-										<thead>
-											<tr>
-												<th>Id</th>
-												<th>Person Number</th>
-												<th>Name</th>
-												<th>Phone</th>
-												<th>Id Number</th>
-												<th>Date of Birth</th>
-												<?php 
-												if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>
-													<th>Details</th>
-												<?php 
-												}
-												?>
-											</tr>
-										</thead>
-										<tbody>
-											
-										</tbody>
-									</table>
-								<!--</div>-->
-							</div>
-						</div>
+					<table class="table table-striped table-hover" id="member_table">
+						<thead>
+							<tr>
+								<th>Id</th>
+								<th>Person Number</th>
+								<th>Name</th>
+								<th>Phone</th>
+								<th>Id Number</th>
+								<th>Date of Birth</th>
+								<?php 
+								if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>
+									<th>Details</th>
+								<?php 
+								}
+								?>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+						<tfoot>
+							<tr>
+								<th>Id</th>
+								<th>Person Number</th>
+								<th>Name</th>
+								<th>Phone</th>
+								<th>Id Number</th>
+								<th>Date of Birth</th>
+								<?php 
+								if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>
+									<th>Details</th>
+								<?php 
+								}
+								?>
+							</tr>
+						</tfoot>
+					</table>
 						
-					</div>
-
-					</div>
 				</div>
 			</div>
 		</div>
@@ -109,7 +103,7 @@ $member = new Member();
 								<!--ko if: $root.member_relatives2().length>0 -->
 									<h4>Relatives</h4>
 									<div class="row" >
-										<div class="col-lg-4 titles">Name</div>
+										<div class="col-lg-3 titles">Name</div>
 										<div class="col-lg-3 titles" >Relationship</div>
 										<div class="col-lg-3 titles">Phone</div>
 										<div class="col-lg-2 titles" >Address</div>
@@ -117,7 +111,7 @@ $member = new Member();
 									<div data-bind='foreach: $root.member_relatives2'>
 										<div class="row" >
 											<div class="col-lg-4" data-bind="text: first_name + ', ' + last_name + ' ' + other_names" >Name</div>
-											<div class="col-lg-3" data-bind="text: rel_type">Relationship</div>
+											<div class="col-lg-2" data-bind="text: rel_type">Relationship</div>
 											<div class="col-lg-3" data-bind="text: telephone"></div>
 											<div class="col-lg-2" data-bind="text: address">Address</div>
 										</div>

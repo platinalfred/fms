@@ -32,7 +32,8 @@
 										<div class="row">
 											<div class="col-lg-8">
 												<div class="form-group">
-													<label>Group Name *</label>
+													<label>Group Name</label>
+													<label class="req">*</label>
 													<input  name="groupName" type="text" class="form-control required">
 												</div>
 												<div class="form-group">

@@ -16,10 +16,10 @@
 								</div>
 							</div>
 							<div class="ibox-content">
-								<form id="form" name="register_group" class="wizard-big">
+								<form id="form" name="register_expense" class="wizard-big">
 									<input name ="createdBy" type="hidden" value="<?php echo $_SESSION['personId']; ?>">
 									<input name ="modifiedBy" type="hidden" value="<?php echo $_SESSION['personId']; ?>">
-									<input name ="dateCreated" type="hidden" value="<?php echo time(); ?>">
+									<input name ="expenseDate" type="hidden" value="<?php echo time(); ?>">
 									<input name ="tbl" type="hidden" value="add_expense">
 										
 									<h1>Expense Details</h1>
@@ -27,19 +27,23 @@
 										<div class="row">
 											<div class="col-lg-8">
 												<div class="form-group">
-													<label>Expense Type *</label>
-													<?php $person->loadList("SELECT * FROM expensetypes", "expense_type", "id", "name"); ?>
+													<label>Expense Name </label><label class="req">*</label>
+													<input  name="expenseName" type="text" class="form-control required">
+												</div>
+												<div class="form-group">
+													<label>Expense Type <span class="req">*</span></label>
+													<?php $person->loadList("SELECT * FROM expensetypes", "expenseType", "id", "name"); ?>
 													
 												</div>
 												<div class="form-group">
-													<label>Staff *</label>
+													<label>Staff </label><label class="req">*</label>
 													<select class="form-control" name="staff">
 														<?php 
 														$person = new Person();
-														$all_staff = $person->queryData("SELECT p.firstname, p.lastname, p.id FROM staff s ,person p WHERE p.id = s.personId");
+														$all_staff = $person->queryData("SELECT p.firstname, p.lastname, s.id as staff_id, p.id FROM staff s ,person p WHERE p.id = s.personId ");
 														if($all_staff){
 															foreach($all_staff as $single){ ?>
-																<option value="<?php echo $single['id']; ?>" ><?php echo $single['firstname']." ".$single['lastname']; ?></option>
+																<option value="<?php echo $single['staff_id']; ?>" ><?php echo $single['firstname']." ".$single['lastname']; ?></option>
 																<?php
 															}
 														}
@@ -47,12 +51,12 @@
 													</select>
 												</div>
 												<div class="form-group">
-													<label>Amount Used *</label>
-													<input  name="groupName" type="text" class="form-control required">
+													<label>Amount Used </label><label class="req">*</label>
+													<input  name="amountUsed" type="text" class="athousand_separator form-control required">
 												</div>
 												<div class="form-group">
 													<label>Description</label>
-													<textarea  name="description" class="form-control "></textarea>
+													<textarea  name="amountDescription" class="form-control "></textarea>
 												</div>
 											</div>
 										</div>
