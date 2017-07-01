@@ -102,14 +102,9 @@ include("include/header.php");
 				<div class="col-lg-6">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
-							<div>
-								<h3 class="font-bold no-margins">Performance of Loan Products</h3>
-								<small>Product Sales</small>
-							</div>
 							<div class="m-t-sm">
-
 								<div class="row">
-									<div id="lineChart"></div>
+									<div id="lineChart" style="max-height:300px; height:300px; max-width:600px; margin: 0 auto"></div>
 								</div>
 
 							</div>
@@ -179,7 +174,7 @@ include("include/header.php");
 										</tr>
 									</tfoot>
 								</table>
-								<p data-bind="if: tables.expenses" class="pull-right"><a data-bind="attr: { href: 'view_expenses.php?start_date='+$parent.startDate()+'&end_date='+$parent.endDate()}" class="btn btn-info" title="View all expenses">View all...</a></p>
+								<p data-bind="if: tables.expenses" class="pull-right"><a data-bind="attr: { href: 'expenses.php?start_date='+$parent.startDate()+'&end_date='+$parent.endDate()}" class="btn btn-info" title="View all expenses">View all...</a></p>
 							</div>
 
 						</div>

@@ -41,7 +41,7 @@
             firstDay: 1
           }
     };
-		$('#reportrange span').html(moment().subtract(30, 'days').format('YYYY-MM-DD') + ' - ' + moment().format('MMMM D, YYYY'));
+		$('#reportrange span').html(moment().subtract(30, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
 		
 		$('#reportrange').daterangepicker(optionSet1, cb);
 		
