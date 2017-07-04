@@ -11,33 +11,63 @@
 		var self = this;
 		self.guarantor = ko.observable();
 	};
-	var LoanAccount = function() {
+	var ApplicationFormModel = function(){
 		var self = this;
-		
-		//these are required as the datatable is being loaded
-		self.transactionHistory = ko.observableArray(); //for the account transacation history display
-		self.account_details = ko.observable();
-		
-		//this gets loaded when the loan is for approval/editing
-		self.edit_client = ko.observable(0);
-		self.loan_account_details = ko.observable();
 		self.loanAccountId = ko.observable();
-		
-		//loan repayment section form
-		self.payment_amount = ko.observable(0);
-		self.comments = ko.observable("");
-		
-		//loan account approval section
-		self.amountApproved = ko.observable(0);
-		self.approvalNotes = ko.observable();
-		self.applicationStatus = ko.observable(3);
-		
-		//loan amount disbursement section
-		self.disbursedAmount = ko.observable(0);
-		self.disbursementNotes = ko.observable();
 		
 		//guarantors 
 		self.guarantors = ko.observableArray();
+		self.requestedAmount = ko.observable(0);
+		self.interestRate = ko.observable(0);
+		self.applicationDate = ko.observable(moment().format('DD-MM-YYYY'));
+		self.offSetPeriod = ko.observable(0);
+		self.installments = ko.observable(0);
+		self.gracePeriod = ko.observable(0);
+		
+		<?php if(!isset($client)):?>self.customers = ko.observableArray([{"id":1,"clientNames":"Kiwatule Womens Savings Group","clientType":2}]); <?php endif;?>
+		// Stores an array of all the Data for viewing on the page
+		self.loanProducts = ko.observableArray([{"id":1,"productName":"Group Savings Loan","description":"Suitable for group savings", "availableTo":"2"}]);
+		self.productFees = ko.observableArray();
+		self.loanAccountFees = ko.observableArray();
+		
+		self.loanProduct = ko.observable();
+		self.client = ko.observable(<?php if(isset($client)) echo json_encode($client);?>);
+		
+		//filter the loan products based on the user type
+		self.filteredLoanProducts = ko.computed(function() {
+			var clientType = (self.client()?parseInt(self.client().clientType):3);
+			return ko.utils.arrayFilter(self.loanProducts(), function(loanProduct) {
+				//console.log(loanProduct.availableTo);
+				return (clientType == parseInt(loanProduct.availableTo) || parseInt(loanProduct.availableTo)==3);
+			});
+		});
+		//filter the loan product fees based on the currently selected product id
+		self.filteredLoanProductFees = ko.computed(function() {
+			if(self.loanProduct()){
+				var loanProductId = parseInt(self.loanProduct().id);
+				return ko.utils.arrayFilter(self.productFees(), function(productFee) {
+					return (loanProductId == parseInt(productFee.loanProductId));
+				});
+			}
+			else{
+				return self.productFees();
+			}
+		});
+		//filter the guarantors based on the user type and current client selected
+		self.filteredGuarantors = ko.computed(function() {
+			if(self.client()){
+				var clientType = parseInt(self.client().clientType);
+				var clientId = parseInt(self.client().id);
+				return ko.utils.arrayFilter(self.guarantors(), function(guarantor) {
+					return (clientId != parseInt(guarantor.id) && parseInt(clientType)==1);
+				});
+			}
+			else{
+				return self.guarantors();
+			}
+			
+		});
+		
 		// Stores an array of selectedGuarantors
 		self.selectedGuarantors = ko.observableArray([new GuarantorSelection()]);
 		self.addedCollateral = ko.observableArray([new Collateral()]);
@@ -75,21 +105,31 @@
 		self.removeGuarantor = function(selectedGuarantor) { self.selectedGuarantors.remove(selectedGuarantor) };
 		self.addCollateral = function() { self.addedCollateral.push(new Collateral()) };
 		self.removeCollateral = function(addedCollateral) { self.addedCollateral.remove(addedCollateral) };
+	}
+	var LoanAccount = function() {
+		var self = this;
+		//the application form object
+		self.applicationForm = ko.observable(new ApplicationFormModel());
+		//these are required as the datatable is being loaded
+		self.transactionHistory = ko.observableArray(); //for the account transacation history display
+		self.account_details = ko.observable();
 		
-		<?php if(!isset($client)):?>self.customers = ko.observableArray([{"id":1,"clientNames":"Kiwatule Womens Savings Group","clientType":2}]); <?php endif;?>
-		// Stores an array of all the Data for viewing on the page
-		self.loanProducts = ko.observableArray([{"id":1,"productName":"Group Savings Loan","description":"Suitable for group savings", "availableTo":"2"}]);
-		self.productFees = ko.observableArray();
-		self.loanAccountFees = ko.observableArray();
+		//this gets loaded when the loan is for approval/editing
+		self.edit_client = ko.observable(0);
+		self.loan_account_details = ko.observable();
 		
-		self.loanProduct = ko.observable();
-		self.client = ko.observable(<?php if(isset($client)) echo json_encode($client);?>);
-		self.requestedAmount = ko.observable(0);
-		self.interestRate = ko.observable(0);
-		self.applicationDate = ko.observable(moment().format('DD-MM-YYYY'));
-		self.offSetPeriod = ko.observable(0);
-		self.installments = ko.observable(0);
-		self.gracePeriod = ko.observable(0);
+		//loan repayment section form
+		self.payment_amount = ko.observable(0);
+		self.comments = ko.observable("");
+		
+		//loan account approval section
+		self.amountApproved = ko.observable(0);
+		self.approvalNotes = ko.observable();
+		self.applicationStatus = ko.observable(3);
+		
+		//loan amount disbursement section
+		self.disbursedAmount = ko.observable(0);
+		self.disbursementNotes = ko.observable();
 		
 		// Operations
 		//set options value afterwards
@@ -103,46 +143,11 @@
 			}
 		};
 		
-		//filter the loan products based on the user type
-		self.filteredLoanProducts = ko.computed(function() {
-			var clientType = (self.client()?parseInt(self.client().clientType):3);
-			return ko.utils.arrayFilter(self.loanProducts(), function(loanProduct) {
-				//console.log(loanProduct.availableTo);
-				return (clientType == parseInt(loanProduct.availableTo) || parseInt(loanProduct.availableTo)==3);
-			});
-		});
-		//filter the loan product fees based on the currently selected product id
-		self.filteredLoanProductFees = ko.computed(function() {
-			if(self.loanProduct()){
-				var loanProductId = parseInt(self.loanProduct().id);
-				return ko.utils.arrayFilter(self.productFees(), function(productFee) {
-					return (loanProductId == parseInt(productFee.loanProductId));
-				});
-			}
-			else{
-				return self.productFees();
-			}
-		});
-		//filter the guarantors based on the user type and current client selected
-		self.filteredGuarantors = ko.computed(function() {
-			if(self.client()){
-				var clientType = parseInt(self.client().clientType);
-				var clientId = parseInt(self.client().id);
-				return ko.utils.arrayFilter(self.guarantors(), function(guarantor) {
-					return (clientId != parseInt(guarantor.id) && parseInt(clientType)==1);
-				});
-			}
-			else{
-				return self.guarantors();
-			}
-			
-		});
-		
 		//reset the whole form after saving data in the database
 		self.resetForm = function() {
-			//self.client(null);
-			//self.loanProduct(null);//
-			$("#loanAccountForm")[0].reset();
+			/*self.client(null);
+			$("#loanAccountForm")[0].reset();*/
+			self.applicationForm(new ApplicationFormModel());
 			dTable['applications'].ajax.reload();
 		};
 		
@@ -154,10 +159,10 @@
 				data:{origin:"loan_account"<?php if(isset($_GET['loanId'])):?>, loanAccountId:<?php echo $_GET['loanId'];?> <?php endif;?>},
 				url: "ajax_data.php",
 				success: function(response){
-					self.loanProducts(response.products);
-					self.productFees(response.productFees);
-					self.guarantors(response.guarantors);
-					<?php if(!isset($client)):?>self.customers(response.customers); <?php endif;?>
+					self.applicationForm().loanProducts(response.products);
+					self.applicationForm().productFees(response.productFees);
+					self.applicationForm().guarantors(response.guarantors);
+					<?php if(!isset($client)):?>self.applicationForm().customers(response.customers); <?php endif;?>
 					<?php if(isset($_GET['loanId'])){
 						$clientId = $client['id'];
 						$client['clientId'] = $client['id'];
@@ -171,7 +176,7 @@
 		
 		//send the items to the server for saving
 		self.save = function(form) {
-			var guarantors = $.map(self.selectedGuarantors(), function(current_guarantor) {
+			var guarantors = $.map(self.applicationForm().selectedGuarantors(), function(current_guarantor) {
 				return current_guarantor.guarantor() ? {
 					id: current_guarantor.guarantor().id
 				} : undefined
@@ -180,26 +185,26 @@
 				type: "post",
 				data:{
 					id : self.loanAccountId(),
-					clientId : (self.client()?self.client().id:undefined),
-					clientType : (self.client()?self.client().clientType:undefined),
-					status : (self.loanProduct()?self.loanProduct().initialAccountState:undefined),
-					loanProductId : (self.loanProduct()?self.loanProduct().id:undefined),
-					requestedAmount : self.requestedAmount(),
-					applicationDate : moment(self.applicationDate(), 'DD-MM-YYYY').format('X'),
-					interestRate : self.interestRate(),
-					offSetPeriod : self.offSetPeriod(),
-					gracePeriod : self.gracePeriod(),
-					repaymentsFrequency : self.loanProduct()?self.loanProduct().repaymentsFrequency:undefined,
-					repaymentsMadeEvery : self.loanProduct()?self.loanProduct().repaymentsMadeEvery:undefined,
-					installments : self.installments(),
-					penaltyCalculationMethodId : self.loanProduct()?self.loanProduct().penaltyCalculationMethodId:undefined,
-					penaltyTolerancePeriod : self.loanProduct()?self.loanProduct().penaltyTolerancePeriod:undefined,
-					penaltyRateChargedPer : self.loanProduct()?self.loanProduct().penaltyRateChargedPer:undefined,
-					penaltyRate : self.loanProduct()?self.loanProduct().penaltyRate:undefined,
-					linkToDepositAccount : self.loanProduct()?self.loanProduct().linkToDepositAccount:undefined,
+					clientId : (self.applicationForm().client()?self.applicationForm().client().id:undefined),
+					clientType : (self.applicationForm().client()?self.applicationForm().client().clientType:undefined),
+					status : (self.applicationForm().loanProduct()?self.applicationForm().loanProduct().initialAccountState:undefined),
+					loanProductId : (self.applicationForm().loanProduct()?self.applicationForm().loanProduct().id:undefined),
+					requestedAmount : self.applicationForm().requestedAmount(),
+					applicationDate : moment(self.applicationForm().applicationDate(), 'DD-MM-YYYY').format('X'),
+					interestRate : self.applicationForm().interestRate(),
+					offSetPeriod : self.applicationForm().offSetPeriod(),
+					gracePeriod : self.applicationForm().gracePeriod(),
+					repaymentsFrequency : self.applicationForm().loanProduct()?self.applicationForm().loanProduct().repaymentsFrequency:undefined,
+					repaymentsMadeEvery : self.applicationForm().loanProduct()?self.applicationForm().loanProduct().repaymentsMadeEvery:undefined,
+					installments : self.applicationForm().installments(),
+					penaltyCalculationMethodId : self.applicationForm().loanProduct()?self.applicationForm().loanProduct().penaltyCalculationMethodId:undefined,
+					penaltyTolerancePeriod : self.applicationForm().loanProduct()?self.applicationForm().loanProduct().penaltyTolerancePeriod:undefined,
+					penaltyRateChargedPer : self.applicationForm().loanProduct()?self.applicationForm().loanProduct().penaltyRateChargedPer:undefined,
+					penaltyRate : self.applicationForm().loanProduct()?self.applicationForm().loanProduct().penaltyRate:undefined,
+					linkToDepositAccount : self.applicationForm().loanProduct()?self.applicationForm().loanProduct().linkToDepositAccount:undefined,
 					guarantors:guarantors,//the chosen guarantors
-					feePostData:self.filteredLoanProductFees(), //the applicable fees
-					collateral:self.addedCollateral(), //the applicable fees
+					feePostData:self.applicationForm().filteredLoanProductFees(), //the applicable fees
+					collateral:self.applicationForm().addedCollateral(), //the applicable fees
 					origin : "loan_account"
 				},
 				url: "lib/AddData.php",
@@ -268,7 +273,6 @@
 							dTable['applications'].ajax.reload();
 							dTable['approved'].ajax.reload();
 							dTable['rejected'].ajax.reload();
-							$('#approve_loan-modal').modal('hide');
 						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while approving: \n"+response ,"fail");
@@ -297,7 +301,6 @@
 							dTable['applications'].ajax.reload();
 							dTable['approved'].ajax.reload();
 							dTable['rejected'].ajax.reload();
-							$('#disburse_loan-modal').modal('hide');
 						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while approving: \n"+response ,"fail");
@@ -347,7 +350,6 @@
 	$("#loanAccountForm").validate({submitHandler: loanAccountModel.save});
 	$("#loanPaymentForm").validate({submitHandler: loanAccountModel.makePayment});
 	$("#loanAccountApprovalForm").validate({submitHandler: loanAccountModel.approveLoan});
-	$("#loanDisbursementForm").validate({submitHandler: loanAccountModel.disburseLoan});
 	
 	
 <!-- Datatables -->
@@ -383,23 +385,22 @@
 				{ data: 'clientNames'},
 				{ data: 'productName'},
 				{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}/*  ,
+				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} ,
 				{ data: 'id', render: function ( data, type, full, meta ) {
 					var authorized =  false;
-					var role = '<?php echo $_SESSION['branch_credit']; ?>';
-					return 
 				<?php if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])){?>
-					/* if(user_props['branch_credit']==true && parseInt(full.requestedAmount)<1000001){
+					if(user_props['branch_credit']&&parseInt(full.requestedAmount)<1000001){
 						authorized = true;
 					}
-					if(user_props['management_credit']==true && parseInt(full.requestedAmount)>1000000&&parseInt(full.requestedAmount)<5000001){
+					if(user_props['management_credit']&&parseInt(full.requestedAmount)>1000000&&parseInt(full.requestedAmount)<5000001){
 						authorized = true;
 					}
-					if(user_props['executive_board']==true && parseInt(full.requestedAmount)>5000000){
+					if(user_props['executive_board']&&parseInt(full.requestedAmount)>5000000){
 						authorized = true;
-					} '<a href="#'+(authorized?'approve_loan':'')+'-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> '+(authorized?'Approve':'Edit')+' </a>'
-					'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Approve </a>'
-				<?php } ?> +'';}} */
+					}}}
+				<?php } else { ?>
+					return '<a href="#'+(authorized?'approve_loan':'add_loan_account')+'-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> '+(authorized?'Approve':'Edit')+' </a>';}}
+				<?php } ?>
 				] ,
 		  buttons: [
 			{
@@ -586,7 +587,7 @@
 				{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format((parseInt(data)/parseInt(full.installments))+parseInt(full.disbursedAmount)/parseInt(full.installments));}},
 				{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
 				{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)+parseInt(full.interest));}},
-				{ data: 'amountPaid', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(data)):0;}}
+				{ data: 'amountPaid', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
 				] ,
 		  buttons: [
 			{

@@ -11,7 +11,7 @@ if(isset($_POST['origin'])){
 				$loanRepayment = new LoanRepayment();
 				$data['transactionDate'] = time();
 				$data['dateModified'] = time();
-				$data['receivedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+				$data['recievedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				$output = $loanRepayment->addLoanRepayment($data);
 			}

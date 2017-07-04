@@ -21,17 +21,17 @@ include("include/header.php");
 							<div class="row">
 								<div class="col-md-4">
 									<small>Portfolio</small>
-									<h3 class="no-margins"><a href="view_loan_payments.php" title="Details" data-bind="text:figures.loan_portfolio">40,642</a></h3>
+									<h3 class="no-margins"><a href="view_loan_payments.php" title="Details" data-bind="text:curr_format(parseInt(figures.loan_portfolio))">40,642</a></h3>
 									<div class="font-bold text-navy"> <span data-bind="text: percents.loan_portfolio">44</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.loan_portfolio < 1, 'fa-level-up': percents.loan_portfolio > 0}"></i> </div>
 								</div>
 								<div class="col-md-4">
 									<small>Penalties</small>
-									<h3 class="no-margins"><a href="view_loan_payments.php" title="Details" data-bind="text:figures.loan_portfolio">40,642</a></h3>
-									<div class="font-bold text-navy"> <span data-bind="text: percents.penalties">44</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.penalties < 1, 'fa-level-up': percents.penalties > 0}"></i> </div>
+									<h3 class="no-margins"><a href="view_loan_payments.php" title="Details" data-bind="text:curr_format(parseInt(figures.loan_penalty))">40,642</a></h3>
+									<div class="font-bold text-navy"> <span data-bind="text: curr_format(parseInt(percents.loan_penalty))">44</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.loan_penalty < 1, 'fa-level-up': percents.loan_penalty > 0}"></i> </div>
 								</div>
 								<div class="col-md-4">
 									<small>Payments</small>
-									<h3 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text:figures.loan_payments">20,612</a></h3>
+									<h3 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text:curr_format(parseInt(figures.loan_payments))">20,612</a></h3>
 									<div class="font-bold text-navy"><span data-bind="text:percents.loan_payments">22</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.loan_payments < 1, 'fa-level-up': percents.loan_payments > 0}"></i> </div>
 								</div>
 							</div>
@@ -48,20 +48,25 @@ include("include/header.php");
 						</div>
 						<div class="ibox-content">
 							<div class="row">
-								<div class="col-md-4">
+								<div class="col-md-3">
 									<small>Pending</small>
-									<h3 class="no-margins"><a href="view_loan_payments.php" title="Details" data-bind="text: figures.pending_loans">40,642</a></h3>
+									<h3 class="no-margins"><a href="view_loans.php" title="Details" data-bind="text: curr_format(parseInt(figures.pending_loans))">40,642</a></h3>
 									<div class="font-bold text-navy"> <span data-bind="text: percents.pending_loans">44</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.pending_loans < 1, 'fa-level-up': percents.pending_loans > 0}"></i> </div>
 								</div>
-								<div class="col-md-4">
-									<small>Partial</small>
-									<h3 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text: figures.partial_loans">90,893</a></h3>
-									<div class="font-bold text-navy"><span data-bind="text: percents.partial_loans">67</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.pending_loans < 1, 'fa-level-up': percents.pending_loans > 0}"></i> </div>
+								<div class="col-md-3">
+									<small>Rejected</small>
+									<h3 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text: curr_format(parseInt(figures.rejected_loans))">90,893</a></h3>
+									<div class="font-bold text-navy"><span data-bind="text: percents.rejected_loans">67</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.rejected_loans < 1, 'fa-level-up': percents.rejected_loans > 0}"></i> </div>
 								</div>
-								<div class="col-md-4">
+								<div class="col-md-3">
 									<small>Approved</small>
-									<h3 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text: figures.approved_loans">206,12</a></h3>
-									<div class="font-bold text-navy"><span data-bind="text: percents.approved_loans">22</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.approved_loans < 1, 'fa-level-up': percents.approved_loans > 0}"></i> </div>
+									<h3 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text: curr_format(parseInt(figures.approved_loans))">90,893</a></h3>
+									<div class="font-bold text-navy"><span data-bind="text: percents.approved_loans">67</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.approved_loans < 1, 'fa-level-up': percents.approved_loans > 0}"></i> </div>
+								</div>
+								<div class="col-md-3">
+									<small>Disbursed</small>
+									<h3 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text: curr_format(parseInt(figures.disbursed_loans))">206,12</a></h3>
+									<div class="font-bold text-navy"><span data-bind="text: percents.disbursed_loans">22</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.disbursed_loans < 1, 'fa-level-up': percents.disbursed_loans > 0}"></i> </div>
 								</div>
 							</div>
 						</div>
@@ -80,7 +85,7 @@ include("include/header.php");
 							<div class="row">
 								<div class="col-md-4">
 									<small>Savings</small>
-									<h3 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text:figures.savings">20,612</a></h3>
+									<h3 class="no-margins"><a href="view_savings.php" title="Details" data-bind="text:curr_format(parseInt(figures.savings))">20,612</a></h3>
 									<div class="font-bold text-navy"><span data-bind="text:percents.savings">22</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.savings < 1, 'fa-level-up': percents.savings > 0}"></i> </div>
 								</div>
 								<div class="col-md-4">
@@ -90,7 +95,7 @@ include("include/header.php");
 								</div>
 								<div class="col-md-4">
 									<small>Subscription</small>
-									<h3 class="no-margins"><a href="view_subscriptions.php" title="Details" data-bind='text: figures.total_scptions'>80,800</a></h3>
+									<h3 class="no-margins"><a href="view_subscriptions.php" title="Details" data-bind='text: curr_format(parseInt(figures.total_scptions))'>80,800</a></h3>
 									<div class="font-bold text-info"><span data-bind='text: percents.scptions_percent'>20</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.scptions_percent < 1, 'fa-level-up': percents.scptions_percent > 0}"></i></div>
 								</div>
 							</div>

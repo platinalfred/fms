@@ -11,19 +11,20 @@ if(isset($_POST['origin'])){
 		case 'dashboard':
 			$member = new Member();
 			$dashboard = new Dashboard();
+			$loan_account_obj = new LoanAccount();
 			$expense = new Expenses();
 			$income = new Income();
 			$loan = new Loans();
-			$accounts = new Accounts();
+			$deposit_account_transaction_obj = new DepositAccountTransaction();
 			/* $share = new Shares(); */
 			
 			//set the respective variables to be received from the calling page
 			$figures = $tables = $percents = array();
 			//No of members
 			//1 in this period
-			$figures['members'] = $member->noOfMembers("(`dateAdded` BETWEEN ".$start_date." AND ".$end_date.") AND active=1");
+			$figures['members'] = $member->noOfMembers(" active=1");//(`dateAdded` BETWEEN ".$start_date." AND ".$end_date.") AND
 			//before this period
-			$members_b4 = $member->noOfMembers("(`dateAdded` < ".$start_date.") AND active=1");
+			$members_b4 = $member->noOfMembers("active=1");//(`dateAdded` < ".$start_date.") AND 
 			$percents['members'] = $members_b4>0?round(($figures['members']/$members_b4)*100,2):0;
 
 			//Total amount of paid subscriptions
@@ -36,17 +37,25 @@ if(isset($_POST['origin'])){
 
 			//Total loan portfolio
 			//1 in this period
-			$figures['loan_portfolio'] = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$end_date." AND ".$end_date.")");
+			$figures['loan_portfolio'] = $dashboard->getSumOfLoans("`disbursementDate` BETWEEN ".$start_date." AND ".$end_date);
 			//before this period
 			$loan_portfolio_b4 = $dashboard->getSumOfLoans("(`disbursementDate` < ".$start_date.")");
 			//percentage increase/decrease
 			$percents['loan_portfolio'] = $loan_portfolio_b4>0?round(($figures['loan_portfolio']/$loan_portfolio_b4)*100,2):0;
 
+			//Total loan penalties
+			//1 in this period
+			$figures['loan_penalty'] = $dashboard->getSumOfLoans("`dateAdded` BETWEEN ".$start_date." AND ".$end_date);
+			//before this period
+			$loan_penalty_b4 = $dashboard->getSumOfLoans("(`dateAdded` < ".$start_date.")");
+			//percentage increase/decrease
+			$percents['loan_penalty'] = $loan_penalty_b4>0?round(($figures['loan_penalty']/$loan_penalty_b4)*100,2):0;
+
 			//Total loan payments
 			//1 in this period
-			$figures['loan_payments'] = $dashboard->getCountOfLoanRepayments("(`transactionDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
+			$figures['loan_payments'] = $dashboard->getSumOfLoanRepayments("(`transactionDate` BETWEEN ".$start_date." AND ".$end_date.")");// AND `status`=3
 			//before this period
-			$loan_payments_b4 = $dashboard->getCountOfLoanRepayments("(`transaction_date` < '".$start_date."') AND `status`=3");
+			$loan_payments_b4 = $dashboard->getSumOfLoanRepayments("(`transactionDate` < ".$start_date.")");// AND `status`=3
 			//percentage increase/decrease
 			$percents['loan_payments'] = $loan_payments_b4>0?round((($loan_payments_b4 - $figures['loan_payments'])/$loan_payments_b4)*100,2):0;
 
@@ -58,32 +67,40 @@ if(isset($_POST['origin'])){
 			//percentage increase/decrease
 			$percents['pending_loans'] = $pending_loans_b4>0?round(($figures['pending_loans']/$pending_loans_b4)*100,2):0;
 
-			//Total partial application loans
+			//Total rejected loans
 			//1 in this period
-			$figures['partial_loans'] = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
+			$figures['rejected_loans'] = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
 			//before this period
-			$partial_loans_b4 = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
+			$partial_loans_b4 = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
 			//percentage increase/decrease
-			$percents['partial_loans'] = $partial_loans_b4>0?round(($figures['partial_loans']/$partial_loans_b4)*100,2):0;
+			$percents['rejected_loans'] = $partial_loans_b4>0?round(($figures['rejected_loans']/$partial_loans_b4)*100,2):0;
 
-			//Total approved loans
+			//Total approveded loans
 			//1 in this period
-			$figures['approved_loans'] = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
+			$figures['approved_loans'] = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
 			//before this period
-			$approved_loans_b4 = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
+			$approved_loans_b4 = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
 			//percentage increase/decrease
 			$percents['approved_loans'] = $approved_loans_b4>0?round(($figures['approved_loans']/$approved_loans_b4)*100,2):0;
 
+			//Total disbursed loans
+			//1 in this period
+			$figures['disbursed_loans'] = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4");
+			//before this period
+			$approved_loans_b4 = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4");
+			//percentage increase/decrease
+			$percents['disbursed_loans'] = $approved_loans_b4>0?round(($figures['disbursed_loans']/$approved_loans_b4)*100,2):0;
+
 			//Withdraws
 			//1 in this period
-			$withdraws = ($accounts->findAccountBalance("`transaction_type`=2 AND `transaction_date` BETWEEN '".$start_date."' AND '".$end_date."'")*-1);
+			$withdraws = ($deposit_account_transaction_obj->getMoneySum("=2 AND `dateCreated` BETWEEN '".$start_date."' AND '".$end_date."'")*-1);
 			//Deposits
-			$deposits = $accounts->findAccountBalance("`transaction_type`=1 AND `transaction_date` BETWEEN '".$start_date."' AND '".$end_date."'");
+			$deposits = $deposit_account_transaction_obj->getMoneySum("=1 AND `dateCreated` BETWEEN '".$start_date."' AND '".$end_date."'");
 			//before this period 
 			
-			$deposits_b4 = $accounts->findAccountBalance("`transaction_type`=1 AND `transaction_date` < '".$start_date."'");
+			$deposits_b4 = $deposit_account_transaction_obj->getMoneySum("=1 AND `dateCreated` < '".$start_date."'");
 			//before this period  
-			$withdraws_b4 = ($accounts->findAccountBalance("`transaction_type`=2 AND `transaction_date` < '".$start_date."'")*-1);
+			$withdraws_b4 = ($deposit_account_transaction_obj->getMoneySum("=2 AND `dateCreated` < '".$start_date."'")*-1);
 			
 			//percentage increase/decrease
 			$figures['savings'] = ($withdraws - $deposits);
@@ -357,7 +374,8 @@ function getGraphData($start_date, $end_date){
 	$graph_data = $data_points = array();
 	
 	$_end = new DateTime(date("Y-m-d",$end_date));
-	$period = new DatePeriod( new DateTime(date("Y-m-d",$start_date)), new DateInterval('P1D'), $_end );
+	//$period = new DatePeriod( new DateTime(date("Y-m-d",$start_date)), new DateInterval('P1D'), $_end );
+	$period = new DatePeriod( new DateTime(date("Y-m-d",$start_date)), new DateInterval('P1D'), $_end->modify( '+1 day' ) );
 	$period_dates = iterator_to_array($period);
 	
 	$graph_data['title']['text'] = "Total product sales, ".date('j M, y',$start_date)." - ".date('j M, y',$end_date);
@@ -367,18 +385,17 @@ function getGraphData($start_date, $end_date){
 	
 	//if days are 7 or less
 	if($days == 0 || $days <8){
-		$period = new DatePeriod( new DateTime(date("Y-m-d",$start_date)), new DateInterval('P1D'), $_end->modify( '+1 day' ) );
 		foreach($loan_products as $product){
 			$datasets = array();
 			$datasets['name'] = $product['productName'];
 			
-			foreach($period as $date){
-				$datasets['data'][] = $dashboard->getSumOfLoans("`disbursementDate` = ".$date." AND ".$product['id']);
+			foreach($period_dates as $period_date){
+				$datasets['data'][] = $dashboard->getSumOfLoans("`disbursementDate` = ".$period->getTimestamp()." AND  `loanProductId`=".$product['id']);
 			}
 			$graph_data['datasets'][] = $datasets;
 		}
-		foreach($period as $date){
-			$data_points[] = $date->format("D, j/n");
+		foreach($period_dates as $period_date){
+			$data_points[] = $period_date->format("D, j/n");
 		}
 	}
 	elseif($days > 7 && $days <31){
@@ -411,7 +428,7 @@ function getGraphData($start_date, $end_date){
 			
 			foreach($weeks as $week){
 				$between = "BETWEEN ".$week['start']." AND ".$week['end'].")";
-				$datasets['data'][] = $dashboard->getSumOfLoans("`disbursementDate` <= ".$week['end']." AND ".$product['id']);
+				$datasets['data'][] = $dashboard->getSumOfLoans("`disbursementDate` <= ".$week['end']." AND `loanProductId`=".$product['id']);
 				$data_points[] = /*date('j/M', $week['start'])."-".*/date('j/M', $week['end']);
 			}
 			$graph_data['datasets'][] = $datasets;
@@ -448,7 +465,7 @@ function getGraphData($start_date, $end_date){
 			
 			foreach($months as $month){
 				$between = "BETWEEN ".$month['start']." AND ".$month['end'].")";
-				$datasets['data'][] = $dashboard->getSumOfLoans($between." AND ".$product['id']);
+				$datasets['data'][] = $dashboard->getSumOfLoans($between." AND  `loanProductId`=".$product['id']);
 				$data_points[] = /*date('M/Y', $week['start'])."-".*/date('M/Y', $month['end']);
 			}
 			$graph_data['datasets'][] = $datasets;

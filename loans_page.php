@@ -193,7 +193,7 @@
 												<th>Total (UGX)</th>
 												<th>&nbsp;</th>
 												<th>&nbsp;</th>
-												<th data-bind="text: curr_format(parseInt(array_total($parent.transactionHistory(),2)))">&nbsp;</th>
+												<th data-bind="text: curr_format(parseInt(array_total($parent.transactionHistory(),4)))">&nbsp;</th>
 											</tr>
 										</tfoot>
 									</table>
