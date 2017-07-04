@@ -122,6 +122,7 @@ if(isset($_POST['origin'])){
 		break;
 		case "deposit_account":
 			$depositAccount = new DepositAccount();
+			$data['dateCreated'] = time();
 			$data['dateModified'] = time();
 			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			
