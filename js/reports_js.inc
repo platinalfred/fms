@@ -41,8 +41,8 @@ $(document).ready(function(){
 				  { data: 'interestPaid', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
 				  { data: 'interestPaid', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
 				  { data: 'paidPrinciple', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(full.principle)-parseInt(data)):0;}},
-				  { data: 'interestPaid', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(full.exp_interest)-parseInt(data)):0;}},
-				  { data: 'paidPrinciple', render: function ( data, type, full, meta ) {return data?curr_format((parseInt(full.principle)-parseInt(data))+(parseInt(full.exp_interest)-parseInt(data))):0;}}
+				  { data: 'interestPaid', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(full.exp_interest)-data?parseInt(data):0):0;}},
+				  { data: 'paidPrinciple', render: function ( data, type, full, meta ) {return data?curr_format((parseInt(full.principle)-parseInt(data))+(parseInt(full.exp_interest)-data?parseInt(data):0)):0;}}
 					
 					] ,
 			  buttons: [
