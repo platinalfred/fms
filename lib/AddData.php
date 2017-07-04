@@ -272,7 +272,7 @@ if(isset($_POST['origin'])){
 				$initials = ($branch['branch_name'] != "")? strtoupper($branch['branch_name']) : strtoupper(substr($branch_name, 0, 3));
 				$date = date("ymdis");
 			 
-				$data['loanNo'] = $initials."-".$date;
+				$data['loanNo'] = "L".$date;
 				$data['dateCreated'] = time();
 				$data['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				$data['branchId'] = $branchId;
@@ -316,7 +316,7 @@ if(isset($_POST['origin'])){
 					//create loan account for group
 					$clientData['saccoGroupId'] = $data['clientId'] ;
 					$saccoGroupLoanAccount = new SaccoGroupLoanAccount();
-					$accoGroupLoanAccountId = $saccoGroupLoanAccount->addSaccoGroupLoanAccount($clientData);
+					$output = $saccoGroupLoanAccountId = $saccoGroupLoanAccount->addSaccoGroupLoanAccount($clientData);
 				}
 				unset($clientData);
 				
@@ -345,12 +345,14 @@ if(isset($_POST['origin'])){
 				if(isset($data['collateral'])){
 					$collateralItems = $data['collateral'];
 					foreach($collateralItems as $collateralItem){
-						$collateralItem['loanAccountId'] = $loanAccountId;
-						$collateralItem['dateCreated'] = time();
-						$collateralItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-						$collateralItem['dateModified'] = time();
-						$collateralItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-						$output = $loanCollateral->addLoanCollateral($collateralItem);
+						if($collateralItem['itemName']!='undefined'){
+							$collateralItem['loanAccountId'] = $loanAccountId;
+							$collateralItem['dateCreated'] = time();
+							$collateralItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+							$collateralItem['dateModified'] = time();
+							$collateralItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+							$output = $loanCollateral->addLoanCollateral($collateralItem);
+						}
 					}
 					unset($data['collateral']);
 				}
