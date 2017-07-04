@@ -144,7 +144,7 @@
 									</tbody>
 									<tfoot>
 										<tr>
-											<th>NET INCOME</th><td><strong><span data-bind="text: curr_format(parseInt(subscriptions)+parseInt(shares)+parseInt(shares)+parseInt(loan_payments)-(parseInt(disbursedLoan.loanAmount)+parseInt(disbursedLoan.interestAmount))-(expenses?curr_format(parseInt(expenses)):0))">0.0</span></strong></td>
+											<th>NET INCOME</th><td><strong><span data-bind="text: curr_format(parseInt(subscriptions)+parseInt(shares)+parseInt(shares)+parseInt(loan_payments)-(parseInt(disbursedLoan.loanAmount)+parseInt(disbursedLoan.interestAmount))-(expenses?parseInt(expenses):0))">0.0</span></strong></td>
 										</tr>
 									</tfoot>
 								</table>

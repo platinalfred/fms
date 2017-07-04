@@ -268,6 +268,7 @@
 							dTable['applications'].ajax.reload();
 							dTable['approved'].ajax.reload();
 							dTable['rejected'].ajax.reload();
+							$('#approve_loan-modal').modal('hide');
 						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while approving: \n"+response ,"fail");
@@ -296,6 +297,7 @@
 							dTable['applications'].ajax.reload();
 							dTable['approved'].ajax.reload();
 							dTable['rejected'].ajax.reload();
+							$('#"disburse_loan-modal').modal('hide');
 						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while approving: \n"+response ,"fail");
@@ -345,6 +347,7 @@
 	$("#loanAccountForm").validate({submitHandler: loanAccountModel.save});
 	$("#loanPaymentForm").validate({submitHandler: loanAccountModel.makePayment});
 	$("#loanAccountApprovalForm").validate({submitHandler: loanAccountModel.approveLoan});
+	$("#loanDisbursementForm").validate({submitHandler: loanAccountModel.disburseLoan});
 	
 	
 <!-- Datatables -->
@@ -380,22 +383,23 @@
 				{ data: 'clientNames'},
 				{ data: 'productName'},
 				{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} ,
+				{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}/*  ,
 				{ data: 'id', render: function ( data, type, full, meta ) {
 					var authorized =  false;
+					var role = '<?php echo $_SESSION['branch_credit']; ?>';
+					return 
 				<?php if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])){?>
-					if(user_props['branch_credit']&&parseInt(full.requestedAmount)<1000001){
+					/* if(user_props['branch_credit']==true && parseInt(full.requestedAmount)<1000001){
 						authorized = true;
 					}
-					if(user_props['management_credit']&&parseInt(full.requestedAmount)>1000000&&parseInt(full.requestedAmount)<5000001){
+					if(user_props['management_credit']==true && parseInt(full.requestedAmount)>1000000&&parseInt(full.requestedAmount)<5000001){
 						authorized = true;
 					}
-					if(user_props['executive_board']&&parseInt(full.requestedAmount)>5000000){
+					if(user_props['executive_board']==true && parseInt(full.requestedAmount)>5000000){
 						authorized = true;
-					}
-				<?php } else { ?>
-					return '<a href="#'+(authorized?'approve_loan':'add_loan_account')+'-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> '+(authorized?'Approve':'Edit')+' </a>';}}
-				<?php } ?>
+					} '<a href="#'+(authorized?'approve_loan':'')+'-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> '+(authorized?'Approve':'Edit')+' </a>'
+					'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Approve </a>'
+				<?php } ?> +'';}} */
 				] ,
 		  buttons: [
 			{
@@ -582,7 +586,7 @@
 				{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format((parseInt(data)/parseInt(full.installments))+parseInt(full.disbursedAmount)/parseInt(full.installments));}},
 				{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
 				{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)+parseInt(full.interest));}},
-				{ data: 'amountPaid', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
+				{ data: 'amountPaid', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(data)):0;}}
 				] ,
 		  buttons: [
 			{

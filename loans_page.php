@@ -28,7 +28,7 @@
 										<thead>
 											<tr>
 												<?php 
-												$header_keys = array("Loan No", "Client", "Loan Product","Appn Date", "Amount Requested","Action");
+												$header_keys = array("Loan No", "Client", "Loan Product","Appn Date", "Amount Requested"/* ,"Action" */);
 												foreach($header_keys as $key){ ?>
 													<th><?php echo $key; ?></th>
 													<?php
