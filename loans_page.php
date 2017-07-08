@@ -4,22 +4,39 @@
 				<div class="ibox-title">
 					<h5>Loan Accounts <small>loans list</small></h5>
 				  <div class="pull-right"><a href="#add_loan_account-modal" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i> New Loan Application</a>
-					<!-- select id="loan_types" class="form-control">
-					  <option>All loans</option>
-					  <option value="1" <?php echo (isset($_GET['type'])&&$_GET['type']==1)?"selected":"";?>>Performing loans</option>
-					  <option value="2" <?php echo (isset($_GET['type'])&&$_GET['type']==2)?"selected":"";?>> Non Performing</option>
-					  <option value="3" <?php echo (isset($_GET['type'])&&$_GET['type']==3)?"selected":"";?>> Active loans</option>
-					  <option value="4" <?php echo (isset($_GET['type'])&&$_GET['type']==4)?"selected":"";?>> Due loans</option>
-					</select -->
+					
 				  </div>
 				</div>
+				<div class="ibox-content m-b-sm border-bottom">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label class="control-label" for="product_name">Loans</label>
+								<select id="loan_types" class="form-control">
+								   <option value="0" >Pending</option>
+								    <option value="1" >Approved</option>
+								    <option value="2">Disbursed</option>
+									<option value="3" >Rejected</option>
+								</select >
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label class="control-label" for="principle">Select Period</label>
+								<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 10px; border: 1px solid #ccc">
+								  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+								  <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-2" style="padding-top:2%;">
+							<a  class="btn btn-sm btn-success" style="vertical-align:middle;" ><i class="fa fa-folder-open-o"></i> Show results</a>
+						</div>
+					</div>
+
+				</div>
 				<div class="ibox-content">
-					<ul class="nav nav-tabs">
-						<li><a data-toggle="tab" href="#tab-1"><i class="fa fa-list"></i> Applications</a></li>
-						<li><a data-toggle="tab" href="#tab-2" class="text-danger"><i class="fa fa-times"></i> Rejected</a></li>
-						<li><a data-toggle="tab" href="#tab-3"><i class="fa fa-check-circle-o"></i> Approved</a></li>
-						<li class="active"><a data-toggle="tab" href="#tab-4"><i class="fa fa-check-circle-o"></i> Disbursed</a></li>
-					</ul>
+					
 					<div class="tab-content">
 						<div id="tab-1" class="tab-pane">
 							<div class="full-height-scroll">
