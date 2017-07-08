@@ -22,8 +22,8 @@ class Shares extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findShareAmount($where = ""){
-		$result = $this->getfrec(self::$table_name, "amount", $where, "", "");
-		return !empty($result) ? $result['amount'] : 0;
+		$result = $this->getfrec(self::$table_name, "SUM(amount) sum", $where, "", "");
+		return !empty($result) ? $result['sum'] : 0;
 	}
 	public function findShareAmountForYear($year){
 		$result = $this->getfrec(self::$table_name, "amount", "year=".$id, "", "");

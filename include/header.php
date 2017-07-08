@@ -42,7 +42,11 @@ if(!isset($_SESSION['Logged'])){
 		<link href="css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
 	<?php 
 	} 
-	 
+	if(in_array("ladda", $needed_files)){ ?>
+	 <!-- Ladda style -->
+		<link href="css/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
+	<?php 
+	}
 	if(in_array("Morris", $needed_files)){  ?>
 		<!-- Morris -->
 		<link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
@@ -164,7 +168,7 @@ if(!isset($_SESSION['Logged'])){
                         <a href="view_loans.php"><i class="fa fa-calculator"></i> <span class="nav-label">Loans</span>  </a>
                     </li>
 					 <li>
-                        <a href="view_savings.php"><i class="fa fa-dollar"></i> <span class="nav-label">Savings</span>  </a>
+                        <a href="view_savings.php"><i class="fa fa-dollar"></i> <span class="nav-label">Savings Accounts</span>  </a>
                     </li>
                     <li>
                         <a href="members.php"><i class="fa fa-group"></i> <span class="nav-label">Members</span>  </a>

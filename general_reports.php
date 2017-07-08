@@ -1,11 +1,11 @@
 			
 			<div class="col-lg-12">
-				<div class="ibox-content m-b-sm border-bottom">
+				<!--<div class="ibox-content m-b-sm border-bottom">
 					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label class="control-label" for="product_name">Loan Product</label>
-								<?php $person = new Person; $person->loadList("SELECT * FROM loan_products", "product_name", "id", "productName", "", "selected"); ?>
+								<?php /* $person = new Person; $person->loadList("SELECT * FROM loan_products", "product_name", "id", "productName", "", "selected"); */ ?>
 								
 							</div>
 						</div>
@@ -41,7 +41,7 @@
 						</div>
 					</div>
 
-				</div>
+				</div> -->
 				<div class="ibox">
 					<div class="ibox-title" style="border-top:none;">
 						<h5>Loan Accounts</h5>
@@ -65,6 +65,7 @@
 									</tr>
 								</thead>
 								<tbody>
+									
 								</tbody>
 								<tfoot>
 								<?php 

@@ -112,6 +112,21 @@
 		<script src="js/demo/peity-demo.js"></script>
 	<?php 
 	}
+	if(in_array("ladda", $needed_files)){ ?>
+		
+		<!-- Ladda -->
+		<script src="js/plugins/ladda/spin.min.js"></script>
+		<script src="js/plugins/ladda/ladda.min.js"></script>
+		<script src="js/plugins/ladda/ladda.jquery.min.js"></script>
+		
+		<script>
+			$(document).ready(function () {
+				$( '.ladda' ).ladda( 'bind', { timeout: 3000 } );
+				
+			})
+		</script>
+	<?php 
+	}
 	if(in_array("Jvectormap", $needed_files)){ ?>	
 		 <!-- Jvectormap -->
 		<script src="js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>

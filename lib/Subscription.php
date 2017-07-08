@@ -24,8 +24,8 @@ class Subscription extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findSubscriptionAmount($where = ""){
-		$result = $this->getfrec(self::$table_name, "amount", $where, "", "");
-		return !empty($result) ? $result['amount'] : 0;
+		$result = $this->getfrec(self::$table_name, "SUM(amount) sub", $where, "", "");
+		return !empty($result) ? $result['sub'] : 0;
 	}
 	public function findSubscriptionAmountForYear($year){
 		$result = $this->getfrec(self::$table_name, "amount", "year=".$id, "", "");

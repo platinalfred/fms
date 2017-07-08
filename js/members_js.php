@@ -242,10 +242,33 @@ $(document).ready(function(){
 			data: frmdata,
 			success: function (response) {
 				if($.trim(response) == "success"){
+					
 					showStatusMessage("Successfully added new record" ,"success");
 					setTimeout(function(){
 						memberModel.resetForm();
 						<?php if(!isset($_GET['view'])):?>dTable.ajax.reload();<?php endif;?>
+					}, 2000);
+				}else{
+					
+					showStatusMessage(response, "fail");
+				}
+				
+			}
+		});
+
+		return false;
+	});
+	$(".subscribe").click(function(){
+		var frmdata = $(this).closest("form").serialize();
+		$.ajax({
+			url: "save_data.php",
+			type: 'POST',
+			data: frmdata,
+			success: function (response) {
+				if($.trim(response) == "success"){
+					showStatusMessage("Successfully added subscription" ,"success");
+					setTimeout(function(){
+						window.location="";
 					}, 2000);
 				}else{
 					
@@ -366,7 +389,7 @@ $(document).ready(function(){
 		self.member_employers2 = ko.observableArray();
 	}
 	var memberTableModel = new MemberTable();
-	$("#subTable").DataTable({ dom: "lfrtipB" });
+	$("#subTable").DataTable();
 			  
   /* PICK DATA FOR DATA TABLE  */
   <?php if(!isset($_GET['view'])):?>

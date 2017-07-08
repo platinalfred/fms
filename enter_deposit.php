@@ -24,7 +24,7 @@
 								  <div class="form-group" data-bind="with: account_details">
 									<label class="control-label col-md-4" for="amount">Amount<span class="required">*</span></label>
 									<div class="col-md-8">
-									  <input type="number"  id="deposit_amount" name="amount" class="form-control col-md-7 col-xs-12" data-bind='value: $parent.deposit_amount, attr: {"data-rule-min":(parseFloat(recomDepositAmount)>0?recomDepositAmount:null), "data-msg-min":"Amount is less than recommended "+recomDepositAmount' data-msg-required="Amount is required" required>
+									  <input type="number"  id="deposit_amount" name="amount" class="form-control col-md-7 col-xs-12 athousand_separator" data-bind='value: $parent.deposit_amount, attr: {"data-rule-min":(parseFloat(recomDepositAmount)>0?recomDepositAmount:null), "data-msg-min":"Amount is less than recommended "+recomDepositAmount' data-msg-required="Amount is required" required>
 									</div>
 								  </div>
 								  <div class="form-group" data-bind="with: account_details">
