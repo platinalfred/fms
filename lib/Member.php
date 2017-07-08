@@ -70,12 +70,12 @@ class Member extends Db {
 	//list of the members for special kinds of select lists
 	public function findSelectList(){
 		$table = self::$table_name. " JOIN `person` ON `member`.`personId` = `person`.`id`";
-		$fields = "`member`.`id`, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType`";
+		$fields = "`member`.`id`, CONCAT(`lastname`,' ',`firstname`,' ',`othername`) `clientNames`, 1 `clientType`";
 		$result_array = $this->getfarray($table, $fields, "", "", "");
 		return $result_array;
 	}
 	public function findAll(){
-		$result_array = $this->queryData("SELECT `member`.`id`, `member`.`personId`, CONCAT(`lastname`, ' ', `firstname`, ' ', `othername`) `memberNames`, `firstname`, `lastname`, `othername`, `phone`, `email`, `postal_address`, `physical_address`, `dateofbirth`, `gender`, `date_registered`, `photograph`, `memberType`, `dateAdded`, `branch_id`, `addedBy` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id`");
+		$result_array = $this->queryData("SELECT `member`.`id`, `member`.`personId`, CONCAT(`lastname`, ' ', `firstname`, ' ', `othername`) `memberNames`, `firstname`, `lastname`, `othername`, `phone`, `email`, `postal_address`,`person_number`, `id_number`, `person`.`comment`,`physical_address`, `dateofbirth`, `gender`, `date_registered`, `photograph`, `memberType`, `dateAdded`, `branch_id`, `addedBy` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id`");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findNamesByPersonNumber($pno){

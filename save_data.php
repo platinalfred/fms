@@ -133,7 +133,7 @@ if(isset($_POST['tbl'])){
 				$data["personId"] = $person_id;
 				$data['branchId'] = $data['branch_id'];
 				$data['addedBy'] = $data['modifiedBy'];
-				$data['dateAdded'] = $data['date_registered'];
+				//$data['dateAdded'] = $data['date_registered'];
 				
 				if(!empty($data['relative'])){
 					foreach($data['relative'] as $single){
@@ -155,6 +155,7 @@ if(isset($_POST['tbl'])){
 						$person->addPersonBusiness($single);
 					} 	 
 				}
+				 
 				if($member->addMember($data)){
 					$output = "success";
 				} 

@@ -1,10 +1,13 @@
 <?php 
-$needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout");
+$needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout","datepicker",);
 $page_title = "Members";
 include("include/header.php"); 
 require_once("lib/Libraries.php");
 $member = new Member();
 ?>
+	<style>
+	.row{ margin-top:10px;}
+	</style>
 	<div class="row">
 		<?php include("add_member_modal.php"); ?>
 		<div class="col-sm-8">
@@ -136,10 +139,9 @@ $member = new Member();
 										</div>
 									</div>
 								<!-- /ko -->
-								<div class="col-lg-12" data-bind="with: member_details">
-									<strong>Comments</strong>
-									<p class="comments"  data-bind="text:comment">
-									</p>
+								<div class="row" data-bind="with: member_details">
+									<div class="col-lg-10"><strong>Comments</strong></div>
+									<div class="comments col-lg-10"  data-bind="text:comment"></div>
 								</div>
 								<hr/>
 								<!--

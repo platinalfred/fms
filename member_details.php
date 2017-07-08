@@ -9,7 +9,7 @@ $person = new Person();
 global $client;
 $client  = array();
 $member_data  = $member->findMemberDetails($_GET['id']);
-$names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_data['othername']; 
+$names =  $member_data['lastname']." ".$member_data['firstname']." ".$member_data['othername']; 
 $data['relatives'] = $person->findPersonRelatives($member_data['id']);
 $client['clientType'] = 1;
 $client['clientNames'] = $names;

@@ -124,6 +124,7 @@ class DataTable extends Db{
 			
 			// Get total number of rows in query
 			$sQuery = "SELECT COUNT(".$index_column.") cnt FROM ".$table;
+			
 			$iTotal = $this->countCustom($sQuery);
 			// Output
 			$output = array(

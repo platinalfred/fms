@@ -1,5 +1,12 @@
 <script>
 $(document).ready(function(){ 
+	 $('.date').datepicker({
+		todayBtn: "linked",
+		keyboardNavigation: false,
+		forceParse: false,
+		calendarWeeks: true,
+		autoclose: true
+	});
 	<?php 
 	if(isset($_GET['id'])){ ?>
 		$('.delete_member').click(function () {
@@ -372,7 +379,7 @@ $(document).ready(function(){
 			  "deferRender": true,
 			  "order": [[ 1, 'asc' ]],
 			  "ajax": {
-				  "url":"find_members.php",
+				  "url":"find_data.php",
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
@@ -438,9 +445,12 @@ $(document).ready(function(){
 	
 	$('.table tbody').on('click', 'tr ', function () {
 		var data = dTable.row(this).data();
+		
 		memberTableModel.member_details(data);
 		//ajax to retrieve other member details
-		findMemberDetails(data.personId);
+		if(data){
+			findMemberDetails(data.personId);
+		}
 	});
 	function findMemberDetails(id){
 		$.ajax({
