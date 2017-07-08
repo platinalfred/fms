@@ -212,14 +212,16 @@ if(!isset($_SESSION['Logged'])){
                         </form>
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
-						<?php if(in_array("daterangepicker", $needed_files)){ ?>
+						<?php 
+						if(in_array("headerdaterangepicker", $needed_files)){ ?>
                         <li>
 							<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 10px; border: 1px solid #ccc">
 							  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 							  <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
 							</div>
                         </li>
-						<?php } ?>
+						<?php 
+						} ?>
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                                 <i class="fa fa-envelope"></i> <span class="label label-warning">16</span>
