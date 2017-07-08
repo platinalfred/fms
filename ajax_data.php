@@ -22,9 +22,9 @@ if(isset($_POST['origin'])){
 			$figures = $tables = $percents = array();
 			//No of members
 			//1 in this period
-			$figures['members'] = $member->noOfMembers(" active=1");//(`dateAdded` BETWEEN ".$start_date." AND ".$end_date.") AND
+			$figures['members'] = $member->noOfMembers(" (`dateAdded` BETWEEN ".$start_date." AND ".$end_date.") AND active=1");//
 			//before this period
-			$members_b4 = $member->noOfMembers("active=1");//(`dateAdded` < ".$start_date.") AND 
+			$members_b4 = $member->noOfMembers(" `dateAdded` < ".$start_date." AND active=1");//(
 			$percents['members'] = $members_b4>0?round(($figures['members']/$members_b4)*100,2):0;
 
 			//Total amount of paid subscriptions
@@ -390,7 +390,7 @@ function getGraphData($start_date, $end_date){
 			$datasets['name'] = $product['productName'];
 			
 			foreach($period_dates as $period_date){
-				$datasets['data'][] = $dashboard->getSumOfLoans("`disbursementDate` = ".$period->getTimestamp()." AND  `loanProductId`=".$product['id']);
+				$datasets['data'][] = $dashboard->getSumOfLoans("DAY(FROM_UNIXTIME(`disbursementDate))` = DAY(FROM_UNIXTIME(".$period_date->getTimestamp().")) AND  `loanProductId`=".$product['id']);
 			}
 			$graph_data['datasets'][] = $datasets;
 		}
@@ -489,8 +489,8 @@ function getPieChartData($start_date, $end_date){
 	$between = "BETWEEN ".$start_date." AND ".$end_date.")";
 	$pie_chart_data['series']['name'] = 'Loan Products';
 	foreach($loan_products as $product){
-		$products_sum += $total_amount = $dashboard->getSumOfLoans("(`disbursementDate` ".$between." AND `loanProductId=".$product['id']);
-		$pie_chart_data['series']['data'][] = array('name'=>$product['productName'],'y'=>$total_amount?$total_amount:320);
+		$products_sum += $total_amount = $dashboard->getSumOfLoans("(`disbursementDate` ".$between." AND `loanProductId`=".$product['id']);
+		$pie_chart_data['series']['data'][] = array('name'=>$product['productName'],'y'=>$total_amount);
 	}//
 	$pie_chart_data['title']['text'] = "Total product sales ".date('j M, y',$start_date)." - ".date('j M, y',$end_date);
 	

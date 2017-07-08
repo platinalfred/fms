@@ -11,15 +11,15 @@ class Dashboard extends Db {
 	}
 	public function getSumOfLoans($where = 1){
 		$result = $this->getfrec("loan_account", "sum(`disbursedAmount`) loanSum ", $where, "", "");
-		return !empty($result) ? (($result['loanSum']!=NULL)?$result['loanSum']:0) : 0;
+		return !empty($result) ? (($result['loanSum']!=NULL)?(float)$result['loanSum']:0) : 0;
 	}
 	public function getSumOfPenalties($where = 1){
 		$result = $this->getfrec("loan_penalty", "sum(`amount`) penaltySum ", $where, "", "");
-		return !empty($result) ? (($result['penaltySum']!=NULL)?$result['penaltySum']:0) : 0;
+		return !empty($result) ? (($result['penaltySum']!=NULL)?(float)$result['penaltySum']:0) : 0;
 	}
 	public function getSumOfShares($where = 1){
 		$result = $this->getfrec("shares", "sum(`amount`) sharesSum ", $where, "", "");
-		return !empty($result) ? (($result['sharesSum']!=NULL)?$result['sharesSum']:0) : 0;
+		return !empty($result) ? (($result['sharesSum']!=NULL)?(float)$result['sharesSum']:0) : 0;
 	}
 	public function getCountOfShares($where = 1){
 		$result = $this->getfrec("shares", "count(`id`) sharesCount ", $where, "", "");
@@ -27,7 +27,7 @@ class Dashboard extends Db {
 	}
 	public function getSumOfSubscriptions($where = 1){
 		$result = $this->getfrec("subscription", "sum(`amount`) subsSum ", $where, "", "");
-		return !empty($result) ? (($result['subsSum']!=NULL)?$result['subsSum']:0) : 0;
+		return !empty($result) ? (($result['subsSum']!=NULL)?(float)$result['subsSum']:0) : 0;
 	}
 	public function getCountOfSubscriptions($where = 1){
 		$result = $this->getfrec("subscription", "count(`id`) subsCount ", $where, "", "");
@@ -35,7 +35,7 @@ class Dashboard extends Db {
 	}
 	public function getSumOfLoanRepayments($where = 1){
 		$result = $this->getfrec("loan_repayment", "sum(`amount`) loanPayments ", $where, "", "");
-		return !empty($result) ? (($result['loanPayments']!=NULL)?$result['loanPayments']:0) : 0;
+		return !empty($result) ? (($result['loanPayments']!=NULL)?(float)$result['loanPayments']:0) : 0;
 	}
 }
 ?>

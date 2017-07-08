@@ -3,7 +3,7 @@
 	include specific plugin files that you need on a page by  adding the names as below in the array
 	dataTables, ChartJs,iCheck,daterangepicker,clockpicker,colorpicker,datapicker,easypiechart,fullcalendar,idle-timer,morris, nouslider, summernote,validate,wow,video,touchspin,Sparkline,Flot, Peity, Jvectormap, touchspin, select2, daterangepicker, clockpicker, ionRangeSlider, datapicker, nouslider, jasny, switchery, cropper, colorpicker, steps, dropzone, bootstrap-markdown
 */
-$needed_files = array("daterangepicker", "iCheck", "jasny", "knockout", "moment", "highcharts");
+$needed_files = array("headerdaterangepicker", "daterangepicker", "iCheck", "jasny", "knockout", "moment", "highcharts");
 
 $page_title = "Dashboard";
 include("include/header.php"); 

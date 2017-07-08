@@ -89,10 +89,6 @@ if(!isset($_SESSION['Logged'])){
 		<link href="css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
 	<?php 
 	}
-	if(in_array("daterangepicker", $needed_files)){ ?>
-		<link href="css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
-	<?php 
-	}
 	if(in_array("select2", $needed_files)){ ?>
 		<link href="css/plugins/select2/select2.min.css" rel="stylesheet">
 	<?php 
@@ -217,7 +213,7 @@ if(!isset($_SESSION['Logged'])){
                         <li>
 							<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 10px; border: 1px solid #ccc">
 							  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-							  <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+							  <span>December 30, 2016 - January 28, 2017</span> <b class="caret"></b>
 							</div>
                         </li>
 						<?php 
