@@ -296,7 +296,11 @@ if(isset($_POST['origin'])){
 		break;
 		case 'loan_accounts':
 			$loanAccount = new LoanAccount();
-			$where="`status`=".$_POST['status'];
+			$where = "`status`=".$_POST['status'];
+			if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+				$action_date = ($_POST['status']==4)?"disbursementDate":($_POST['status']==3||$_POST['status']==2)?"approvalDate":"applicationDate";
+				$where .= " AND (`".($action_date)."` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
+			}
 			if(isset($_POST['clientType'])&&isset($_POST['id'])){
 				$where .= " AND `clientId`=".$_POST['id'];
 				$where .= " AND `clientType`=".$_POST['clientType'];
