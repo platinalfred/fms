@@ -121,7 +121,7 @@
 		
 		<script>
 			$(document).ready(function () {
-				$( '.ladda' ).ladda( 'bind', { timeout: 3000 } );
+				$( '.ladda' ).ladda( 'bind', { timeout: 4000 } );
 				
 			})
 		</script>

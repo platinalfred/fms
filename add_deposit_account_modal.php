@@ -9,7 +9,7 @@
 								<h5>New Deposit Account <small>Create new Account</small></h5>
 								<div class="ibox-tools">
 									<a class="" data-dismiss="modal">
-										<i class="fa fa-times lg"></i>
+										<i class="fa fa-times lg req"></i>
 									</a>
 								</div>
 							</div>

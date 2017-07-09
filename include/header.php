@@ -15,7 +15,7 @@ if(!isset($_SESSION['Logged'])){
 	
 	<link rel="apple-touch-icon" sizes="57x57" href="img/fav.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="img/fav.png">
-    <title>Buladde Financial Services <?php echo isset($page_title)?(" - ".$page_title): "";?></title>
+    <title>BFS <?php echo isset($page_title)?(" - ".$page_title): "";?></title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -203,10 +203,10 @@ if(!isset($_SESSION['Logged'])){
         <div id="page-wrapper" class="gray-bg">
             <div class="row border-bottom">
                 <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-                    <div class="navbar-header"> 
+                    <div class="navbar-header" style="width:80%;"> 
                         <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                        <form role="search" class="navbar-form-custom" action="">
-                            <div class="form-group">
+                        <form role="search" class="navbar-form-custom" action="" style="width:90%;">
+                            <div class="form-group" >
                                 <input type="text" placeholder="<?php echo $page_title; ?>" class="form-control" name="top-search" style="font-weight:600;font-size:20px;" id="top-search">
                             </div>
                         </form>

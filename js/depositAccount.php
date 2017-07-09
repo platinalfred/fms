@@ -15,11 +15,11 @@
 			  "url":"server_processing.php",
 			  "type": "POST",
 			  "data":  function(d){
-				d.page = 'deposit_accounts';
-				<?php if(isset($client)):?> d.clientId=<?php echo $client['id'];?>; <?php endif;?>
-				d.type = <?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>; //loan_type for the datatable;
-				d.start_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"moment().subtract(30, 'days').format('X')"; ?>;
-				d.end_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"moment().format('X')"; ?>;
+					d.page = 'deposit_accounts';
+					<?php if(isset($client)):?> d.clientId=<?php echo $client['id'];?>; <?php endif;?>
+					d.type = <?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>; //loan_type for the datatable;
+					d.start_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"moment().subtract(30, 'days').format('X')"; ?>;
+					d.end_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"moment().format('X')"; ?>;
 				}
 		  },
 		   "initComplete": function(settings, json) {
@@ -44,8 +44,7 @@
 				{ data: 'productName'},
 				{ data: 'dateCreated',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
 				{ data: 'sumDeposited', render: function ( data, type, full, meta ) {return curr_format(parseInt(data?data:0));}},
-				{ data: 'sumWithdrawn', render: function ( data, type, full, meta ) {return curr_format(parseInt(data?data:0));}}/* ,
-				{ data: 'id', render: function ( data, type, full, meta ) {  return '<a href="#enter_deposit" class="btn btn-white btn-sm"><i class="fa fa-money"></i> Enter Deposit </a><a href="#enter_withdraw" class="btn btn-white btn-sm"><i class="fa fa-money"></i> Withdraw Cash </a>';}} */
+				{ data: 'sumWithdrawn', render: function ( data, type, full, meta ) {return curr_format(parseInt(data?data:0));}}
 				] ,
 		  buttons: [
 			{
@@ -222,12 +221,20 @@
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
 							$("#enterDepositForm")[0].reset();
+							self.deposit_amount(0);
+							//If you are in the account details page
 							<?php if(isset($_GET['depAcId'])): ?>
-							self.getServerData();
+								self.getServerData();
+								dTable.ajax.reload();
 							<?php else: ?>
-							getTransactionHistory(self.account_details().id);
+								//If you are on all accounts page
+								getTransactionHistory(self.account_details().id);
+								dTable.ajax.reload(function(){
+									//Reload the current selected account
+									self.account_details(dTable.row("#dep_"+self.account_details().id).data());
+								}, false);
 							<?php endif; ?>
-							dTable.ajax.reload();
+							
 						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while saving data: \n"+response ,"failed");
@@ -253,13 +260,20 @@
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
 							$("#enterWithdrawForm")[0].reset();
+							self.deposit_amount(0);
 							<?php if(isset($_GET['depAcId'])): ?>
-							self.getServerData();
+								self.getServerData();
+								dTable.ajax.reload();
 							<?php else: ?>
-							getTransactionHistory(self.account_details().id);
+								getTransactionHistory(self.account_details().id);
+								dTable.ajax.reload(
+									function(){
+									self.account_details(dTable.row("#dep_"+self.account_details().id).data());
+								}, false);
 							<?php endif; ?>
-							dTable.ajax.reload();
-						}, 3000);
+								//After reloading the data table there is need to 
+								
+						}, 4000);
 					}else{
 						showStatusMessage("Error encountered while saving data: \n"+response ,"failed");
 					}

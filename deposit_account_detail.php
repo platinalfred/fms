@@ -9,17 +9,18 @@
 									<a data-toggle="collapse" href="#collapseTwo" class="" aria-expanded="true">Account details <small data-bind="text: (productName+'-'+id).replace(/\s/g,'')"></small></a>
 								</h5>
 							</div>
-							<div id="collapseTwo" class="panel-collapse collapse in" aria-expanded="true" style="">
+							<div id="collapseTwo" class="panel-collapse collapse in" aria-expanded="true" style=""><!-- sumDeposited - sumWithdrawn-->
 								<div class="panel-body">
 									<table class="table table-bordered">
 										<tbody>
 											<tr> <th>Account No. </th> <td data-bind="text: (productName+'-'+id).replace(/\s/g,'')"></td> </tr>
+											<tr> <th>Current Balance</th> <td data-bind="text: curr_format(parseInt(sumUpAmount(statement,1))-parseInt(sumUpAmount(statement,2)))"></td> </tr>
 											<tr> <th>Opening Balance</th> <td data-bind="text: curr_format(parseInt(openingBalance))"></td> </tr>
 											<tr> <th>Opening Date </th> <td data-bind="text: moment(dateCreated,'X').format('DD, MMM YYYY')"></td> </tr>
 											<tr data-bind="if: interestRate>0"> <th>Interest Rate</th> <td data-bind="text: interestRate +'%'"></td> </tr>
-											<tr data-bind="if: recomDepositAmount>0"> <th>Recommended Deposit</th> <td data-bind="text: interestRate +'%'"></td> </tr>
-											<tr data-bind="if: maxWithdrawalAmount>0"> <th>Withdrawal limit</th> <td data-bind="text: curr_format(parseInt((maxWithdrawalAmount))"></td> </tr>
-											<tr data-bind="if: termLength"> <th>Term Length</th> <td data-bind="text: termLength"></td> </tr>
+											<tr data-bind="if: recomDepositAmount>0"> <th>Recommended Deposit</th> <td data-bind="text: recomDepositAmount"></td> </tr>
+											<tr data-bind="if: maxWithdrawalAmount > 0"> <th>Withdrawal limit</th> <td data-bind="text:curr_format(parseInt(maxWithdrawalAmount))"></td> </tr>
+											<tr data-bind="if: termLength"> <th>Term Length <sup data-toggle="tooltip" title="Period of time before which a client starts withdrawing from the account" data-placement="right"><i class="fa fa-question-circle"></i><sup></sup></sup> </th> <td data-bind="text: termLength+' days'"></td> </tr>
 										</tbody>
 									</table>
 								</div>
@@ -31,14 +32,33 @@
 			<div class="col-lg-7">
 				<div class="col-md-6"></div>
 				<?php 
-				if(!isset($_SESSION['accountant'])){ ?>
+				if(isset($_SESSION['accountant'])){ ?>
 					<div class="col-md-6"><a class="btn btn-primary btn-sm" href='#enter_deposit' data-toggle="modal"><i class="fa fa-edit"></i> Enter Deposit </a><a data-bind="attr: {href:((sumUpAmount(statement,1)-sumUpAmount(statement,2))>0?'#enter_withdraw':undefined)}" class="btn btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Withdraw Cash </a></div>
 				<?php 
-				}else{
-					
 				}
 				?>
 				<div class="ibox">
+					<div class="col-lg-7">
+						<div class="form-group">
+							<label class="control-label" for="principle">Select Period</label>
+							<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 10px; border: 1px solid #ccc">
+							  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+							  <span>December 30, 2016 - January 28, 2017</span> <b class="caret"></b>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-1">
+						<div class="form-group">
+							<label class="control-label" for="principle" style="color:#fff;">Display</label>
+							<input type="button" value="View" class="btn btn-sm btn-info">
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<button type="button" class="btn btn-sm btn-default">Excel</button>
+	                    <button type="button" class="btn btn-sm btn-default">PDF</button>
+	                    <button type="button" class="btn btn-sm btn-default">Print</button>
+					</div>
+					<div class="clearboth"></div>
 					<div class="ibox-title">
 						<h5>Account Statement</h5>
 						<div class="ibox-tools">
@@ -48,8 +68,7 @@
 						</div>
 					</div>
 					<div class="ibox-content">
-						<div>
-						</div>
+						
 						<div class="table-responsive">
 							<table class="table table-condensed">
 								<thead>

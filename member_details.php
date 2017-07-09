@@ -2,11 +2,12 @@
 $needed_files = array("dataTables", "iCheck", "steps", "jasny","ladda", "moment", "knockout", "daterangepicker", "datepicker");
 
 $page_title = "";
-if(isset($_GET['savings_accs'])){
-	$page_title = "Savings Account Details";
+if(isset($_GET['view']) && $_GET['view'] == "savings_accs"){
+	$page_title = "Member Savings Account Details";
 }elseif(isset($_GET['depAcId'])){
 	$page_title = "Deposit Account Details";
 }
+
 include("include/header.php");
 include("lib/Reports.php");
 $member = new Member();

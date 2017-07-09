@@ -1,7 +1,5 @@
 <script type="text/javascript">
-$(".athousand_separator").keyup(function(){
-	alert("Hello");
-});
+
 	var Collateral = function() {
 			var self = this;
 			self.itemName = ko.observable();

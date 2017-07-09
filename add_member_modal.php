@@ -8,20 +8,6 @@
 }
        
 </style>
-<script>
-function addCommas(nStr){
-    var sep = ',';
-    nStr += '';
-    x = nStr.split('.');
-    x1 = x[0];
-    x2 = x.length > 1 ? '.' + x[1] : '';
-    var rgx = /(\d+)(\d{3})/;
-    while (rgx.test(x1)) {
-        x1 = x1.replace(rgx, '$1' + sep + '$2');
-    }
-    return x1 + x2;
-}
-</script>
 <div id="add_member" class="modal  fade" aria-hidden="true" >
 	<div class="modal-dialog modal-lg" style="width: 900px !important;">
 		<div class="modal-content">
@@ -86,7 +72,7 @@ function addCommas(nStr){
 											<div class="col-sm-12 no_padding">
 											<div class="form-group">
 												<div class="col-sm-3 no_padding">
-													<label>Name <span class="required">*</span></label>
+													<label>Name <span class="req">*</span></label>
 												</div>
 												<div class="col-sm-9">
 													<input type="text" class="form-control" name="lastname" placeholder="Sur Name" required />
@@ -102,8 +88,8 @@ function addCommas(nStr){
 											<div class="form-group">
 												<div class="col-sm-5 no_padding"><label class="col-lg-12" >Gender</label></div>
 												<div class="col-sm-7">
-													<label > <input name="gender" class="i-checks" type="radio" value="M" >Male</label>
-													<label > <input name="gender" class="i-checks" type="radio" value="F"> Female</label>
+													<label > <input required name="gender" class="i-checks" type="radio" value="M" >Male</label>
+													<label > <input required name="gender" class="i-checks" type="radio" value="F"> Female</label>
 												</div>
 											</div>											
 												
@@ -112,7 +98,7 @@ function addCommas(nStr){
 											<div class="form-group">
 												<label class="col-sm-3 control-label no_padding">Marital Status</label>
 												<div class="col-sm-9">
-													<select class="form-control m-b" name="marital_status" >
+													<select class="form-control m-b" name="marital_status" required>
 														<option value="">Please select</option>
 														<option value="Single">Single</option>
 														<option value="Married">Married</option>
@@ -125,7 +111,7 @@ function addCommas(nStr){
 										
 										<div class="col-sm-12 no_padding">
 											<div class="form-group">
-												<label class="col-sm-3 control-label no_padding" >Date of Birth <span class="required">*</span></label>
+												<label class="col-sm-3 control-label no_padding" >Date of Birth <span class="req">*</span></label>
 												<div class="col-sm-9">
 													<input id="dateofbirth" name="dateofbirth" type="text" data-mask="99/99/9999" class="form-control" >
 													<span class="help-block">(dd/mm/yyyy)</span>
@@ -158,7 +144,7 @@ function addCommas(nStr){
 								<div class="row">
 									<div class="col-lg-6">
 										<div class="item form-group">
-											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding" for="id_type">ID Type <span class="required">*</span>
+											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding" for="id_type">ID Type <span class="req">*</span>
 											</label>
 											<div class="col-md-9 col-sm-9 col-xs-12">
 												<select class="form-control m-b" name="id_type" required >
@@ -179,7 +165,7 @@ function addCommas(nStr){
 									</div>
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Id Number <span class="required">*</span></label>
+											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Id Number <span class="req">*</span></label>
 											<div class="col-md-9 col-sm-9 col-xs-12">
 												<input name="id_number" type="text" class="form-control" required>
 											</div>
@@ -187,7 +173,7 @@ function addCommas(nStr){
 									</div>
 									<div class="col-lg-12">
 										<div class="form-group">
-											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Attach Id specimen <span class="required">*</span></label>
+											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Attach Id specimen <span class="req">*</span></label>
 											<div class="col-md-9 col-sm-9 col-xs-12">
 												<input name="id_specimen" type="file" class="form-control" required>
 											</div>
@@ -329,7 +315,7 @@ function addCommas(nStr){
 									<div class="col-lg-2">
 										<div class="form-group">
 											<label>Monthly Salary</label>
-											<input data-bind="attr: {name:'employment['+$index()+'][monthlySalary]'}"  type="number" class="form-control ">
+											<input data-bind="attr: {name:'employment['+$index()+'][monthlySalary]'}"  type="number" class="form-control athousand_separator">
 										</div>
 									</div>
 									<div class="col-lg-1"><span title="Remove employer" class="btn text-danger btn-lg" data-bind='click: $root.removeEmployment'><i class="fa fa-minus"></i></span></div>
@@ -455,7 +441,7 @@ function addCommas(nStr){
 								</div>
 								
 								<div class="col-lg-4">
-									<button class="btn btn-lg btn-primary" type="submit">Submit Member</button>
+									<button class="btn btn-lg btn-primary ladda" data-style="contract" type="submit">Submit Member</button>
 								</div>
 							</fieldset>
 						</form>
