@@ -296,7 +296,11 @@ if(isset($_POST['origin'])){
 		break;
 		case 'loan_accounts':
 			$loanAccount = new LoanAccount();
-			$where="`status`=".$_POST['status'];
+			$where = "`status`=".$_POST['status'];
+			if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+				$action_date = ($_POST['status']==4)?"disbursementDate":($_POST['status']==3||$_POST['status']==2)?"approvalDate":"applicationDate";
+				$where .= " AND (`".($action_date)."` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
+			}
 			if(isset($_POST['clientType'])&&isset($_POST['id'])){
 				$where .= " AND `clientId`=".$_POST['id'];
 				$where .= " AND `clientType`=".$_POST['clientType'];
@@ -380,11 +384,11 @@ function getGraphData($start_date, $end_date){
 	
 	$_end = new DateTime(date("Y-m-d",$end_date));
 	//$period = new DatePeriod( new DateTime(date("Y-m-d",$start_date)), new DateInterval('P1D'), $_end );
-	$period = new DatePeriod( new DateTime(date("Y-m-d",$start_date)), new DateInterval('P1D'), $_end->modify( '+1 day' ) );
+	$period = new DatePeriod( new DateTime(date("Y-m-d",$start_date)), new DateInterval('P1D'), $_end );
 	$period_dates = iterator_to_array($period);
 	
 	$graph_data['title']['text'] = "Total product sales, ".date('j M, y',$start_date)." - ".date('j M, y',$end_date);
-	$graph_data['yAxis']['title']['text'] = "UGX '000";
+	$graph_data['yAxis']['title']['text'] = "UGX";
 	
 	$loan_products = $loanProduct->findAll();
 	
@@ -395,7 +399,7 @@ function getGraphData($start_date, $end_date){
 			$datasets['name'] = $product['productName'];
 			
 			foreach($period_dates as $period_date){
-				$datasets['data'][] = $dashboard->getSumOfLoans("DAY(FROM_UNIXTIME(`disbursementDate))` = DAY(FROM_UNIXTIME(".$period_date->getTimestamp().")) AND  `loanProductId`=".$product['id']);
+				$datasets['data'][] = $dashboard->getSumOfLoans("DAY(FROM_UNIXTIME(`disbursementDate`)) = DAY(FROM_UNIXTIME(".$period_date->getTimestamp().")) AND  `loanProductId`=".$product['id']);
 			}
 			$graph_data['datasets'][] = $datasets;
 		}
@@ -403,7 +407,7 @@ function getGraphData($start_date, $end_date){
 			$data_points[] = $period_date->format("D, j/n");
 		}
 	}
-	elseif($days > 7 && $days <31){
+	elseif($days > 7 && $days <32){
 		/*split the days into weeks
 		*generate an array holding the start and end dates of the given period
 		*/
@@ -423,10 +427,10 @@ function getGraphData($start_date, $end_date){
 			}
 		}
 		$weeks[$index]['end'] = $end_date;
-		if(date('N',$end_date)==1){
+		if(date('N',$end_date)==1||date('N',$end_date)==7){
 			$weeks[$index]['start'] = $end_date;
-			$weeks[$index]['end'] = $end_date;
 		}
+		/* print_r($weeks); */
 		foreach($loan_products as $product){
 			$datasets = array();
 			$datasets['name'] = $product['productName'];
@@ -434,13 +438,13 @@ function getGraphData($start_date, $end_date){
 			foreach($weeks as $week){
 				$between = "BETWEEN ".$week['start']." AND ".$week['end'].")";
 				$datasets['data'][] = $dashboard->getSumOfLoans("`disbursementDate` <= ".$week['end']." AND `loanProductId`=".$product['id']);
-				$data_points[] = /*date('j/M', $week['start'])."-".*/date('j/M', $week['end']);
+				$data_points[] = /**/date('j/M', $week['start'])."-".date('j/M', $week['end']);
 			}
 			$graph_data['datasets'][] = $datasets;
 		}
 		
 	}
-	elseif($days > 30){
+	elseif($days > 31){
 		/*split the days into months
 		*generate an array holding the start and end dates of the given period */
 		
