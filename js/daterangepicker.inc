@@ -3,8 +3,8 @@
 		$('#reportrange span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
 	};
    var optionSet1 = {
-          startDate: moment().subtract(30, 'days'),
-          endDate: moment(),
+          startDate: moment(startDate,'X'),
+          endDate: moment(endDate,'X'),
           minDate: '01/01/2012',
           maxDate: '12/31/2020',
           dateLimit: {
@@ -52,10 +52,7 @@
 		//console.log("hide event fired");
 		});
 		$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-				//when at the dashboard page
-				dashModel.startDate(picker.startDate.format('X'));
-				dashModel.endDate(picker.endDate.format('X'));
-				dashModel.updateData();
+			handleDateRangePicker(picker.startDate.format('X'), picker.endDate.format('X'))
 		});
 		$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
 			console.log("cancel event fired");

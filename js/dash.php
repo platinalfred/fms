@@ -32,6 +32,9 @@
 	dashModel.updateData();
 	ko.applyBindings(dashModel);
 	
- $(document).ready(function() {
- });
+function handleDateRangePicker(start_date, end_date){
+		dashModel.startDate(start_date);
+		dashModel.endDate(end_date);
+		dashModel.updateData();
+ }
 </script>

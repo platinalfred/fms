@@ -21,17 +21,17 @@ include("include/header.php");
 							<div class="row">
 								<div class="col-md-4">
 									<small>Portfolio</small>
-									<h3 class="no-margins"><a href="view_loan_payments.php" title="Details" data-bind="text:curr_format(parseInt(figures.loan_portfolio))">40,642</a></h3>
+									<h3 class="no-margins"><a href="view_loans.php" title="Details" data-bind="text:curr_format(parseInt(figures.loan_portfolio))">40,642</a></h3>
 									<div class="font-bold text-navy"> <span data-bind="text: percents.loan_portfolio">44</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.loan_portfolio < 1, 'fa-level-up': percents.loan_portfolio > 0}"></i> </div>
 								</div>
 								<div class="col-md-4">
 									<small>Penalties</small>
-									<h3 class="no-margins"><a href="view_loan_payments.php" title="Details" data-bind="text:curr_format(parseInt(figures.loan_penalty))">40,642</a></h3>
+									<h3 class="no-margins"><a href="view_loans.php" title="Details" data-bind="text:curr_format(parseInt(figures.loan_penalty))">40,642</a></h3>
 									<div class="font-bold text-navy"> <span data-bind="text: curr_format(parseInt(percents.loan_penalty))">44</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.loan_penalty < 1, 'fa-level-up': percents.loan_penalty > 0}"></i> </div>
 								</div>
 								<div class="col-md-4">
 									<small>Payments</small>
-									<h3 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text:curr_format(parseInt(figures.loan_payments))">20,612</a></h3>
+									<h3 class="no-margins"><a href="view_loan_payments.php" title="Details" data-bind="text:curr_format(parseInt(figures.loan_payments))">20,612</a></h3>
 									<div class="font-bold text-navy"><span data-bind="text:percents.loan_payments">22</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.loan_payments < 1, 'fa-level-up': percents.loan_payments > 0}"></i> </div>
 								</div>
 							</div>
@@ -50,22 +50,22 @@ include("include/header.php");
 							<div class="row">
 								<div class="col-md-3">
 									<small>Pending</small>
-									<h3 class="no-margins"><a href="view_loans.php" title="Details" data-bind="text: curr_format(parseInt(figures.pending_loans))">40,642</a></h3>
+									<h3 class="no-margins"><a title="Details" data-bind="text: curr_format(parseInt(figures.pending_loans)), attr:{href:'view_loans.php?status=1&startdate'+$root.startDate()+'&enddate='+$root.endDate()}">40,642</a></h3>
 									<div class="font-bold text-navy"> <span data-bind="text: percents.pending_loans">44</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.pending_loans < 1, 'fa-level-up': percents.pending_loans > 0}"></i> </div>
 								</div>
 								<div class="col-md-3">
 									<small>Rejected</small>
-									<h3 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text: curr_format(parseInt(figures.rejected_loans))">90,893</a></h3>
+									<h3 class="no-margins"><a title="Details" data-bind="text: curr_format(parseInt(figures.rejected_loans)), attr:{href:'view_loans.php?status=2&startdate'+$root.startDate()+'&enddate='+$root.endDate()}">90,893</a></h3>
 									<div class="font-bold text-navy"><span data-bind="text: percents.rejected_loans">67</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.rejected_loans < 1, 'fa-level-up': percents.rejected_loans > 0}"></i> </div>
 								</div>
 								<div class="col-md-3">
 									<small>Approved</small>
-									<h3 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text: curr_format(parseInt(figures.approved_loans))">90,893</a></h3>
+									<h3 class="no-margins"><a title="Details" data-bind="text: curr_format(parseInt(figures.approved_loans)), attr:{href:'view_loans.php?status=3&startdate'+$root.startDate()+'&enddate='+$root.endDate()}">90,893</a></h3>
 									<div class="font-bold text-navy"><span data-bind="text: percents.approved_loans">67</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.approved_loans < 1, 'fa-level-up': percents.approved_loans > 0}"></i> </div>
 								</div>
 								<div class="col-md-3">
 									<small>Disbursed</small>
-									<h3 class="no-margins"><a href="view_loans.php?type=4" title="Details" data-bind="text: curr_format(parseInt(figures.disbursed_loans))">206,12</a></h3>
+									<h3 class="no-margins"><a title="Details" data-bind="text: curr_format(parseInt(figures.disbursed_loans)), attr:{href:'view_loans.php?status=4&startdate'+$root.startDate()+'&enddate='+$root.endDate()}">206,12</a></h3>
 									<div class="font-bold text-navy"><span data-bind="text: percents.disbursed_loans">22</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.disbursed_loans < 1, 'fa-level-up': percents.disbursed_loans > 0}"></i> </div>
 								</div>
 							</div>

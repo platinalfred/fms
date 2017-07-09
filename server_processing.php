@@ -27,10 +27,11 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
 //list of loans
 if ( isset($_POST['page']) && $_POST['page'] == "loan_accounts" ) {
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
-		$where1 = "(`date_added` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
+		$where = "(`disbursementDate` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
 	}
-	$where = "`loan_account`.`status`=4";
-	
+	if(isset($_POST['status']) && is_numeric($_POST['status'])){
+		$where = ($where?$where." AND ":"")."`loan_account`.`status`=".$_POST['status'];
+	}
 	$member_sql = "(SELECT `members`.`id` `clientId`, loanAccountId, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType` FROM `member_loan_account` JOIN (SELECT `member`.`id`, `firstname`, `lastname`, `othername` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`)`members` ON `memberId` = `members`.`id`)";
 	$saccogroup_sql = "(SELECT `saccogroup`.`id` `clientId`, `loanAccountId`, `groupName` `clientNames`, 2 as `clientType` FROM `group_loan_account` JOIN `saccogroup` ON `saccoGroupId` = `saccogroup`.`id`)";
 	
@@ -41,7 +42,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "loan_accounts" ) {
 	
 	$primary_key = "`loan_account`.`id`";
 
-	$columns = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`interestRate`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`" );
+	$columns = array( "`loan_account`.`id`", "CONCAT('loanAcc',`loan_account`.`id`) `DT_RowId`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`disbursementDate`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`interestRate`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`" );
 }
 //list of the income transactions
 if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {

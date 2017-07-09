@@ -13,10 +13,10 @@
 							<div class="form-group">
 								<label class="control-label" for="product_name">Loans</label>
 								<select id="loan_types" class="form-control">
-								   <option value="0" >Pending</option>
-								    <option value="1" >Approved</option>
-								    <option value="2">Disbursed</option>
-									<option value="3" >Rejected</option>
+								   <option value="1" <?php echo (isset($_GET['status'])&&$_GET['status']==1)?'selected':'';?>>Pending</option>
+								    <option value="3" <?php echo (isset($_GET['status'])&&$_GET['status']==3)?'selected':'';?>>Approved</option>
+								    <option value="4" <?php echo isset($_GET['status'])?(($_GET['status']==4)?'selected':''):'selected';?>>Disbursed</option>
+									<option value="2" <?php echo (isset($_GET['status'])&&$_GET['status']==2)?'selected':'';?>>Rejected</option>
 								</select >
 							</div>
 						</div>
@@ -30,7 +30,7 @@
 							</div>
 						</div>
 						<div class="col-sm-2" style="padding-top:2%;">
-							<a  class="btn btn-sm btn-success" style="vertical-align:middle;" ><i class="fa fa-folder-open-o"></i> Show results</a>
+							<!-- a  class="btn btn-sm btn-success" style="vertical-align:middle;" ><i class="fa fa-folder-open-o"></i> Show results</a-->
 						</div>
 					</div>
 
