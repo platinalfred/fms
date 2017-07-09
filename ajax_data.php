@@ -363,6 +363,11 @@ if(isset($_POST['origin'])){
 			$shares_data['data'] = $shares->findGeneralShares();
 			echo json_encode($shares_data);
 		break;
+		case 'view_members':
+			$member = new Member();
+			$member_data['data'] = $member->findAll();
+			echo json_encode($member_data);
+		break;
 		default:
 		echo json_encode("nothing found");
 	}

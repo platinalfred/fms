@@ -6,7 +6,7 @@ require_once("lib/DatatablesJSON.php");
 $data_table = new DataTable();
 $primary_key = $columns = $table = $where = $group_by = "";
 if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
-	
+
 	//members, person, person relative, person employment, account,
 	$table = "`member` JOIN `person` ON `member`.`personId` = `person`.`id`"; 
 	$primary_key = "`member`.`id`";
@@ -17,5 +17,6 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 if ( isset($_POST['page']) && strlen($_POST['page'])>0) {
 	// Get the data
 	$data_table->get($table, $primary_key, $columns, $where, $group_by);
-}
+	//print_r($data_table->get($table, $primary_key, $columns, $where, $group_by));
+} 
 ?>

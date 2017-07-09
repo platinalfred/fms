@@ -1,5 +1,12 @@
 <script>
 $(document).ready(function(){ 
+	 $('.date').datepicker({
+		todayBtn: "linked",
+		keyboardNavigation: false,
+		forceParse: false,
+		calendarWeeks: true,
+		autoclose: true
+	});
 	<?php 
 	if(isset($_GET['id'])){ ?>
 		$('.delete_member').click(function () {
@@ -235,10 +242,33 @@ $(document).ready(function(){
 			data: frmdata,
 			success: function (response) {
 				if($.trim(response) == "success"){
+					
 					showStatusMessage("Successfully added new record" ,"success");
 					setTimeout(function(){
 						memberModel.resetForm();
 						<?php if(!isset($_GET['view'])):?>dTable.ajax.reload();<?php endif;?>
+					}, 2000);
+				}else{
+					
+					showStatusMessage(response, "fail");
+				}
+				
+			}
+		});
+
+		return false;
+	});
+	$(".subscribe").click(function(){
+		var frmdata = $(this).closest("form").serialize();
+		$.ajax({
+			url: "save_data.php",
+			type: 'POST',
+			data: frmdata,
+			success: function (response) {
+				if($.trim(response) == "success"){
+					showStatusMessage("Successfully added subscription" ,"success");
+					setTimeout(function(){
+						window.location="";
 					}, 2000);
 				}else{
 					
@@ -359,7 +389,7 @@ $(document).ready(function(){
 		self.member_employers2 = ko.observableArray();
 	}
 	var memberTableModel = new MemberTable();
-	$("#subTable").DataTable({ dom: "lfrtipB" });
+	$("#subTable").DataTable();
 			  
   /* PICK DATA FOR DATA TABLE  */
   <?php if(!isset($_GET['view'])):?>
@@ -372,7 +402,7 @@ $(document).ready(function(){
 			  "deferRender": true,
 			  "order": [[ 1, 'asc' ]],
 			  "ajax": {
-				  "url":"find_members.php",
+				  "url":"find_data.php",
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
@@ -438,9 +468,12 @@ $(document).ready(function(){
 	
 	$('.table tbody').on('click', 'tr ', function () {
 		var data = dTable.row(this).data();
+		
 		memberTableModel.member_details(data);
 		//ajax to retrieve other member details
-		findMemberDetails(data.personId);
+		if(data){
+			findMemberDetails(data.personId);
+		}
 	});
 	function findMemberDetails(id){
 		$.ajax({

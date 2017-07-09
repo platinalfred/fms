@@ -1,6 +1,12 @@
 <?php
-$needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout", "daterangepicker", "datepicker");
-$page_title = "Member Details";
+$needed_files = array("dataTables", "iCheck", "steps", "jasny","ladda", "moment", "knockout", "daterangepicker", "datepicker");
+
+$page_title = "";
+if(isset($_GET['savings_accs'])){
+	$page_title = "Savings Account Details";
+}elseif(isset($_GET['depAcId'])){
+	$page_title = "Deposit Account Details";
+}
 include("include/header.php");
 include("lib/Reports.php");
 $member = new Member();
@@ -9,12 +15,13 @@ $person = new Person();
 global $client;
 $client  = array();
 $member_data  = $member->findMemberDetails($_GET['id']);
-$names =  $member_data['firstname']." ". $member_data['lastname']." ".$member_data['othername']; 
+$names =  $member_data['lastname']." ".$member_data['firstname']." ".$member_data['othername']; 
 $data['relatives'] = $person->findPersonRelatives($member_data['id']);
 $client['clientType'] = 1;
 $client['clientNames'] = $names;
 $client['id'] = $_GET['id'];
 if(!$member_data){
+	
 	echo "<p>No member details found</p>";
 	return;
 }
@@ -27,7 +34,8 @@ p{
 	margin: 0 0 3px;
 }
 </style>
-<?php include("update_member_modal.php");?>
+<?php
+ include("update_member_modal.php");?>
 <div class="row">
 	
 	<div class="col-lg-12">

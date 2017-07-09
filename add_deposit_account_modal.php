@@ -65,7 +65,7 @@
 										<div class="form-group">
 											<label class="col-md-3 control-label">Term Length <sup data-toggle="tooltip" title="Period of time before which a client can start withdrawing from the account" data-placement="right"><i class="fa fa-question-circle"></i></sup></label>
 											<div class="col-md-4">
-												<input type="number" class="form-control input-sm" name="termLength" id="termLength" data-bind='value: $root.termLength, attr: {"data-rule-min":(parseFloat(minTermLength)>0?minTermLength:null), "data-rule-max": (parseFloat(minTermLength)>0?minTermLength:null), "data-msg-min":"Term Length is lower than "+minTermLength, "data-msg-max":"Term Length is more than "+maxTermLength}'/>
+												<input type="number" class="form-control input-sm" name="termLength" id="termLength" data-bind='value: $root.termLength, attr: {"data-rule-min":(parseFloat(minTermLength)>0?minTermLength:null), "data-rule-max": (parseFloat(maxTermLength)>0?maxTermLength:null), "data-msg-min":"Term Length is lower than "+minTermLength, "data-msg-max":"Term Length is more than "+maxTermLength}'/>
 												<div>
 													<label class="col-sm-4" data-bind="visible: parseFloat(minTermLength)>0">Min</label>
 													<label class="col-sm-2" data-bind="visible: parseFloat(minTermLength)>0, text: minTermLength"></label>

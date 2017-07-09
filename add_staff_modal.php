@@ -151,10 +151,12 @@
 													<label style=""class="">Name <span class="req">*</span></label>
 												</div>
 												<div class="col-sm-9">
-													<input type="text" class="form-control" name="firstname" data-msg-require="Please enter name" placeholder="First Name" required/>
-													<span class="input-group-btn" style="width:2px;"></span>
 													<input type="text" class="form-control" name="lastname" placeholder="Last Name" required />
 													<span class="input-group-btn" style="width:2px;"></span>
+													
+													<input type="text" class="form-control" name="firstname" data-msg-require="Please enter name" placeholder="First Name" required/>
+													<span class="input-group-btn" style="width:2px;"></span>
+													
 													<input type="text" class="form-control" name="othername"  placeholder="Other Name" />
 												</div>
 											</div>

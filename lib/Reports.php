@@ -112,7 +112,6 @@ Class Reports{
 	
 		$member_data = $member->findById($_GET['id']);
 		$all_client_subscriptions = $subscription->findMemberSubscriptions($_GET['id']); 
-		
 		include("subscribe.php"); ?>
 		 <div class="row">
 			<div class="ibox">
@@ -124,7 +123,6 @@ Class Reports{
 				<div class="clearfix"></div>
 				<span class="label-warning"><?php echo @$msg; ?></span>
 			  </div>
-
 			  <div class="ibox-content">
 					<?php 
 					if($all_client_subscriptions){  ?>

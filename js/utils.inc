@@ -2,7 +2,6 @@
 	/*PICK DATA FOR DATA TABLE  */
 
 $('input.athousand_separator').keyup(function(event) {
-
   // skip for arrow keys
   if(event.which >= 37 && event.which <= 40){
    event.preventDefault();
@@ -13,7 +12,6 @@ $('input.athousand_separator').keyup(function(event) {
 	  return numberWithCommas(value);
   });
 });
-
 function numberWithCommas(x) {
 	var parts = x.toString().split(".");
 	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");

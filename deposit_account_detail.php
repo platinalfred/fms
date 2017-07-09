@@ -30,7 +30,14 @@
 			</div>
 			<div class="col-lg-7">
 				<div class="col-md-6"></div>
-				<div class="col-md-6"><a class="btn btn-primary btn-sm" href='#enter_deposit' data-toggle="modal"><i class="fa fa-edit"></i> Enter Deposit </a><a data-bind="attr: {href:((sumUpAmount(statement,1)-sumUpAmount(statement,2))>0?'#enter_withdraw':undefined)}" class="btn btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Withdraw Cash </a></div>
+				<?php 
+				if(!isset($_SESSION['accountant'])){ ?>
+					<div class="col-md-6"><a class="btn btn-primary btn-sm" href='#enter_deposit' data-toggle="modal"><i class="fa fa-edit"></i> Enter Deposit </a><a data-bind="attr: {href:((sumUpAmount(statement,1)-sumUpAmount(statement,2))>0?'#enter_withdraw':undefined)}" class="btn btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Withdraw Cash </a></div>
+				<?php 
+				}else{
+					
+				}
+				?>
 				<div class="ibox">
 					<div class="ibox-title">
 						<h5>Account Statement</h5>

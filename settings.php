@@ -14,6 +14,7 @@ require_once("lib/Libraries.php");
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#tab-20" >Loan Products</a></li>
 					<li><a data-toggle="tab" href="#tab-21" >Deposit Products</a></li>
+					<li class=""><a data-toggle="tab"  href="#tab-9" >Loan Product Types</a></li>
 					<li><a data-toggle="tab" href="#tab-23" >Share Rate</a></li>
 					<li><a data-toggle="tab" href="#tab-1" >Person Types</a></li>
 					<!--<li class=""><a data-toggle="tab" href="#tab-2" href="#">Account Types</a></li>-->
@@ -28,8 +29,7 @@ require_once("lib/Libraries.php");
 							
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-7" href="#">Income Sources</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-8" href="#">Individual Types</a></li>
-							<li class=""><a data-toggle="tab" role="tab" href="#tab-9" href="#">Loan Product Types</a></li>
-							<li class=""><a data-toggle="tab" role="tab" href="#tab-13" href="#">Loan Product Penalties</a></li>
+							
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-14" href="#">Relationhip Types </a></li>
 							<!--<li class=""><a data-toggle="tab" role="tab" href="#tab-15" href="#">Repayment Duration</a></li> -->
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-16" href="#">Security Types</a></li>
@@ -721,112 +721,6 @@ require_once("lib/Libraries.php");
 													<th>Date Created</th>
 													<th></th>
 												</tr>
-											</tfoot>
-										</table>
-									</div>
-								</div>
-							</div>
-							
-						</div>
-					</div>
-					<!-- Loan Product Penalty Start -->	
-					<div id="tab-13" class="tab-pane ">
-						<div class="panel-body">
-							<div class="col-lg-2 col-offset-sm-8">
-								<div class="text-center">
-									<a data-toggle="modal" class="btn btn-primary" href="#loan_product_penalty"><i class="fa fa-plus"></i> Add Loan Product Penalty</a>
-								</div>
-								<div id="loan_product_penalty" class="modal fade" aria-hidden="true">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-body">
-												<div class="row">
-													<div class="col-sm-12">
-														<p>Add Loan Product Penalty</p>
-														<div class="ibox-content">
-															<form class="form-horizontal" id="tblLoanProductPenalty">
-																<input type="hidden" name="tbl" value="loan_product_penalty">
-																<div class="form-group"><label class="col-lg-2 control-label">Penalty </label>
-																	<div class="col-lg-10">
-																		<select class="form-control m-b" name="account">
-																			<?php 
-																			$penalty_calculation_method = new PenaltyCalculationMethod(); 
-																			$all_penalties = $penalty_calculation_method->findAll(); 
-																			if($all_penalties){
-																				foreach($all_penalties as $single){ ?>
-																					<option value="<?php echo $single['id']; ?>"><?php echo $single['methodDescription']; ?></option>
-																				<?php	
-																				}
-																			} ?>
-																		</select>
-																	</div>
-																</div>
-																<div class="form-group"><label class="col-lg-2 control-label">Description</label>
-																	<div class="col-lg-10"><textarea  placeholder="Description" class="form-control"></textarea></div>
-																</div>
-																<div class="form-group"><label class="col-lg-2 control-label">Penalty Charged AS</label>
-																	<div class="col-lg-5">
-																		<div class="i-checks"><label> <input type="radio" value="option1" name="a"> <i></i> (%) </label></div>
-																		<div class="i-checks"><label> <input type="radio" checked="" value="option2" name="a"> <i></i>(Amount) </label></div>
-																	</div>
-																</div>
-																 <div class="form-group"><label class="col-sm-2 control-label">Penalty Tolerance Period</label>
-																	<div class="col-sm-10"><input type="number" placeholder="placeholder" class="form-control">Days</div>
-																</div>
-																<h3>Default Penalty Rate (UGX)</h3>
-																<div class="col-sm-10">
-																	<div class="form-group "><label class="col-sm-2 control-label">Deafault</label>
-																		<div class="col-sm-5"><input name="defmount" type="text" class="form-control"></div>
-																	</div>
-																	<div class="form-group "><label class="col-sm-2 control-label">Min</label>
-																		<div class="col-sm-5"><input id="minAmount" name="minAmount" type="text" class="form-control"></div>
-																	</div>	
-																	<div class="form-group"><label class="col-sm-2 control-label">Max</label>
-																		<div class="col-sm-5"><input id="maxAmount" name="maxAmount" type="text" class="form-control"></div>
-																	</div>	
-																</div>
-																<div class="form-group">
-																	<div class="col-lg-offset-2 col-lg-10">
-																		<button class="btn btn-sm btn-primary save" type="button">Submit</button>
-																	</div>
-																</div>
-															</form>
-														</div>
-													</div>
-													
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								
-							</div>
-							<div class="col-lg-12" style="margin-top:10px;">
-								<div class="ibox-content">
-									<div class="table-responsive">
-										<table class="table table-striped table-bordered table-hover" id="loan_product_penalties">
-											<thead>
-											<tr>
-												<th>Description</th>
-												<th>penaltyChargedAs</th>
-												<th>penaltyTolerancePeriod</th>
-												<th>defaultAmount</th>
-												<th>minAmount</th>
-												<th>maxAmount</th>
-												<th></th>
-											</tr>
-											</thead>
-											<tbody>
-												
-											</tbody>
-											<tfoot>
-												<th>Description</th>
-												<th>penaltyChargedAs</th>
-												<th>penaltyTolerancePeriod</th>
-												<th>defaultAmount</th>
-												<th>minAmount</th>
-												<th>maxAmount</th>
-												<th></th>
 											</tfoot>
 										</table>
 									</div>

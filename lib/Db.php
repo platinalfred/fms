@@ -131,6 +131,7 @@ class Db{
 						case 2://Loan Officer 2
 							$this->setSessions("loan_officer", true);
 						break;
+						
 						case 3: //Branch Manager 3
 							$this->setSessions("branch_manager", true);
 						break;
@@ -142,6 +143,9 @@ class Db{
 						break;
 						case 6: //Executive board committee
 							$this->setSessions("executive_board", true);
+						break;
+						case 7://Accountant
+							$this->setSessions("accountant", true);
 						break;
 					}
 					
@@ -220,6 +224,7 @@ class Db{
     }
 	
 	function loadList($query, $name, $value_field,$display_field, $field_id="",$select_option="", $selected_id="", $add_link = "", $roles = array(1, 2, 3, 4), $select = "single", $selected=""){
+		
        //  $result = mysql_query($query) or die(mysql_error());
 		$results = $this->queryData($query);
 		

@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Position extends Db {
 	protected static $table_name  = "position";
-	protected static $db_fields = array("id", "name", "description");
+	protected static $db_fields = array("id", "name", "access_level", "description");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -23,14 +23,14 @@ class Position extends Db {
 		return !empty($result) ? $result['name'] : false;
 	}
 	public function addPosition($data){
-		$fields = self::$db_fields;
+		$fields =array_slice(self::$db_fields, 1);
 		if($this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data))){
 			return true;
 		}
 		return false;
 	}
 	public function updatePosition($data){
-		$fields = array_slice(1, self::$db_fields);
+		$fields = array_slice(self::$db_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
 		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){
