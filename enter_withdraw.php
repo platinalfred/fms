@@ -9,7 +9,7 @@
 								<h5>Withdraw cash<small> from savings account</small></h5>
 								<div class="ibox-tools">
 									<a data-dismiss="modal">
-										<i class="fa fa-times"></i>
+										<i class="fa fa-times req"></i>
 									</a>
 								</div>
 							</div>
@@ -30,7 +30,7 @@
 									  <div class="form-group" data-bind="with: account_details">
 										<label class="control-label col-md-4" for="amount">Amount<span class="required">*</span></label>
 										<div class="col-md-8">
-										  <input type="number"  id="deposit_amount" name="amount"  required class="form-control col-md-7 col-xs-12" data-bind='value: $parent.deposit_amount, attr: {"data-rule-max": (typeof(sumDeposited)!="undefined"?(sumDeposited-sumWithdrawn):(sumUpAmount(statement,1)-sumUpAmount(statement,2))), "data-msg-max":"Amount is more than maximum allowed "+(typeof(sumDeposited)!="undefined"?(sumDeposited-sumWithdrawn):(sumUpAmount(statement,1)-sumUpAmount(statement,2)))}' data-msg-required="Amount is required">
+										  <input type="number"  id="deposit_amount" name="amount"  required class="form-control col-md-7 col-xs-12" data-bind='textInput: $parent.deposit_amount, attr: {"data-rule-max": (typeof(sumDeposited)!="undefined"?(sumDeposited-sumWithdrawn):(sumUpAmount(statement,1)-sumUpAmount(statement,2))), "data-msg-max":"Amount is more than maximum allowed "+(typeof(sumDeposited)!="undefined"?(sumDeposited-sumWithdrawn):(sumUpAmount(statement,1)-sumUpAmount(statement,2)))}' data-msg-required="Amount is required">
 										</div>
 									  </div>
 									  <div class="form-group" data-bind="with: account_details">
@@ -40,7 +40,7 @@
 										</div>
 									  </div>
 									  <div class="form-group" data-bind="with: account_details">
-										<label class="control-label col-md-4" for="textarea">Comment </label>
+										<label class="control-label col-md-4" for="textarea">Withdrawn By </label>
 										<div class="col-md-8">
 										  <textarea id="textarea"  name="comments" class="form-control" data-bind="value: $parent.comments"></textarea>
 										</div>
@@ -48,8 +48,7 @@
 									  <div class="ln_solid"></div>
 									  <div class="form-group">
 										<div class="col-md-8 col-md-offset-4">
-										  <button type="button" class="btn btn-white">Cancel</button>
-										  <button type="submit" class="btn btn-primary">Withdraw</button>
+										  <button type="submit" class="btn btn-warning pull-right ladda" data-style="contract">Withdraw</button>
 										</div>
 									  </div>
 									</form>

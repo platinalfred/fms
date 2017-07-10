@@ -182,4 +182,3 @@ $member = new Member();
  include("include/footer.php");
  include("js/members_js.php");
  ?>
-

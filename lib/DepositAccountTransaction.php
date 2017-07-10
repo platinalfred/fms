@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class DepositAccountTransaction extends Db {
 	protected static $table_name  = "deposit_account_transaction";
-	protected static $table_fields = array("id", "depositAccountId", "amount", "comment", "transactionType", "dateCreated", "transactedBy", "dateModified", "modifiedBy");
+	protected static $table_fields = array("id", "depositAccountId", "amount", "comment", "transactionType", "dateCreated", "transactedBy",  "modifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -20,7 +20,7 @@ class DepositAccountTransaction extends Db {
 		if($accountId){
 			$where = "`depositAccountId` = ".$accountId;
 		}
-		$result_array = $this->getarray(self::$table_name, $where, "", "");
+		$result_array = $this->getarray(self::$table_name, $where, "dateModified DESC", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	
