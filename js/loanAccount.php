@@ -89,7 +89,7 @@ $(".athousand_separator").keyup(function(){
 		self.client = ko.observable(<?php if(isset($client)) echo json_encode($client);?>);
 		self.requestedAmount = ko.observable(0);
 		self.interestRate = ko.observable(0);
-		self.applicationDate = ko.observable(moment().format('DD-MM-YYYY'));
+		self.applicationDate = ko.observable('<?php echo date('d-m-Y');?>');
 		self.offSetPeriod = ko.observable(0);
 		self.installments = ko.observable(0);
 		self.gracePeriod = ko.observable(0);
@@ -408,7 +408,7 @@ $(".athousand_separator").keyup(function(){
 							{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}/*  ,
 							{ data: 'id', render: function ( data, type, full, meta ) {
 								var authorized =  false;
-								var role = '<?php echo $_SESSION['branch_credit']; ?>';
+								var role = '<?php //echo $_SESSION['branch_credit']; ?>';
 								return 
 							<?php if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])){?>
 								/* if(user_props['branch_credit']==true && parseInt(full.requestedAmount)<1000001){

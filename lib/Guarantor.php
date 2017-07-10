@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Guarantor extends Db {
 	protected static $table_name  = "guarantor";
-	protected static $table_fields = array("id", "memberId", "loanAccountId", "createdBy", "dateCreated", "modifiedBy", "dateModified");
+	protected static $table_fields = array("id", "memberId", "loanAccountId", "createdBy", "dateCreated", "modifiedBy");
 		
 	protected static $members_sql = "(SELECT `member`.`id`, `phone`, CONCAT(`firstname`, ' ', `lastname`, ' ', `othername`) `memberNames` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id`) `members`";
 	
@@ -24,7 +24,7 @@ class Guarantor extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findGuarantors(){
-		$result_array = $this->queryData("SELECT `member`.`id`, `phone`, `shares`, COALESCE((`deposit_sum`-`withdraws_sum`),0) `savings`, CONCAT(`firstname`, ' ', `lastname`, ' ', `othername`) `memberNames` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id` LEFT JOIN (SELECT SUM(`amount`) savings, `memberId` FROM `account_transaction` WHERE `transactionType`=1 GROUP BY `memberId`) `client_savings` ON `member`.`id` = `client_savings`.`memberId` JOIN (SELECT SUM(`amount`) `shares`, `memberId` FROM `shares` GROUP BY `memberId`) `client_shares` ON `member`.`id` = `client_shares`.`memberId`");
+		$result_array = $this->queryData("SELECT `member`.`id`, `phone`, `shares`, COALESCE((`deposit_sum`-`withdraws_sum`),0) `savings`, CONCAT(`firstname`, ' ', `lastname`, ' ', `othername`) `memberNames` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id` JOIN (SELECT SUM(`amount`) savings, `memberId` FROM `account_transaction` WHERE `transactionType`=1 GROUP BY `memberId`) `client_savings` ON `member`.`id` = `client_savings`.`memberId` JOIN (SELECT SUM(`amount`) `shares`, `memberId` FROM `shares` GROUP BY `memberId`) `client_shares` ON `member`.`id` = `client_shares`.`memberId`");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function getLoanGuarantors($filter = ""){

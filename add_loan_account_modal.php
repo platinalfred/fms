@@ -59,7 +59,7 @@
 												</div>
 												<div class="col-sm-6">
 													<label class="control-label">&nbsp;</label>
-													<div class="input-group date" data-provide="datepicker" data-date-format="dd-mm-yyyy">
+													<div class="input-group date" data-provide="datepicker" data-date-format="dd-mm-yyyy" data-date-end-date="<?php echo date('d-m-Y');?>">
 														<input type="text" class="form-control" name="applicationDate" id="applicationDate" data-bind='value: $root.applicationDate' required>
 														<div class="input-group-addon">
 															<span class="fa fa-calendar"></span>
@@ -73,7 +73,7 @@
 											<div class="form-group">
 												<label class="col-md-3 control-label">Loan Amount</label>
 												<div class="col-md-3">
-													<input type="number"  class="athousand_separator form-control input-sm" name="requestedAmount" id="requestedAmount" data-bind='value: $root.requestedAmount, attr: {"data-rule-min":(parseFloat(minAmount)>0?minAmount:null), "data-rule-max": (parseFloat(maxAmount)>0?maxAmount:null), "data-msg-min":"Loan amount is less than "+curr_format(parseInt(minAmount)), "data-msg-max":"Loan amount is more than "+curr_format(parseInt(maxAmount)), value:defAmount}'/>
+													<input type="number"  class="form-control input-sm" name="requestedAmount" id="requestedAmount" data-bind='textInput: $root.requestedAmount, attr: {"data-rule-min":(parseFloat(minAmount)>0?minAmount:null), "data-rule-max": (parseFloat(maxAmount)>0?maxAmount:null), "data-msg-min":"Loan amount is less than "+curr_format(parseInt(minAmount)), "data-msg-max":"Loan amount is more than "+curr_format(parseInt(maxAmount)), value:defAmount}'/>
 													<div>
 														<label class="col-sm-2" data-bind="visible: parseFloat(minAmount)>0">Min</label>
 														<label class="col-sm-4" data-bind="visible: parseFloat(minAmount)>0, text: curr_format(parseInt(minAmount))"></label>
@@ -90,6 +90,9 @@
 														<label class="col-sm-2" data-bind='visible: parseFloat(maxInterest)>0'>Max</label>
 														<label class="col-sm-4" data-bind="visible: parseFloat(maxInterest)>0, text: maxInterest"></label>
 													</div>
+												</div>
+												<div class="col-md-6">
+													<i><span data-bind="text: getWords($root.requestedAmount())+' Uganda shillings only'"></span></i>
 												</div>
 											</div>
 											<div class="hr-line-dashed"></div>
@@ -224,13 +227,13 @@
 									<div class="row">
 										<div class="hr-line-dashed"></div>
 										<div class="form-group" data-bind="visible: $root.addedCollateral().length > 0">
-											<!--div class="col-md-12">
-												<div class="col-sm-6">Total Collateral: UGX <span data-bind="text: curr_format($root.totalCollateral()), css: {'text-danger': $root.totalCollateral()<(($root.loanProduct().minCollateral/100)*($root.requestedAmount()+($root.requestedAmount()*$root.interestRate()/100))), 'text-info': $root.totalCollateral()>(($root.loanProduct().minCollateral/100)*(($root.requestedAmount()+$root.requestedAmount()*$root.interestRate()/100)))}"></span> <i  data-bind="css: {'fa fa-check text-info':$root.totalCollateral()>(($root.loanProduct().minCollateral/100)*($root.requestedAmount()+($root.requestedAmount()*$root.interestRate()/100)))}"></i></div>
+											<div class="col-md-12">
+												<div class="col-sm-6">Total Collateral: UGX <span data-bind="text: curr_format($root.totalCollateral()), css: {'text-danger': $root.totalCollateral()<((parseInt($root.loanProduct().minCollateral)/100)*(parseInt($root.requestedAmount())+(parseInt($root.requestedAmount())*parseInt($root.interestRate())/100))), 'text-info': $root.totalCollateral()>((parseInt($root.loanProduct().minCollateral)/100)*(parseInt($root.requestedAmount())+(parseInt($root.requestedAmount())*parseInt($root.interestRate())/100)))}"></span> <i  data-bind="css: {'fa fa-check text-info':$root.totalCollateral()>((parseInt($root.loanProduct().minCollateral)/100)*(parseInt($root.requestedAmount())+(parseInt($root.requestedAmount())*parseInt($root.interestRate())/100)))}"></i></div>
 												<div class="col-sm-6" class="text-info">
-												Required Minimum: UGX <span data-bind='text: curr_format(parseInt(($root.loanProduct().minCollateral/100)*($root.requestedAmount()+($root.requestedAmount()*$root.interestRate()/100))))+" at a rate of "+$root.loanProduct().minCollateral+"%"'> </span>
+												Required Minimum: UGX <span data-bind='text: curr_format((parseInt($root.loanProduct().minCollateral)/100)*(parseInt($root.requestedAmount())+(parseInt($root.requestedAmount())*parseInt($root.interestRate())/100)))+" at a rate of "+$root.loanProduct().minCollateral+"%"'> </span>
 												</div>
 											</div>
-											<div class="hr-line-dashed"></div-->
+											<div class="hr-line-dashed"></div><!--  -->
 											<div class="table-responsive">
 												<table class="table table-condensed">
 													<thead>
@@ -246,7 +249,9 @@
 														<tr>
 															<td><input class="form-control input-sm" name="itemName[]" data-bind='value: itemName' data-msg-required="Item name is required" required/></td>
 															<td><textarea class="form-control input-sm" name="description[]" data-bind='value: description' required></textarea></td>
-															<td><input class="form-control input-sm" name="itemValue[]" type="number" data-bind='value: itemValue' required/></td>
+															<td><input class="form-control input-sm" name="itemValue[]" type="number" data-bind='textInput: itemValue' required/>
+															<i><span data-bind="text: getWords(itemValue())+' Uganda shillings only'"></span></i>
+															</td>
 															<td><input class="input-sm" name="attachmentUrl[]" type="file" data-bind='value: attachmentUrl'/></td>
 															<td><span title="Remove item" class="btn text-danger" data-bind='click: $root.removeCollateral'><i class="fa fa-minus"></i></span></td>
 														</tr>
@@ -266,7 +271,7 @@
                                 <div class="form-group">
                                     <div class="col-sm-6 col-sm-offset-2">
                                         <button class="btn btn-warning" type="reset">Cancel</button>
-                                        <button class="btn btn-primary" type="submit" data-bind="enable: loanProduct">Submit</button>
+                                        <button class="btn btn-primary" type="submit" data-bind="enable: loanProduct">Submit</button><!--&&(selectedGuarantors().length>=loanProduct.minGuarantors)&&(totalCollateral()>=(parseInt(loanProduct.minCollateral)/100)*(parseInt(requestedAmount())+(parseInt(requestedAmount())*parseInt(interestRate())/100)))-->
                                     </div>
                                 </div>
                             </form>

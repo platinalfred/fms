@@ -1,5 +1,5 @@
 <?php 
-$needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout","datepicker",);
+$needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout","datepicker","headerdaterangepicker", "daterangepicker");
 $page_title = "Members";
 include("include/header.php"); 
 require_once("lib/Libraries.php");

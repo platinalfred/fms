@@ -427,7 +427,7 @@ function getGraphData($start_date, $end_date){
 			}
 		}
 		$weeks[$index]['end'] = $end_date;
-		if(date('N',$end_date)==1||date('N',$end_date)==7){
+		if(date('N',$end_date)==1){
 			$weeks[$index]['start'] = $end_date;
 		}
 		/* print_r($weeks); */

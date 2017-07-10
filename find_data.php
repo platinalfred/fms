@@ -23,7 +23,9 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_groups" ) {
 	$group_by = "saccogroup.groupName ASC";
 }
 if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
-		
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+		$where = "(`dateAdded` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
+	}		
 	//members, person, person relative, person employment, account,
 	$table = "`member` JOIN `person` ON `member`.`personId` = `person`.`id`"; 
 	$primary_key = "`member`.`id`";
