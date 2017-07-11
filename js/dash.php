@@ -3,8 +3,8 @@
 		var self = this;
 		// Stores an array of all the Data for viewing in the Dashboard
 		self.dashboardData = ko.observable({"figures":{"no_members":"0","portfolio":"0"},"percents":{"members_percent":10},"tables":{"income":[],"expenses":[]}});
-		self.startDate = ko.observable(moment().subtract(30, 'days').format('X'));
-		self.endDate = ko.observable(moment().format('X'));
+		self.startDate = ko.observable(startDate);
+		self.endDate = ko.observable(endDate);
 		
 		// Operations
 		self.updateData = function() {

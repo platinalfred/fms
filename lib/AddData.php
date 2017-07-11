@@ -269,9 +269,6 @@ if(isset($_POST['origin'])){
 				$db = new Db();
 				
 				$branchId = isset($_SESSION['branch_id'])?$_SESSION['branch_id']:1;
-				$branch = $db->getfrec("branch","branch_name", "id=".$branchId,"", "");
-				$branch_name = $branch['branch_name'];
-				$initials = ($branch['branch_name'] != "")? strtoupper($branch['branch_name']) : strtoupper(substr($branch_name, 0, 3));
 				$date = date("ymdis");
 			 
 				$data['loanNo'] = "L".$date;
@@ -351,7 +348,6 @@ if(isset($_POST['origin'])){
 							$collateralItem['loanAccountId'] = $loanAccountId;
 							$collateralItem['dateCreated'] = time();
 							$collateralItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-							$collateralItem['dateModified'] = time();
 							$collateralItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 							$output = $loanCollateral->addLoanCollateral($collateralItem);
 						}

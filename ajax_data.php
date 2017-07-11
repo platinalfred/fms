@@ -93,17 +93,17 @@ if(isset($_POST['origin'])){
 
 			//Withdraws
 			//1 in this period
-			$withdraws = ($deposit_account_transaction_obj->getMoneySum("=2 AND `dateCreated` BETWEEN '".$start_date."' AND '".$end_date."'")*-1);
+			$withdraws = ($deposit_account_transaction_obj->getMoneySum("2 AND (`dateCreated` BETWEEN ".$start_date." AND ".$end_date.")"));
 			//Deposits
-			$deposits = $deposit_account_transaction_obj->getMoneySum("=1 AND `dateCreated` BETWEEN '".$start_date."' AND '".$end_date."'");
+			$deposits = $deposit_account_transaction_obj->getMoneySum("1 AND (`dateCreated` BETWEEN ".$start_date." AND ".$end_date.")");
 			//before this period 
 			
-			$deposits_b4 = $deposit_account_transaction_obj->getMoneySum("=1 AND `dateCreated` < '".$start_date."'");
+			$deposits_b4 = $deposit_account_transaction_obj->getMoneySum("1 AND `dateCreated` < ".$start_date);
 			//before this period  
-			$withdraws_b4 = ($deposit_account_transaction_obj->getMoneySum("=2 AND `dateCreated` < '".$start_date."'")*-1);
+			$withdraws_b4 = ($deposit_account_transaction_obj->getMoneySum("2 AND `dateCreated` < ".$start_date));
 			
 			//percentage increase/decrease
-			$figures['savings'] = ($withdraws - $deposits);
+			$figures['savings'] = ($deposits - $withdraws);
 			
 			//percentage increase/decrease
 			$percents['savings'] = $withdraws_b4>0?round(((($deposits_b4-$withdraws_b4) - $figures['savings'])/$withdraws_b4 - $deposits_b4)*100,2):0;
@@ -427,7 +427,7 @@ function getGraphData($start_date, $end_date){
 			}
 		}
 		$weeks[$index]['end'] = $end_date;
-		if(date('N',$end_date)==1||date('N',$end_date)==7){
+		if(date('N',$end_date)==1){
 			$weeks[$index]['start'] = $end_date;
 		}
 		/* print_r($weeks); */

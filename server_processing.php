@@ -27,7 +27,8 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
 //list of loans
 if ( isset($_POST['page']) && $_POST['page'] == "loan_accounts" ) {
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
-		$where = "(`disbursementDate` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
+		$action_date = ($_POST['status']==4)?"disbursementDate":($_POST['status']==3||$_POST['status']==2)?"approvalDate":"applicationDate";
+		$where = "(`".($action_date)."` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
 	}
 	if(isset($_POST['status']) && is_numeric($_POST['status'])){
 		$where = ($where?$where." AND ":"")."`loan_account`.`status`=".$_POST['status'];
@@ -101,10 +102,10 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loan_payments" ) {
 //list of all the member deposit accounts
 if ( isset($_POST['page']) && $_POST['page'] == "deposit_accounts" ) {	
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
-		$where1 = " AND (`deposit_account`.`dateCreated` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
+		$where = "(`deposit_account`.`dateCreated` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
 	}
 	if((isset($_POST['clientId'])&& strlen($_POST['clientId'])>0)){
-		$where = " `clientId` = ".$_POST['clientId'];
+		$where = ($where?$where." AND ":"")." `clientId` = ".$_POST['clientId'];
 	}
 	
 	$member_sql = "(SELECT `members`.`id` `clientId`, depositAccountId, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType` FROM `member_deposit_account` JOIN (SELECT `member`.`id`, `firstname`, `lastname`, `othername` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`)`members` ON `memberId` = `members`.`id`)";
