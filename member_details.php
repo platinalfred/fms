@@ -1,11 +1,26 @@
 <?php
 $needed_files = array("dataTables", "iCheck", "steps", "jasny","ladda", "moment", "knockout", "daterangepicker", "datepicker");
 
-$page_title = "";
-if(isset($_GET['view']) && $_GET['view'] == "savings_accs"){
-	$page_title = "Member Savings Account Details";
-}elseif(isset($_GET['depAcId'])){
-	$page_title = "Deposit Account Details";
+
+if(isset($_GET['view'])){
+	$page_title = "Individual Loan Accounts";
+	switch($_GET['view']){
+		case 'savings_accs':
+			$page_title = "Member Savings Account Details";
+		break;
+		case 'depAcId':
+			$page_title = "Member Deposit Account Details";
+		break;
+		case 'mysubscriptions':
+			$page_title = "Member Subscription Details";
+		break;
+		case 'ledger':
+			$page_title = "Member Transaction Details";
+		break;
+		default:
+			$page_title = "Member Details";
+		break;
+	}
 }
 
 include("include/header.php");

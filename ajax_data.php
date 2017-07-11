@@ -200,8 +200,8 @@ if(isset($_POST['origin'])){
 						$deposit_account_ids_array = $member_deposit_account_obj->getAccountIds($member_id);
 						$loan_account_ids_array = $member_loan_account_obj->getAccountIds($member_id);
 						
-						$data['subscriptions'] = $subscriptionsObj->findSubscriptionAmount('memberid='.$member_id);
-						$data['shares'] = $sharesObj->findShareAmount('memberid='.$member_id);
+						$data['subscriptions'] = $subscriptionsObj->findSubscriptionAmount('memberId='.$member_id);
+						$data['shares'] = $sharesObj->findShareAmount('memberId='.$member_id);
 						break;
 						
 						case 2:
@@ -279,6 +279,16 @@ if(isset($_POST['origin'])){
 		case 'loan_report':
 			$loanReportObj = new LoanAccount();
 			$data['data'] = $loanReportObj->getReport("`status`=4");
+			echo json_encode($data);
+		break;
+		case 'loan_report_individual':
+			$loanReportObj = new LoanAccount();
+			$data['data'] = $loanReportObj->getReportIndividual("`status`=4");
+			echo json_encode($data);
+		break;
+		case 'loan_report_group':
+			$loanReportObj = new LoanAccount();
+			$data['data'] = $loanReportObj->getReportGroup("`status`=4");
 			echo json_encode($data);
 		break;
 		case 'loan_products':

@@ -10,7 +10,7 @@ class Subscription extends Db {
 		return !empty($result) ? $result:false;
 	}
 	public function findGeneralSubscriptions(){
-		$resultt = $this->getfarray(self::$table_name."s, memebers.m, person p", "CONCAT(p.firstname,' ',p.lastname,' ',p.othername) as member_names, s.amount, .s.subscriptionYear, s.datePaid", "s.memberId = m.memberId AND m.personId=p.id", "", "");
+		$result_array = $this->getfarray(self::$table_name." s, member m, person p", "CONCAT(p.firstname,' ',p.lastname,' ',p.othername) as member_names, s.amount, .s.subscriptionYear, s.datePaid", "s.memberId = m.id AND m.personId=p.id", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	

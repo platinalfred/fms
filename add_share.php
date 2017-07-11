@@ -53,7 +53,7 @@
 									</fieldset>
 									<div class="form-group">
 										<div class="col-sm-6 col-sm-offset-3">
-											<button class="btn btn-primary save" type="submit">Submit</button>
+											<button class="btn btn-primary add_share" type="submit">Submit</button>
 										</div>
 									</div>
 								</form>

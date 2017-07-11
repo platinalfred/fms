@@ -73,26 +73,53 @@ $(document).ready(function(){
 			  buttons: [
 				{
 				  extend: "copy",
-				  className: "btn-sm"
+				  className: "btn-sm",
+				  className: 'btn-sm'
 				},
 				{
 				  extend: "csv",
-				  className: "btn-sm"
+				  className: "btn-sm",
+				  className: 'btn-sm',
+					title: 'BFS Loan Report '
 				},
 				{
 				  extend: "excel",
-				  className: "btn-sm"
+				  className: "btn-sm",
+				  className: 'btn-sm'
 				},
-				{
-				  extend: "pdfHtml5",
-				  className: "btn-sm"
-				},
-				{
-				  extend: "print",
-				  className: "btn-sm"
-				},
-			  ]/* ,
-			  responsive: true, */
+				{    extend: "pdfHtml5",
+				  className: "btn-sm",
+                        title: 'BFS Loan Report',
+                        message: 'Date: ',
+                        orientation: 'landscape',
+                        customize: function ( doc ) {
+							$(window.document.body)
+							.css( 'font-size', '10pt' );
+                            $(window.document.body).find( 'table' )
+							.addClass( 'compact' )
+							.css( 'font-size', 'inherit' );
+                        }
+                    },
+					{  extend: 'print',
+						text: 'Print',
+						className: 'btn-sm',
+						title: 'BFS Loan Report ',
+						orientation: 'landscape',
+						customize: function ( doc ) {
+							$(window.document.body)
+							.css( 'font-size', '10pt' );
+							$(window.document.body).find( 'table' )
+							.addClass( 'compact' )
+							.css( 'font-size', 'inherit' );
+						}
+					},
+					{
+					extend: 'colvis',	
+					text: 'Choose columns to show <span class="caret"></span>',
+					className: 'btn-sm',
+					}
+			  ],
+			  responsive: false
 			});
 			//$("#datatable-buttons").DataTable();
 		}

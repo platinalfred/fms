@@ -627,7 +627,7 @@
 							  page = "member_details.php?id=";
 						  }
 						  if(full.clientType==2){
-							  page = "sacco_group_details.php?id=";
+							  page = "group_details.php?id=";
 						  }
 						  return '<a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>';}},
 							{ data: 'clientNames'},

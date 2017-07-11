@@ -2,8 +2,25 @@
 /*
 
 */
-$needed_files = array("daterangepicker","moment","dataTables","knockout"/*, "iCheck", "steps", "jasny", "datepicker"*/);
-$page_title = "Reports";
+$needed_files = array("headerdaterangepicker","daterangepicker","moment","dataTables","knockout"/*, "iCheck", "steps", "jasny", "datepicker"*/);
+
+if(isset($_GET['view'])){
+	$page_title = "Individual Loan Accounts";
+	switch($_GET['view']){
+		case 'general':
+			$page_title = "General Loan Accounts Reports";
+		break;
+		case 'individual':
+			$page_title = "Individual Loan Accounts Reports";
+		break;
+		case 'subscriptions':
+			$page_title = "General Members Subscriptions";
+		break; 
+		default:
+			$page_title = "Reports";
+		break;
+	}
+}
 include("include/header.php");
 include("lib/Reports.php");
 ?>
@@ -17,10 +34,11 @@ include("lib/Reports.php");
 						<button data-toggle="dropdown" class="btn btn-info btn-sm dropdown-toggle"><i class="fa fa-calculator"></i> Loan Reports <span class="caret"></span></button>
 						<ul class="dropdown-menu">
 							<li><a href="?view=general">General Loans Report</a></li>
-							<li><a href="?view=general">Individual loans</a></li>
+							<li><a href="?view=individual">Individual loans</a></li>
 							<li><a href="#">Group Loans</a></li>
 							<li><a href="#">Active Loans</a></li>
 							<li><a href="#">None Performing Loans</a></li>
+							<li><a href="#">Due Loans</a></li>
 						</ul>
 					</div>
 					<div class="btn-group">

@@ -233,7 +233,28 @@ $(document).ready(function(){
 
 		return false;
 	});
-	
+	$(".add_share").click(function(){
+		var frmdata = $(this).closest("form").serialize();
+		$.ajax({
+			url: "save_data.php",
+			type: 'POST',
+			data: frmdata,
+			success: function (response) {
+				if($.trim(response) == "success"){
+					showStatusMessage("Successfully added subscription" ,"success");
+					setTimeout(function(){
+						window.location="";
+					}, 2000);
+				}else{
+					
+					showStatusMessage(response, "fail");
+				}
+				
+			}
+		});
+
+		return false;
+	});
 	function showStatusMessage(message='', display_type='success'){
 		new PNotify({
 			  title: "Alert",
@@ -342,7 +363,11 @@ $(document).ready(function(){
 		self.member_employers2 = ko.observableArray();
 	}
 	var memberTableModel = new MemberTable();
-	$("#subTable").DataTable();
+	
+	if($("#subTable").length > 0){
+		$("#subTable").DataTable();
+	}
+	
 			  
   /* PICK DATA FOR DATA TABLE  */
   <?php if(!isset($_GET['view'])):?>
