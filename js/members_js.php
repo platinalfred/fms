@@ -189,19 +189,19 @@ $(document).ready(function(){
 		<?php 
 		if(isset($_GET['id'])){ 
 			?>
-			self.member_business2 = ko.observableArray(<?php echo json_encode($member_business);  ?>);
+			self.member_business2 = ko.observableArray(<?php if($member_business){echo json_encode($member_business);}  ?>);
 			
 			self.removeBusiness2 = function(relative) {
 				self.member_business2.remove(relative);
 			};
 			//Keeps track of member relatives, observing any changes
-			self.member_relatives2 = ko.observableArray(<?php echo json_encode($member_relatives);  ?>);
+			self.member_relatives2 = ko.observableArray(<?php if($member_relatives){ echo json_encode($member_relatives); } ?>);
 			
 			//remove relative
 			self.removeRelative2 = function(relative) {
 				self.member_relatives2.remove(relative);
 			}
-			self.member_employment2 = ko.observableArray(<?php echo json_encode($member_employment_history);  ?>);
+			self.member_employment2 = ko.observableArray(<?php if($member_employment_history){ echo json_encode($member_employment_history); } ?>);
 			self.removeEmployment2 = function(relative) {
 				self.member_employment2.remove(relative);
 			

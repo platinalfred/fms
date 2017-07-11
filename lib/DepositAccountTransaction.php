@@ -14,11 +14,18 @@ class DepositAccountTransaction extends Db {
 		$result_array = $this->getarray(self::$table_name, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
-	
-	public function getTransactionHistory($accountId = false){
+	public function getCurrentTransactionHistory($accountId = false){
 		$where = "";
 		if($accountId){
 			$where = "`depositAccountId` = ".$accountId;
+		}
+		$result_array = $this->getarray(self::$table_name, $where, "dateModified DESC", "10");
+		return !empty($result_array) ? $result_array : false;
+	}
+	public function getTransactionHistory($accountId = false, $start_date, $end_date){
+		$where = "";
+		if($accountId){
+			$where = "(`dateCreated` BETWEEN ".$start_date." AND ".$end_date.") AND `depositAccountId` = ".$accountId;
 		}
 		$result_array = $this->getarray(self::$table_name, $where, "dateModified DESC", "");
 		return !empty($result_array) ? $result_array : false;

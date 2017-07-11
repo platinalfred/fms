@@ -167,7 +167,7 @@ if(isset($_POST['origin'])){
 				$depositAccountObj = new DepositAccount();
 				$depositAccountTransactionObj = new DepositAccountTransaction();
 				$data['account_details'] = $depositAccountObj->findAllDetailsById($_POST['depositAccountId']);
-				$data['account_details']['statement'] = $depositAccountTransactionObj->getTransactionHistory($_POST['depositAccountId']);
+				$data['account_details']['statement'] = $depositAccountTransactionObj->getTransactionHistory($_POST['depositAccountId'], $_POST['start_date'], $_POST['end_date']);
 			}else{
 				$members = $memberObj->findSelectList();
 				$groups = $saccoGroupObj->findSelectList();
@@ -290,7 +290,7 @@ if(isset($_POST['origin'])){
 			if(isset($_POST['id'])&&$_POST['id']){
 				$depositAccountId = $_POST['id'];
 				$depositAccountTransaction = new DepositAccountTransaction();
-				$transactonHistory = $depositAccountTransaction->getTransactionHistory($depositAccountId);
+				$transactonHistory = $depositAccountTransaction->getCurrentTransactionHistory($depositAccountId);
 				echo json_encode($transactonHistory);
 			}
 		break;

@@ -76,11 +76,11 @@
 							<div class="row m-b-lg" data-bind="if: $parent.transactionHistory().length>0">
 								<div class="table-responsive">
 									<table class="table table-condensed table-striped">
-										<caption>Transactions History</caption>
+										<caption>Recent Transactions</caption>
 										<thead>
 											<tr>
 												<th>Date</th>
-												<th>TransNo</th>
+												<!--<th>TransNo</th>-->
 												<th>Deposit</th>
 												<th>Withdraw</th>
 											</tr>
@@ -88,11 +88,11 @@
 										<tbody data-bind="foreach: $parent.transactionHistory">
 											<tr>
 												<td data-bind="text: moment(dateCreated, 'X').format('DD-MMM-YYYY')"></td>
-												<td data-bind="text: id"></td>
+												<!--<td data-bind="text: id"></td>-->
 												<td data-bind="text: ((transactionType==1)?curr_format(parseInt(amount)):'-')"></td>
 												<td data-bind="text: ((transactionType==2)?curr_format(parseInt(amount)):'-')"></td>
 											</tr>
-										</tbody>
+										</tbody><!--
 										<tfoot>
 											<tr>
 												<th>Total (UGX)</th>
@@ -100,7 +100,7 @@
 												<th data-bind="text: curr_format(parseInt(sumUpAmount($parent.transactionHistory(),1)))">&nbsp;</th>
 												<th data-bind="text: curr_format(parseInt(sumUpAmount($parent.transactionHistory(),2)))">&nbsp;</th>
 											</tr>
-										</tfoot>
+										</tfoot>-->
 									</table>
 								</div>
 							</div>

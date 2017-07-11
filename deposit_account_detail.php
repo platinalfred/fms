@@ -1,106 +1,78 @@
+	
 	<div id="deposit_account_details" class="row">
-		<div class="row" data-bind="with: account_details">
-			<div class="col-lg-5">
-				<div class="panel-body">
-					<div class="panel-group" id="accordion">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h5 class="panel-title">
-									<a data-toggle="collapse" href="#collapseTwo" class="" aria-expanded="true">Account details <small data-bind="text: (productName+'-'+id).replace(/\s/g,'')"></small></a>
-								</h5>
-							</div>
-							<div id="collapseTwo" class="panel-collapse collapse in" aria-expanded="true" style=""><!-- sumDeposited - sumWithdrawn-->
-								<div class="panel-body">
-									<table class="table table-bordered">
-										<tbody>
-											<tr> <th>Account No. </th> <td data-bind="text: (productName+'-'+id).replace(/\s/g,'')"></td> </tr>
-											<tr> <th>Current Balance</th> <td data-bind="text: curr_format(parseInt(sumUpAmount(statement,1))-parseInt(sumUpAmount(statement,2)))"></td> </tr>
-											<tr> <th>Opening Balance</th> <td data-bind="text: curr_format(parseInt(openingBalance))"></td> </tr>
-											<tr> <th>Opening Date </th> <td data-bind="text: moment(dateCreated,'X').format('DD, MMM YYYY')"></td> </tr>
-											<tr data-bind="if: interestRate>0"> <th>Interest Rate</th> <td data-bind="text: interestRate +'%'"></td> </tr>
-											<tr data-bind="if: recomDepositAmount>0"> <th>Recommended Deposit</th> <td data-bind="text: recomDepositAmount"></td> </tr>
-											<tr data-bind="if: maxWithdrawalAmount > 0"> <th>Withdrawal limit</th> <td data-bind="text:curr_format(parseInt(maxWithdrawalAmount))"></td> </tr>
-											<tr data-bind="if: termLength"> <th>Term Length <sup data-toggle="tooltip" title="Period of time before which a client starts withdrawing from the account" data-placement="right"><i class="fa fa-question-circle"></i><sup></sup></sup> </th> <td data-bind="text: termLength+' days'"></td> </tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
+		<div class="col-lg-6 pull-right">
+			<div class="col-lg-5 ">
+				<button type="button" class="btn btn-sm btn-default">Excel</button>
+				<button type="button" class="btn btn-sm btn-default">PDF</button>
+				<button type="button" onClick="window.print();" class="btn btn-sm btn-default"><i class="fa fa-print"></i> Print</button>
+			</div>
+			<div class="col-lg-5 pull-right">
+				<div class="form-group">
+					<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 10px; border: 1px solid #ccc">
+					  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+					  <span>December 30, 2016 - January 28, 2017</span> <b class="caret"></b>
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-7">
-				<div class="col-md-6"></div>
-				<?php 
-				if(isset($_SESSION['accountant'])){ ?>
-					<div class="col-md-6"><a class="btn btn-primary btn-sm" href='#enter_deposit' data-toggle="modal"><i class="fa fa-edit"></i> Enter Deposit </a><a data-bind="attr: {href:((sumUpAmount(statement,1)-sumUpAmount(statement,2))>0?'#enter_withdraw':undefined)}" class="btn btn-warning btn-sm" data-toggle="modal"><i class="fa fa-edit"></i> Withdraw Cash </a></div>
-				<?php 
-				}
-				?>
-				<div class="ibox">
-					<div class="col-lg-7">
-						<div class="form-group">
-							<label class="control-label" for="principle">Select Period</label>
-							<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 10px; border: 1px solid #ccc">
-							  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-							  <span>December 30, 2016 - January 28, 2017</span> <b class="caret"></b>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-1">
-						<div class="form-group">
-							<label class="control-label" for="principle" style="color:#fff;">Display</label>
-							<input type="button" value="View" class="btn btn-sm btn-info">
-						</div>
-					</div>
-					<div class="col-lg-4">
-						<button type="button" class="btn btn-sm btn-default">Excel</button>
-	                    <button type="button" class="btn btn-sm btn-default">PDF</button>
-	                    <button type="button" class="btn btn-sm btn-default">Print</button>
-					</div>
-					<div class="clearboth"></div>
-					<div class="ibox-title">
-						<h5>Account Statement</h5>
-						<div class="ibox-tools">
-							<a class="collapse-link">
-								<i class="fa fa-chevron-up" style="color:#23C6C8;"></i>
-							</a>
-						</div>
-					</div>
-					<div class="ibox-content">
-						
-						<div class="table-responsive">
-							<table class="table table-condensed">
-								<thead>
-									<tr>
-										<th>Ref</th>
-										<th>Date</th>
-										<th>Dr</th>
-										<th>Cr</th>
-									</tr>
-								</thead>
-								<tbody data-bind="foreach: statement">
-									<tr>
-										<td data-bind="text: id"></td>
-										<td data-bind="text: moment(dateCreated, 'X').format('DD-MMM-YYYY')"></td>
-										<td data-bind="text: ((transactionType==1)?curr_format(parseInt(amount)):'-')"></td>
-										<td data-bind="text: ((transactionType==2)?curr_format(parseInt(amount)):'-')"></td>
-									</tr>
-								</tbody>
-								<tfoot>
-									<tr>
-										<th>Total (UGX)</th>
-										<th>&nbsp;</th>
-										<th data-bind="text: curr_format(parseInt(sumUpAmount(statement,1)))">&nbsp;</th>
-										<th data-bind="text: curr_format(parseInt(sumUpAmount(statement,2)))">&nbsp;</th>
-									</tr>
-								</tfoot>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
+			
 		</div>
+		<div class="clearboth"></div>
+		<div class="ibox-content p-xl" data-bind="with: account_details">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-7">
+								&nbsp;
+					</div>
+					<div class="col-sm-5 text-left">
+						<div class="row"><div class="col-sm-7"><b>Period</b></div><div class="col-sm-5"data-bind="text: moment($parent.startDate(),'X').format('DD-MMM-YYYY') +' To '+moment($parent.endDate(),'X').format('DD-MMM-YYYY') "></div></div>
+						<div class="clearboth"></div>
+						<div class="row"><div class="col-sm-7"><b>Account No.</b></div><div class="col-sm-5" data-bind="text: (productName+'-'+id).replace(/\s/g,'')"></div></div>
+						<div class="clearboth"></div>
+						<div class="row"><div class="col-sm-7"><b>Current Balance</b></div><div class="col-sm-5" data-bind="text: curr_format(parseInt(sumUpAmount(statement,1))-parseInt(sumUpAmount(statement,2)))"></div></div>
+						<div class="clearboth"></div>
+						<div class="row"><div class="col-sm-7"><b>Opening Balance</b></div><div class="col-sm-5" data-bind="text: curr_format(parseInt(openingBalance))"></div></div>
+						<div class="clearboth"></div>
+						<div class="row"><div class="col-sm-7"><b>Opening Date</b></div><div class="col-sm-5" data-bind="text: moment(dateCreated,'X').format('DD-MMM-YYYY')"></div></div>
+						<div class="clearboth"></div>
+						<div class="row" data-bind="if: interestRate>0"><div class="col-sm-7"><b>Interest Rate</b></div><div class="col-sm-5" data-bind="text: interestRate +'%'"></div></div>
+						<div class="clearboth"></div>
+						<div class="row" data-bind="if: recomDepositAmount>0" ><div class="col-sm-7"><b>Recommended Deposit</b></div><div class="col-sm-5" data-bind="text: curr_format(parseInt(recomDepositAmount))"></div></div>
+						<div class="clearboth"></div>
+						<div class="row" data-bind="if: maxWithdrawalAmount > 0" ><div class="col-sm-7"><b>Maximum Withdraw Limit</b></div><div class="col-sm-5" data-bind="text:curr_format(parseInt(maxWithdrawalAmount))"></div></div>
+						<div class="clearboth"></div>
+						<div class="row" data-bind="if: termLength"><div class="col-sm-7"><b>Term Length Rate </b><sup data-toggle="tooltip" title="Period of time before which a client starts withdrawing from the account" data-placement="right"><i class="fa fa-question-circle"></i><sup></sup></sup></div><div class="col-sm-5" data-bind="text: termLength+' days'"></div></div>
+					</div>
+				
+				</div>
+				<div class="clearboth"></div>
+				<div class="table-responsive m-t">
+					<table class="table invoice-table">
+						<thead>
+							<tr>
+								<th>Date</th>
+								<th style="text-align:left;">Comment</th>
+								<th>Cr</th>
+								<th>Dr</th>
+							</tr> 
+						</thead>
+						<tbody data-bind="foreach: statement">
+							<tr>
+								<td data-bind="text: moment(dateCreated, 'X').format('DD-MMM-YYYY')"></td>
+								<td style="text-align:left;" data-bind="text: comment"></td>
+								<td data-bind="text: ((transactionType==1)?curr_format(parseInt(amount)):'-')"></td>
+								<td data-bind="text: ((transactionType==2)?curr_format(parseInt(amount)):'-')"></td>
+							</tr>
+						</tbody>
+						<tr>
+							<th>Total (UGX)</th>
+							<th>&nbsp;</th>
+							<th data-bind="text: curr_format(parseInt(sumUpAmount(statement,1)))">&nbsp;</th>
+							<th data-bind="text: curr_format(parseInt(sumUpAmount(statement,2)))">&nbsp;</th>
+						</tr>
+					</table>
+				</div><!-- /table-responsive -->
+			</div>
+		</div>  
 		<?php include_once("enter_deposit.php");?>
 		<?php include_once("enter_withdraw.php");?>
 	</div>

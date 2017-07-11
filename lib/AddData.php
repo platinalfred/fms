@@ -55,11 +55,12 @@ if(isset($_POST['origin'])){
 			}
 		break;
 		case "deposit_product":
+			
 			$depositProduct = new DepositProduct();
 			$data['dateCreated'] = time();
-			$data['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+			$data['createdBy'] = isset($_SESSION['user_id'])? $_SESSION['user_id'] : 1;
 			$data['dateModified'] = time();
-			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+			$data['modifiedBy'] = isset($_SESSION['user_id']) ? $_SESSION['user_id']:1;
 			$output = $depositProduct->addDepositProduct($data);
 			if(is_numeric($output)){
 				//insert the product fees afterwards
@@ -125,7 +126,6 @@ if(isset($_POST['origin'])){
 			$data['dateCreated'] = time();
 			$data['dateModified'] = time();
 			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-			
 			if(isset($data['id'])&&is_numeric($data['id'])){
 				$output = $depositAccount->updateDepositAccount($data);
 				
@@ -155,6 +155,7 @@ if(isset($_POST['origin'])){
 				$data['dateModified'] = time();
 				$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				
+				$data['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				
 				$output = $depositAccount->addDepositAccount($data);
 				
@@ -171,7 +172,7 @@ if(isset($_POST['origin'])){
 					$memberDepositAccountId = $memberDepositAccount->addMemberDepositAccount($data);
 				}else{
 					//create deposit account for group
-					$data['groupId'] = $data['clientId'] ;
+					$data['saccoGroupId'] = $data['clientId'] ;
 					unset($data['clientId']);
 					$saccoGroupDepositAccount = new SaccoGroupDepositAccount();
 					$saccoGroupDepositAccountId = $saccoGroupDepositAccount->addSaccoGroupDepositAccount($data);

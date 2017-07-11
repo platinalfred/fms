@@ -16,7 +16,6 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <!-- script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script -->
 	 <!-- Form Validate -->
 	<script src="js/jquery.validate.min.js" type="text/javascript"></script>
 	
@@ -142,16 +141,16 @@
 		<!-- ChartJS-->
 		 <!-- script src="js/plugins/chartJs/Chart.min.js"></script -->
 		<!-- script src="js/demo/chartjs-demo.js"></script -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+		<script src="js/plugins/chartJs/Chart.min.js"></script>
 	<?php 
 	}
 	if(in_array("highcharts", $needed_files)){ ?>
 		<!-- HighCharts-->
-		<script src="https://code.highcharts.com/highcharts.js"></script>
-		<script src="https://code.highcharts.com/modules/exporting.js"></script>
-		<script src="https://code.highcharts.com/modules/drilldown.js"></script>
-		<script src="https://code.highcharts.com/highcharts-more.js"></script>
-		<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+		<script src="js/plugins/HighCharts/highcharts.js"></script>
+		<script src="js/plugins/HighCharts/exporting.js"></script>
+		<script src="js/plugins/HighCharts/drilldown.js"></script>
+		<script src="js/plugins/HighCharts/highcharts-more.js"></script>
+		<script src="js/plugins/HighCharts/solid-gauge.js"></script>
 	<?php 
 	}
 	if(in_array("c3", $needed_files)){ ?>

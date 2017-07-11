@@ -51,16 +51,8 @@ p{
 							</div>
 							<div class="ibox-content">
 								<div class="row">
-									<div class="col-md-12 col-sm-12 col-xs-12 ">
-										<?php 
-										if($data['group_members']){
-											foreach($data['group_members'] as $single){ ?>
-												<div class="col-md-12 col-sm-12 col-xs-12 details"><?php echo $single['memberNames']; ?>
-												</div>
-												<?php												
-											}
-										}
-										?>
+									<div class="col-md-12 col-sm-12 col-xs-12 " data-bind='foreach: $root.group_members'>
+										<div class="col-md-12 col-sm-12 col-xs-12 details" data-bind='text:memberNames'></div>
 									</div>
 								</div>
 							</div>
@@ -98,7 +90,7 @@ p{
 </div>
 <?php
  include("include/footer.php");
-  include("js/members_js.php");
+  include("js/group_js.php");
   if(isset($_GET['view'])){
 	  switch($_GET['view']){
 		case 'loan_accs':

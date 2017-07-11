@@ -1,8 +1,8 @@
 
 <!-- Datatables -->
 <script>
-	var dTable = new Object();
-	$(document).ready(function() {
+var dTable = new Object();
+$(document).ready(function() {
 	var handleDataTableButtons = function() {
 	  if ($("#datatable-buttons").length) {
 		dTable = $('#datatable-buttons').DataTable({
@@ -37,7 +37,7 @@
 				  page = "member_details.php?id=";
 			  }
 			  if(full.clientType==2){
-				  page = "sacco_group_details.php?id=";
+				  page = "group_details.php?id=";
 			  }
 			  return '<a href="'+page+full.clientId+'&view=savings_accs&depAcId='+data+'" title="View details">'+(full.productName + '-'+data).replace(/\s/g,'')+'</a>';}},
 				{ data: 'clientNames'},
@@ -90,14 +90,15 @@
 			getTransactionHistory(data.id);
 		}
 	});
-  });
+});
  function getTransactionHistory(depositAccountId){
 	 $.ajax({
 		url: "ajax_data.php",
-		data: {id:depositAccountId, origin:'member_savings'},
+		data: {id:depositAccountId, origin:'member_savings', start_date:self.startDate, end_date:self.endDate},
 		type: 'POST',
 		dataType: 'json',
 		success: function (response) {
+			console.log(response);
 			depositAccountModel.transactionHistory(response);			
 		}
 	});
@@ -133,7 +134,8 @@
 		self.openingBal = ko.observable(self.depositProduct()?self.depositProduct().defaultOpeningBal:0);
 		self.termLength = ko.observable(self.depositProduct()?self.depositProduct().defaultTermLength:0);
 		self.interestRate = ko.observable(self.depositProduct()?self.depositProduct().defaultInterestRate:0);
-		
+		self.startDate = ko.observable(moment().subtract(30, 'days').format('X'));
+		self.endDate = ko.observable(moment().format('X'));
 		// Operations
 		//set options value afterwards
 		self.setOptionValue = function(propId) {
@@ -187,7 +189,7 @@
 			$.ajax({
 				type: "post",
 				dataType: "json",
-				data:{origin:"deposit_account"<?php if(isset($_GET['depAcId'])):?>, depositAccountId:<?php echo $_GET['depAcId'];?> <?php endif;?>},
+				data:{origin:"deposit_account"<?php if(isset($_GET['depAcId'])):?>, depositAccountId:<?php echo $_GET['depAcId'];?>, start_date:self.startDate, end_date:self.endDate <?php endif;?>},
 				url: "ajax_data.php",
 				success: function(response){
 					self.depositProducts(response.products);
@@ -324,4 +326,11 @@
 	$("#enterDepositForm").validate({ submitHandler: depositAccountModel.addDeposit });
 	$("#enterWithdrawForm").validate({ submitHandler: depositAccountModel.addWithdraw });
 	$("#depAccountForm").validate({ submitHandler: depositAccountModel.save });//, $("#deposit_account_form")[0]
+	
+	
+	function handleDateRangePicker(start_date, end_date){
+			depositAccountModel.startDate(start_date);
+			depositAccountModel.endDate(end_date);
+			depositAccountModel.getServerData();
+	 }
 	</script>

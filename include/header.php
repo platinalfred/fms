@@ -156,7 +156,7 @@ if(!isset($_SESSION['Logged'])){
                         <a href="dashboard.php"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
                     </li>
                     <li >
-                        <a href="view_reports.php?view=general"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Reports</span><span class="fa arrow-right"></span></a>
+                        <a href="view_reports.php?view=ledger"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Reports</span><span class="fa arrow-right"></span></a>
                        
                     </li>
 					<!--

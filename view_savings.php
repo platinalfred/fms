@@ -1,5 +1,5 @@
 	<?php 
-		$needed_files = array("iCheck", "knockout", "daterangepicker", "moment", "dataTables");
+		$needed_files = array("iCheck", "knockout","headerdaterangepicker", "daterangepicker", "moment", "dataTables");
 		$page_title = "Savings Accounts";
 		include("include/header.php"); 
 		require_once("lib/Libraries.php");
