@@ -67,7 +67,26 @@ class LoanAccount extends Db {
 		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
 		return !empty($result_array) ? $result_array : false;
 	}
-	
+	public function getReportIndividual($where = 1){
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`disbursedAmount`", "`installments`" , "`paidInstallments`" , "(`installments`-`paidInstallments`)`balInstallments`" , "`feesPaid`" , "`amountPaid`" , " (`disbursedAmount`*(`interestRate`/100)/`installments`) `interest`" , " ((`disbursedAmount`*(`interestRate`/100)/`installments`)*`paidInstallments`) `interestPaid`",  " `disbursedAmount`*(`interestRate`/100) `expInterest`", "COALESCE((`disbursedAmount`/`installments`),0)`principle`", "(COALESCE((`disbursedAmount`/`installments`),0)*`paidInstallments`) `paidPrinciple`" );
+		
+		$member_group_union_sql = self::$member_sql;
+		
+		$table = self::$table_name." JOIN (".$member_group_union_sql.") `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` LEFT JOIN ". self::$loan_payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId` LEFT JOIN ". self::$loan_fees_sql. " ON `loan_account`.`id` = `loan_fees`.`loanAccountId`";
+		
+		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
+		return $result_array;
+	}
+	public function getReportGroup($where = 1){
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`disbursedAmount`", "`installments`" , "`paidInstallments`" , "(`installments`-`paidInstallments`)`balInstallments`" , "`feesPaid`" , "`amountPaid`" , " (`disbursedAmount`*(`interestRate`/100)/`installments`) `interest`" , " ((`disbursedAmount`*(`interestRate`/100)/`installments`)*`paidInstallments`) `interestPaid`",  " `disbursedAmount`*(`interestRate`/100) `expInterest`", "COALESCE((`disbursedAmount`/`installments`),0)`principle`", "(COALESCE((`disbursedAmount`/`installments`),0)*`paidInstallments`) `paidPrinciple`" );
+		
+		$member_group_union_sql = self::$saccogroup_sql;
+		
+		$table = self::$table_name." JOIN (".$member_group_union_sql.") `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` LEFT JOIN ". self::$loan_payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId` LEFT JOIN ". self::$loan_fees_sql. " ON `loan_account`.`id` = `loan_fees`.`loanAccountId`";
+		
+		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
+		return $result_array;
+	}
 	public function getReport($where = 1){
 		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`disbursedAmount`", "`installments`" , "`paidInstallments`" , "(`installments`-`paidInstallments`)`balInstallments`" , "`feesPaid`" , "`amountPaid`" , " (`disbursedAmount`*(`interestRate`/100)/`installments`) `interest`" , " ((`disbursedAmount`*(`interestRate`/100)/`installments`)*`paidInstallments`) `interestPaid`",  " `disbursedAmount`*(`interestRate`/100) `expInterest`", "COALESCE((`disbursedAmount`/`installments`),0)`principle`", "(COALESCE((`disbursedAmount`/`installments`),0)*`paidInstallments`) `paidPrinciple`" );
 		

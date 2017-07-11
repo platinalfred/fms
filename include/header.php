@@ -31,6 +31,8 @@ if(!isset($_SESSION['Logged'])){
 	if(in_array("dataTables", $needed_files)){
 		?>
 		<link href="css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+		<!--<link href="css/plugins/dataTables/jquery.dataTables.css" rel="stylesheet">-->
+		<link href="css/plugins/dataTables/buttons.dataTables.min.css" rel="stylesheet">
 	<?php 
 	}
 	if(in_array("iCheck", $needed_files)){ ?>
@@ -203,7 +205,7 @@ if(!isset($_SESSION['Logged'])){
         <div id="page-wrapper" class="gray-bg">
             <div class="row border-bottom">
                 <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-                    <div class="navbar-header" style="width:80%;"> 
+                    <div class="navbar-header" style="width:60%;"> 
                         <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
                         <form role="search" class="navbar-form-custom" action="" style="width:90%;">
                             <div class="form-group" >

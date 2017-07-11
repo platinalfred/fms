@@ -36,7 +36,9 @@
 		?>
 		<script src="js/plugins/dataTables/datatables.min.js"></script>
 		<script src="js/plugins/dataTables/dataTables.responsive.min.js"></script>
-		
+		<script src="js/plugins/dataTables/dataTables.buttons.min.js"></script>
+		<script src="js/plugins/dataTables/buttons.print.min.js"></script>
+		<script src="js/plugins/dataTables/buttons.colVis.min.js"></script>
 		<script>
 			$(document).ready(function () {
 				jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {

@@ -3,7 +3,7 @@
 		
 				<div class="ibox">
 					<div class="ibox-title" style="border-top:none;">
-						<h5>Loan Accounts</h5>
+						<h5>Individual Loan Accounts</h5>
 						<div class="ibox-tools">
 							<a class="collapse-link">
 								<i class="fa fa-chevron-down"></i>
@@ -16,7 +16,7 @@
 								<thead>
 									<tr>
 										<?php 
-										$header_keys = array("SNo.", "Member", "Amount", "No. of Installments", "Principle", "Interest", "Total Interest Expected", "Other", "Loan application fees", "No of installments paid", "Bal of installments", "Principal paid", "Interest paid", "Misc Income", "Outstanding Principal", "Outstanding Interest", "outstanding loan balance");
+										$header_keys = array("SNo.", "Member", "Amount",  "Principle", "Interest", "Total Interest Expected",  "Loan application fees", "No of installments paid", "Bal of installments", "Principal paid", "Interest paid", "Misc Income", "Outstanding Principal", "Outstanding Interest", "outstanding loan balance");
 										foreach($header_keys as $key){ ?>
 											<th><?php echo $key; ?></th>
 											<?php 

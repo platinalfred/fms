@@ -35,6 +35,9 @@ Class Reports{
 			case 'general';
 				$this->viewGeneral($this->data);
 			break;
+			case 'individual';
+				$this->viewIndividual($this->data);
+			break;
 			case 'subscriptions';
 				$this->generalSubsriptions();
 			break;
@@ -73,6 +76,8 @@ Class Reports{
 	}
 	public function viewGeneral(){
 		include_once('./general_reports.php');
+	}public function viewIndividual(){
+		include_once('./individual_reports.php');
 	}
 	public function generalSubsriptions(){
 		include_once('./general_subscriptions.php');
@@ -124,24 +129,24 @@ Class Reports{
 				<span class="label-warning"><?php echo @$msg; ?></span>
 			  </div>
 			  <div class="ibox-content">
-					<?php 
-					if($all_client_subscriptions){  ?>
-						<div class="table-responsive">
-						  <table id="subTable" class="table table-striped">
-							<thead>
-								<tr class="headings">
-									<?php 
-									$header_keys = array("Date Subscribed", "Year", "Amount");
-									foreach($header_keys as $key){ ?>
-										<th><?php echo $key; ?></th>
-										<?php
-									}
-									?>
-								</tr>
-							</thead>
+					
+					<div class="table-responsive">
+					  <table id="subTable" class="table table-striped">
+						<thead>
+							<tr class="headings">
+								<?php 
+								$header_keys = array("Date Subscribed", "Year", "Amount");
+								foreach($header_keys as $key){ ?>
+									<th><?php echo $key; ?></th>
+									<?php
+								}
+								?>
+							</tr>
+						</thead>
 
-							<tbody>
-								<?php
+						<tbody>
+							<?php
+							if($all_client_subscriptions){
 								$subscription_sum = 0;
 								foreach($all_client_subscriptions as $single){ 
 									?>
@@ -152,21 +157,18 @@ Class Reports{
 									</tr>
 									<?php
 								}
-								?>
-							</tbody>
-							<tfoot>
-								<tr class="headings">
-									<th colspan="2">Total</th>
-									<th><?php echo number_format($subscription_sum,2,".",","); ?></th>
-								</tr>
-							</tfoot>
-						  </table>
-						</div>
-					<?php 
-					}else{
-						echo "This member has not yet subscribed, please add subscription.";
-					}
-					?>
+							}
+							?>
+						</tbody>
+						<tfoot>
+							<tr class="headings">
+								<th colspan="2">Total</th>
+								<th><?php if($all_client_subscriptions){ echo number_format($subscription_sum,2,".",","); }else{ echo 0; }?></th>
+							</tr>
+						</tfoot>
+					  </table>
+					</div>
+					
                   </div>
 				</div>
 		  </div>

@@ -24,14 +24,7 @@
 								</thead>
 								<tbody>
 								</tbody>
-								<tfoot>
-								<?php 
-									foreach($header_keys as $key){ ?>
-										<th><?php echo ""; ?></th>
-										<?php 
-									}
-								?>
-								</tfoot>
+								
 							</table>
 						</div>
 					</div>
