@@ -37,7 +37,7 @@
 									</thead>
 									<tbody>
 										<tr>
-											<th>Subscriptions</th><td></td><td><span data-bind="text: curr_format(parseInt(subscriptions))">0.0</span></td>
+											<th>Subscriptions</th><td></td><td><span data-bind="text: subscriptions?curr_format(parseInt(subscriptions)):0">0.0</span></td>
 										</tr>
 										<tr>
 											<th>Shares</th><td></td><td><span data-bind="text: (shares?curr_format(parseInt(shares)):0)">0.0</span></td>
@@ -46,10 +46,10 @@
 											<th>Account Opening Balances</th><td></td><td id="deposits"><span data-bind="text: curr_format(parseInt(opening_balances))">0.0</span></td>
 										</tr>
 										<tr>
-											<th>Deposits</th><td></td><td><span data-bind="text: curr_format(parseInt(deposits))">0.0</span></td>
+											<th>Deposits</th><td></td><td><span data-bind="text: deposits?curr_format(parseInt(deposits)):0">0.0</span></td>
 										</tr>
 										<tr>
-											<th>Withdraws</th><td><span data-bind="text: curr_format(parseInt(withdraws))">0.0</span></td><td></td>
+											<th>Withdraws</th><td><span data-bind="text: withdraws?curr_format(parseInt(withdraws)):0">0.0</span></td><td></td>
 										</tr>
 									</tbody>
 								</table>
@@ -66,15 +66,15 @@
 											<td>Shares</td><td><span data-bind="text: (shares?curr_format(parseInt(shares)):0)">0.0</span></td>
 										</tr>
 										<tr>
-											<td>Subscriptions</td><td><span data-bind="text: curr_format(parseInt(subscriptions))">0.0</span></td>
+											<td>Subscriptions</td><td><span data-bind="text: subscriptions?curr_format(parseInt(subscriptions)):0">0.0</span></td>
 										</tr>
 										<tr>
-											<td>Interest from Loans</td><td><span data-bind="text: curr_format(parseInt(loan_payments)-(parseInt(disbursedLoan.loanAmount)+parseInt(disbursedLoan.interestAmount)))">0.0</span></td>
+											<td>Interest from Loans</td><td><span data-bind="text: curr_format((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0)))">0.0</span></td>
 										</tr>
 									</tbody>
 									<tfoot>
 										<tr>
-											<th>Total Revenues &amp; Gains</th><td><strong><span data-bind="text: curr_format(parseInt(subscriptions)+parseInt(shares)+parseInt(shares)+parseInt(loan_payments)-(parseInt(disbursedLoan.loanAmount)+parseInt(disbursedLoan.interestAmount)))">0.0</span></strong></td>
+											<th>Total Revenues &amp; Gains</th><td><strong><span data-bind="text: curr_format((subscriptions?parseInt(subscriptions):0)+(shares?parseInt(shares):0)+((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0))))">0.0</span></strong></td>
 										</tr>
 									</tfoot>
 								</table>
@@ -144,7 +144,7 @@
 									</tbody>
 									<tfoot>
 										<tr>
-											<th>NET INCOME</th><td><strong><span data-bind="text: curr_format(parseInt(subscriptions)+parseInt(shares)+parseInt(shares)+parseInt(loan_payments)-(parseInt(disbursedLoan.loanAmount)+parseInt(disbursedLoan.interestAmount))-(expenses?parseInt(expenses):0))">0.0</span></strong></td>
+											<th>NET INCOME</th><td><strong><span data-bind="text: curr_format((subscriptions?parseInt(subscriptions):0)+(shares?parseInt(shares):0)+((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0)))-(expenses?parseInt(expenses):0))">0.0</span></strong></td>
 										</tr>
 									</tfoot>
 								</table>

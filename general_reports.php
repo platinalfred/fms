@@ -57,7 +57,7 @@
 								<thead>
 									<tr>
 										<?php 
-										$header_keys = array("SNo.", "Member", "Amount", "No. of Installments", "Principle", "Interest", "Total Interest Expected", "Other", "Loan application fees", "No of installments paid", "Bal of installments", "Principal paid", "Interest paid", "Misc Income", "Outstanding Principal", "Outstanding Interest", "outstanding loan balance");
+										$header_keys = array("SNo.", "Member", "Amount", "Principle", "Interest", "Total Interest Expected", "Loan application fees", "No of installments paid", "Bal of installments", "Principal paid", "Interest paid", "Outstanding Principal", "Outstanding Interest", "outstanding loan balance", "Misc Income", "Amount paid");
 										foreach($header_keys as $key){ ?>
 											<th><?php echo $key; ?></th>
 											<?php 
@@ -68,12 +68,14 @@
 									
 								</tbody>
 								<tfoot>
+									<tr>
 								<?php 
 									foreach($header_keys as $key){ ?>
 										<th><?php echo ""; ?></th>
 										<?php 
 									}
 								?>
+									</tr>
 								</tfoot>
 							</table>
 						</div>

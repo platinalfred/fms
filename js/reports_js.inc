@@ -16,33 +16,58 @@ $(document).ready(function(){
 				  "targets": [2],
 				  "orderable": false,
 				  "searchable": false
+			  },{
+				  "targets": [15],
+				  "orderable": false,
+				  "visible": false,
+				  "searchable": false
 			  }],
 			  "footerCallback": function (tfoot, data, start, end, display ) {
-				var api = this.api(), cols = [2,6,7,8,11,12,13,14,15, 16];
+				var api = this.api(), cols = [2,5,6,9,10,12];
 				$.each(cols, function(key, val){
 					var total = api.column(val).data().sum();
 					$(api.column(val).footer()).html( curr_format(total) );
 				});
+				//outstanding principle
+				var outstanding_principle = api.column(2).data().sum() - api.column(9).data().sum();
+				$(api.column(11).footer()).html( curr_format( outstanding_principle ) );
+				//outstanding interest
+				var outstanding_interest = api.column(5).data().sum() - api.column(10).data().sum();
+				$(api.column(12).footer()).html( curr_format( outstanding_interest ) );
+				//total outstanding loan amount
+				$(api.column(13).footer()).html( curr_format( outstanding_principle + outstanding_interest ) );
+				//total miscellaneous income//
+				
+				var paid_amount = (api.column(15).data().sum());
+				
+				var loan_amount = (api.column(2).data().sum())+(api.column(5).data().sum());
+				
+				var misc_income = (paid_amount>loan_amount)?curr_format((paid_amount-loan_amount)):0;
+				$(api.column(14).footer()).html( misc_income );
 			  },
 			  "autoWidth": false,
 			  columns:[
 				  { data: 'id'},
 				  { data: 'clientNames'},
 				  { data: 'disbursedAmount', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
-				  { data: 'installments'},
 				  { data: 'principle', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  { data: 'interest', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  { data: 'expInterest', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
-				  { data: 'principle', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  { data: 'feesPaid', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
 				  { data: 'paidInstallments', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
 				  { data: 'balInstallments'},
 				  { data: 'paidPrinciple', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
 				  { data: 'interestPaid', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
-				  { data: 'interestPaid', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
-				  { data: 'paidPrinciple', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(full.principle)-parseInt(data)):0;}},
-				  { data: 'interestPaid', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(full.exp_interest)-data?parseInt(data):0):0;}},
-				  { data: 'paidPrinciple', render: function ( data, type, full, meta ) {return data?curr_format((parseInt(full.principle)-parseInt(data))+(parseInt(full.exp_interest)-data?parseInt(data):0)):0;}}
+				  { data: 'paidPrinciple', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(full.disbursedAmount)-parseInt(data)):0;}},
+				  { data: 'interestPaid', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(full.expInterest)-(data?parseInt(data):0)):0;}},
+				  { data: 'paidPrinciple', render: function ( data, type, full, meta ) {return data?curr_format((parseInt(full.disbursedAmount)-parseInt(data))+(parseInt(full.expInterest)-(full.interestPaid?parseInt(full.interestPaid):0))):0;}},
+				  { data: 'amountPaid', render: function(data, type, full, meta) {
+						var paid_amount = (data?parseInt(data):0);
+						var loan_amount = (full.disbursedAmount?parseInt(full.disbursedAmount):0)+(full.expInterest?parseInt(full.expInterest):0);
+						return (paid_amount>loan_amount)?curr_format((paid_amount-loan_amount)):0;
+					  }
+				  },
+				  { data: 'amountPaid'}
 					
 					] ,
 			  buttons: [
@@ -66,8 +91,8 @@ $(document).ready(function(){
 				  extend: "print",
 				  className: "btn-sm"
 				},
-			  ],
-			  responsive: true,
+			  ]/* ,
+			  responsive: true, */
 			});
 			//$("#datatable-buttons").DataTable();
 		}
