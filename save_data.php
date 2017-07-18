@@ -289,6 +289,13 @@ if(isset($_POST['tbl'])){
 				echo "success";
 			}  
 		break;
+		case "add_income":
+			$data = $_POST;
+			$income = new Income();
+			 if($income->addIncome($data)){
+				echo "success";
+			}  
+		break;
 		case "shares":
 			$data = $_POST;
 			$member = new Member();

@@ -22,14 +22,14 @@ class DepositAccountFee extends Db {
 		return $result;
 	}
 	
-	public function getSum($depositAccountIds = false){
-		$where = "";
+	public function getSum($where1 = "1 ", $depositAccountIds = false){
+		$where = $where1;
 		$in_part_string = "";
 		if($depositAccountIds){
 			foreach($depositAccountIds as $depositAccount){
 				$in_part_string .= $depositAccount['depositAccountId'].",";
 			}
-			$where .= " `depositAccountId` IN (".substr($in_part_string, 0, -1).")";
+			$where .= " AND `depositAccountId` IN (".substr($in_part_string, 0, -1).")";
 		}
 		$field = "COALESCE(SUM(`amount`),0) `feeSum`";
 		$result = $this->getfrec(self::$table_name, $field, $where, "", "");

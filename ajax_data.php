@@ -25,7 +25,7 @@ if(isset($_POST['origin'])){
 			$figures['members'] = $member->noOfMembers(" (`dateAdded` BETWEEN ".$start_date." AND ".$end_date.") AND active=1");//
 			//before this period
 			$members_b4 = $member->noOfMembers(" `dateAdded` < ".$start_date." AND active=1");//(
-			$percents['members'] = $members_b4>0?round(($figures['members']/$members_b4)*100,2):0;
+			$percents['members'] = ($figures['members']>0&&$members_b4>0)?round(($figures['members']/$members_b4)*100,2):($figures['members']>0?100:0);
 
 			//Total amount of paid subscriptions
 			//1 in this period
@@ -33,7 +33,7 @@ if(isset($_POST['origin'])){
 			//before this period
 			$total_scptions_b4 = $dashboard->getCountOfSubscriptions("(`datePaid` < ".$start_date.")");
 			//percentage increase/decrease
-			$percents['scptions_percent'] = $total_scptions_b4>0?round(($figures['total_scptions']/$total_scptions_b4)*100,2):0;
+			$percents['scptions_percent'] = ($total_scptions_b4>0&&$figures['total_scptions']>0)?round(($figures['total_scptions']/$total_scptions_b4)*100,2):($figures['total_scptions']>0?100:0);
 
 			//Total loan portfolio
 			//1 in this period
@@ -41,7 +41,7 @@ if(isset($_POST['origin'])){
 			//before this period
 			$loan_portfolio_b4 = $dashboard->getSumOfLoans("(`disbursementDate` < ".$start_date.")");
 			//percentage increase/decrease
-			$percents['loan_portfolio'] = $loan_portfolio_b4>0?round(($figures['loan_portfolio']/$loan_portfolio_b4)*100,2):0;
+			$percents['loan_portfolio'] = ($loan_portfolio_b4>0&&$figures['loan_portfolio']>0)?round(($figures['loan_portfolio']/$loan_portfolio_b4)*100,2):($figures['loan_portfolio']>0?100:0);
 
 			//Total loan penalties
 			//1 in this period
@@ -49,7 +49,7 @@ if(isset($_POST['origin'])){
 			//before this period
 			$loan_penalty_b4 = $dashboard->getSumOfLoans("(`dateAdded` < ".$start_date.")");
 			//percentage increase/decrease
-			$percents['loan_penalty'] = $loan_penalty_b4>0?round(($figures['loan_penalty']/$loan_penalty_b4)*100,2):0;
+			$percents['loan_penalty'] = ($loan_penalty_b4>0&&$figures['loan_penalty']>0)?round(($figures['loan_penalty']/$loan_penalty_b4)*100,2):($figures['loan_penalty']>0?100:0);
 
 			//Total loan payments
 			//1 in this period
@@ -57,7 +57,7 @@ if(isset($_POST['origin'])){
 			//before this period
 			$loan_payments_b4 = $dashboard->getSumOfLoanRepayments("(`transactionDate` < ".$start_date.")");// AND `status`=3
 			//percentage increase/decrease
-			$percents['loan_payments'] = $loan_payments_b4>0?round((($loan_payments_b4 - $figures['loan_payments'])/$loan_payments_b4)*100,2):0;
+			$percents['loan_payments'] = ($loan_payments_b4>0&&$figures['loan_payments']>0)?round(($figures['loan_payments']/$loan_payments_b4)*100,2):($figures['loan_payments']>0?100:0);
 
 			//Total pending loans
 			//1 in this period
@@ -65,15 +65,15 @@ if(isset($_POST['origin'])){
 			//before this period
 			$pending_loans_b4 = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=1");
 			//percentage increase/decrease
-			$percents['pending_loans'] = $pending_loans_b4>0?round(($figures['pending_loans']/$pending_loans_b4)*100,2):0;
+			$percents['pending_loans'] = ($pending_loans_b4>0&&$figures['pending_loans']>0)?round(($figures['pending_loans']/$pending_loans_b4)*100,2):($figures['pending_loans']>0?100:0);
 
 			//Total rejected loans
 			//1 in this period
 			$figures['rejected_loans'] = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
 			//before this period
-			$partial_loans_b4 = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
+			$rejected_loans_b4 = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
 			//percentage increase/decrease
-			$percents['rejected_loans'] = $partial_loans_b4>0?round(($figures['rejected_loans']/$partial_loans_b4)*100,2):0;
+			$percents['rejected_loans'] = ($rejected_loans_b4>0&&$figures['rejected_loans']>0)?round(($figures['rejected_loans']/$rejected_loans_b4)*100,2):($figures['rejected_loans']>0?100:0);
 
 			//Total approveded loans
 			//1 in this period
@@ -81,15 +81,15 @@ if(isset($_POST['origin'])){
 			//before this period
 			$approved_loans_b4 = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
 			//percentage increase/decrease
-			$percents['approved_loans'] = $approved_loans_b4>0?round(($figures['approved_loans']/$approved_loans_b4)*100,2):0;
+			$percents['approved_loans'] = ($approved_loans_b4>0&&$figures['approved_loans']>0)?round(($figures['approved_loans']/$approved_loans_b4)*100,2):($figures['approved_loans']>0?100:0);
 
 			//Total disbursed loans
 			//1 in this period
 			$figures['disbursed_loans'] = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4");
 			//before this period
-			$approved_loans_b4 = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4");
+			$disbursed_loans_b4 = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4");
 			//percentage increase/decrease
-			$percents['disbursed_loans'] = $approved_loans_b4>0?round(($figures['disbursed_loans']/$approved_loans_b4)*100,2):0;
+			$percents['disbursed_loans'] = ($disbursed_loans_b4>0&&$figures['disbursed_loans']>0)?round(($figures['disbursed_loans']/$disbursed_loans_b4)*100,2):($figures['disbursed_loans']>0?100:0);
 
 			//Withdraws
 			//1 in this period
@@ -104,15 +104,16 @@ if(isset($_POST['origin'])){
 			
 			//percentage increase/decrease
 			$figures['savings'] = ($deposits - $withdraws);
-			
+			$b4 = $deposits_b4-$withdraws_b4;
 			//percentage increase/decrease
-			$percents['savings'] = $withdraws_b4>0?round(((($deposits_b4-$withdraws_b4) - $figures['savings'])/$withdraws_b4 - $deposits_b4)*100,2):0;
+			//we divide the current savings by the previous in order to get the percentage inc/decrease
+			$percents['savings'] = ($figures['savings']>0&&$b4>0)?round((($figures['savings'])/$b4)*100,2):($figures['savings']>0?100:0);
 
 			//Income
 			$tables['income'] = $income->findAll("`dateAdded` BETWEEN ".$start_date." AND ".$end_date, "amount DESC", "10");
 
 			//Expenses"
-			$tables['expenses'] = $expense->findAllExpenses("`expenseDate` BETWEEN ".$start_date." AND ".$end_date, "amountUsed DESC", "10");
+			$tables['expenses'] = $expense->findAllExpenses("`expenseDate` BETWEEN ".$start_date." AND ".$end_date, 10);
 
 			$products_sql = "SELECT `productName`, SUM(`disbursedAmount`) `loan_amount`, SUM(`disbursedAmount`*`interestRate`/100) `interest`, `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `paidAmount`, `loanAccountId` FROM `loan_repayment` WHERE `transactionDate` <= ".$end_date." GROUP BY `loanAccountId`) `payments` ON `loan_account`.`id`=`payments`.`loanAccountId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4 GROUP BY `productName` ORDER BY `productName`";
 			
@@ -184,6 +185,11 @@ if(isset($_POST['origin'])){
 			$loanAccountPaymentObj = new LoanRepayment();
 			$loanAccountFeeObj = new LoanAccountFee();
 			
+			$between = "";
+			if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+				$between = " BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
+			}
+			
 			$depositAccountIds = $loanAccountIds = $deposit_account_where  = $loan_account_where = "";
 			$deposit_account_ids_array = $loan_account_ids_array = false;
 			$member_id = 0;
@@ -200,7 +206,7 @@ if(isset($_POST['origin'])){
 						$deposit_account_ids_array = $member_deposit_account_obj->getAccountIds($member_id);
 						$loan_account_ids_array = $member_loan_account_obj->getAccountIds($member_id);
 						
-						$data['subscriptions'] = $subscriptionsObj->findSubscriptionAmount('memberId='.$member_id);
+						$data['subscriptions'] = $subscriptionsObj->findSubscriptionAmount('memberId='.$member_id. ($between?"AND (datePaid ".$between:""));
 						$data['shares'] = $sharesObj->findShareAmount('memberId='.$member_id);
 						break;
 						
@@ -227,29 +233,28 @@ if(isset($_POST['origin'])){
 						$loanAccountIds = substr($loanAccountIds,0,-1).")";
 					} */
 					
-					$data['deposits'] = empty($deposit_account_ids_array) ? 0 : $depositAccountTransactionObj->getMoneySum(1, $deposit_account_ids_array);
-					$data['withdraws'] = empty($deposit_account_ids_array) ? 0 :  $depositAccountTransactionObj->getMoneySum(2, $deposit_account_ids_array);
-					$data['deposit_account_fees'] = empty($deposit_account_ids_array) ? 0 :  $depositAccountFeeObj->getSum($deposit_account_ids_array);
-					$data['disbursedLoan'] = empty($loan_account_ids_array) ? 0 :  $loanAccountObj->getSumOfFields($loan_account_ids_array);
-					$data['loan_payments'] = empty($loan_account_ids_array) ? 0 :  $loanAccountPaymentObj->getPaidAmount($loan_account_ids_array);
-					$data['loan_account_fees'] = empty($loan_account_ids_array) ? 0 :  $loanAccountFeeObj->getSum($loan_account_ids_array);
+					$data['deposits'] = empty($deposit_account_ids_array) ? 0 : $depositAccountTransactionObj->getMoneySum("1 ". ($between?"AND (dateCreated ".$between:""), $deposit_account_ids_array);
+					$data['withdraws'] = empty($deposit_account_ids_array) ? 0 :  $depositAccountTransactionObj->getMoneySum("2 ". ($between?"AND (dateCreated ".$between:""), $deposit_account_ids_array);
+					$data['deposit_account_fees'] = empty($deposit_account_ids_array) ? 0 :  $depositAccountFeeObj->getSum(($between?"(dateCreated ".$between:"1 "),$deposit_account_ids_array);
+					$data['disbursedLoan'] = empty($loan_account_ids_array) ? 0 :  $loanAccountObj->getSumOfFields(($between?"(`disbursementDate` ".$between:"1"),$loan_account_ids_array);
+					$data['loan_payments'] = empty($loan_account_ids_array) ? 0 :  $loanAccountPaymentObj->getPaidAmount(($between?"(`transactionDate` ".$between:"1"),$loan_account_ids_array);
+					$data['loan_account_fees'] = empty($loan_account_ids_array) ? 0 :  $loanAccountFeeObj->getSum(($between?"(`dateCreated` ".$between:"1 "),$loan_account_ids_array);
 				}
 			}else{
 				$sharesObj = new Shares();
 				$subscriptionsObj = new Subscription();
 				$expensesObj = new Expenses();
-				$data['subscriptions'] = $subscriptionsObj->findSubscriptionAmount();
-				$data['shares'] = $sharesObj->findShareAmount();
-				$data['shares'] = $sharesObj->findShareAmount();
-				$data['expenses'] = $expensesObj->findExpensesSum();
-				$data['opening_balances'] = $depositAccountObj->getSumOfFields($deposit_account_ids_array);
+				$data['subscriptions'] = $subscriptionsObj->findSubscriptionAmount(($between?"(datePaid ".$between:""));
+				$data['shares'] = $sharesObj->findShareAmount(($between?"(`datePaid` ".$between:""));
+				$data['expenses'] = $expensesObj->findExpensesSum(($between?"(`expenseDate` ".$between:""));
+				$data['opening_balances'] = $depositAccountObj->getSumOfFields(($between?"(`dateCreated` ".$between:"1 "), $deposit_account_ids_array);
 				
-				$data['deposits'] = $depositAccountTransactionObj->getMoneySum(1, $deposit_account_ids_array);
-				$data['withdraws'] = $depositAccountTransactionObj->getMoneySum(2, $deposit_account_ids_array);
-				$data['deposit_account_fees'] = $depositAccountFeeObj->getSum($deposit_account_ids_array);
-				$data['disbursedLoan'] = $loanAccountObj->getSumOfFields($loan_account_ids_array);
-				$data['loan_payments'] = $loanAccountPaymentObj->getPaidAmount($loan_account_ids_array);
-				$data['loan_account_fees'] = $loanAccountFeeObj->getSum($loan_account_ids_array);
+				$data['deposits'] = $depositAccountTransactionObj->getMoneySum("1 ". ($between?"AND (`dateCreated` ".$between:""),  $deposit_account_ids_array);
+				$data['withdraws'] = $depositAccountTransactionObj->getMoneySum("2 ". ($between?"AND (`dateCreated` ".$between:""),  $deposit_account_ids_array);
+				$data['deposit_account_fees'] = $depositAccountFeeObj->getSum(($between?"(dateCreated ".$between:"1 "),$deposit_account_ids_array);
+				$data['disbursedLoan'] = $loanAccountObj->getSumOfFields(($between?"(`disbursementDate` ".$between:"1 "),$loan_account_ids_array);
+				$data['loan_payments'] = $loanAccountPaymentObj->getPaidAmount(($between?"(`transactionDate` ".$between:"1"),$loan_account_ids_array);
+				$data['loan_account_fees'] = $loanAccountFeeObj->getSum(($between?"(`dateCreated` ".$between:"1 "),$loan_account_ids_array);
 			}
 			echo json_encode($data);
 		break;

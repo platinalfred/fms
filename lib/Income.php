@@ -4,7 +4,7 @@ require_once($curdir.'/Db.php');
 class Income extends Db {
 	protected static $table_name  = "income";
 	protected static $table_name2  = "income JOIN income_sources ON incomeType = income_sources.id";
-	protected static $db_fields = array("income.id", "incomeType", "amount", "dateAdded", "addedBy", "description");
+	protected static $db_fields = array("income.id", "incomeSource", "amount", "modifiedBy", "dateAdded", "addedBy", "description");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -31,8 +31,8 @@ class Income extends Db {
 		return false;
 	}
 	public function addIncome($data){
-		print_r($data);
 		$fields = array_slice(self::$db_fields, 1);
+		$data['amount'] =  $this->stripCommasOnNumber($data['amount']);
 		if($this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data))){
 			return true;
 		}

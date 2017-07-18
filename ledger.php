@@ -67,6 +67,9 @@
 												<td>Miscellaneous Income</td><td><span data-bind="text: (shares?curr_format(parseInt(shares)):0)">0.0</span></td>
 											</tr>
 											<tr>
+												<td>Income from other sources</td><td><span data-bind="text: (shares?curr_format(parseInt(shares)):0)">0.0</span></td>
+											</tr>
+											<tr>
 												<td>Shares</td><td><span data-bind="text: (shares?curr_format(parseInt(shares)):0)">0.0</span></td>
 											</tr>
 											<tr>
@@ -74,6 +77,12 @@
 											</tr>
 											<tr>
 												<td>Loan Processing Fees</td><td><span data-bind="text: (loan_account_fees?curr_format(parseInt(loan_account_fees)):0)">0.0</span></td>
+											</tr>
+											<tr>
+												<td>Loan Application Fees</td><td><span data-bind="text: (loan_account_fees?curr_format(parseInt(loan_account_fees)):0)">0.0</span></td>
+											</tr>
+											<tr>
+												<td>Passbook Sales</td><td><span data-bind="text: (loan_account_fees?curr_format(parseInt(loan_account_fees)):0)">0.0</span></td>
 											</tr>
 											<tr>
 												<td>Interest from Loans</td><td><span data-bind="text: curr_format((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0)))">0.0</span></td>

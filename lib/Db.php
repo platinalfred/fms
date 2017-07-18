@@ -557,7 +557,7 @@ class Db{
 		if($updated){
 			return true;
 		} 
-		return mysqli_error($this->conn); 
+		return false; 
 	}
 	function getrec($table, $where, $ordby, $limit) {
 		if ($where != "") 	$sel = "SELECT * FROM ".$table." WHERE ".$where;
@@ -585,7 +585,8 @@ class Db{
 			$q->close();
 			return $res;
 		}else{
-			return false;
+			//return mysqli_error($this->conn);
+			return  false;
 		}
 		
 	}//end getfrec

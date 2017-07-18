@@ -1,9 +1,9 @@
 <?php 
 $needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout");
-$page_title = "Expenses";
+$page_title = "Income From Other Sources";
 include("include/header.php"); 
 require_once("lib/Libraries.php");
-$member = new Member();
+$income = new Income();
 ?>
 	<div class="modal fade" id="DescModal" role="dialog">
 		<div class="modal-dialog modal-lg">
@@ -18,23 +18,20 @@ $member = new Member();
 		<!-- /.modal-dialog -->
 	</div>
 	<div class="row">
-		<?php include("add_expense.php"); ?>
+		<?php include("add_income.php"); ?>
 		<div class="col-sm-12">
 			<div class="ibox">
 				<div class="ibox-content">
-					<h2>Expenses</h2>
-					<div class="col-sm-12 col-lg-12 text-muted small pull-left" style="padding:10px;"><a data-toggle="modal" class="btn btn-primary" href="#add_expense"><i class="fa fa-plus"></i> Add Expense</a></div>
+					<h2>Income from other sources</h2>
+					<div class="col-sm-12 col-lg-12 text-muted small pull-left" style="padding:10px;"><a data-toggle="modal" class="btn btn-primary" href="#add_income"><i class="fa fa-plus"></i> Add Income</a></div>
 					<div class="clear:both;"></div>
-					
-					<table class="table table-striped table-hover" id="expenses">
+					<table class="table table-striped table-hover" id="income">
 						<thead>
 							<tr>
-								<th>Expense Name</th>
-								<th>Amount Used</th>
-								<th>Amount Description</th>
-								<th>Attached Staff</th>
-								<th>Expense Date</th>
-								
+								<th>Income Source</th>
+								<th>Description</th>
+								<th>Amount Received</th>
+								<th>Date Received</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -55,8 +52,8 @@ $(document).ready(function(){
 	
 	var  dTable;
 	var handleDataTableButtons = function() {
-		if ($("#expenses").length ) {
-			dTable = $('#expenses').DataTable({
+		if ($("#income").length ) {
+			dTable = $('#income').DataTable({
 				dom: "lfrtipB",
 				"processing": true,
 				"serverSide": true,
@@ -67,7 +64,7 @@ $(document).ready(function(){
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
-						d.page = 'view_expenses';
+						d.page = 'view_income';
 					}
 				},"columnDefs": [ {
 				  "targets": [0],
@@ -78,11 +75,10 @@ $(document).ready(function(){
 				  "orderable": false
 				}],
 				columns:[  
-					{ data: 'expenseName'},
-					{ data: 'amountUsed', render:function(data, type, full, meta ){ return curr_format(parseInt(data)); }},
-					{ data: 'amountDescription'}, 
-					{ data: 'staff_names'} , 
-					{ data: 'expenseDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD MMM, YYYY');}} 
+					{ data: 'income_source'},
+					{ data: 'description'}, 
+					{ data: 'amount', render:function(data, type, full, meta ){ return curr_format(parseInt(data)); }}, 
+					{ data: 'dateAdded',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD MMM, YYYY');}} 
 					] ,
 				buttons: [
 				{
@@ -126,10 +122,10 @@ $(document).ready(function(){
 	  };
 	}();
 	TableManageButtons.init();
-	$('#expenses').on('click', 'tr .edit_expense', function () {
+	$('#income').on('click', 'tr .edit_expense', function () {
 		var id = $(this).attr("id")
 		 $('#DescModal').removeData('bs.modal');
-        $('#DescModal').modal({remote: 'edit_group.php?id=' + id });
+        $('#DescModal').modal({remote: 'edit_income.php?id=' + id });
         $('#DescModal').modal('show');
 	});
 	function showStatusMessage(message='', display_type='success'){
@@ -167,14 +163,13 @@ $(document).ready(function(){
 		
 	}
 	// It has the name attribute "registration"
-	$("form[name='register_expense']").validate({
+	$("form[name='receive_income']").validate({
 		// Specify validation rules
 		rules: {
 		  // The key name on the left side is the name attribute
 		  // of an input field. Validation rules are defined
 		  // on the right side
-		  expenseName: "required",
-		  amountUsed: "required"
+		  amount: "required"
 		},
 		errorPlacement: function(error, element) {
 			error.insertAfter(element);
@@ -182,14 +177,13 @@ $(document).ready(function(){
 		},
 		// Specify validation error messages
 		messages: {
-		  amountUsed: "Please give the expense amount.",
-		  expenseName: "Please give a name to this expense",
+		  amount: "Please enter the received amount.",
 		},
 		// Make sure the form is submitted to the destination defined
 		// in the "action" attribute of the form when valid
 		submitHandler: function(form, event) {
 			event.preventDefault();
-			var form =  $("form[name='register_expense']");
+			var form =  $("form[name='receive_income']");
 			var frmdata = form.serialize();
 			$.ajax({
 				url: "save_data.php",
@@ -197,7 +191,7 @@ $(document).ready(function(){
 				data: frmdata,
 				success: function (response) {
 					if($.trim(response) == "success"){
-						showStatusMessage("Successfully saved your expense" ,"success");
+						showStatusMessage("Successfully saved your received income" ,"success");
 						form[0].reset();
 						dTable.ajax.reload();
 					}else{

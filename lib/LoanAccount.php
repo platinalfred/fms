@@ -114,15 +114,15 @@ class LoanAccount extends Db {
 		return $result_array = $this->queryData($account_statement_sql);
 	}
 	
-	public function getSumOfFields($loanAccountIds = false){
+	public function getSumOfFields($where1 = "1 ", $loanAccountIds = false){
 		$fields = array( "COALESCE(SUM(`disbursedAmount`),0) `loanAmount`", "(`disbursedAmount`*(`interestRate`/100)/`installments`) `interestAmount`" );
-		$where = "";
+		$where = $where1;
 		$in_part_string = "";
 		if(is_array($loanAccountIds)){
 			foreach($loanAccountIds as $loanAccount){
 				$in_part_string .= $loanAccount['loanAccountId'].",";
 			}
-			$where .= " `id` IN (".substr($in_part_string, 0, -1).")";
+			$where .= " AND`id` IN (".substr($in_part_string, 0, -1).")";
 		}
 		$result_array = $this->getfrec(self::$table_name, implode(",",$fields), $where, "", "");
 		return !empty($result_array) ? $result_array : false;

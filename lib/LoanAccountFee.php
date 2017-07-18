@@ -24,16 +24,16 @@ class LoanAccountFee extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
-	public function getSum($loanAccountIds = false){
-		$where = "";
+	public function getSum($where1 = "1 ", $loanAccountIds = false){
+		$where = $where1;
 		$in_part_string = "";
 		if($loanAccountIds){
 			foreach($loanAccountIds as $loanAccountId){
 				$in_part_string .= $loanAccountId['loanAccountId'].",";
 			}
-			$where .= " `loanAccountId` IN (".substr($in_part_string, 0, -1).")";
+			$where .= " AND `loanAccountId` IN (".substr($in_part_string, 0, -1).")";
 		}
-		$field = "COALESCE(SUM(`feAmount`),0) `feeSum`";
+		$field = "COALESCE(SUM(`feeAmount`),0) `feeSum`";
 		$result = $this->getfrec(self::$table_name, $field, $where, "", "");
 		return !empty($result) ? $result['feeSum'] : 0;
 	}

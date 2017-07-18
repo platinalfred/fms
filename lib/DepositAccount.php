@@ -23,23 +23,20 @@ class DepositAccount extends Db {
 		$result_array = $this->getarray(self::$table_name, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
-	public function getSumOfFields($depositAccountIds = false){
+	public function getSumOfFields($where1 = "1 ", $depositAccountIds = false){
 		$fields = array( "COALESCE(SUM(`openingBalance`),0) `openingBalances`");
-		$where = "";
+		$where = $where1;
 		$in_part_string = "";
 		if($depositAccountIds){
 			if(is_array($depositAccountIds)){
 				foreach($depositAccountIds as $depositAccountId){
 					$in_part_string .= $depositAccountId['depositAccountId'].",";
 				}
-				$where .= " `id` IN (".substr($in_part_string, 0, -1).")";
-			}
-			else{
-				return 0;
+				$where .= " AND `id` IN (".substr($in_part_string, 0, -1).")";
 			}
 		}
 		$result_array = $this->getfrec(self::$table_name, implode(",",$fields), $where, "", "");
-		return !empty($result_array) ? $result_array['openingBalances'] : false;
+		return $result_array['openingBalances'];
 	}
 	
 	public function findSpecifics($fields, $where = ""){ //pick out data for specific fields

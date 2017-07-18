@@ -6,13 +6,20 @@ require_once("lib/DatatablesJSON.php");
 $data_table = new DataTable();
 $primary_key = $columns = $table = $where = $group_by = "";
 if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
-	//SELECT expenseName, amountUsed,staff_names, amountDescription, expenseDate FROM expense JOIN expensetypes ON expenseType = expensetypes.id JOIN (SELECT CONCAT(firstname,'', lastname) as staff_names, staff.id from person JOIN staff ON staff.personId = person.id) as staff_details ON staff_details.id = expense.staff ORDER BY expenseDate DESC
 	
 	//members, person, person relative, person employment, account,
 	$table = "`expense` JOIN `expensetypes` ON `expenseType` = `expensetypes`.`id` JOIN (SELECT CONCAT(`firstname`,' ', `lastname`) as staff_names, `staff`.`id` from `person` JOIN `staff` ON staff.personId = person.id) as staff_details ON staff_details.id = expense.staff"; 
 	$primary_key = "`expense`.`id`";
 	$columns = array( "expenseName", "amountUsed","staff_names", "amountDescription", "expenseDate" );
 	$group_by = "expense.expenseDate DESC";
+}
+if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
+	
+	//members, person, person relative, person employment, account,
+	$table = "`income` JOIN `income_sources` ON `incomeSource` = `income_sources`.`id`"; 
+	$primary_key = "`income`.`id`";
+	$columns = array( "income_sources.name as income_source", "amount","income.description", "dateAdded");
+	$group_by = "income.dateAdded DESC";
 }
 if ( isset($_POST['page']) && $_POST['page'] == "view_groups" ) {
 		
@@ -32,6 +39,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 	$columns = array( "`member`.`id`","`person`.`person_number`", "`person`.`comment`","`firstname`", "`lastname`", "`othername`", "`phone`", "`id_number`" ,"`dateAdded`", "`memberType`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`","`personId`", "`date_registered`", "`branch_id`" );
 	$group_by = "person.id DESC";
 }
+
 if ( isset($_POST['page']) && strlen($_POST['page'])>0) {
 	// Get the data
 	$data_table->get($table, $primary_key, $columns, $where, $group_by);

@@ -1,8 +1,8 @@
 <?php
 $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
-class Expenses extends Db {
-	protected static $table_name  = "expense";
+class Miscellanous extends Db{
+	protected static $table_name  = "miscellanous";
 	protected static $db_fields = array("expense.id", "expenseType", "amountUsed", "amountDescription","expenseType","staff", "expenseDate", "expenseName", "createdBy", "modifiedBy");
 	
 	public function findById($id){
@@ -17,13 +17,9 @@ class Expenses extends Db {
 		}
 		return !empty($result) ? $result['amount']:false;
 	}
-	public function findAllExpenses($where="",$limit){
-		$fields = "expense.id, expenseName, amountUsed,staff_names, amountDescription, expenseDate";
-		
-		$table = self::$table_name." JOIN expensetypes ON expenseType = expensetypes.id JOIN (SELECT CONCAT(firstname,'', lastname) as staff_names, staff.id from person JOIN staff ON staff.personId = person.id) as staff_details ON staff_details.id = expense.staff";
-		
-		$result_array = $this->getfarray($table, $fields, $where, "expenseDate DESC", $limit);
-		return !empty($result_array) ? $result_array:false;
+	public function findAllExpenses(){
+		$result = $this->queryData("SELECT expense.id, expenseName, amountUsed,staff_names, amountDescription, expenseDate FROM expense JOIN expensetypes ON expenseType = expensetypes.id JOIN (SELECT CONCAT(firstname,'', lastname) as staff_names, staff.id from person JOIN staff ON staff.personId = person.id) as staff_details ON staff_details.id = expense.staff ORDER BY expenseDate DESC");
+		return !empty($result) ? $result : false;
 		
 	}
 	public function findAll ($where = 1, $orderby = "id DESC", $limit = ""){

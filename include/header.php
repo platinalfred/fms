@@ -169,8 +169,11 @@ if(!isset($_SESSION['Logged'])){
 					 <li>
                         <a href="view_loans.php"><i class="fa fa-calculator"></i> <span class="nav-label">Loans</span>  </a>
                     </li>
-					 <li>
+					<li>
                         <a href="view_savings.php"><i class="fa fa-dollar"></i> <span class="nav-label">Savings Accounts</span>  </a>
+                    </li>
+					<li>
+                        <a href="miscellanous_income.php"><i class="fa fa-dollar"></i> <span class="nav-label">Other Income</span>  </a>
                     </li>
                     <li>
                         <a href="members.php"><i class="fa fa-group"></i> <span class="nav-label">Members</span>  </a>

@@ -155,7 +155,7 @@ include("include/header.php");
 									<tbody data-bind="foreach: tables.expenses">
 										<tr>
 											<td data-bind="text: id">1</td>
-											<td data-bind="text: moment(expenseDate).format('D MMMM, YYYY')"></td>
+											<td data-bind="text: moment(expenseDate,'X').format('DD MMMM, YYYY')"></td>
 											<td data-bind="text: amountDescription"></td>
 											<td data-bind="text: curr_format(parseInt(amountUsed))"></td>
 										</tr>
