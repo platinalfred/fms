@@ -361,7 +361,7 @@
 	$(document).ready(function() {
 		
 		  var post_data = new Object();
-		  <?php if(isset($client)):?>post_data =<?php echo json_encode($client);?>; <?php endif;?>
+		  <?php if(isset($client)):?>post_data = <?php echo json_encode($client);?>; <?php endif;?>
 	var handleDataTableButtons = function() {
 		switch(parseInt($('#loan_types').val())){
 			case 1: //applications pending approval

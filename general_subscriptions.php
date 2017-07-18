@@ -24,6 +24,13 @@
 								</thead>
 								<tbody>
 								</tbody>
+								<tfoot>
+									<tr><?php foreach($header_keys as $key){ ?>
+											<th><?php echo ""; ?></th>
+											<?php 
+										} ?>
+									</tr>
+								</tfoot>
 								
 							</table>
 						</div>

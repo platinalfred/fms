@@ -64,10 +64,16 @@
 										</thead>
 										<tbody id="ledger">
 											<tr>
+												<td>Miscellaneous Income</td><td><span data-bind="text: (shares?curr_format(parseInt(shares)):0)">0.0</span></td>
+											</tr>
+											<tr>
 												<td>Shares</td><td><span data-bind="text: (shares?curr_format(parseInt(shares)):0)">0.0</span></td>
 											</tr>
 											<tr>
 												<td>Subscriptions</td><td><span data-bind="text: subscriptions?curr_format(parseInt(subscriptions)):0">0.0</span></td>
+											</tr>
+											<tr>
+												<td>Loan Processing Fees</td><td><span data-bind="text: (loan_account_fees?curr_format(parseInt(loan_account_fees)):0)">0.0</span></td>
 											</tr>
 											<tr>
 												<td>Interest from Loans</td><td><span data-bind="text: curr_format((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0)))">0.0</span></td>

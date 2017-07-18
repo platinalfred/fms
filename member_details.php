@@ -23,7 +23,6 @@ if(isset($_GET['view'])){
 	}
 }
 
-include("include/header.php");
 include("lib/Reports.php");
 $member = new Member();
 $shares = new Shares();
@@ -31,7 +30,8 @@ $person = new Person();
 global $client;
 $client  = array();
 $member_data  = $member->findMemberDetails($_GET['id']);
-$names =  $member_data['lastname']." ".$member_data['firstname']." ".$member_data['othername']; 
+$page_title = $names =  $member_data['lastname']." ".$member_data['firstname']." ".$member_data['othername']; 
+include("include/header.php");
 $data['relatives'] = $person->findPersonRelatives($member_data['id']);
 $client['clientType'] = 1;
 $client['clientNames'] = $names;

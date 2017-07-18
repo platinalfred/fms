@@ -1,5 +1,5 @@
 <?php
-$needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout", "datepicker");
+$needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout", "daterangepicker", "datepicker");
 $page_title = "Group Details";
 include("include/header.php");
 include("lib/Reports.php");

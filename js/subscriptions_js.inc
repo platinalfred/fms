@@ -17,13 +17,10 @@ $(document).ready(function(){
 				  "orderable": false,
 				  "searchable": false
 			  }],
-			  /* "footerCallback": function (tfoot, data, start, end, display ) {
-				var api = this.api(), cols = [2,6,7,8,11,12,13,14,15, 16];
-				$.each(cols, function(key, val){
-					var total = api.column(val).data().sum();
-					$(api.column(val).footer()).html( curr_format(total) );
-				});
-			  } ,*/
+			  "footerCallback": function (tfoot, data, start, end, display ) {
+				  var api = this.api();
+				$(api.column(1).footer()).html( curr_format( api.column(1).data().sum() ) );
+			  } ,/* */
 			  "autoWidth": false,
 			  columns:[
 				  { data: 'member_names'},

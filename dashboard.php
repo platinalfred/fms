@@ -95,7 +95,7 @@ include("include/header.php");
 								</div>
 								<div class="col-md-4">
 									<small>Subscription</small>
-									<h3 class="no-margins"><a title="The number of subscriptions by members in a specified period" data-bind="text: curr_format(parseInt(figures.total_scptions)), attr:{href:'view_reports.php?view=subscriptions&status=1&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">80,800</a></h3>
+									<h3 class="no-margins"><a title="The number of subscriptions by members in a specified period" data-bind="text: curr_format(parseInt(figures.total_scptions)), attr:{href:'view_reports.php?view=subscriptions&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">80,800</a></h3>
 									<div class="font-bold text-info"><span data-bind='text: percents.scptions_percent'>20</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.scptions_percent < 1, 'fa-level-up': percents.scptions_percent > 0}"></i></div>
 								</div>
 							</div>
@@ -157,7 +157,7 @@ include("include/header.php");
 											<td data-bind="text: id">1</td>
 											<td data-bind="text: moment(expenseDate).format('D MMMM, YYYY')"></td>
 											<td data-bind="text: amountDescription"></td>
-											<td data-bind="text: curr_format(amountUsed)"></td>
+											<td data-bind="text: curr_format(parseInt(amountUsed))"></td>
 										</tr>
 									</tbody>
 									<tfoot data-bind="if: tables.expenses">
