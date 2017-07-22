@@ -43,7 +43,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "loan_accounts" ) {
 	
 	$primary_key = "`loan_account`.`id`";
 
-	$columns = array( "`loan_account`.`id`", "CONCAT('loanAcc',`loan_account`.`id`) `DT_RowId`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`disbursementDate`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`interestRate`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`" );
+	$columns = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`disbursementDate`", "`productName`", "`disbursedAmount`", "`applicationDate`", "`requestedAmount`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`interestRate`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`", "`clientType`", "`clientId`","`status`",   "CONCAT('loanAcc',`loan_account`.`id`) `DT_RowId`"/**/);
 }
 //list of the income transactions
 if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
@@ -119,7 +119,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "deposit_accounts" ) {
 	
 	$primary_key = "`deposit_account`.`id`";
 
-	$columns = array( "`deposit_account`.`id`", "CONCAT('dep_',`deposit_account`.`id`) `DT_RowId`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`deposit_account`.`maxWithdrawalAmount`", "`deposit_account`.`recomDepositAmount`", "`sumWithdrawn`", "`sumDeposited`", "`deposit_account`.`dateCreated`" );
+	$columns = array( "`deposit_account`.`id`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`deposit_account`.`maxWithdrawalAmount`", "`deposit_account`.`recomDepositAmount`", "`sumWithdrawn`", "`sumDeposited`", "CONCAT('dep_',`deposit_account`.`id`) `DT_RowId`", "`deposit_account`.`dateCreated`" );
 
 }
 if ( isset($_POST['page']) && strlen($_POST['page'])>0) {

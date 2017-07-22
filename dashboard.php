@@ -169,7 +169,7 @@ include("include/header.php");
 										</tr>
 									</tfoot>
 								</table>
-								<p data-bind="if: tables.expenses" class="pull-right"><a data-bind="attr: { href: 'expenses.php?start_date='+$parent.startDate()+'&end_date='+$parent.endDate()}" class="btn btn-info" title="View all expenses">View all...</a></p>
+								<p data-bind="if: tables.expenses" class="pull-right"><a data-bind="attr: { href: 'expenses.php?start_date='+$parent.startDate()+'&amp;end_date='+$parent.endDate()}" class="btn btn-info" title="View all expenses">View all...</a></p>
 							</div>
 
 						</div>
@@ -214,7 +214,7 @@ include("include/header.php");
 										</tr>
 									</tfoot>
 								</table>
-								<p data-bind="if: tables.loan_products" class="pull-right"><a data-bind="attr: { href: 'view_loans.php?start_date='+$parent.startDate()+'&end_date='+$parent.endDate()}" class="btn btn-info" title="View all loans">View all...</a></p>
+								<p data-bind="if: tables.loan_products" class="pull-right"><a data-bind="attr: { href: 'view_reports.php?view=general&amp;start_date='+$parent.startDate()+'&amp;end_date='+$parent.endDate()}" class="btn btn-info" title="View all loans">View all...</a></p>
 							</div>
 						</div>
 					</div>

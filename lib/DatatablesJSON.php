@@ -79,7 +79,7 @@ class DataTable extends Db{
 			" ".
 			$sWhere.
 			" ".
-			$sGroupBy;
+			$sGroupBy.
 			" ".
 			$sOrder.
 			" ".
@@ -123,18 +123,17 @@ class DataTable extends Db{
 			$iFilteredTotal = current($this->getFilteredTotal());
 			
 			// Get total number of rows in query
-			$sQuery = "SELECT COUNT(".$index_column.") cnt FROM ".$table;
+			$sQuery1 = "SELECT COUNT(".$index_column.") cnt FROM ".$table;
 			
-			$iTotal = $this->countCustom($sQuery);
+			$iTotal = $this->countCustom($sQuery1);
 			// Output
 			$output = array(
 				"draw" => intval($_POST['draw']),
 				"recordsTotal" => $iTotal,
 				"recordsFiltered" => $iFilteredTotal,
-				//"query" => $preparedStatement,		add for debugging
+				//	"query" => $sQuery,	add for debugging
 				"data" => array()
 			);
-			
 			// Return array of values
 			foreach($rResult as $aRow) {
 				/* $row = array();			

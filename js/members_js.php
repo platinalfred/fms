@@ -378,7 +378,7 @@ $(document).ready(function(){
 				"processing": true,
 			  "serverSide": true,
 			  "deferRender": true,
-			  "order": [[ 1, 'asc' ]],
+			  "order": [[ 1, 'desc' ]],
 			  "ajax": {
 				  "url":"find_data.php",
 				  "dataType": "JSON",
@@ -455,6 +455,7 @@ $(document).ready(function(){
 			findMemberDetails(data.personId);
 		}
 	});
+	
 	function findMemberDetails(id){
 		$.ajax({
 			url: "find_more_member_details.php?id="+id,
