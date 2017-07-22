@@ -378,7 +378,7 @@ $(document).ready(function(){
 				"processing": true,
 			  "serverSide": true,
 			  "deferRender": true,
-			  "order": [[ 1, 'asc' ]],
+			  "order": [[ 1, 'desc' ]],
 			  "ajax": {
 				  "url":"find_data.php",
 				  "dataType": "JSON",
@@ -400,7 +400,7 @@ $(document).ready(function(){
 					{ data: 'phone'},
 					{ data: 'id_number'},
 					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}}<?php 
-					if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>,
+					if(!isset($_SESSION['loan_officer'])){ ?>,
 					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <a href="member_details.php?id='+data+'" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> more </a> ';}} <?php } ?> 
 					] ,
 			  buttons: [
@@ -455,6 +455,7 @@ $(document).ready(function(){
 			findMemberDetails(data.personId);
 		}
 	});
+	
 	function findMemberDetails(id){
 		$.ajax({
 			url: "find_more_member_details.php?id="+id,

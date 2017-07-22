@@ -166,33 +166,31 @@ if(!isset($_SESSION['Logged'])){
 						</li>
 						<?php 
 					}
-					?>
-					<!--
-					 <ul class="nav nav-second-level collapse in <?php /* if(isset($_SESSION['branch_manager']) || isset($_SESSION['management_credit']) || isset($_SESSION['branch_credit']) || isset($_SESSION['executive_board'])){ echo "in"; } */ ?>">
-                            
-                        </ul>-->
-					
+					?>				
 					<li>
-                        <a href="view_loans.php"><i class="fa fa-calculator"></i> <span class="nav-label">Loans</span>  </a>
-                    </li>
+						<a href="view_loans.php"><i class="fa fa-calculator"></i> <span class="nav-label">Loans</span>  </a>
+					</li>
 					<?php 
-					if(!isset($_SESSION['loan_officer'])){ ?>
-						<li>
-							<a href="view_savings.php"><i class="fa fa-dollar"></i> <span class="nav-label">Savings Accounts</span>  </a>
-						</li>
-						<li>
-							<a href="miscellanous_income.php"><i class="fa fa-dollar"></i> <span class="nav-label">Other Income</span>  </a>
-						</li>
-						<li>
-							<a href="members.php"><i class="fa fa-group"></i> <span class="nav-label">Members</span>  </a>
-						</li>
-						<li>
-							<a href="groups.php"><i class="fa fa-group"></i> <span class="nav-label">Groups</span>  </a>
-						</li>
-						<li>
-							<a href="expenses.php"><i class="fa fa-flask"></i> <span class="nav-label">Expenses</span></a>
-						</li>
-					<?php 
+					if(!isset($_SESSION['executive_board']) && !isset($_SESSION['branch_credit'])&& !isset($_SESSION['management_credit'])){
+						
+						if(!isset($_SESSION['loan_officer'])){ ?>
+							<li>
+								<a href="view_savings.php"><i class="fa fa-dollar"></i> <span class="nav-label">Savings Accounts</span>  </a>
+							</li>
+							<li>
+								<a href="miscellanous_income.php"><i class="fa fa-dollar"></i> <span class="nav-label">Other Income</span>  </a>
+							</li>
+							<li>
+								<a href="members.php"><i class="fa fa-group"></i> <span class="nav-label">Members</span>  </a>
+							</li>
+							<li>
+								<a href="groups.php"><i class="fa fa-group"></i> <span class="nav-label">Groups</span>  </a>
+							</li>
+							<li>
+								<a href="expenses.php"><i class="fa fa-flask"></i> <span class="nav-label">Expenses</span></a>
+							</li>
+							<?php 
+						}
 					}
 					if(isset($_SESSION['admin'])){ ?>
 						<div class="menu_section">
@@ -236,7 +234,7 @@ if(!isset($_SESSION['Logged'])){
                         </li>
 						<?php 
 						} 
-						if(!isset($_SESSION['loan_officer'])){ ?>
+						if(!isset($_SESSION['loan_officer']) && !isset($_SESSION['executive_board'])){ ?>
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                                 <i class="fa fa-envelope"></i> <span class="label label-warning">16</span>

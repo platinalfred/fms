@@ -3,9 +3,14 @@
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
 					<h5>Loan Accounts <small>loans list</small></h5>
-				  <div class="pull-right"><a href="#add_loan_account-modal" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i> New Loan Application</a>
+					<?php 
+					if(isset($_SESSION['loans_officer']) || isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>
+						 <div class="pull-right"><a href="#add_loan_account-modal" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i> New Loan Application</a>
 					
-				  </div>
+						</div>
+						<?php
+					}
+					?>
 				</div>
 				<div class="ibox-content m-b-sm border-bottom">
 					<div class="row">
@@ -170,7 +175,7 @@
 								<li class="list-group-item">
 								<?php 
 								//If its not a loans officer show the payment link
-								if(!isset($_SESSION['loan_officer'])){ ?>
+								if(isset($_SESSION['accountant'])){ ?>
 									<!-- ko if: status==4-->
 										<a class="btn btn-info btn-sm" href='#make_payment-modal' data-toggle="modal"><i class="fa fa-edit"></i> Make Payment </a>
 									<!-- /ko -->

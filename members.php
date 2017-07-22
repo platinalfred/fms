@@ -16,7 +16,7 @@ $member = new Member();
 					<!--<span class="text-muted small pull-right">Last modification: <i class="fa fa-clock-o"></i> 2:10 pm - 12.06.2014</span>-->
 					<h2>Members</h2>
 					<?php 
-					if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>
+					if(!isset($_SESSION['loan_officer'])){ ?>
 						<div class="col-sm-5 text-muted small pull-left" style="padding:10px;"> <a data-toggle="modal" href="#add_member" class="btn btn-primary btn-xs"> <i class="fa fa-plus"></i> Add new member</a></div> 
 						<?php
 					}
@@ -31,7 +31,7 @@ $member = new Member();
 								<th>Id Number</th>
 								<th>Date of Birth</th>
 								<?php 
-								if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>
+								if(!isset($_SESSION['loan_officer'])){ ?>
 									<th>Details</th>
 								<?php 
 								}
@@ -50,7 +50,7 @@ $member = new Member();
 								<th>Id Number</th>
 								<th>Date of Birth</th>
 								<?php 
-								if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>
+								if(!isset($_SESSION['loan_officer'])){ ?>
 									<th>Details</th>
 								<?php 
 								}

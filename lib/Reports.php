@@ -122,9 +122,14 @@ Class Reports{
 			<div class="ibox">
 			  <div class="ibox-title">
 				<h2> <small>Subscriptions </small></h2>
-				<div class="ibox-tools">
-					<a data-toggle="modal" class="btn btn-sm btn-primary" href="#add_subscription"><i class="fa fa-plus"></i> Subscribe</a>
-				</div>
+				<?php
+				if(isset($_SESSION['accountant'])){ ?>
+					<div class="ibox-tools">
+						<a data-toggle="modal" class="btn btn-sm btn-primary" href="#add_subscription"><i class="fa fa-plus"></i> Subscribe</a>
+					</div>
+					<?php 
+				}
+				?>
 				<div class="clearfix"></div>
 				<span class="label-warning"><?php echo @$msg; ?></span>
 			  </div>
@@ -208,9 +213,15 @@ Class Reports{
                 <div class="ibox">
                   <div class="ibox-title">
                     <h2><small>Shares </small></h2>
-					<div class="ibox-tools">
-						<a data-toggle="modal" class="btn btn-sm btn-primary" href="#add_shares"><i class="fa fa-plus"></i> Buy Share</a>
-					</div>
+					<?php
+					
+					if(isset($_SESSION['accountant'])){ print_r($_SESSION);?>
+						<div class="ibox-tools">
+							<a data-toggle="modal" class="btn btn-sm btn-primary" href="#add_shares"><i class="fa fa-plus"></i> Buy Share</a>
+						</div>
+					<?php 
+					}
+					?>
                     <div class="clearfix"></div>
 					<span class="label-warning"><?php echo @$msg; ?></span>
                   </div>

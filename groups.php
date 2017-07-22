@@ -32,7 +32,7 @@ $member = new Member();
 								<th>Group Name</th>
 								<th>Description</th>
 								<?php 
-								if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>
+								if(!isset($_SESSION['loan_officer'])){ ?>
 									<th>Edit/Delete</th>
 								<?php 
 								}

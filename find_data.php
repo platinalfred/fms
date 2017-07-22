@@ -11,15 +11,13 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
 	$table = "`expense` JOIN `expensetypes` ON `expenseType` = `expensetypes`.`id` JOIN (SELECT CONCAT(`firstname`,' ', `lastname`) as staff_names, `staff`.`id` from `person` JOIN `staff` ON staff.personId = person.id) as staff_details ON staff_details.id = expense.staff"; 
 	$primary_key = "`expense`.`id`";
 	$columns = array( "expenseName", "amountUsed","staff_names", "amountDescription", "expenseDate" );
-	$group_by = "expense.expenseDate DESC";
 }
 if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
 	
 	//members, person, person relative, person employment, account,
-	$table = "`income` JOIN `income_sources` ON `incomeSource` = `income_sources`.`id`"; 
+	$table = "`income` JOIN `income_sources` ON `income`.`incomeSource` = `income_sources`.`id`"; 
 	$primary_key = "`income`.`id`";
 	$columns = array( "income_sources.name as income_source", "amount","income.description", "dateAdded");
-	$group_by = "income.dateAdded DESC";
 }
 if ( isset($_POST['page']) && $_POST['page'] == "view_groups" ) {
 		
@@ -27,7 +25,6 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_groups" ) {
 	$table = "saccogroup"; 
 	$primary_key = "`saccogroup`.`id`";
 	$columns = array("id", "groupName", "description", "dateCreated", "createdBy",  "modifiedBy");
-	$group_by = "saccogroup.groupName ASC";
 }
 if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 	

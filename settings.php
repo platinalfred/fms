@@ -957,7 +957,7 @@ require_once("lib/Libraries.php");
 																	<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding" for="id_type">Access Level <span class="required">*</span>
 																	</label>
 																	<div class="col-md-9 col-sm-9 col-xs-12">
-																		<select class="form-control m-b" name="id_type" required >
+																		<select class="form-control m-b" name="access_level" required >
 																			<option>Please select</option>
 																			<?php 
 																			$access_level = new AccessLevel();

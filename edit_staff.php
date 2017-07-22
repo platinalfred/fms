@@ -16,7 +16,9 @@ if($staff_data){
  <link href="css/general.css" rel="stylesheet">
 <div class="ibox">
 	<div class="ibox-title">
-		
+		<p>
+			<h2><b>Edit staff details</b></h2>
+		</p>
 		<div class="ibox-tools">
 			<a class="collapse-link">
 				<i class="fa fa-chevron-up"></i>
@@ -28,9 +30,7 @@ if($staff_data){
 	</div>
 	<div class="ibox-content">
 		
-		<p>
-			<h2><b>Edit staff details</b></h2>
-		</p>
+		
 			
 		<form id="edit_staff" action="" method="post" name="edit_staff"  class="wizard-big">
 			<input type="hidden" name="member_id" value="<?php echo $_GET['id'];?>">
@@ -44,7 +44,7 @@ if($staff_data){
 			
 			<input type="hidden" name="personId" value="<?php echo $staff_data['personId'];?>">
 			<input type="hidden" name="tbl" value="update_staff">
-			<h1>Account details</h1>
+			<h1>User and Login Information</h1>
 			<fieldset>
 				<div class="row">
 					<div class="col-lg-6">

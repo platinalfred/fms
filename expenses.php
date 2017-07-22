@@ -1,5 +1,5 @@
 <?php 
-$needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout");
+$needed_files = array("headerdaterangepicker","daterangepicker", "dataTables", "iCheck", "steps", "jasny", "moment", "knockout");
 $page_title = "Expenses";
 include("include/header.php"); 
 require_once("lib/Libraries.php");
@@ -23,7 +23,9 @@ $member = new Member();
 			<div class="ibox">
 				<div class="ibox-content">
 					<h2>Expenses</h2>
-					<div class="col-sm-12 col-lg-12 text-muted small pull-left" style="padding:10px;"><a data-toggle="modal" class="btn btn-primary" href="#add_expense"><i class="fa fa-plus"></i> Add Expense</a></div>
+					<?php 
+					if(isset($_SESSION['admin']) || isset($_SESSION['accountant'])){ ?>
+					<div class="col-sm-12 col-lg-12 text-muted small pull-left" style="padding:10px;"><a data-toggle="modal" class="btn btn-primary" href="#add_expense"><i class="fa fa-plus"></i> Add Expense</a></div> <?php } ?>
 					<div class="clear:both;"></div>
 					
 					<table class="table table-striped table-hover" id="expenses">
@@ -32,7 +34,7 @@ $member = new Member();
 								<th>Expense Name</th>
 								<th>Amount Used</th>
 								<th>Amount Description</th>
-								<th>Attached Staff</th>
+								<th>Expense By</th>
 								<th>Expense Date</th>
 								
 							</tr>
@@ -40,6 +42,15 @@ $member = new Member();
 						<tbody>
 							
 						</tbody>
+						<tfoot>
+							<tr>
+								<th>&nbsp;Total (UGX)</th>
+								<th>&nbsp;</th>
+								<th>&nbsp;</th>
+								<th>&nbsp;</th>
+								<th>&nbsp;</th>
+							</tr>
+						</tfoot>
 					</table>
 								
 				</div>
@@ -110,7 +121,14 @@ $(document).ready(function(){
 				"initComplete": function(settings, json) {
 					/* ko.applyBindings(memberTableModel, $("#member_details")[0]);
 					$(".table tbody>tr:first").trigger('click'); */
-				}
+				},
+				  "footerCallback": function (tfoot, data, start, end, display ) {
+					var api = this.api(), cols = [1];
+					$.each(cols, function(key, val){
+						var total = api.column(val).data().sum();
+						$(api.column(val).footer()).html( curr_format(total) );
+					});
+				  }
 			});
 
 			//$("#datatable-buttons").DataTable();

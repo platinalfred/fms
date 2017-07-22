@@ -3,9 +3,14 @@
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
 					<h5>Savings Accounts <small>Deposits and withdraws</small></h5>
-				  <div class="pull-right">
-					<div><a href="#add_deposit_account" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i>New Savings Account</a></div>
-				  </div>
+					<?php
+					if(isset($_SESSION['accountant'])){ ?>
+					  <div class="pull-right">
+						<div><a href="#add_deposit_account" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i>New Savings Account</a></div>
+					  </div>
+					<?php 
+					}
+				  ?>
 				</div>
 				<div class="ibox-content">
 					<div class="table-responsive">
@@ -62,6 +67,7 @@
 								</li>
 							</ul>
 							<?php 
+							
 							if(isset($_SESSION['accountant'])){ ?>
 								<div class="row m-b-lg">
 									<div class="hr-line-dashed"></div>

@@ -4,7 +4,7 @@
 			var self = this;
 			self.itemName = ko.observable();
 			self.description = ko.observable();
-			self.itemValue = ko.observable();
+			self.itemValue = ko.observable(0);
 			self.attachmentUrl = ko.observable();
 		};
 	//list of the guarantors
@@ -594,7 +594,7 @@
 					dTable['disbursed'] = $('#disbursed').DataTable({
 					  dom: "Bfrtip",
 					  <?php if(!isset($client)): ?>
-					  "order": [ [3, 'asc' ]],
+					  "order": [ [3, 'desc' ]],
 					  "processing": true,
 					  "serverSide": true,
 					  "deferRender": true,
