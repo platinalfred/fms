@@ -9,7 +9,7 @@ if(isset($_GET['tbl'])){
 			require_once("lib/Staff.php");
 			$staff = new Staff();
 			if($staff->deleteStaff($_GET['id'])){
-				$msg =  "Successfully deleted this staff from the system";
+				$msg =  "Successfully deleted this staff from the system.";
 			}
 		break;
 		case "member":

@@ -27,16 +27,10 @@ $staff
 					<h2><b>STAFF</b></h2>
 					
 					<div class="col-sm-5 text-muted small pull-left" style="padding:10px;"> <a data-toggle="modal" href="#add_staff" class="btn btn-primary btn-xs"> <i class="fa fa-plus"></i> Add new Staff</a></div>
-					<div class="clear:both;"></div>
-					<div class="input-group">
-						<input type="text" placeholder="Search client " class="input form-control">
-						<span class="input-group-btn">
-							<button type="button" class="btn btn btn-primary"> <i class="fa fa-search"></i> Search Staff</button>
-						</span>
-					</div>
+						
 					<div class="clients-list">
 					<ul class="nav nav-tabs">
-						<li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> Staff</a></li>
+						
 					</ul>
 					<div class="tab-content">
 						<div id="tab-1" class="tab-pane active">
@@ -53,6 +47,7 @@ $staff
 												<th>Phone</th>
 												<th>Id Number</th>
 												<th>Date of Birth</th>
+												<th>Status</th>
 												<th>Edit</th>
 											</tr>
 										</thead>

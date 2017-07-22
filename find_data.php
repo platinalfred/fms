@@ -30,14 +30,28 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_groups" ) {
 	$group_by = "saccogroup.groupName ASC";
 }
 if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
+	
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where = "(`dateAdded` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
-	}		
+	}	
+	
 	//members, person, person relative, person employment, account,
 	$table = "`member` JOIN `person` ON `member`.`personId` = `person`.`id`"; 
 	$primary_key = "`member`.`id`";
 	$columns = array( "`member`.`id`","`person`.`person_number`", "`person`.`comment`","`firstname`", "`lastname`", "`othername`", "`phone`", "`id_number`" ,"`dateAdded`", "`memberType`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`","`personId`", "`date_registered`", "`branch_id`" );
-	$group_by = "person.id DESC";
+	$group_by = "person.id ";
+}
+if ( isset($_POST['page']) && $_POST['page'] == "view_staff" ) {
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+		$where = "(`dateAdded` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
+	}		
+	//members, person, person relative, person employment, account,
+	//$table = "`staff` JOIN `person` ON `staff`.`personId` = `person`.`id`"; 
+	$table = "`staff` JOIN `person` ON `staff`.`personId` = `person`.`id` JOIN `position` ON `staff`.`position_id` = `position`.`id` JOIN `branch` ON `staff`.`branch_id` = `branch`.`id`"; 
+	$primary_key = "`staff`.`id`";
+	$columns = array( "`staff`.`id`","`person`.`person_number`","`branch`.`branch_name`", "`person`.`comment`","`position`.`name`","`firstname`", "`lastname`", "`othername`", "`status`","`phone`", "`id_number`" ,  "`dateofbirth`","`username`", "`gender`", "`email`", "`person`.`postal_address`", "`person`.`physical_address`","`personId`", "`date_registered`", "`branch_id`" );
+	//$columns = array( "`person`.`id`","`person`.`person_number`","`staff`.`id`", "`position`.`name` `position`" , "`username`", "`firstname`", "`lastname`", "`othername`", "`phone`", "`id_number`" ,"`date_added`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`", "`branch_id`" );`person`.
+	$group_by = "person.id";
 }
 
 if ( isset($_POST['page']) && strlen($_POST['page'])>0) {
