@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 10, 2017 at 02:04 PM
+-- Generation Time: Jul 24, 2017 at 04:29 PM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.5.35
 
@@ -50,22 +50,45 @@ END$$
 --
 -- Functions
 --
-CREATE DEFINER=`root`@`localhost` FUNCTION `default_days` (`loan_id` INT UNSIGNED, `loan_date` DATE, `loan_end_date` DATE, `cur_date` DATE, `exp_payback` DECIMAL(12,2)) RETURNS INT(11) READS SQL DATA
+CREATE DEFINER=`root`@`localhost` FUNCTION `GetDueDate` (`disbursementDate` DATETIME, `installments` TINYINT, `time_unit` TINYINT, `repaymentFreq` TINYINT(1), `start_date` DATETIME, `end_date` DATETIME) RETURNS DATE NO SQL
 BEGIN
-	DECLARE temp_days, no_days, loan_duration, loan_age INT DEFAULT 0;
-    DECLARE tempDate DATE;
-	SET loan_duration = TIMESTAMPDIFF(MONTH,loan_date,loan_end_date);
-	SET loan_age = TIMESTAMPDIFF(MONTH,loan_date,cur_date);
-	IF loan_age >0 THEN
-        WHILE (loan_age > 0) DO
-            SET loan_age = loan_age-1;
-            SET tempDate = DATE_SUB(cur_date, INTERVAL loan_age MONTH);
-            CALL exceeded_days(loan_id, loan_date, cur_date, loan_duration, exp_payback, loan_age,temp_days);
-            SET no_days = no_days + temp_days;
-        END WHILE;
-    END IF;
+	DECLARE installs INT DEFAULT 0;
+    DECLARE tempDate, dueDate DATE;
+	WHILE (installs <= installments) DO
+		SET installs = installs+1;
+		
+		CASE time_unit
+		WHEN 1 THEN SET tempDate = DATE_ADD(disbursementDate, INTERVAL installs*repaymentFreq DAY);
+		WHEN 2 THEN SET tempDate = DATE_ADD(disbursementDate, INTERVAL installs*repaymentFreq WEEK);
+		WHEN 3 THEN SET tempDate = DATE_ADD(disbursementDate, INTERVAL installs*repaymentFreq MONTH);
+		END CASE;
+		IF (tempDate BETWEEN start_date AND end_date) THEN
+			SET dueDate = tempDate;
+			RETURN dueDate;
+		END IF;
+	END WHILE;
 	
-	RETURN no_days;
+	RETURN dueDate;
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `ImmediateDueDate` (`disbursementDate` DATETIME, `installments` TINYINT(2), `time_unit` TINYINT(1), `repaymentsFreq` TINYINT(1), `start_date` DATETIME) RETURNS DATE NO SQL
+BEGIN
+	DECLARE installs INT DEFAULT 0;
+    DECLARE tempDate, dueDate DATE;
+	WHILE (installs <= installments) DO
+		SET installs = installs+1;
+		
+		CASE time_unit
+		WHEN 1 THEN SET tempDate = DATE_ADD(disbursementDate, INTERVAL installs*repaymentFreq DAY);
+		WHEN 2 THEN SET tempDate = DATE_ADD(disbursementDate, INTERVAL installs*repaymentFreq WEEK);
+		WHEN 3 THEN SET tempDate = DATE_ADD(disbursementDate, INTERVAL installs*repaymentFreq MONTH);
+		END CASE;
+		IF (tempDate < end_date) THEN
+			SET dueDate = tempDate;
+		END IF;
+	END WHILE;
+	
+	RETURN dueDate;
 END$$
 
 DELIMITER ;
@@ -683,7 +706,9 @@ INSERT INTO `loan_account` (`id`, `loanNo`, `branch_id`, `status`, `loanProductI
 (2, 'L1707105718', 0, 1, 2, '1000000.00', 1498942800, '0.00', 0, NULL, '7.90', 3, NULL, 1, 1, 3, 1, 2, 1, 1, '0.00', 1, NULL, NULL, '', NULL, NULL, NULL, NULL, 1, 1499666238, 1, '0000-00-00 00:00:00'),
 (3, 'L1707100621', 0, 1, 2, '1000000.00', 1498942800, '0.00', 0, NULL, '7.90', 3, NULL, 1, 1, 3, 1, 2, 1, 1, '0.00', 1, NULL, NULL, '', NULL, NULL, NULL, NULL, 1, 1499666781, 1, '0000-00-00 00:00:00'),
 (4, 'L1707100954', 0, 1, 2, '1000000.00', 1498942800, '0.00', 0, NULL, '7.90', 3, NULL, 1, 1, 3, 1, 2, 1, 1, '0.00', 1, NULL, NULL, '', NULL, NULL, NULL, NULL, 1, 1499666994, 1, '0000-00-00 00:00:00'),
-(5, 'L1707101059', 0, 1, 2, '1000000.00', 1498942800, '0.00', 0, NULL, '7.90', 3, NULL, 1, 1, 3, 1, 2, 1, 1, '0.00', 1, NULL, NULL, '', NULL, NULL, NULL, NULL, 1, 1499667059, 1, '0000-00-00 00:00:00');
+(5, 'L1707101059', 0, 1, 2, '1000000.00', 1498942800, '0.00', 0, NULL, '7.90', 3, NULL, 1, 1, 3, 1, 2, 1, 1, '0.00', 1, NULL, NULL, '', NULL, NULL, NULL, NULL, 1, 1499667059, 1, '0000-00-00 00:00:00'),
+(6, 'L1707174841', 0, 1, 2, '300000.00', 1500238800, '0.00', 0, NULL, '9.80', 4, NULL, 1, 1, 3, 1, 2, 1, 1, '0.00', 1, NULL, NULL, '', NULL, NULL, NULL, NULL, 1, 1500317321, 1, '0000-00-00 00:00:00'),
+(7, 'L1707175147', 0, 1, 2, '400000.00', 1500238800, '0.00', 0, NULL, '9.80', 4, NULL, 1, 1, 3, 1, 2, 1, 1, '0.00', 1, NULL, NULL, '', NULL, NULL, NULL, NULL, 1, 1500317507, 1, '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -763,7 +788,9 @@ CREATE TABLE `loan_collateral` (
 --
 
 INSERT INTO `loan_collateral` (`id`, `loanAccountId`, `itemName`, `description`, `itemValue`, `attachmentUrl`, `dateCreated`, `createdBy`, `dateModified`, `modifiedBy`) VALUES
-(1, 5, 'Motor vehicle', 'Harrier 4 seater, black, UAJ 432B. Log book provided', '4500000.00', 'undefined', 1499667059, 1, '2017-07-10 06:10:59', 1);
+(1, 5, 'Motor vehicle', 'Harrier 4 seater, black, UAJ 432B. Log book provided', '4500000.00', 'undefined', 1499667059, 1, '2017-07-10 06:10:59', 1),
+(2, 6, 'Beds', '4 metallic beds valued at 300k each', '1200000.00', 'undefined', 1500317322, 1, '2017-07-17 18:48:42', 1),
+(3, 7, 'Beds', '4 metallic beds valued at 300k each', '300000.00', 'undefined', 1500317507, 1, '2017-07-17 18:51:47', 1);
 
 -- --------------------------------------------------------
 
@@ -1055,7 +1082,9 @@ INSERT INTO `member_loan_account` (`id`, `memberId`, `loanAccountId`, `dateCreat
 (1, 4, 2, 1499666238, 1, '0000-00-00 00:00:00', 1),
 (2, 4, 3, 1499666781, 1, '0000-00-00 00:00:00', 1),
 (3, 4, 4, 1499666994, 1, '0000-00-00 00:00:00', 1),
-(4, 4, 5, 1499667059, 1, '0000-00-00 00:00:00', 1);
+(4, 4, 5, 1499667059, 1, '0000-00-00 00:00:00', 1),
+(5, 5, 6, 1500317321, 1, '0000-00-00 00:00:00', 1),
+(6, 3, 7, 1500317507, 1, '0000-00-00 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -1613,6 +1642,26 @@ CREATE TABLE `tax_rate_source` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `time_units`
+--
+
+CREATE TABLE `time_units` (
+  `id` int(11) NOT NULL,
+  `time_unit` varbinary(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Time units definitions';
+
+--
+-- Dumping data for table `time_units`
+--
+
+INSERT INTO `time_units` (`id`, `time_unit`) VALUES
+(1, 0x444159),
+(2, 0x5745454b),
+(3, 0x4d4f4e5448);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `transaction`
 --
 
@@ -2144,6 +2193,12 @@ ALTER TABLE `tax_rate_source`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `time_units`
+--
+ALTER TABLE `time_units`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `transaction`
 --
 ALTER TABLE `transaction`
@@ -2290,7 +2345,7 @@ ALTER TABLE `individual_type`
 -- AUTO_INCREMENT for table `loan_account`
 --
 ALTER TABLE `loan_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `loan_account_approval`
 --
@@ -2310,7 +2365,7 @@ ALTER TABLE `loan_account_penalty`
 -- AUTO_INCREMENT for table `loan_collateral`
 --
 ALTER TABLE `loan_collateral`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `loan_documents`
 --
@@ -2365,7 +2420,7 @@ ALTER TABLE `member_deposit_account`
 -- AUTO_INCREMENT for table `member_loan_account`
 --
 ALTER TABLE `member_loan_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `other_settings`
 --
@@ -2476,6 +2531,11 @@ ALTER TABLE `systemaccesslogs`
 --
 ALTER TABLE `tax_rate_source`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `time_units`
+--
+ALTER TABLE `time_units`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `transaction`
 --
