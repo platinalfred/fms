@@ -283,17 +283,7 @@ if(isset($_POST['origin'])){
 		break;
 		case 'loan_report':
 			$loanReportObj = new LoanAccount();
-			$data['data'] = $loanReportObj->getReport("`status`=4");
-			echo json_encode($data);
-		break;
-		case 'loan_report_individual':
-			$loanReportObj = new LoanAccount();
-			$data['data'] = $loanReportObj->getReportIndividual("`status`=4");
-			echo json_encode($data);
-		break;
-		case 'loan_report_group':
-			$loanReportObj = new LoanAccount();
-			$data['data'] = $loanReportObj->getReportGroup("`status`=4");
+			$data['data'] = $loanReportObj->getReport($start_date,$end_date);
 			echo json_encode($data);
 		break;
 		case 'loan_products':

@@ -174,11 +174,23 @@
 								<!-- ko if: status==3 -->
 									<a class="btn btn-warning btn-sm" href='#disburse_loan-modal' data-toggle="modal"><i class="fa fa-money"></i> Disburse Loan </a>
 								<!-- /ko -->
-								<?php if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])):?>
 								<!-- ko if: status==1 -->
-									<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-edit"></i> Approve Loan </a>
-								<!-- /ko -->
+								<?php if(isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit']):?>
+									<!-- ko if: parseInt(requestedAmount)<1000001 -->
+										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-edit"></i> Approve Loan </a>
+									<!-- /ko -->
 								<?php endif;?>
+								<?php if(isset($_SESSION['management_credit'])&&$_SESSION['management_credit']):?>
+									<!-- ko if: (parseInt(requestedAmount)>1000000&&parseInt(requestedAmount)<5000001) -->
+										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-edit"></i> Approve Loan </a>
+									<!-- /ko -->
+								<?php endif;?>
+								<?php if(isset($_SESSION['executive_board'])&&$_SESSION['executive_board']):?>
+									<!-- ko if: parseInt(requestedAmount)>5000000 -->
+										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-edit"></i> Approve Loan </a>
+									<!-- /ko -->
+								<?php endif;?>
+								<!-- /ko -->
 								</li>
 							</ul>
 							<div class="row m-b-lg" data-bind="if: status==2">

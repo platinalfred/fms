@@ -11,7 +11,7 @@ $(document).ready(function(){
 				  "url":"ajax_data.php",
 				  "dataType": "JSON",
 				  "type": "POST",
-				  "data":  { origin: 'loan_report'}
+				  "data":  { origin: 'loan_report', start_date:startDate,end_date:endDate}
 			  },"columnDefs": [ {
 				  "targets": [2],
 				  "orderable": false,
@@ -134,6 +134,33 @@ $(document).ready(function(){
 	}();
 	
 	TableManageButtons.init();
-	
+	$('#loan_loan_categories').change(TableManageButtons.init);
 });
+ function handleDateRangePicker(start_date, end_date){
+	 startDate = start_date;
+	 endDate = end_date;
+	switch(parseInt($('#loan_categories').val())){
+		case 1: //all loans
+			dTable['loan_report'].ajax.reload();
+			$(".table#loan_report tbody>tr:first").trigger('click');
+		break;
+		case 2: //active loans
+			dTable['active'].ajax.reload();
+			$(".table#rejected tbody>tr:first").trigger('click');
+		break;
+		case 3: //performing loans
+			dTable['approved'].ajax.reload();
+			$(".table#approved tbody>tr:first").trigger('click');
+		break;
+		case 4: //non performing loans
+			dTable['non_performing'].ajax.reload();
+			$(".table#performing tbody>tr:first").trigger('click');
+		break;
+		case 5: //due loans
+			dTable['due'].ajax.reload();
+			$(".table#due tbody>tr:first").trigger('click');
+		break;
+		default:
+	}
+ }
 </script>

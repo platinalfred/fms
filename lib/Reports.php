@@ -70,7 +70,6 @@ Class Reports{
 		if(empty($depositAccount)){
 			include_once('./savings_page.php');
 		}else{
-			//$depositAccountId = $depositAccount['loanId']);
 			include_once('./deposit_account_detail.php');
 		}
 	}

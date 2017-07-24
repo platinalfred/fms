@@ -30,17 +30,7 @@ include("lib/Reports.php");
 			<div class="col-lg-12">
 				<div class="ibox-content">
 					<a  href="?view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-dollar"></i> Income Statement</a>
-					<div class="btn-group">
-						<button data-toggle="dropdown" class="btn btn-info btn-sm dropdown-toggle"><i class="fa fa-calculator"></i> Loan Reports <span class="caret"></span></button>
-						<ul class="dropdown-menu">
-							<li><a href="?view=general">General Loans Report</a></li>
-							<li><a href="?view=individual">Individual loans</a></li>
-							<li><a href="#">Group Loans</a></li>
-							<li><a href="#">Active Loans</a></li>
-							<li><a href="#">None Performing Loans</a></li>
-							<li><a href="#">Due Loans</a></li>
-						</ul>
-					</div>
+					<a  href="?view=general" class="btn btn-info btn-sm"><i class="fa fa-calculator"></i> Loans</a>
 					<div class="btn-group">
 						<button data-toggle="dropdown" class="btn btn-info btn-sm dropdown-toggle"><i class="fa fa-dollar"></i> Savings Reports <span class="caret"></span></button>
 						<ul class="dropdown-menu">
