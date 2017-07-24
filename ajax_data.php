@@ -283,7 +283,7 @@ if(isset($_POST['origin'])){
 		break;
 		case 'loan_report':
 			$loanReportObj = new LoanAccount();
-			$data['data'] = $loanReportObj->getReport($start_date,$end_date);
+			$data['data'] = $loanReportObj->getReport($start_date,$end_date, $_POST['client_type'], $_POST['category']);
 			echo json_encode($data);
 		break;
 		case 'loan_products':
