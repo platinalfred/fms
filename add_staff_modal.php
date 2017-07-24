@@ -27,18 +27,13 @@
 						</div>
 					</div>
 					<div class="ibox-content">
-						
-						<p>
-							Capture information about a staff
-						</p>
-							
 						<form id="form" action="" method="post" name="registration"  class="wizard-big">
 							<input type="hidden" name="registered_by" value="<?php echo $_SESSION['user_id'];?>">
 							<input type="hidden" name="added_by" value="<?php echo $_SESSION['user_id'];?>">
 							<input type="hidden" name="date_registered" value="<?php echo time();?>">
 							<input type="hidden" name="person_type" value="1">
 							<input type="hidden" name="tbl" value="add_staff">
-							<h1>Account details</h1>
+							<h1>Login and staff bio information</h1>
 							<fieldset>
 								<div class="row">
 									<div class="col-lg-6">
@@ -47,11 +42,11 @@
 											<div class="col-sm-8">
 												<select class="form-control m-b" name="title" required>
 													<option value="">Choose option</option>
-													<option value="Mr" >Mr.</option>
-													<option value="Mrs">Mrs.</option>
-													<option value="Dr">Dr.</option>
-													<option value="Prof">Prof.</option>
-													<option value="Eng">Eng.</option>
+													<option value="Mr" >Mr</option>
+													<option value="Mrs">Mrs</option>
+													<option value="Dr">Dr</option>
+													<option value="Prof">Prof</option>
+													<option value="Eng">Eng</option>
 												</select>
 											</div>
 										</div>

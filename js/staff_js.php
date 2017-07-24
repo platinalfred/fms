@@ -151,7 +151,7 @@ $(document).ready(function(){
 			  "deferRender": true,
 			  "order": [[ 1, 'asc' ]],
 			  "ajax": {
-				  "url":"find_staff.php",
+				  "url":"find_data.php",
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
@@ -169,12 +169,13 @@ $(document).ready(function(){
 					{ data: 'id', render: function ( data, type, full, meta ) {return "  "+data; }},
 					{ data: 'person_number'},
 					{ data: 'username'},
-					{ data: 'position'},
+					{ data: 'name'},
 					{ data: 'Names', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname; }},
 					{ data: 'phone'},
 					{ data: 'id_number'},
 					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}},
-					{ data: 'id', render: function ( data, type, full, meta ) {  return '<a  id='+data +' class="btn btn-white btn-sm edit"><i class="fa fa-pencil"></i> Edit </a> <a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </a>';}}
+					{ data: 'status', render: function ( data, type, full, meta ) { if(data==1){return "<span class='label label-primary'>Active</span>"; }else{return "<span class='label label-danger'>Deleted</span>";} }},
+					{ data: 'id', render: function ( data, type, full, meta ) {  return '<a  id='+data +' class="btn btn-white btn-sm edit"><i class="fa fa-pencil"></i> Edit </a> <a class="btn btn-sm btn-danger delete" id='+data +'><i class="fa fa-trash"></i> </a>';}}
 					] ,
 			  buttons: [
 				{
@@ -240,5 +241,24 @@ $(document).ready(function(){
 		//memberModel.member_relatives(data.member_relatives);
 	});
 	
+	$('.table tbody').on('click', 'tr .delete', function () {
+		var confirmation = confirm("Are sure you would like to delete this item?");
+		var id = $(this).attr("id");
+		if(confirmation){
+			$.ajax({ // create an AJAX call...
+				url: "delete.php?id="+id+"&tbl=staff", // the file to call
+				success: function(response) { // on success..
+					if(response != "fail"){
+						showStatusMessage("Successfully deleted record", "success");
+						setTimeout(function(){
+							dTable.ajax.reload();
+						}, 1000);
+					}else{
+						showStatusMessage(response, "warning");
+					}
+				}			
+			}); 
+		}
+	});
 });
 </script>

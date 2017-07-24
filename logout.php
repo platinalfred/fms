@@ -11,5 +11,6 @@ unset($_SESSION['branch_manager']);
 unset($_SESSION['branch_credit']);
 unset($_SESSION['management_credit']);
 unset($_SESSION['executive_board']);
+unset($_SESSION['accountant']);
 header("location:index.php");
 ?>

@@ -398,7 +398,7 @@
 						  if(full.clientType==2){
 							  page = "sacco_group_details.php?id=";
 						  }
-						  return '<a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>';}
+						  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }
 						  },
 							{ data: 'clientNames'},
 							{ data: 'productName'},
@@ -482,7 +482,7 @@
 						  if(full.clientType==2){
 							  page = "sacco_group_details.php?id=";
 						  }
-						  return '<a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>';}},
+						  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?><a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>';}},
 							{ data: 'clientNames'},
 							{ data: 'productName'},
 							{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
@@ -549,7 +549,7 @@
 						  if(full.clientType==2){
 							  page = "sacco_group_details.php?id=";
 						  }
-						  return '<a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>';}},
+						  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?><a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>';}},
 							{ data: 'clientNames'},
 							{ data: 'productName'},
 							{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
@@ -629,7 +629,7 @@
 						  if(full.clientType==2){
 							  page = "group_details.php?id=";
 						  }
-						  return '<a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>';}},
+						  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?><a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>';}},
 							{ data: 'clientNames'},
 							{ data: 'productName'},
 							{ data: 'disbursementDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},

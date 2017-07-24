@@ -47,11 +47,19 @@
 						$db = new Db();
 						$msg = "";
 						if(isset($_POST['logon'])){
-							if($db->getLogin($_POST['username'], $_POST['password'])){ ?>
-								<script>
-									window.location = "dashboard.php";
-								</script>
-								<?php
+							if($db->getLogin($_POST['username'], $_POST['password'])){ 
+								if(isset($_SESSION['loan_officer'])){
+									?>
+									<script>
+										window.location = "view_loans.php";
+									</script>
+									<?php
+								}else{?>
+									<script>
+										window.location = "dashboard.php";
+									</script>
+									<?php
+								}
 							}else{
 								$msg =  "Incorrect Username/Password."; 
 							}

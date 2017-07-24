@@ -110,7 +110,7 @@ class Db{
 		}
 		$to_add = array("id","username", "branch_id", "personId");
 		$password = md5($password);
-		$results = $this->getfrec("staff", implode(",",$to_add), "username='$username' AND password='$password'", "", "");
+		$results = $this->getfrec("staff", implode(",",$to_add), "username='$username' AND password='$password' AND status=1", "", "");
 		
 		if(count($results) > 0){
 		   $_SESSION['Logged'] = true;

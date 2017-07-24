@@ -30,6 +30,7 @@ class Staff extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
+	
 	public function findNamesByPersonNumber($pno){
 		$result = $this->getrec(self::$table_name." st, person p", "p.first_name, p.last_name, p.other_names", "st.personId='$pno' AND p.id = st.personId", "", "");
 		return !empty($result) ? $result['first_name']." ".$result['other_names']." ".$result['last_name'] : false;
@@ -65,6 +66,12 @@ class Staff extends Db {
 		$id = $data['id'];
 		unset($data['id']);
 		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){
+			return true;
+		}
+		return false;
+	}
+	public function deleteStaff($id){
+		if($this->update(self::$table_name, array("status"), array("status"=>0), "id=".$id)){
 			return true;
 		}
 		return false;

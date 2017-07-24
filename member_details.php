@@ -59,11 +59,16 @@ p{
 
 			<div class="ibox">
 				<div class="ibox-title">
-					<h5><?php echo $names; ?> <small> - <?php echo $member->findPersonNumber($member_data['id']);?> </small></h5>
-					<div class="ibox-tools">
-						<a  data-toggle="modal" href="#update_member" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Edit </a>
-						<a href="#" class="btn btn-danger btn-sm delete_member" style="color:#fff;"><i class="fa fa-trash"></i> Delete</a>
-					</div>
+					<h5><?php echo $names; ?> <small> - <?php echo $member->findPersonNumber($member_data['personId']);?> </small></h5>
+					<?php 
+					if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>
+						<div class="ibox-tools">
+							<a  data-toggle="modal" href="#update_member" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+							<a href="#" class="btn btn-danger btn-sm delete_member" style="color:#fff;"><i class="fa fa-trash"></i> Delete</a>
+						</div>
+					<?php 
+					}
+					?>
 				</div>
 				<div class="ibox-content" style="padding-top:3px;">
 					<div class="col-lg-12">
@@ -83,11 +88,20 @@ p{
 									<div class="col-lg-2">
 									<?php
 										if($member_data['photograph'] !="" && file_exists($member_data['photograph'])){?> 
-											<img style="width:100%; height:100%;" height="100%" src="<?php echo $member_data['photograph']; ?>" > <a  href="" type="button"  data-toggle="modal" data-target=".add_photo"><i class="fa fa-edit"></i> Change photo</a>
+											<img style="width:100%; height:100%;" height="100%" src="<?php echo $member_data['photograph']; ?>" > 
 											<?php 
+											if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>
+												<a  href="" type="button"  data-toggle="modal" data-target=".add_photo"><i class="fa fa-edit"></i> Change photo</a>
+											<?php 
+											}
 										}else{?>
-											<img style="width:100%;"  src="img/user.png" > <a  href="" type="button"  data-toggle="modal" data-target=".add_photo">
-											<i class="fa fa-edit"></i> Add a photo</a><?php 
+											<img style="width:100%;"  src="img/user.png" >
+											<?php 
+											if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>
+												<a  href="" type="button"  data-toggle="modal" data-target=".add_photo">
+												<i class="fa fa-edit"></i> Add a photo</a>
+												<?php 
+											}
 										} ?>
 										<div class="modal fade add_photo" tabindex="-1" role="dialog" aria-hidden="true">
 											<div class="modal-dialog modal-sm">

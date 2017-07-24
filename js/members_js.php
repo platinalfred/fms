@@ -400,7 +400,7 @@ $(document).ready(function(){
 					{ data: 'phone'},
 					{ data: 'id_number'},
 					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}}<?php 
-					if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>,
+					if(!isset($_SESSION['loan_officer'])){ ?>,
 					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <a href="member_details.php?id='+data+'" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> more </a> ';}} <?php } ?> 
 					] ,
 			  buttons: [
