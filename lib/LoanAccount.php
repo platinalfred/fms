@@ -99,6 +99,7 @@ class LoanAccount extends Db {
 				$where .= "`status`=4";
 			break;
 			case 2: //performing loans
+				$where .= "`status`=4";
 			break;
 			case 3: //non performing loans
 				$immediate_date = "ImmediateDueDate(FROM_UNIXTIME(`disbursementDate`),`installments`,`repaymentsMadeEvery`,`repaymentsFrequency`,FROM_UNIXTIME($end_date))";
@@ -110,7 +111,7 @@ class LoanAccount extends Db {
 				
 				$payments_sql = "(SELECT `loanAccountId`, COUNT(`id`)`paidInstallments`, COALESCE(SUM(amount),0) `amountPaid`  FROM `loan_repayment` WHERE `transactionDate` <= $end_date GROUP BY `loanAccountId`) `loan_payments`";
 				
-				$where .= "$immediate_date IS NOT NULL AND ((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql>`amountPaid`";
+				$where .= "`status`=4 AND $immediate_date IS NOT NULL AND ((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql>`amountPaid`";
 			break;
 			case 4: //due loans
 				$timestamp_diff_sql = "(CASE `repaymentsMadeEvery`
@@ -118,9 +119,10 @@ class LoanAccount extends Db {
 					WHEN 2 THEN TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(`disbursementDate`),$due_date)
 					WHEN 3 THEN TIMESTAMPDIFF(MONTH,FROM_UNIXTIME(`disbursementDate`),$due_date)
 					END)";
-				$where .= "$due_date IS NOT NULL AND ((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql>`amountPaid`";
+				$where .= "`status`=4 AND $due_date IS NOT NULL AND ((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql>`amountPaid`";
 			break;
 			default;
+			$where .= "`status`=4";
 		}
 		
 		$member_group_union_sql = $client_type==1?(self::$member_sql):($client_type==2?(self::$saccogroup_sql):(self::$member_sql. " UNION ". self::$saccogroup_sql));
