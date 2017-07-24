@@ -13,7 +13,7 @@
 
 		//variables for the dropdowns
 		self.daysOfYearOptions = [{id:1,desc:'Actual/365 Fixed(365 days)'},{id:2,desc:'30 Day month (360 days)'}];
-		self.initialAccountStateOptions = [{"id":1, "desc":"Pending Approval"},{"id":1, "desc":"Partial Application"}];
+		self.initialAccountStateOptions = [{"id":1, "desc":"Pending Approval"}];
 		self.taxCalculationMethodOptions = [{"id":1, "desc":"Inclusive"},{"id":2, "desc":"Exclusive"}];
 		self.penaltyCalculationMethodOptions = ko.observableArray([{"id":1, "methodDescription":"No penalty"},{"id":2, "methodDescription":"(Overdue Principal + Overdue Interest)*# of Late Days * Penalty Rate"}]);
 		self.repaymentsMadeEveryOptions = [{id:1,desc:'Day(s)'},{id:2,desc:'Week(s)'},{id:3,desc:'Month(s)'}];

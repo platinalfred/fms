@@ -59,7 +59,7 @@
                                 <div class="form-group">
 									<label class="col-sm-2 control-label">Max Tranches <sup data-toggle="tooltip" title="Specify if the loan amount can be disbursed in multiple tranches" data-placement="right"><i class="fa fa-question-circle"></i><sup></label>
 
-                                    <div class="col-sm-2"><input type="number" placeholder="days" class="form-control input-sm " name="maxTranches" id="maxTranches" data-bind="value: maxTranches" data-msg-required="Number of days is required"/></div><label class="col-sm-1 control-label"> #</label><div class="col-sm-6"></div>
+                                    <div class="col-sm-2"><input type="number" placeholder="trenches" class="form-control input-sm " name="maxTranches" id="maxTranches" data-bind="value: maxTranches" data-msg-required="Number of trenches is required"/></div><label class="col-sm-1 control-label"> #</label><div class="col-sm-6"></div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
 								<!--Found at https://support.mambu.com/customer/en/portal/articles/1162103-setting-up-new-loan-products -->
@@ -176,6 +176,10 @@
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
+								<!-- TEMPORARILY ADDED FOR TAXES-->
+								<input type="hidden" name="taxRateSource">
+								<input type="hidden" name="taxCalculationMethod">
+								<!--
                                 <div class="form-group">
                                     <div class="col-sm-3">
 										<label class="control-label">Tax Rate source</label>
@@ -191,7 +195,7 @@
 										<select class="form-control" id="taxCalculationMethod" name="taxCalculationMethod" data-bind='options: taxCalculationMethodOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: taxCalculationMethod'>
 										</select>
                                     </div>
-                                </div>
+                                </div>-->
                                 </div>
                                 <div class="hr-line-dashed"></div>
 								<div class="form-group" data-bind="visible: existingLoanProductFees().length > 0">
@@ -201,9 +205,9 @@
 												<tr>
 													<th>Choose</th>
 													<th>Name</th>
-													<th>Amount, Flat(UGX)</th>
 													<th>Fee Type</th>
 													<th>Amount Calculated As</th>
+													<th>Amount</th>
 													<th>Required Fee?</th>
 												</tr>
 											</thead>
@@ -211,9 +215,9 @@
 												<tr>
 													<td><input class="icheckbox_square-green" style="position: relative;" name="fee" type="checkbox" data-bind="attr:{value: id}, checked: $parent.productFee" /></td>
 													<td data-bind='text: feeName'></td>
-													<td data-bind='text: curr_format(amount)'></td>
 													<td data-bind='text: feeTypeName'></td>
 													<td data-bind='text: $root.getAmountCalculatedAsOption(amountCalculatedAs)'></td>
+													<td data-bind='text: curr_format(amount)'></td>
 													<td data-bind='text: $root.requiredFunctionNot(requiredFee)'></td>
 												</tr>
 											</tbody>
@@ -227,9 +231,10 @@
 											<thead>
 												<tr>
 													<th>Name</th>
-													<th>Amount, Flat(UGX)</th>
-													<th>Fee Type</th>
 													<th>Amount Calculated As</th>
+													<th>Amount</th>
+													<th>Fee Type</th>
+													
 													<th>Required Fee?</th>
 													<th>&nbsp;</th>
 												</tr>
@@ -237,11 +242,13 @@
 											<tbody data-bind="foreach: $root.newLoanProductFees">
 												<tr>
 													<td><input class="form-control input-sm required" name="feeName[]" data-bind='value: feeName, uniqueName: true' data-msg-required="Fee name is required" required/></td>
+													<td><select class="form-control " id="amountCalculatedAs" name="amountCalculatedAs" data-bind='options: $parent.amountCalculatedAsOptions, optionsText: "desc", , optionsAfterRender: $root.setOptionValue("id"), optionsCaption: "Select...", value: amountCalculatedAs'>
+													</select><!-- to be used later , css: {required:id==2} --></td>
+													
 													<td><input class="form-control input-sm required" name="amount[]" type="number" data-bind='value: amount' required/></td>
 													<td><select class="form-control" id="feeType" name="feeType" data-bind='options: $parent.feeTypesOptions, optionsText: "description", optionsCaption: "Select...", , optionsAfterRender: $parent.setOptionValue("id"), value: feeType' data-msg-required="Fee type is required">
 													</select></td>
-													<td><select class="form-control " id="amountCalculatedAs" name="amountCalculatedAs" data-bind='options: $parent.amountCalculatedAsOptions, optionsText: "desc", , optionsAfterRender: $root.setOptionValue("id"), optionsCaption: "Select...", value: amountCalculatedAs'>
-													</select><!-- to be used later , css: {required:id==2} --></td>
+													
 													<td><input class="form-control input-sm required" name="requiredFee[]" type="checkbox" data-bind='checked: requiredFee' required/></td>
 													<td><span title="Remove fee" class="btn text-danger" data-bind='click: $root.removeFee'><i class="fa fa-minus"></i></span></td>
 												</tr>

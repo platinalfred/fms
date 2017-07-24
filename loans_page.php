@@ -185,7 +185,7 @@
 									<!-- /ko -->
 									
 								<?php }
-								if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])):?>
+								if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&& $_SESSION['executive_board'])):?>
 								<!-- ko if: status==1 -->
 								<?php if(isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit']):?>
 									<!-- ko if: parseInt(requestedAmount)<1000001 -->

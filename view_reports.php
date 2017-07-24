@@ -32,21 +32,14 @@ include("lib/Reports.php");
 					<a  href="?view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-dollar"></i> Income Statement</a>
 					<a  href="?view=general" class="btn btn-info btn-sm"><i class="fa fa-calculator"></i> Loans</a>
 					<div class="btn-group">
-						<button data-toggle="dropdown" class="btn btn-info btn-sm dropdown-toggle"><i class="fa fa-dollar"></i> Savings Reports <span class="caret"></span></button>
-						<ul class="dropdown-menu">
-							<li><a href="#">General savings accounts</a></li>
-							<li><a href="#">Individual savings accounts</a></li>
-							<li><a href="#">Group savings accounts</a></li>
-						</ul>
+						<a href="?view=allsavings" class="btn btn-info btn-sm"><i class="fa fa-dollar"></i> Savings</a>
+						
 					</div>
-					<a href="#" class="btn btn-sm btn-info"> Expenses report</a>
+					<a href="?view=expenses" class="btn btn-sm btn-info"> Expenses</a>
 					
 					
 					<a href="?view=subscriptions" class="btn btn-info btn-sm"><i class="fa fa-money"></i> <span class="nav-label">Subscriptions</span>  </a>
 					<a href="?view=shares" class="btn btn-info btn-sm"><i class="fa fa-money"></i> <span class="nav-label">Shares</span>  </a>
-					<a href="?view=members" class="btn btn-info btn-sm"><i class="fa fa-group"></i> <span class="nav-label">Members</span>  </a>
-					<a href="?view=groups" class="btn btn-info btn-sm"><i class="fa fa-group"></i> <span class="nav-label">Groups</span>  </a>
-					<a href="#" class="btn btn-info btn-sm">Log reports</a>
 				</div>
 				
 			</div>
@@ -68,6 +61,12 @@ include("lib/Reports.php");
 	  switch($_GET['view']){
 		case 'savings':
 			include("js/savings_js.php");
+		break;
+		case 'allsavings':
+			include("js/savings_page_js.php");
+		break;
+		case 'expenses':
+			include("js/expense_report.php");
 		break;
 		case 'general':
 			include("js/reports_js.inc");

@@ -26,6 +26,9 @@ Class Reports{
 			case 'savings_accs';
 				$this->viewSavingsAccs($this->data, $this->item_view);
 			break;
+			case 'allsavings';
+				$this->viewSavings($this->data, $this->item_view);
+			break;
 			case 'loan_accs';
 				$this->clientLoan($this->data, $this->item_view);
 			break;
@@ -40,6 +43,9 @@ Class Reports{
 			break;
 			case 'subscriptions';
 				$this->generalSubsriptions();
+			break;
+			case 'expenses';
+				$this->allExpenses();
 			break;
 			case 'shares';
 				$this->generalShares();
@@ -72,6 +78,12 @@ Class Reports{
 		}else{
 			include_once('./deposit_account_detail.php');
 		}
+	}
+	public function viewSavings($client){
+		include_once('./allsavings.php');
+	}
+	public function allExpenses(){
+		include_once('./viewexpenses.php');
 	}
 	public function viewGeneral(){
 		include_once('./general_reports.php');
