@@ -88,7 +88,7 @@ p{
 									<div class="col-lg-2">
 									<?php
 										if($member_data['photograph'] !="" && file_exists($member_data['photograph'])){?> 
-											<img style="width:100%; height:100%;" height="100%" src="<?php echo $member_data['photograph']; ?>" > 
+											<img style="width:100%;"  src="<?php echo $member_data['photograph']; ?>" > 
 											<?php 
 											if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>
 												<a  href="" type="button"  data-toggle="modal" data-target=".add_photo"><i class="fa fa-edit"></i> Change photo</a>

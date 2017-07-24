@@ -1,8 +1,8 @@
 <?php 
 require_once("lib/Person.php");
-require_once("lib/SimpleImage.php");
+require_once("lib/SimpleImage1.php");
 $person = new Person();
-$images = new SimpleImage();
+
 $msg = "";
 if(isset($_POST['photo_upload'])){
 	if ($_FILES['photograph']['error'] > 0) {
@@ -27,22 +27,19 @@ if(isset($_POST['photo_upload'])){
 					}else{
 						$msg =  "Oooooops!! there was an error! ";
 					}
-				}else{		
+				}else{	
+					//$images = new SimpleImage($_FILES['photograph']['tmp_name']);
 					$data['photograph'] = $normal;
 					$data['id'] = $_POST['id'];
-					$images->load($_FILES['photograph']['tmp_name']);
-					$images->resize(131, 120); 
-					$images->output($_FILES["photograph"]["type"]);
-					$images->save('img/profiles/'.$_FILES['photograph']['name']);
-					//if(move_uploaded_file($_FILES['photograph']['tmp_name'], 'img/profiles/'.$_FILES['photograph']['name'])){
+					if(move_uploaded_file($_FILES['photograph']['tmp_name'], 'img/profiles/'.$_FILES['photograph']['name'])){
 						if($person->updateImage($data)){					
 							 $msg =  'success';
 						}else{
 							$msg =  "Oooooops!! there was an error! ";
 						}
-					/* }else{
+					}else{
 						$msg = "File can not be uploaded.";
-					} */
+					} 
 					
 				}
 			}

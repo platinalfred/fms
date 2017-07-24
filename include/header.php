@@ -234,7 +234,7 @@ if(!isset($_SESSION['Logged'])){
                         </li>
 						<?php 
 						} 
-						if(!isset($_SESSION['loan_officer']) && !isset($_SESSION['executive_board'])){ ?>
+						if(!isset($_SESSION['loan_officer'])){ ?>
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                                 <i class="fa fa-envelope"></i> <span class="label label-warning">16</span>

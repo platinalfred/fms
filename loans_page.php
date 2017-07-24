@@ -193,7 +193,7 @@
 										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-edit"></i> Approve Loan </a>
 									<!-- /ko -->
 								<?php endif;?>
-								<?php if(isset($_SESSION['management_credit'])&&$_SESSION['management_credit']):?>
+								<?php if(isset($_SESSION['management_credit'])&& $_SESSION['management_credit']):?>
 									<!-- ko if: (parseInt(requestedAmount)>1000000&&parseInt(requestedAmount)<5000001) -->
 										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-edit"></i> Approve Loan </a>
 									<!-- /ko -->
