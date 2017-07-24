@@ -184,8 +184,7 @@
 										<a class="btn btn-warning btn-sm" href='#disburse_loan-modal' data-toggle="modal"><i class="fa fa-money"></i> Disburse Loan </a>
 									<!-- /ko -->
 									
-									<?php 
-								}
+								<?php }
 								if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])):?>
 								<!-- ko if: status==1 -->
 								<?php if(isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit']):?>
@@ -204,6 +203,7 @@
 									<!-- /ko -->
 								<?php endif;?>
 								<!-- /ko -->
+								<?php endif;?>
 								</li>
 							</ul>
 							<div class="row m-b-lg" data-bind="if: status==2">
@@ -245,9 +245,9 @@
 					</div>
 				</div>
 			</div>
-		<?php include_once("add_loan_account_modal.php");?>
-		<?php include_once("make_payment_modal.php");?>
-		<?php include_once("loan_approval_modal.php");?>
-		<?php include_once("disburse_loan_modal.php");?>
+		<?php include_once("add_loan_account_modal.php"); ?>
+		<?php include_once("make_payment_modal.php"); ?>
+		<?php include_once("loan_approval_modal.php"); ?>
+		<?php include_once("disburse_loan_modal.php"); ?>
 		</div>
 	</div>	
