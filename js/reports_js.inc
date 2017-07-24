@@ -14,42 +14,47 @@ $(document).ready(function(){
 				  "type": "POST",
 				  "data":  function(d){ d.origin = 'loan_report', d.start_date = startDate,d.end_date=endDate,d.client_type = client_type,d.category = category}
 			  },"columnDefs": [ {
-				  "targets": [2],
-				  "orderable": false,
-				  "searchable": false
-			  },{
-				  "targets": [15],
+				  "targets": [16],
 				  "orderable": false,
 				  "visible": false,
 				  "searchable": false
 			  }],
 			  "footerCallback": function (tfoot, data, start, end, display ) {
-				var api = this.api(), cols = [2,5,6,9,10,12];
+				var api = this.api(), cols = [3,4,7,10,11,13];
 				$.each(cols, function(key, val){
 					var total = api.column(val).data().sum();
 					$(api.column(val).footer()).html( curr_format(total) );
 				});
 				//outstanding principle
-				var outstanding_principle = api.column(2).data().sum() - api.column(9).data().sum();
-				$(api.column(11).footer()).html( curr_format( outstanding_principle ) );
+				var outstanding_principle = api.column(3).data().sum() - api.column(10).data().sum();
+				$(api.column(12).footer()).html( curr_format( outstanding_principle ) );
 				//outstanding interest
-				var outstanding_interest = api.column(5).data().sum() - api.column(10).data().sum();
-				$(api.column(12).footer()).html( curr_format( outstanding_interest ) );
+				var outstanding_interest = api.column(6).data().sum() - api.column(11).data().sum();
+				$(api.column(13).footer()).html( curr_format( outstanding_interest ) );
 				//total outstanding loan amount
-				$(api.column(13).footer()).html( curr_format( outstanding_principle + outstanding_interest ) );
+				$(api.column(14).footer()).html( curr_format( outstanding_principle + outstanding_interest ) );
 				//total miscellaneous income//
 				
-				var paid_amount = (api.column(15).data().sum());
+				var paid_amount = (api.column(16).data().sum());
 				
-				var loan_amount = (api.column(2).data().sum())+(api.column(5).data().sum());
+				var loan_amount = (api.column(3).data().sum())+(api.column(6).data().sum());
 				
 				var misc_income = (paid_amount>loan_amount)?curr_format((paid_amount-loan_amount)):0;
-				$(api.column(14).footer()).html( misc_income );
+				$(api.column(15).footer()).html( misc_income );
 			  },
 			  "autoWidth": false,
 			  columns:[
-				  { data: 'id'},
+				  { data: 'loanNo', render: function ( data, type, full, meta ) {
+					  var page = "";
+					  if(full.clientType==1){
+						  page = "member_details.php?id=";
+					  }
+					  if(full.clientType==2){
+						  page = "group_details.php?id=";
+					  }
+					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }},
 				  { data: 'clientNames'},
+				  { data: 'disbursementDate' },
 				  { data: 'disbursedAmount', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  { data: 'principle', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  { data: 'interest', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},

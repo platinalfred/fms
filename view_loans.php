@@ -3,7 +3,6 @@
 	$page_title = "Loan Accounts";
 	include("include/header.php"); 
 	require_once("lib/Libraries.php");
-	print_r($_SESSION);
 	require_once("loans_page.php");
 	include("include/footer.php");
 	require_once("js/loanAccount.php");
