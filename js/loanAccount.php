@@ -12,6 +12,7 @@
 	var Business = function() {
 			var self = this;
 			self.businessName = ko.observable();
+			self.natureOfBusiness = ko.observable("Retail");
 			self.businessLocation = ko.observable();
 			self.numberOfEmployees = ko.observable(0); //no of employees
 			self.businessWorth = ko.observable(0); //monetary worth of the business

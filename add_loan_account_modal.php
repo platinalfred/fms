@@ -284,7 +284,7 @@
 										<div class="col-lg-6">
 											<div class="form-group">
 												<label>Business Location</label>
-												<textarea data-bind="value: location" required class="form-control "></textarea>
+												<textarea data-bind="value: businessLocation" required class="form-control "></textarea>
 											</div>
 										</div>
 										<div class="col-lg-3">
