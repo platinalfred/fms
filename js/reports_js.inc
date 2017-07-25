@@ -54,7 +54,7 @@ $(document).ready(function(){
 					  }
 					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }},
 				  { data: 'clientNames'},
-				  { data: 'disbursementDate' },
+				  { data: 'disbursementDate', render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');} },
 				  { data: 'disbursedAmount', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  { data: 'principle', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  { data: 'interest', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
