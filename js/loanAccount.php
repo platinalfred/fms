@@ -6,6 +6,26 @@
 			self.description = ko.observable();
 			self.itemValue = ko.observable(0);
 			self.attachmentUrl = ko.observable();
+			//self.uploadImage = function(file){
+				//Is the file an image??
+				//if(!file||!file.type.match(/image.*/)) return;
+				
+				//it is
+			/* 	document.body.className = "uploading";
+				
+				//let's build a FormData object
+				var fd = new FormData();
+				fd.append('image',file); //append the file
+				fd.append("key","262662626262");
+				var xhr = new XMLHttpRequest();//
+				xhr.open("POST","http://localhost/fms/uploadImage.php");
+				xhr.onload = function(){
+					document.querySelector("#link").href = JSON.parse(xhr.responseText).upload.links.imgur_page;
+					document.body.className = "uploaded";
+				}
+				//And now, we send the formdata
+				xhr.send(fd);
+			}; */
 		};
 
 	//any business owned by the applicant
@@ -283,11 +303,11 @@
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
 							$("#loanAccountApprovalForm")[0].reset();
+							$('#approve_loan-modal').modal('hide');
 							dTable['applications'].ajax.reload();
 							dTable['approved'].ajax.reload();
 							dTable['rejected'].ajax.reload();
 							self.account_details(null);
-							$('#approve_loan-modal').modal('hide');
 						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while approving: \n"+response ,"fail");
@@ -313,10 +333,10 @@
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
 							$("#loanAccountApprovalForm")[0].reset();
+							$('#disburse_loan-modal').modal('hide');
 							dTable['applications'].ajax.reload();
 							dTable['approved'].ajax.reload();
 							dTable['rejected'].ajax.reload();
-							$('#disburse_loan-modal').modal('hide');
 						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while approving: \n"+response ,"fail");
