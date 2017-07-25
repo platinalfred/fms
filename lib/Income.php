@@ -10,7 +10,10 @@ class Income extends Db {
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
 		return !empty($result) ? $result:false;
 	}
-	
+	public function findIncomeSum($where = ""){
+		$result = $this->getfrec(self::$table_name, "SUM(`amount`) `amount`", $where, "", "");
+		return !empty($result) ? $result['amount']:0;
+	}
 	public function findAll($where = 1, $orderby = "", $limit = ""){
 		$result_array = $this->getarray(self::$table_name2, $where, $orderby, $limit );
 		return !empty($result_array) ? $result_array : false;

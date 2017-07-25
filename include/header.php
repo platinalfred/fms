@@ -235,7 +235,8 @@ if(!isset($_SESSION['Logged'])){
 						<?php 
 						} 
 						if(!isset($_SESSION['loan_officer'])){ ?>
-                        <li class="dropdown">
+                        <!--
+						<li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                                 <i class="fa fa-envelope"></i> <span class="label label-warning">16</span>
                             </a>
@@ -327,6 +328,7 @@ if(!isset($_SESSION['Logged'])){
                                 </li>
                             </ul>
                         </li>
+						-->
 						<?php 
 						}
 						?>
