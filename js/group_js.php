@@ -30,7 +30,7 @@ $(document).ready(function(){
 					{ data: 'id'},
 					{ data: 'groupName'},
 					{ data: 'description'}<?php 
-					if(isset($_SESSION['admin']) || isset($_SESSION['loan_officer'])){ ?>,
+					if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>,
 					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle">Action <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="group_details.php?id='+ data +'"><i class="fa fa-folder"></i> Manage Group</a></li><li><a id="'+data+'"  class="delete_me"><i class="fa fa-trash" style="color:#ff0000"></i> Delete</a></li>   </ul></div>  ';}} <?php } ?> 
 					] ,
 			  buttons: [

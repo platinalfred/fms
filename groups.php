@@ -23,7 +23,12 @@ $member = new Member();
 			<div class="ibox">
 				<div class="ibox-content">
 					<h2>Member Groups</h2>
+					<?php 
+					if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){  ?>
 					<div class="col-sm-12 text-muted small pull-left" style="padding:10px;"><a data-toggle="modal" class="btn btn-primary" href="#add_group"><i class="fa fa-plus"></i> Add Group</a></div>
+					<?php 
+					}
+					?>
 					<div class="clear:both;"></div>
 					<table class="table table-striped table-hover" id="groupTable">
 						<thead>
@@ -32,7 +37,7 @@ $member = new Member();
 								<th>Group Name</th>
 								<th>Description</th>
 								<?php 
-								if(!isset($_SESSION['loan_officer'])){ ?>
+								if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){  ?>
 									<th>Edit/Delete</th>
 								<?php 
 								}

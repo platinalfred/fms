@@ -18,9 +18,9 @@
 							<div class="form-group">
 								<label class="control-label" for="product_name">Loans</label>
 								<select id="loan_types" class="form-control">
-								   <option value="1" <?php echo (isset($_GET['status'])&&$_GET['status']==1)?'selected':'';?>>Pending</option>
+								   <option value="1" <?php echo (isset($_GET['status'])&&$_GET['status']==1)?'selected':'selected';?>>Pending</option>
 								    <option value="3" <?php echo (isset($_GET['status'])&&$_GET['status']==3)?'selected':'';?>>Approved</option>
-								    <option value="4" <?php echo isset($_GET['status'])?(($_GET['status']==4)?'selected':''):'selected';?>>Disbursed</option>
+								    <option value="4" <?php echo isset($_GET['status'])?(($_GET['status']==4)?'selected':''):'';?>>Disbursed</option>
 									<option value="2" <?php echo (isset($_GET['status'])&&$_GET['status']==2)?'selected':'';?>>Rejected</option>
 								</select >
 							</div>

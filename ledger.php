@@ -63,11 +63,12 @@
 											</tr>
 										</thead>
 										<tbody id="ledger">
+											<!--
 											<tr>
 												<td>Miscellaneous Income</td><td><span data-bind="text: (shares?curr_format(parseInt(shares)):0)">0.0</span></td>
-											</tr>
+											</tr> -->
 											<tr>
-												<td>Income from other sources</td><td><span data-bind="text: (shares?curr_format(parseInt(shares)):0)">0.0</span></td>
+												<td>Income from other sources</td><td><span data-bind="text: (other_income_sources?curr_format(parseInt(other_income_sources)):0)">0.0</span></td>
 											</tr>
 											<tr>
 												<td>Shares</td><td><span data-bind="text: (shares?curr_format(parseInt(shares)):0)">0.0</span></td>
@@ -90,7 +91,7 @@
 										</tbody>
 										<tfoot>
 											<tr>
-												<th>Total Revenues &amp; Gains</th><td><strong><span data-bind="text: curr_format((subscriptions?parseInt(subscriptions):0)+(shares?parseInt(shares):0)+((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0))))">0.0</span></strong></td>
+												<th>Total Revenues &amp; Gains</th><td><strong><span data-bind="text: curr_format((subscriptions?parseInt(subscriptions):0)+(other_income_sources?parseInt(other_income_sources):0)+(shares?parseInt(shares):0)+((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0))))">0.0</span></strong></td>
 											</tr>
 										</tfoot>
 									</table>
@@ -160,7 +161,7 @@
 										</tbody>
 										<tfoot>
 											<tr>
-												<th>NET INCOME</th><td><strong><span data-bind="text: curr_format((subscriptions?parseInt(subscriptions):0)+(shares?parseInt(shares):0)+((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0)))-(expenses?parseInt(expenses):0))">0.0</span></strong></td>
+												<th>NET INCOME</th><td><strong><span data-bind="text: curr_format((subscriptions?parseInt(subscriptions):0)+(other_income_sources?parseInt(other_income_sources):0)+(shares?parseInt(shares):0)+((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0)))-(expenses?parseInt(expenses):0))">0.0</span></strong></td>
 											</tr>
 										</tfoot>
 									</table>

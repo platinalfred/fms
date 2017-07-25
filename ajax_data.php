@@ -244,10 +244,14 @@ if(isset($_POST['origin'])){
 				$sharesObj = new Shares();
 				$subscriptionsObj = new Subscription();
 				$expensesObj = new Expenses();
+				$incomeObj = new Income();
 				$data['subscriptions'] = $subscriptionsObj->findSubscriptionAmount(($between?"(datePaid ".$between:""));
 				$data['shares'] = $sharesObj->findShareAmount(($between?"(`datePaid` ".$between:""));
 				$data['expenses'] = $expensesObj->findExpensesSum(($between?"(`expenseDate` ".$between:""));
+				$data['other_income_sources'] = $incomeObj->findIncomeSum(($between?"(`dateAdded` ".$between:""));
 				$data['opening_balances'] = $depositAccountObj->getSumOfFields(($between?"(`dateCreated` ".$between:"1 "), $deposit_account_ids_array);
+				
+				
 				
 				$data['deposits'] = $depositAccountTransactionObj->getMoneySum("1 ". ($between?"AND (`dateCreated` ".$between:""),  $deposit_account_ids_array);
 				$data['withdraws'] = $depositAccountTransactionObj->getMoneySum("2 ". ($between?"AND (`dateCreated` ".$between:""),  $deposit_account_ids_array);
