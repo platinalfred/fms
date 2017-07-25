@@ -85,6 +85,40 @@
 											</table>
 										</div>
 									</div>
+									<div class="col-md-12" data-bind="if: $parent.loan_account_details().memberBusinesses">
+										<strong>Business</strong>
+										<div class="table-responsive">
+											<table class="table table-condensed">
+												<thead>
+													<tr>
+														<th>Business</th>
+														<th>Type</th>
+														<th>Location</th>
+														<th>No. Employees</th>
+														<th>URSB No.</th>
+														<th>Business Worth</th>
+													</tr>
+												</thead>
+												<tbody data-bind="foreach: $parent.loan_account_details().memberBusinesses">
+													<tr>
+														<td data-bind="text: businessName"></td>
+														<td data-bind="text: natureOfBusiness"></td>
+														<td data-bind="text: businessLocation"></td>
+														<td data-bind="text: numberOfEmployees"></td>
+														<td data-bind="text: ursbNumber"></td>
+														<td data-bind="text: curr_format(parseInt(businessWorth))"></td>
+													</tr>
+												</tbody>
+												<tfoot>
+													<tr>
+														<th>Total</th>
+														<th colspan="4"></th>
+														<th data-bind="text: curr_format(parseInt(array_total($parent.loan_account_details().memberBusinesses,5)))"></th>
+													</tr>
+												</tfoot>
+											</table>
+										</div>
+									</div>
 									<div class="col-md-12" data-bind="if: $parent.loan_account_details().relatives">
 										<strong>Relatives</strong>
 										<div class="table-responsive">
@@ -133,57 +167,60 @@
 									</div>
 									<!--/ko-->
 								</div>
-								<form class="form-horizontal" id="loanAccountApprovalForm">
-									<div class="col-md-5">
-									  <div class="form-group" data-bind="with: account_details">
-										<label class="control-label col-sm-6">Loan Product</label>
-										<p class="col-sm-6" data-bind="text: productName"></p>
-									  </div>
-									  <div class="form-group" data-bind="with: account_details">
-										<label class="control-label col-sm-6">Account No.</label>
-										<p class="col-sm-6" data-bind="text: loanNo"></p>
-									  </div>
-									  <div class="form-group" data-bind="with: account_details">
-										<label class="control-label col-sm-6">Amount requested</label>
-										<p class="col-sm-6" data-bind="text: 'UGX ' + curr_format(parseInt(requestedAmount))"></p>
-									  </div>
-									</div>
-									<div class="col-md-7">
-									  <div class="form-group" data-bind="with: account_details">
-										<label class="control-label col-sm-4">Approve/reject</label>
-										<div class="col-sm-4">
-											<label class="control-label text-danger"><input type="radio" name="status" value="2" data-bind="checked: $parent.applicationStatus"/> Rejected</label>
+								<hr/>
+								<div>
+									<form class="form-horizontal" id="loanAccountApprovalForm">
+										<div class="col-md-5">
+										  <div class="form-group" data-bind="with: account_details">
+											<label class="control-label col-sm-6">Loan Product</label>
+											<p class="col-sm-6" data-bind="text: productName"></p>
+										  </div>
+										  <div class="form-group" data-bind="with: account_details">
+											<label class="control-label col-sm-6">Account No.</label>
+											<p class="col-sm-6" data-bind="text: loanNo"></p>
+										  </div>
+										  <div class="form-group" data-bind="with: account_details">
+											<label class="control-label col-sm-6">Amount requested</label>
+											<p class="col-sm-6" data-bind="text: 'UGX ' + curr_format(parseInt(requestedAmount))"></p>
+										  </div>
 										</div>
-										<div class="col-sm-4">
-											<label class="control-label text-info"><input type="radio" name="status" value="3" data-bind="checked: $parent.applicationStatus" required data-msg-required="Please select option"/> Approved</label>
-										</div>
-									  </div>
-									  <div class="form-group" data-bind="with: account_details">
-										<label class="control-label col-sm-4" for="amountApproved">Amount approved<span class="required">*</span></label>
-										<div class="col-sm-8">
-										  <input type="number"  id="amountApproved" name="amountApproved" class="form-control col-sm-7" data-bind='value: $parent.amountApproved, attr: {"data-rule-max":parseInt(requestedAmount), "data-msg-max":"Amount cannot be greater than requested amount "+requestedAmount}' data-msg-required="Enter approved amount" required>
-										</div>
+										<div class="col-md-7">
+										  <div class="form-group" data-bind="with: account_details">
+											<label class="control-label col-sm-4">Approve/reject</label>
+											<div class="col-sm-4">
+												<label class="control-label text-danger"><input type="radio" name="status" value="2" data-bind="checked: $parent.applicationStatus"/> Rejected</label>
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label text-info"><input type="radio" name="status" value="3" data-bind="checked: $parent.applicationStatus" required data-msg-required="Please select option"/> Approved</label>
+											</div>
+										  </div>
+										  <div class="form-group" data-bind="with: account_details">
+											<label class="control-label col-sm-4" for="amountApproved">Amount approved<span class="required">*</span></label>
+											<div class="col-sm-8">
+											  <input type="number"  id="amountApproved" name="amountApproved" class="form-control col-sm-7" data-bind='value: $parent.amountApproved, attr: {"data-rule-max":parseInt(requestedAmount), "data-msg-max":"Amount cannot be greater than requested amount "+requestedAmount}' data-msg-required="Enter approved amount" required>
+											</div>
+										  </div>
+										  <div class="form-group">
+											<label class="control-label col-sm-4"></label>
+											<div class="col-sm-8">
+												<i><span data-bind="text: getWords(amountApproved())+' Uganda shillings only'"></span></i>
+											</div>
+										  </div>
+										  <div class="form-group" data-bind="with: account_details">
+											<label class="control-label col-sm-4" for="textarea">Justification </label>
+											<div class="col-sm-8">
+											  <textarea id="approvalNotes"  name="approvalNotes" class="form-control" data-bind="value: approvalNotes" required data-msg-required="Justification is required"></textarea>
+											</div>
+										  </div>
 									  </div>
 									  <div class="form-group">
-										<label class="control-label col-sm-4"></label>
-										<div class="col-sm-8">
-											<i><span data-bind="text: getWords(amountApproved())+' Uganda shillings only'"></span></i>
+										<div class="col-md-8 col-md-offset-4">
+										  <button type="reset" class="btn btn-white">Cancel</button>
+										  <button type="submit" class="btn btn-primary">Submit</button>
 										</div>
 									  </div>
-									  <div class="form-group" data-bind="with: account_details">
-										<label class="control-label col-sm-4" for="textarea">Justification </label>
-										<div class="col-sm-8">
-										  <textarea id="approvalNotes"  name="approvalNotes" class="form-control" data-bind="value: approvalNotes" required data-msg-required="Justification is required"></textarea>
-										</div>
-									  </div>
-								  </div>
-								  <div class="form-group">
-									<div class="col-md-8 col-md-offset-4">
-									  <button type="reset" class="btn btn-white">Cancel</button>
-									  <button type="submit" class="btn btn-primary">Submit</button>
-									</div>
-								  </div>
-								</form>
+									</form>
+								</div>
 							  </div>
 						</div>
 					</div>

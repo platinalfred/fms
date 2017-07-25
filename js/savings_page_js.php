@@ -1,6 +1,7 @@
 <!-- Datatables -->
 <script>
 var dTable = new Object();
+var client_type = 0;
 $(document).ready(function() {
 	var handleDataTableButtons = function() {
 	  if ($("#datatable-buttons").length) {
@@ -16,9 +17,9 @@ $(document).ready(function() {
 			  "data":  function(d){
 					d.page = 'deposit_accounts';
 					<?php if(isset($client)):?> d.clientId=<?php echo $client['id'];?>; <?php endif;?>
-					d.type = <?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>; //loan_type for the datatable;
-					d.start_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"moment().subtract(30, 'days').format('X')"; ?>;
-					d.end_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"moment().format('X')"; ?>;
+					d.clientType = client_type; //client type;
+					d.start_date = startDate;
+					d.end_date = endDate;
 				}
 		  },
 		   "initComplete": function(settings, json) {
@@ -35,7 +36,7 @@ $(document).ready(function() {
 				var actual_balance = (api.column(4).data().sum())-(api.column(5).data().sum());
 				
 				//var misc_income = (paid_amount>loan_amount)?curr_format((paid_amount-loan_amount)):0;
-				$(api.column(6).footer()).html(actual_balance);
+				$(api.column(6).footer()).html(curr_format(actual_balance));
 		  },columns:[ { data: 'id', render: function ( data, type, full, meta ) {
 			  var page = "";
 			  if(full.clientType==1){
@@ -88,6 +89,17 @@ $(document).ready(function() {
 	  };
 	}();
 	TableManageButtons.init();
+	<?php if(isset($_GET['view'])&&$_GET['view']=='allsavings'):?>
+		$('#client_type').change(function(){handleDateRangePicker(startDate,endDate);});
+	<?php endif;?>
 });
+<?php if(isset($_GET['view'])&&$_GET['view']=='allsavings'):?>
+	 function handleDateRangePicker(start_date, end_date){
+		 startDate = start_date;
+		 endDate = end_date;
+		client_type = parseInt($('#client_type').val());
+		dTable.ajax.reload();
+	 }
+<?php endif;?>
  
 </script>

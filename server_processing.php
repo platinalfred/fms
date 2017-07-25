@@ -111,7 +111,8 @@ if ( isset($_POST['page']) && $_POST['page'] == "deposit_accounts" ) {
 	$member_sql = "(SELECT `members`.`id` `clientId`, depositAccountId, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType` FROM `member_deposit_account` JOIN (SELECT `member`.`id`, `firstname`, `lastname`, `othername` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`)`members` ON `memberId` = `members`.`id`)";
 	$saccogroup_sql = "(SELECT `saccogroup`.`id` `clientId`, `depositAccountId`, `groupName` `clientNames`, 2 as `clientType` FROM `group_deposit_account` JOIN `saccogroup` ON `saccoGroupId` = `saccogroup`.`id`)";
 	
-	$member_group_union_sql = " ".$member_sql. " UNION ". $saccogroup_sql . " ORDER BY `clientNames`";
+	$member_group_union_sql = ((isset($_POST['clientType'])&&$_POST['clientType']==1)?($member_sql):((isset($_POST['clientType'])&&$_POST['clientType']==2)?($saccogroup_sql):($member_sql. " UNION ". $saccogroup_sql))) . " ORDER BY `clientNames`";
+	
 	$deposits_sql = "SELECT `depositAccountId`, COALESCE(SUM(amount),0) `sumDeposited` FROM `deposit_account_transaction` WHERE `transactionType` = 1 GROUP BY `depositAccountId`";
 	$withdraws_sql = "SELECT `depositAccountId`, COALESCE(SUM(amount),0) `sumWithdrawn` FROM `deposit_account_transaction` WHERE `transactionType` = 2 GROUP BY `depositAccountId`";
 	

@@ -349,6 +349,7 @@ if(isset($_POST['origin'])){
 						$data['member_details'] = $personObj->findById($memberData['personId']);
 						$data['relatives'] = $personObj->findPersonRelatives($memberData['personId']);
 						$data['employmentHistory'] = $personObj->findPersonEmploymentHistory($memberData['personId']);
+						$data['memberBusinesses'] = $personObj->findMemberBusiness($memberData['personId']);
 					}
 				}
 				if($_POST['clientType'] == 2){

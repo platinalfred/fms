@@ -67,26 +67,6 @@ class LoanAccount extends Db {
 		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
 		return !empty($result_array) ? $result_array : false;
 	}
-	public function getReportIndividual($where = 1){
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`disbursedAmount`", "`installments`" , "`paidInstallments`" , "(`installments`-`paidInstallments`)`balInstallments`" , "`feesPaid`" , "`amountPaid`" , " (`disbursedAmount`*(`interestRate`/100)/`installments`) `interest`" , " ((`disbursedAmount`*(`interestRate`/100)/`installments`)*`paidInstallments`) `interestPaid`",  " `disbursedAmount`*(`interestRate`/100) `expInterest`", "COALESCE((`disbursedAmount`/`installments`),0)`principle`", "(COALESCE((`disbursedAmount`/`installments`),0)*`paidInstallments`) `paidPrinciple`" );
-		
-		$member_group_union_sql = self::$member_sql;
-		
-		$table = self::$table_name." JOIN (".$member_group_union_sql.") `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` LEFT JOIN ". self::$loan_payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId` LEFT JOIN ". self::$loan_fees_sql. " ON `loan_account`.`id` = `loan_fees`.`loanAccountId`";
-		
-		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
-		return $result_array;
-	}
-	public function getReportGroup($where = 1){
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`disbursedAmount`", "`installments`" , "`paidInstallments`" , "(`installments`-`paidInstallments`)`balInstallments`" , "`feesPaid`" , "`amountPaid`" , " (`disbursedAmount`*(`interestRate`/100)/`installments`) `interest`" , " ((`disbursedAmount`*(`interestRate`/100)/`installments`)*`paidInstallments`) `interestPaid`",  " `disbursedAmount`*(`interestRate`/100) `expInterest`", "COALESCE((`disbursedAmount`/`installments`),0)`principle`", "(COALESCE((`disbursedAmount`/`installments`),0)*`paidInstallments`) `paidPrinciple`" );
-		
-		$member_group_union_sql = self::$saccogroup_sql;
-		
-		$table = self::$table_name." JOIN (".$member_group_union_sql.") `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` LEFT JOIN ". self::$loan_payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId` LEFT JOIN ". self::$loan_fees_sql. " ON `loan_account`.`id` = `loan_fees`.`loanAccountId`";
-		
-		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
-		return $result_array;
-	}
 	public function getReport($start_date, $end_date, $client_type = 0, $category = 1){
 		$between = "BETWEEN FROM_UNIXTIME($start_date) AND FROM_UNIXTIME($end_date)";
 		$due_date = "GetDueDate(FROM_UNIXTIME(`disbursementDate`),`installments`,`repaymentsMadeEvery`,`repaymentsFrequency`,FROM_UNIXTIME($start_date),FROM_UNIXTIME($end_date))";
@@ -99,7 +79,16 @@ class LoanAccount extends Db {
 				$where .= "`status`=4";
 			break;
 			case 2: //performing loans
-				$where .= "`status`=4";
+				$immediate_date = "ImmediateDueDate(FROM_UNIXTIME(`disbursementDate`),`installments`,`repaymentsMadeEvery`,`repaymentsFrequency`,FROM_UNIXTIME($end_date))";
+				$timestamp_diff_sql = "(CASE `repaymentsMadeEvery`
+					WHEN 1 THEN TIMESTAMPDIFF(DAY,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
+					WHEN 2 THEN TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
+					WHEN 3 THEN TIMESTAMPDIFF(MONTH,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
+					END)";
+				
+				$payments_sql = "(SELECT `loanAccountId`, COUNT(`id`)`paidInstallments`, COALESCE(SUM(amount),0) `amountPaid`  FROM `loan_repayment` WHERE `transactionDate` <= $end_date GROUP BY `loanAccountId`) `loan_payments`";
+				
+				$where .= "`status`=4 AND $immediate_date IS NOT NULL AND ((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql<=`amountPaid`";
 			break;
 			case 3: //non performing loans
 				$immediate_date = "ImmediateDueDate(FROM_UNIXTIME(`disbursementDate`),`installments`,`repaymentsMadeEvery`,`repaymentsFrequency`,FROM_UNIXTIME($end_date))";

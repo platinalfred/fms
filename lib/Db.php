@@ -661,8 +661,8 @@ class Db{
 			$q->close();
 			return $res;
 		}
-		return false;
-		//return mysqli_error($this->conn);
+		//return false;
+		return mysqli_error($this->conn);
 	}
 	function getarrayunique($table, $where, $ordby, $limit) {
 		$out = array();

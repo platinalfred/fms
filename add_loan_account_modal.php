@@ -268,6 +268,58 @@
 								</fieldset>
 								<!-- /ko -->
 								<!-- /ko -->
+								<!--ko with: loanProduct -->
+								<!--ko if: (parseInt($root.client().clientType)==1) -->
+								<h1>Businesses <small>Add Businesses</small></h1>
+								<fieldset>
+									<div class="row" data-bind="foreach: $root.member_business">
+										<h3 data-bind="text:'Business '+($index()+1)"></h3>
+										<div class="col-lg-6">
+											<div class="form-group">
+												<label>Name of Business</label>
+												<textarea data-bind="value: businessName" required class="form-control"></textarea>
+											</div>
+											
+										</div>
+										<div class="col-lg-6">
+											<div class="form-group">
+												<label>Business Location</label>
+												<textarea data-bind="value: location" required class="form-control "></textarea>
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Number Of Employees</label>
+												<input data-bind="value: numberOfEmployees" required type="number" class="form-control ">
+											</div>
+										</div>
+										<div class="col-lg-2">
+											<div class="form-group">
+												<label>Business Worth</label>
+												<input data-bind="textInput: businessWorth"  type="text" class="form-control">
+											</div>
+										</div>
+										<div class="col-lg-2">
+											<div class="form-group">
+												<label>URSB Number</label>
+												<input data-bind="value: ursbNumber"  type="text" class="form-control ">
+											</div>
+										</div>
+										<div class="col-lg-1"><span title="Remove Business" class="btn text-danger btn-lg" data-bind='click: $root.removeBusiness'><i class="fa fa-minus"></i></span></div>
+										<div class="clearboth"></div>
+									</div>
+									<div class="row">
+										<div class="clearboth"></div>
+										<div class="col-lg-12">
+											 <div class="form-group">
+												<span class="btn btn-info btn-sm pull-right" data-bind='click: $root.addBusinnes'><i class="fa fa-plus"></i> Add more</span>
+											</div>
+										</div>
+									</div>
+									
+								</fieldset>
+								<!-- /ko -->
+								<!-- /ko -->
                                 <div class="form-group">
                                     <div class="col-sm-6 col-sm-offset-2">
                                         <button class="btn btn-warning" type="reset">Cancel</button>

@@ -32,12 +32,12 @@ class Guarantor extends Db {
 		
 		$table = self::$table_name." JOIN ".(self::$members_sql)." ON `members`.`id` = ".(self::$table_name).".`memberId` JOIN ".(self::$deposits_sql)." ON `deposits`.`memberId` = ".(self::$table_name).".`memberId` LEFT JOIN ".(self::$withdraws_sql)." ON `withdraws`.`memberId` = ".(self::$table_name).".`memberId` JOIN ".(self::$shares_sql)." ON ".(self::$table_name).".`memberId` = `client_shares`.`memberId` LEFT JOIN ".(self::$loan_balances_sql)." ON ".(self::$table_name).".`memberId` = `loan_balances`.`memberId`";
 		
-		$where = $table = "";
+		$where = "";
 		if(is_numeric($filter)){
 			$where = "`loanAccountId`=".$filter;
 		}
 		else{
-			$table = (self::$members_sql)." LEFT JOIN ".(self::$deposits_sql)." ON `members`.`id` = `deposits`.`memberId` JOIN ".(self::$withdraws_sql)." ON `members`.`id` = `deposits`.`memberId` JOIN ".(self::$shares_sql)." ON `members`.`id` = `client_shares`.`memberId` LEFT JOIN ".(self::$loan_balances_sql)." ON `members`.`id` = `loan_balances`.`memberId`";
+			$table = (self::$members_sql)." LEFT JOIN ".(self::$deposits_sql)." ON `members`.`id` = `deposits`.`memberId` JOIN ".(self::$withdraws_sql)." ON `members`.`id` = `deposits`.`memberId` JOIN ".(self::$shares_sql)." ON `members`.`id` = `client_shares`.`memberId` LEFT JOIN ".(self::$loan_balances_sql)." ON `members`.`id` = `loan_balances`.`memberId` ";
 			$where = $filter;
 		}
 		

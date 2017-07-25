@@ -204,9 +204,9 @@ if(isset($_POST['origin'])){
 				$loanAccountId = $data['id'];
 				$loanAccount->updateLoanAccount($data);
 				if((integer)$data['clientType']==1){
-					$guarantor = new Guarantor();
 					if(isset($data['guarantors'])){
 						if($data['guarantors'] !== "false"){
+							$guarantor = new Guarantor();
 							//lets first delete all the existing loan account guarantors
 							$guarantor->deleteGuarantor($loanAccountId);
 							//then add new ones
@@ -221,8 +221,28 @@ if(isset($_POST['origin'])){
 								$loanAccountGuarantor['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 								$output = $guarantor->addGuarantors($loanAccountGuarantor);
 							}
-							unset($loanAccountGuarantor);
 						}
+						unset($loanAccountGuarantor);
+					}
+					if(isset($data['memberBusinesses'])){
+						if($data['memberBusinesses'] !== "false"){
+							$person_obj = new Person();
+							$member_obj = new Member();
+							$member_details = $member_obj->findById($data['clientId']);
+							$person_id = $member_details['personId'];
+							//lets first delete all the existing businesss
+							$person_obj->deleteBusiness($person_id);
+							//then add the updated list
+							
+							foreach($data['memberBusinesses'] as $single){
+								if($single['businessName']!='undefined'){
+									$single['dateAdded'] = time();
+									$single['personId'] = $person_id;
+									$output = $person_obj->addPersonBusiness($single);
+								}
+							}
+						}
+						unset($data['memberBusinesses']);
 					}
 				}
 				$loanAccountFee = new LoanAccountFee();
@@ -247,6 +267,22 @@ if(isset($_POST['origin'])){
 				}
 				//insert the collateral items if any
 				$loanCollateral = new LoanCollateral();
+				
+				if(isset($data['collateral'])){
+					//first delete all the existing loan account collateral
+					$loanCollateral->deleteLoanCollateral(loanAccountId);
+					//then insert new ones afresh, these might include the old ones as well
+					$collateralItems = $data['collateral'];
+					foreach($collateralItems as $collateralItem){
+						$collateralItem['loanAccountId'] = $loanAccountId;
+						$collateralItem['dateCreated'] = time();
+						$collateralItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						$collateralItem['dateModified'] = time();
+						$collateralItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
+						$output = $loanCollateral->addLoanCollateral($collateralItem);
+					}
+					unset($data['collateral']);
+				}
 				
 				if(isset($data['collateral'])){
 					//first delete all the existing loan account collateral
@@ -309,6 +345,21 @@ if(isset($_POST['origin'])){
 								$output = $guarantor->addGuarantor($loanAccountGuarantor);
 							}
 							unset($loanAccountGuarantor);
+						}
+						if(isset($data['memberBusinesses'])){
+							$person_obj = new Person();
+							$member_obj = new Member();
+							$member_details = $member_obj->findById($data['clientId']);
+							$person_id = $member_details['personId'];
+							
+							foreach($data['memberBusinesses'] as $single){
+								if($single['businessName']!='undefined'){
+									$single['dateAdded'] = time();
+									$single['personId'] = $person_id;
+									$person_obj->addPersonBusiness($single);
+								}
+							}
+							unset($data['memberBusinesses']);
 						}
 					}
 				}else{

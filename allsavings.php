@@ -2,8 +2,22 @@
 <div class="col-lg-12">
 	<div class="ibox float-e-margins">
 		<div class="ibox-title">
-			<h5>Savings Accounts <small>Deposits and withdraws</small></h5>
-			
+			<div class="row">
+				<div class="col-sm-12">
+					<h5>Savings Accounts <small>Deposits and withdraws</small></h5>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<select id="client_type" class="form-control">
+							<option value="0" <?php echo isset($_GET['cat'])?(($_GET['cat']==1)?'selected':''):'selected';?>>Client Type</option>
+						   <option value="1" <?php echo (isset($_GET['cat'])&&$_GET['cat']==2)?'selected':'';?>>Individual Loans</option>
+							<option value="2" <?php echo (isset($_GET['cat'])&&$_GET['cat']==3)?'selected':'';?>>Group Loans</option>
+						</select >
+					</div>
+				</div>
+				<div class="col-sm-10">
+				</div>
+			</div>
 		</div>
 		<div class="ibox-content">
 			<div class="table-responsive">

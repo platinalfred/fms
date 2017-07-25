@@ -8,9 +8,8 @@
 					  <div class="pull-right">
 						<div><a href="#add_deposit_account" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i>New Savings Account</a></div>
 					  </div>
-					<?php 
-					}
-				  ?>
+					<?php } ?>
+
 				</div>
 				<div class="ibox-content">
 					<div class="table-responsive">

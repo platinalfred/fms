@@ -7,7 +7,7 @@
 							<div class="col-sm-2">
 								<div class="form-group">
 									<select id="client_type" class="form-control">
-										<option value="0" <?php echo isset($_GET['cat'])?(($_GET['cat']==1)?'selected':''):'selected';?>>All </option>
+										<option value="0" <?php echo isset($_GET['cat'])?(($_GET['cat']==1)?'selected':''):'selected';?>>Client Type</option>
 									   <option value="1" <?php echo (isset($_GET['cat'])&&$_GET['cat']==2)?'selected':'';?>>Individual Loans</option>
 										<option value="2" <?php echo (isset($_GET['cat'])&&$_GET['cat']==3)?'selected':'';?>>Group Loans</option>
 									</select >
@@ -15,7 +15,7 @@
 							</div>
 							<div class="col-sm-3">
 									<select id="loan_category" class="form-control">
-										<option value="0" <?php echo isset($_GET['cat'])?(($_GET['cat']==1)?'selected':''):'selected';?>>All loans</option>
+										<option value="0" <?php echo isset($_GET['cat'])?(($_GET['cat']==1)?'selected':''):'selected';?>>All Categories</option>
 										<option value="1" <?php echo (isset($_GET['cat'])&&$_GET['cat']==4)?'selected':'';?>>Active Loans</option>
 										<option value="2" <?php echo (isset($_GET['cat'])&&$_GET['cat']==5)?'selected':'';?>>Performing Loans</option>
 										<option value="3" <?php echo (isset($_GET['cat'])&&$_GET['cat']==6)?'selected':'';?>>Non Performing Loans</option>

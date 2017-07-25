@@ -128,8 +128,8 @@ $(document).ready(function(){
 		};
 		self.member_business = ko.observableArray(<?php if(!isset($_GET['id'])){ ?> [new MemberBusiness()]<?php } ?>);
 		self.addBusinnes = function() { self.member_business.push(new MemberBusiness()) };
-		self.removeBusiness = function(relative) {
-			self.member_business.remove(relative);
+		self.removeBusiness = function(business) {
+			self.member_business.remove(business);
 		};
 		//Keeps track of member relatives, observing any changes
 		self.member_relatives = ko.observableArray(<?php if(!isset($_GET['id'])){ ?> [new MemberRelative()]<?php } ?> );

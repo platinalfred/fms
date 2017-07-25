@@ -7,6 +7,16 @@
 			self.itemValue = ko.observable(0);
 			self.attachmentUrl = ko.observable();
 		};
+
+	//any business owned by the applicant
+	var Business = function() {
+			var self = this;
+			self.businessName = ko.observable();
+			self.businessLocation = ko.observable();
+			self.numberOfEmployees = ko.observable(0); //no of employees
+			self.businessWorth = ko.observable(0); //monetary worth of the business
+			self.ursbNumber = ko.observable(); //URSB registration number
+		};
 	//list of the guarantors
 	var GuarantorSelection = function() {
 		var self = this;
@@ -42,6 +52,7 @@
 		// Stores an array of selectedGuarantors
 		self.selectedGuarantors = ko.observableArray([new GuarantorSelection()]);
 		self.addedCollateral = ko.observableArray([new Collateral()]);
+		self.member_business = ko.observableArray([new Business()]);
 		// Put one guarantor in by default
 		self.totalSavings = ko.pureComputed(function() {
 			var total = 0;
@@ -76,6 +87,8 @@
 		self.removeGuarantor = function(selectedGuarantor) { self.selectedGuarantors.remove(selectedGuarantor) };
 		self.addCollateral = function() { self.addedCollateral.push(new Collateral()) };
 		self.removeCollateral = function(addedCollateral) { self.addedCollateral.remove(addedCollateral) };
+		self.addBusinnes = function() { self.member_business.push(new Business()); };
+		self.removeBusiness = function(business) { self.member_business.remove(business); };
 		
 		<?php if(!isset($client)):?>self.customers = ko.observableArray([{"id":1,"clientNames":"Kiwatule Womens Savings Group","clientType":2}]); <?php endif;?>
 		// Stores an array of all the Data for viewing on the page
@@ -201,6 +214,7 @@
 					guarantors:guarantors,//the chosen guarantors
 					feePostData:self.filteredLoanProductFees(), //the applicable fees
 					collateral:self.addedCollateral(), //the applicable fees
+					memberBusinesses:self.member_business(), //businesses of a member
 					origin : "loan_account"
 				},
 				url: "lib/AddData.php",
@@ -238,8 +252,8 @@
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
 							$("#loanPaymentForm")[0].reset();
-							dTable['approved'].ajax.reload(function(){
-								self.account_details(dTable['approved'].row('#loanAcc'+self.account_details().id).data());
+							dTable['disbursed'].ajax.reload(function(){
+								self.account_details(dTable['disbursed'].row('#loanAcc'+self.account_details().id).data());
 								},false);
 							getTransactionHistory(self.account_details().id);
 						}, 3000);
@@ -336,8 +350,7 @@
 							self.installments(response.loan_account_details.installments);
 							self.applicationDate(moment(response.loan_account_details.applicationDate,'X').format('DD-MM-YYYY'));
 						}
-						else{
-							self.loan_account_details(response);
+						else{self.loan_account_details(response);
 						}
 					}
 				}
@@ -710,6 +723,8 @@
 			}); 
 		}
 	});
+	var editing = 0
+	<?php if((isset($_SESSION['loan_officer'])&&$_SESSION['loan_officer'])):?>editing = 1; loanAccountModel.edit_client(1);<?php endif;?>
 	$('.table#applications').on('click', '.edit_loan', function () {
 		<?php if(!isset($_GET['loanId'])):?>
 		var row = $(this).closest("tr[role=row]");
@@ -719,8 +734,6 @@
 		var data = dTable['applications'].row(row).data() ;
 		<?php endif;?>
 		//var loanAccountId = <?php if(isset($_GET['loanId'])):?><?php echo $_GET['loanId']; else:?>data.id<?php endif;?>;
-		var editing = 0
-		<?php if((isset($_SESSION['loan_officer'])&&$_SESSION['loan_officer'])):?>editing = 1; loanAccountModel.edit_client(1);<?php endif;?>
 		loanAccountModel.getLoanAccountDetails(editing);
 	});
 
@@ -732,6 +745,7 @@
 		loanAccountModel.amountApproved(parseInt(data.requestedAmount));
 		//ajax to retrieve transactions history//
 		getTransactionHistory(data.id);
+		loanAccountModel.getLoanAccountDetails(0);
 	});
 	
 	 function getTransactionHistory(loanAccountId){
