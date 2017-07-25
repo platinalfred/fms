@@ -47,7 +47,7 @@ class LoanAccount extends Db {
 	}
 	
 	public function getApplications($where = 1){
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`clientId`", "`clientType`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`amountApproved`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`status`" , "`approvalNotes`" , "`installments`" );
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`clientId`", "`clientType`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`amountApproved`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`status`" , "`approvalNotes`" , "`installments`" , "`interestRate`", " `requestedAmount`*(`interestRate`/100) `interest`" );
 		
 		$member_group_union_sql = self::$member_sql. " UNION ". self::$saccogroup_sql;
 		

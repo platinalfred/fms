@@ -16,7 +16,7 @@
 							<div class="ibox-content">
 								<div class="col-.lg-12" data-bind="with: account_details">
 									<div class="col-md-12">
-										<strong>Details</strong><br/>
+										<strong>Client Details</strong><br/>
 										<i data-bind="css: {'fa':1, 'fa-male': clientType==1, 'fa-group': clientType==2}"></i> <span data-bind="text: clientNames"></span>  
 										<!--ko if: clientType==1&&$parent.loan_account_details()-->,
 										<i class="fa fa-mobile"></i> <span data-bind="text: $parent.loan_account_details().member_details.phone"></span>,  
@@ -182,6 +182,14 @@
 										  <div class="form-group" data-bind="with: account_details">
 											<label class="control-label col-sm-6">Amount requested</label>
 											<p class="col-sm-6" data-bind="text: 'UGX ' + curr_format(parseInt(requestedAmount))"></p>
+										  </div>
+										  <div class="form-group" data-bind="with: account_details">
+											<label class="control-label col-sm-6">Installments</label>
+											<p class="col-sm-6" data-bind="text:  '1 every ' +repaymentsFrequency +' '+ getDescription(4, repaymentsMadeEvery) +' ('+installments+' in total)  ' "></p>
+										  </div>
+										  <div class="form-group" data-bind="with: account_details">
+											<label class="control-label col-sm-6">Interest</label>
+											<p class="col-sm-6" data-bind="text:  'UGX ' +curr_format(parseInt(interest)) +' (at '+interestRate+'% pa)  ' "></p>
 										  </div>
 										</div>
 										<div class="col-md-7">
