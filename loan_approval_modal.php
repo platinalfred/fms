@@ -191,6 +191,14 @@
 											<label class="control-label col-sm-6">Interest</label>
 											<p class="col-sm-6" data-bind="text:  'UGX ' +curr_format(parseInt(interest)) +' (at '+interestRate+'% pa)  ' "></p>
 										  </div>
+										  <div class="form-group" data-bind="with: account_details">
+											<label class="control-label col-sm-6">Periodic Principle</label>
+											<p class="col-sm-6" data-bind="text: 'UGX: '+curr_format(Math.round(parseInt(requestedAmount)/parseInt(installments)))+ ' paid every ' +repaymentsFrequency +' '+ getDescription(4, repaymentsMadeEvery) "></p>
+										  </div>
+										  <div class="form-group" data-bind="with: account_details">
+											<label class="control-label col-sm-6">Periodic Interest</label>
+											<p class="col-sm-6" data-bind="text:  'UGX: '+curr_format(Math.round(parseInt(interest)/parseInt(installments)))+' paid every ' +repaymentsFrequency +' '+ getDescription(4, repaymentsMadeEvery) "></p>
+										  </div>
 										</div>
 										<div class="col-md-7">
 										  <div class="form-group" data-bind="with: account_details">

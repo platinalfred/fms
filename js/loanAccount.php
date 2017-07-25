@@ -1,5 +1,6 @@
 <script type="text/javascript">
 
+	var dTable = new Object();
 	var Collateral = function() {
 			var self = this;
 			self.itemName = ko.observable();
@@ -305,8 +306,6 @@
 							$("#loanAccountApprovalForm")[0].reset();
 							$('#approve_loan-modal').modal('hide');
 							dTable['applications'].ajax.reload();
-							dTable['approved'].ajax.reload();
-							dTable['rejected'].ajax.reload();
 							self.account_details(null);
 						}, 3000);
 					}else{
@@ -334,9 +333,7 @@
 						setTimeout(function(){
 							$("#loanAccountApprovalForm")[0].reset();
 							$('#disburse_loan-modal').modal('hide');
-							dTable['applications'].ajax.reload();
 							dTable['approved'].ajax.reload();
-							dTable['rejected'].ajax.reload();
 						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while approving: \n"+response ,"fail");
@@ -391,7 +388,6 @@
 <!-- Datatables -->
 
 	var user_props = <?php echo json_encode($_SESSION); ?>;
-	var dTable = new Object();
 	$(document).ready(function() {
 		
 		  var post_data = new Object();
@@ -653,7 +649,7 @@
 						var api = this.api(), cols = [4,8,9,10,11,12,13];
 						$.each(cols, function(key, val){
 							var total = api.column(val).data().sum();
-							$(api.column(val).footer()).html( curr_format(total) );
+							$(api.column(val).footer()).html( curr_format(Math.round(total)) );
 						});
 					  },columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
 						  var page = "";
