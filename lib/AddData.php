@@ -83,7 +83,7 @@ if(isset($_POST['origin'])){
 			$loanProduct = new LoanProduct();
 			$data['dateCreated'] = time();
 			$data['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-			$data['dateModified'] = time();
+			//$data['dateModified'] = time();
 			$data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 			unset($data['origin']);
 			$output = $loanProductId = $loanProduct->addLoanProduct($data);
@@ -96,7 +96,7 @@ if(isset($_POST['origin'])){
 					foreach($data['newLoanProductFees'] as $feeDataItem){
 						$feeDataItem['dateCreated'] = time();
 						$feeDataItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-						$feeDataItem['dateModified'] = time();
+						//$feeDataItem['dateModified'] = time();
 						$feeDataItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 						/*  */
 						$productFees[] = $loanProductFee->addLoanProductFee($feeDataItem);

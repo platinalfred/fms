@@ -4,7 +4,7 @@ require_once($curdir.'/Db.php');
 class LoanProduct extends Db {
 	protected static $table_name  = "loan_products";
 	
-	protected static $table_fields = array("id", "productName", "description", "productType", "active", "availableTo", "defAmount", "minAmount", "maxAmount", "maxTranches", "defInterest", "minInterest", "maxInterest", "repaymentsFrequency", "repaymentsMadeEvery", "defRepaymentInstallments", "minRepaymentInstallments", "maxRepaymentInstallments", "daysOfYear", "initialAccountState", "defGracePeriod", "minGracePeriod", "maxGracePeriod", "minCollateral", "minGuarantors", "defOffSet", "minOffSet", "maxOffSet", "penaltyCalculationMethodId", "penaltyTolerancePeriod", "penaltyRateChargedPer", "defPenaltyRate", "minPenaltyRate", "maxPenaltyRate", "taxRateSource", "taxCalculationMethod", "linkToDepositAccount", "createdBy", "dateCreated", "dateModified", "modifiedBy");
+	protected static $table_fields = array("id", "productName", "description", "productType", "active", "availableTo", "defAmount", "minAmount", "maxAmount", "maxTranches", "defInterest", "minInterest", "maxInterest", "repaymentsFrequency", "repaymentsMadeEvery", "defRepaymentInstallments", "minRepaymentInstallments", "maxRepaymentInstallments", "daysOfYear", "initialAccountState", "defGracePeriod", "minGracePeriod", "maxGracePeriod", "minCollateral", "minGuarantors", "defOffSet", "minOffSet", "maxOffSet", "penaltyCalculationMethodId", "penaltyTolerancePeriod", "penaltyRateChargedPer", "defPenaltyRate", "minPenaltyRate", "maxPenaltyRate", "taxRateSource", "taxCalculationMethod", "linkToDepositAccount", "createdBy", "dateCreated",  "modifiedBy");
 	
 	//"penaltyApplicable", 
 	
