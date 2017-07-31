@@ -184,20 +184,20 @@
 											<p class="col-sm-6" data-bind="text: 'UGX ' + curr_format(parseInt(requestedAmount))"></p>
 										  </div>
 										  <div class="form-group" data-bind="with: account_details">
-											<label class="control-label col-sm-6">Installments</label>
-											<p class="col-sm-6" data-bind="text:  '1 every ' +repaymentsFrequency +' '+ getDescription(4, repaymentsMadeEvery) +' ('+installments+' in total)  ' "></p>
+											<label class="control-label col-sm-12"><span data-bind="text:  '1 Installment(s) paid every ' +repaymentsFrequency +' '+ getDescription(4, repaymentsMadeEvery) +' ('+installments+' in total)  ' "></span></label>
+											
 										  </div>
 										  <div class="form-group" data-bind="with: account_details">
-											<label class="control-label col-sm-6">Interest</label>
-											<p class="col-sm-6" data-bind="text:  'UGX ' +curr_format(parseInt(interest)) +' (at '+interestRate+'% pa)  ' "></p>
+											<label class="control-label col-sm-12"><span data-bind="text:  'Interest: UGX ' +curr_format(parseInt(interest)) +' (at '+interestRate+'% pa)  ' "></span></label>
+											
 										  </div>
 										  <div class="form-group" data-bind="with: account_details">
-											<label class="control-label col-sm-6">Periodic Principle</label>
-											<p class="col-sm-6" data-bind="text: 'UGX: '+curr_format(Math.round(parseInt(requestedAmount)/parseInt(installments)))+ ' paid every ' +repaymentsFrequency +' '+ getDescription(4, repaymentsMadeEvery) "></p>
+											<label class="control-label col-sm-12"><span data-bind="text: 'Periodic Principle: UGX: '+curr_format(Math.round(parseInt(requestedAmount)/parseInt(installments)))+ ' paid every ' +repaymentsFrequency +' '+ getDescription(4, repaymentsMadeEvery) "></span></label>
+											
 										  </div>
 										  <div class="form-group" data-bind="with: account_details">
-											<label class="control-label col-sm-6">Periodic Interest</label>
-											<p class="col-sm-6" data-bind="text:  'UGX: '+curr_format(Math.round(parseInt(interest)/parseInt(installments)))+' paid every ' +repaymentsFrequency +' '+ getDescription(4, repaymentsMadeEvery) "></p>
+											<label class="control-label col-sm-12"><span data-bind="text:  'Periodic Interest: UGX: '+curr_format(Math.round(parseInt(interest)/parseInt(installments)))+' paid every ' +repaymentsFrequency +' '+ getDescription(4, repaymentsMadeEvery) "></span></label>
+											
 										  </div>
 										</div>
 										<div class="col-md-7">

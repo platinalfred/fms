@@ -46,18 +46,6 @@
 	};
 	var LoanAccount = function() {
 		var self = this;
-		//all members
-		<?php if(!isset($client)):?>
-		self.clients = ko.observableArray([{"id":1,"clientNames":"Allan James Kintu"}]); 
-		self.groups = ko.observableArray([{"id":1,"groupNames":"Kiwatule Womens Savings Group"}]); 
-		self.clientTypes = ko.observableArray([{"type_id":1,"client_type":"Member"},{"type_id":2,"client_type":"Group Members"}]); 
-		<?php endif;?>
-		self.groupMembers = ko.observableArray([{"id":1,"memberNames":"Allan James Kintu"}]);
-		self.clientType = ko.observable();
-		// Stores an array of all the Data for viewing on the page
-		self.loanProducts = ko.observableArray([{"id":1,"productName":"Group Savings Loan","description":"Suitable for group savings", "availableTo":"2"}]);
-		self.productFees = ko.observableArray();
-		self.loanAccountFees = ko.observableArray();
 		
 		//these are required as the datatable is being loaded
 		self.transactionHistory = ko.observableArray(); //for the account transacation history display
@@ -84,10 +72,10 @@
 		//guarantors 
 		self.guarantors = ko.observableArray();
 		// Stores an array of selectedGuarantors
-		// Put one guarantor in by default
 		self.selectedGuarantors = ko.observableArray([new GuarantorSelection()]);
 		self.addedCollateral = ko.observableArray([new Collateral()]);
 		self.member_business = ko.observableArray([new Business()]);
+		// Put one guarantor in by default
 		self.totalSavings = ko.pureComputed(function() {
 			var total = 0;
 			$.map(self.selectedGuarantors(), function(selectedGuarantor) {
@@ -124,6 +112,11 @@
 		self.addBusinnes = function() { self.member_business.push(new Business()); };
 		self.removeBusiness = function(business) { self.member_business.remove(business); };
 		
+		<?php if(!isset($client)):?>self.customers = ko.observableArray([{"id":1,"clientNames":"Kiwatule Womens Savings Group","clientType":2}]); <?php endif;?>
+		// Stores an array of all the Data for viewing on the page
+		self.loanProducts = ko.observableArray([{"id":1,"productName":"Group Savings Loan","description":"Suitable for group savings", "availableTo":"2"}]);
+		self.productFees = ko.observableArray();
+		self.loanAccountFees = ko.observableArray();
 		
 		self.loanProduct = ko.observable();
 		self.client = ko.observable(<?php if(isset($client)) echo json_encode($client);?>);
@@ -179,14 +172,16 @@
 				return self.guarantors();
 			}
 			
-		});		
+		});
+		
 		//reset the whole form after saving data in the database
 		self.resetForm = function() {
 			//self.client(null);
 			//self.loanProduct(null);//
 			$("#loanAccountForm")[0].reset();
 			dTable['applications'].ajax.reload();
-		};		
+		};
+		
 		//Retrieve page data from the server
 		self.getServerData = function() {
 			$.ajax({
@@ -198,10 +193,7 @@
 					self.loanProducts(response.products);
 					self.productFees(response.productFees);
 					self.guarantors(response.guarantors);
-					<?php if(!isset($client)):?>
-					self.clients(response.clients); self.groups(response.groups); self.groupMembers(response.groupMembers); 
-					<?php endif;?>
-					<?php if(isset($client)&&$client['clientType']==2):?>self.groupMembers(response.groupMembers);<?php endif;?>
+					<?php if(!isset($client)):?>self.customers(response.customers); <?php endif;?>
 					<?php if(isset($_GET['loanId'])){
 						$clientId = $client['id'];
 						$client['clientId'] = $client['id'];
@@ -211,7 +203,8 @@
 					<?php } ?>
 				}
 			})
-		};		
+		};
+		
 		//send the items to the server for saving
 		self.save = function(form) {
 			var guarantors = $.map(self.selectedGuarantors(), function(current_guarantor) {
@@ -263,6 +256,7 @@
 			});
 			
 		};
+		
 		self.makePayment = function(){
 			$.ajax({
 				type: "post",
@@ -290,7 +284,8 @@
 					}
 				}
 			});
-		};		
+		};
+		
 		self.approveLoan = function(){
 			$.ajax({
 				type: "post",
