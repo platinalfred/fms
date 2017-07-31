@@ -17,7 +17,16 @@ class LoanAccount extends Db {
 		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
 		return !empty($result) ? $result:false;
 	}
-	
+	public function findLoans($start_date, $end_date, $limit=""){
+		if($limit != ""){
+			$limit = "LIMIT ".$limit;
+		}else{
+			$limit  = "";
+		}
+		$products_sql = "SELECT `productName`, COALESCE(SUM(`disbursedAmount`),0) `loan_amount`, SUM(`disbursedAmount`*`interestRate`/100) `interest`, COALESCE(`paidAmount`,0)  `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN (SELECT SUM(`amount`) `paidAmount`, `loanAccountId` FROM `loan_repayment` WHERE `transactionDate` <= ".$end_date." GROUP BY `loanAccountId`) `payments` ON `loan_account`.`id`=`payments`.`loanAccountId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4 GROUP BY `productName` ORDER BY `productName`".$limit;
+		$result_array = $this->queryData($products_sql);
+		return $result_array;
+	}
 	public function findAll($where = 1){
 		$result_array = $this->getarray(self::$table_name, $where, "", "");
 		return !empty($result_array) ? $result_array : false;
@@ -71,7 +80,7 @@ class LoanAccount extends Db {
 		$between = "BETWEEN FROM_UNIXTIME($start_date) AND FROM_UNIXTIME($end_date)";
 		$due_date = "GetDueDate(FROM_UNIXTIME(`disbursementDate`),`installments`,`repaymentsMadeEvery`,`repaymentsFrequency`,FROM_UNIXTIME($start_date),FROM_UNIXTIME($end_date))";
 		
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`disbursementDate`","`disbursedAmount`", "`installments`" , "`paidInstallments`" , "(`installments`-`paidInstallments`)`balInstallments`" , "`feesPaid`" , "`amountPaid`" , " (`disbursedAmount`*(`interestRate`/100)/`installments`) `interest`" , " ((`disbursedAmount`*(`interestRate`/100)/`installments`)*`paidInstallments`) `interestPaid`",  " `disbursedAmount`*(`interestRate`/100) `expInterest`", "COALESCE((`disbursedAmount`/`installments`),0)`principle`", "(COALESCE((`disbursedAmount`/`installments`),0)*`paidInstallments`) `paidPrinciple`", "$due_date `due_date`" );
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`disbursementDate`","`disbursedAmount`", "`installments`" , "COALESCE(`paidInstallments`, 0) paidInstallments" , "(`installments`-COALESCE(`paidInstallments`, 0))`balInstallments`" , "`feesPaid`" , "`amountPaid`" , " (`disbursedAmount`*(`interestRate`/100)/`installments`) `interest`" , " ((`disbursedAmount`*(`interestRate`/100)/`installments`)*COALESCE(`paidInstallments`, 0)) `interestPaid`",  " `disbursedAmount`*(`interestRate`/100) `expInterest`", "COALESCE((`disbursedAmount`/`installments`),0)`principle`", "(COALESCE((`disbursedAmount`/`installments`),0)*COALESCE(`paidInstallments`, 0)) `paidPrinciple`", "$due_date `due_date`" );
 		$where = ""; $payments_sql = self::$loan_payments_sql;
 		//specification of the category of loans to be returned
 		switch($category){

@@ -129,8 +129,7 @@ include("include/header.php");
 				<div class="col-lg-6">
 					<div class="ibox float-e-margins">
 						<div class="ibox-title">
-							<h5>Expenses </h5>
-							<span class="label label-primary">Top 10</span>
+							<h5>Expenses</h5> <span class="label label-primary">Recent 10</span>
 							<div class="ibox-tools">
 								<a class="collapse-link">
 									<i class="fa fa-chevron-up"></i>
@@ -142,86 +141,200 @@ include("include/header.php");
 							</div>
 						</div>
 						<div class="ibox-content">
-							<div class="table-responsive">
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<th>#</th>
-											<th>Date</th>
-											<th>Description</th>
-											<th>Amount</th>
-										</tr>
-									</thead>
-									<tbody data-bind="foreach: tables.expenses">
-										<tr>
-											<td data-bind="text: id">1</td>
-											<td data-bind="text: moment(expenseDate,'X').format('DD MMMM, YYYY')"></td>
-											<td data-bind="text: amountDescription"></td>
-											<td data-bind="text: curr_format(parseInt(amountUsed))"></td>
-										</tr>
-									</tbody>
-									<tfoot data-bind="if: tables.expenses">
-										<tr>
-											<th scope='row'>Total</th>
-											<th>&nbsp;</th>
-											<th>&nbsp;</th>
-											<th data-bind="text: curr_format(array_total(tables.expenses,2))"></th>
-										</tr>
-									</tfoot>
-								</table>
-								<p data-bind="if: tables.expenses" class="pull-right"><a data-bind="attr: { href: 'expenses.php?start_date='+$parent.startDate()+'&amp;end_date='+$parent.endDate()}" class="btn btn-info" title="View all expenses">View all...</a></p>
-							</div>
+							<div>
+								<div class="table-responsive">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>Date</th>
+												<th>Description</th>
+												<th>Amount</th>
+											</tr>
+										</thead>
+										<tbody data-bind="foreach: tables.expenses">
+											<tr>
+												<td data-bind="text: id">1</td>
+												<td data-bind="text: moment(expenseDate,'X').format('DD MMMM, YYYY')"></td>
+												<td data-bind="text: amountDescription"></td>
+												<td data-bind="text: curr_format(parseInt(amountUsed))"></td>
+											</tr>
+										</tbody>
+										<tfoot data-bind="if: tables.expenses">
+											<tr>
+												<th scope='row'>Total</th>
+												<th>&nbsp;</th>
+												<th>&nbsp;</th>
+												<th data-bind="text: curr_format(array_total(tables.expenses,2))"></th>
+											</tr>
+										</tfoot>
+									</table>
+									<p data-bind="if: tables.expenses" class="pull-right"><a data-bind="attr: { href: 'view_reports.php?view=expenses&start_date='+$parent.startDate()+'&amp;end_date='+$parent.endDate()}" class="btn btn-info" title="View all expenses">View all...</a></p>
+								</div>
 
+							</div>
 						</div>
 					</div>
-				</div>
-
-
-				<div class="col-lg-6">
 					<div class="ibox float-e-margins">
 						<div class="ibox-title">
-							<span class="label label-warning pull-right">Product revenue</span>
-							<h5>Loan Products</h5>
-						</div>
-						<div class="ibox-content">
-							<div class="table-responsive">
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<th>Product</th>
-											<th>Amount Disbursed</th>
-											<th>Interest</th>
-											<th>Amount Paid</th>
-											<th>Balance</th>
-										</tr>
-									</thead>
-									<tbody data-bind="foreach: tables.loan_products">
-										<tr>
-											<td data-bind="text: productName">1</td>
-											<td data-bind="text: curr_format(parseInt(loan_amount))"></td>
-											<td data-bind="text: curr_format(parseInt(interest))"></td>
-											<td data-bind="text: curr_format(parseInt(paidAmount))"></td>
-											<td data-bind="text: curr_format(parseInt(loan_amount)+parseInt(interest)-parseInt(paidAmount))"></td>
-										</tr>
-									</tbody>
-									<tfoot data-bind="if: tables.loan_products">
-										<tr>
-											<th scope='row'>Total</th>
-											<th data-bind="text: curr_format(array_total(tables.loan_products,1))"></th>
-											<th data-bind="text: curr_format(array_total(tables.loan_products,2))"></th>
-											<th data-bind="text: curr_format(array_total(tables.loan_products,3))"></th>
-											<th data-bind="text: curr_format(array_total(tables.loan_products,1)+array_total(tables.loan_products,2)-array_total(tables.loan_products,3))"></th>
-										</tr>
-									</tfoot>
-								</table>
-								<p data-bind="if: tables.loan_products" class="pull-right"><a data-bind="attr: { href: 'view_reports.php?view=general&amp;start_date='+$parent.startDate()+'&amp;end_date='+$parent.endDate()}" class="btn btn-info" title="View all loans">View all...</a></p>
+							<h5>Income From Other Sources</h5><span class="label label-primary">Recent 10</span>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+								
+								<a class="close-link">
+									<i class="fa fa-times"></i>
+								</a>
 							</div>
+						</div>
+						<div class="ibox-content no-padding">
+							<div>
+								<div class="table-responsive">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>Source</th>
+												<th>Amount</th>
+												<th>Date Received</th>
+												<th>Description</th>
+											</tr>
+										</thead>
+										<tbody data-bind="foreach: tables.income">
+											<tr>
+												<td data-bind="text: id">1</td>
+												<td data-bind="text: source"></td>
+												<td data-bind="text: curr_format(parseInt(amount))"></td>
+												<td data-bind="text: moment(dateAdded,'X').format('DD MMMM, YYYY')"></td>
+												<td data-bind="text: description"></td>
+											</tr>
+										</tbody>
+										<tfoot data-bind="if: tables.income">
+											<tr>
+												<th scope='row'>Total</th>
+												<th>&nbsp;</th>
+												<th data-bind="text: curr_format(array_total(tables.income,2))"></th>
+											</tr>
+										</tfoot>
+									</table>
+									<p data-bind="if: tables.income" class="pull-right"><a data-bind="attr: { href: 'miscellanous_income.php?start_date='+$parent.startDate()+'&amp;end_date='+$parent.endDate()}" class="btn btn-info" title="View all income">View all...</a></p>
+								</div>
+
+							</div>
+						
 						</div>
 					</div>
 				</div>
+				<div class="col-lg-6">
+					<div class="ibox float-e-margins ">
+						<div class="ibox-title">
+							<h5>Loan Products Revenue</h5> <span class="label label-primary">Top 10</span>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+								
+								<a class="close-link">
+									<i class="fa fa-times"></i>
+								</a>
+							</div>
+						</div>
+						<div class="ibox-content">
+							<div>
+								<div class="table-responsive">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Product</th>
+												<th>Amount Disbursed</th>
+												<th>Interest</th>
+												<th>Amount Paid</th>
+												<th>Balance</th>
+											</tr>
+										</thead>
+										<tbody data-bind="foreach: tables.loan_products">
+											<tr>
+												<td data-bind="text: productName">1</td>
+												<td data-bind="text: curr_format(parseInt(loan_amount))"></td>
+												<td data-bind="text: curr_format(parseInt(interest))"></td>
+												<td data-bind="text: curr_format(parseInt(paidAmount))"></td>
+												<td data-bind="text: curr_format(parseInt(loan_amount)+parseInt(interest)-parseInt(paidAmount))"></td>
+											</tr>
+										</tbody>
+										<tfoot data-bind="if: tables.loan_products">
+											<tr>
+												<th scope='row'>Total</th>
+												<th data-bind="text: curr_format(array_total(tables.loan_products,1))"></th>
+												<th data-bind="text: curr_format(array_total(tables.loan_products,2))"></th>
+												<th data-bind="text: curr_format(array_total(tables.loan_products,3))"></th>
+												<th data-bind="text: curr_format(array_total(tables.loan_products,1)+array_total(tables.loan_products,2)-array_total(tables.loan_products,3))"></th>
+											</tr>
+										</tfoot>
+									</table>
+									<p data-bind="if: tables.loan_products" class="pull-right"><a data-bind="attr: { href: 'view_reports.php?view=loanproducts&amp;start_date='+$parent.startDate()+'&amp;end_date='+$parent.endDate()}" class="btn btn-info" title="View all loans">View all...</a></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="ibox float-e-margins ">
+						<div class="ibox-title">
+							<h5>Member Savings </h5><span class="label label-primary">Recent 10</span>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+								
+								<a class="close-link">
+									<i class="fa fa-times"></i>
+								</a>
+							</div>
+						</div>
+						<div class="ibox-content no-padding">
+							<div>
+								<div class="table-responsive">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>Client Name</th>
+												<th>Savings Product</th>
+												<th>Sum Deposited</th>
+												<th>Sum Withdrawn</th>
+												<th>Account Balance</th>
+											</tr>
+										</thead>
+										<tbody data-bind="foreach: tables.savings">
+											<tr>
+												<td data-bind="text: id">1</td>
+												<td data-bind="text: clientNames"></td>
+												<td data-bind="text: productName"></td>
+												<td data-bind="text: curr_format(parseInt(sumDeposited))"></td>
+												<td data-bind="text: curr_format(parseInt(sumWithdrawn))"></td>
+												<td data-bind="text: curr_format(parseInt(sumDeposited) -(parseInt(sumWithdrawn)))"></td>
+												
+											</tr>
+										</tbody>
+										<tfoot data-bind="if: tables.savings">
+											<tr>
+												<th scope='row'>Total</th>
+												<th>&nbsp;</th>
+												<th>&nbsp;</th>
+												<th data-bind="text: curr_format(array_total(tables.savings,5))"></th>
+												<th data-bind="text: curr_format(array_total(tables.savings,7))"></th>
+												<th data-bind="text: curr_format(array_total(tables.savings,5) - array_total(tables.savings,7))"></th>
+											</tr>
+										</tfoot>
+									</table>
+									<p data-bind="if: tables.savings" class="pull-right"><a data-bind="attr: { href: 'view_reports.php?view=allsavings&start_date='+$parent.startDate()+'&amp;end_date='+$parent.endDate()}" class="btn btn-info" title="View all savings">View all...</a></p>
+								</div>
 
+							</div>
+						
+						</div>
+					</div>
+				</div>
 			</div>
-
 		</div>
 <?php
 include("include/footer.php"); 

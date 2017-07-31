@@ -654,7 +654,9 @@ class Db{
 		else $sel = "SELECT ".$se." FROM ".$table;
 		if ($ordby != "") $sel = $sel." ORDER BY ".$ordby;
 		if ($limit != "") $sel = $sel." LIMIT ".$limit;
-		//echo $sel;
+		/* if($limit == 3){
+			echo $sel;
+		} */
 		$q = $this->conn->query($sel);
 		if($q){
 			$res = $this->buildOut($q);

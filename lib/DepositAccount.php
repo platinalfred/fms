@@ -39,6 +39,26 @@ class DepositAccount extends Db {
 		return $result_array['openingBalances'];
 	}
 	
+	public function findRecentDeposits($start_date, $end_date, $limit){
+		
+		$where = "";
+		
+		
+		$member_sql = "(SELECT `members`.`id` `clientId`, depositAccountId, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType` FROM `member_deposit_account` JOIN (SELECT `member`.`id`, `firstname`, `lastname`, `othername` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`)`members` ON `memberId` = `members`.`id`)";
+		$saccogroup_sql = "(SELECT `saccogroup`.`id` `clientId`, `depositAccountId`, `groupName` `clientNames`, 2 as `clientType` FROM `group_deposit_account` JOIN `saccogroup` ON `saccoGroupId` = `saccogroup`.`id`)";
+		
+		$member_group_union_sql = $member_sql. " UNION ". $saccogroup_sql." ORDER BY `clientNames`";
+		
+		$deposits_sql = "SELECT `depositAccountId`, COALESCE(SUM(amount),0) `sumDeposited` FROM `deposit_account_transaction` WHERE `transactionType` = 1  GROUP BY `depositAccountId`";
+		$withdraws_sql = "SELECT `depositAccountId`, COALESCE(SUM(amount),0) `sumWithdrawn` FROM `deposit_account_transaction` WHERE `transactionType` = 2   GROUP BY `depositAccountId`";
+		
+		$table = "`deposit_account` JOIN ($member_group_union_sql) `clients` ON `clients`.`depositAccountId` = `deposit_account`.`id` JOIN `deposit_product` ON `deposit_account`.`depositProductId` = `deposit_product`.`id` LEFT JOIN ($deposits_sql) `deposits` ON `deposit_account`.`id` = `deposits`.`depositAccountId` LEFT JOIN ($withdraws_sql) `withdraws` ON `deposit_account`.`id` = `withdraws`.`depositAccountId` ";
+		
+		$columns = array( "`deposit_account`.`id`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`deposit_account`.`maxWithdrawalAmount`", "`deposit_account`.`recomDepositAmount`", "COALESCE(`sumWithdrawn`, 0) sumWithdrawn", "COALESCE(`sumDeposited`, 0) sumDeposited", "`deposit_account`.`dateCreated`" );
+		//echo $table." - ".implode(",",$columns)."".$where;
+		$results = $this->getfarray($table, implode(",",$columns), $where, "", $limit);
+		return !empty($results) ? $results : false;
+	}
 	public function findSpecifics($fields, $where = ""){ //pick out data for specific fields
 			$in_part_string = "";
 			$where_clause = "";

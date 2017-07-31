@@ -20,7 +20,7 @@ class LoanProduct extends Db {
 	
 	public function getDtData(){
 		$fields = "`loan_products`.`id`,`productName`,`loan_products`.`description`,`typeName`";
-		$table2 = " LEFT JOIN `loan_product_type` ON `loan_product_type`.`id` = `loan_products`.`productType`";
+		$table2 = " LEFT JOIN `loan_product_type` ON `loan_product_type`.`id` = `loan_products`.`productType` ";
 		$result_array = $this->getfarray(self::$table_name.$table2, $fields, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}

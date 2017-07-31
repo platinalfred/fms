@@ -20,6 +20,7 @@ $(document).ready(function(){
 				  "searchable": false
 			  }],
 			  "footerCallback": function (tfoot, data, start, end, display ) {
+				  //
 				var api = this.api(), cols = [3,4,7,10,11,13];
 				$.each(cols, function(key, val){
 					var total = api.column(val).data().sum();

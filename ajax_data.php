@@ -15,6 +15,7 @@ if(isset($_POST['origin'])){
 			$expense = new Expenses();
 			$income = new Income();
 			$loan = new Loans();
+			$deposit_account = new DepositAccount();
 			$deposit_account_transaction_obj = new DepositAccountTransaction();
 			/* $share = new Shares(); */
 			
@@ -110,14 +111,15 @@ if(isset($_POST['origin'])){
 			$percents['savings'] = ($figures['savings']>0&&$b4>0)?round((($figures['savings'])/$b4)*100,2):($figures['savings']>0?100:0);
 
 			//Income
-			$tables['income'] = $income->findAll("`dateAdded` BETWEEN ".$start_date." AND ".$end_date, "amount DESC", "10");
+			$tables['income'] = $income->findOtherIncome("`dateAdded` BETWEEN ".$start_date." AND ".$end_date, "amount DESC", 10);
+			//Savings
+			$tables['savings'] = $deposit_account->findRecentDeposits($start_date, $end_date, 3);
+			//$tables['savings'] = $depositAccount->findRecentDeposits($start_date, $end_date, 10);
 
 			//Expenses"
 			$tables['expenses'] = $expense->findAllExpenses("`expenseDate` BETWEEN ".$start_date." AND ".$end_date, 10);
-
-			$products_sql = "SELECT `productName`, SUM(`disbursedAmount`) `loan_amount`, SUM(`disbursedAmount`*`interestRate`/100) `interest`, `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN (SELECT COALESCE(SUM(`amount`),0) `paidAmount`, `loanAccountId` FROM `loan_repayment` WHERE `transactionDate` <= ".$end_date." GROUP BY `loanAccountId`) `payments` ON `loan_account`.`id`=`payments`.`loanAccountId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4 GROUP BY `productName` ORDER BY `productName`";
 			
-			$tables['loan_products'] = $loan->findLoans($products_sql);
+			$tables['loan_products'] = $loan_account_obj->findLoans($start_date, $end_date, 10);
 
 			//line and barchart
 			$barchart = getGraphData($start_date, $end_date);
