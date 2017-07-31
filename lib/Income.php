@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Income extends Db {
 	protected static $table_name  = "income";
-	protected static $table_name2  = "income JOIN income_sources ON incomeType = income_sources.id";
+	protected static $table_name2  = "income JOIN income_sources ON incomeSource = income_sources.id";
 	protected static $db_fields = array("income.id", "incomeSource", "amount", "modifiedBy", "dateAdded", "addedBy", "description");
 	
 	public function findById($id){
@@ -13,6 +13,10 @@ class Income extends Db {
 	public function findIncomeSum($where = ""){
 		$result = $this->getfrec(self::$table_name, "SUM(`amount`) `amount`", $where, "", "");
 		return !empty($result) ? $result['amount']:0;
+	}
+	public function findOtherIncome($where = 1, $orderby = "", $limit = ""){
+		$result_array = $this->getfarray(self::$table_name2, "income.id, income_sources.name  source, amount, dateAdded, addedBy, income.description, modifiedBy", $where, $orderby, $limit );
+		return !empty($result_array) ? $result_array : false;
 	}
 	public function findAll($where = 1, $orderby = "", $limit = ""){
 		$result_array = $this->getarray(self::$table_name2, $where, $orderby, $limit );

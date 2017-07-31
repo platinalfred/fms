@@ -25,7 +25,7 @@
 								</select >
 							</div>
 						</div>
-						<div class="col-sm-5">
+						<div class="col-sm-4">
 							<div class="form-group">
 								<label class="control-label" for="principle">Select Period</label>
 								<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 10px; border: 1px solid #ccc">

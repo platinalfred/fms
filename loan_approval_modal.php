@@ -1,4 +1,4 @@
-<div id="approve_loan-modal" class="modal fade" aria-hidden="true">
+<div id="approve_loan-modal" class="modal fade modal-xl" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-body">

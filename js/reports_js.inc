@@ -20,6 +20,7 @@ $(document).ready(function(){
 				  "searchable": false
 			  }],
 			  "footerCallback": function (tfoot, data, start, end, display ) {
+				  //
 				var api = this.api(), cols = [3,4,7,10,11,13];
 				$.each(cols, function(key, val){
 					var total = api.column(val).data().sum();
@@ -54,8 +55,13 @@ $(document).ready(function(){
 					  }
 					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }},
 				  { data: 'clientNames'},
+<<<<<<< HEAD
 				  { data: 'disbursementDate', render: function(data, type, full, meta) {return moment(data,'X').format('DD-MMM-YYYY');} },
 				  { data: 'disbursedAmount', render: function(data, type, full, meta) {return (data?curr_format(Number(Math.round(parseFloat(data)+'e2')+'e-2')):0);}},
+=======
+				  { data: 'disbursementDate', render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');} },
+				  { data: 'disbursedAmount', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
+>>>>>>> 16730c3c02b97c069e7a39e23d37c27a8b10a0bd
 				  { data: 'principle', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  { data: 'interest', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  { data: 'expInterest', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},

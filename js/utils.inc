@@ -4,7 +4,7 @@
 $('input.athousand_separator').keyup(function(event) {
   // skip for arrow keys
   if(event.which >= 37 && event.which <= 40){
-   event.preventDefault();
+	event.preventDefault();
   }
 
   $(this).val(function(index, value) {

@@ -26,7 +26,7 @@
 								  <div class="form-group" data-bind="with: account_details">
 									<label class="control-label col-md-4" for="payment_amount">Amount paid<span class="required">*</span></label>
 									<div class="col-md-8">
-									  <input type="number"  id="disbursedAmount" name="disbursedAmount" class="form-control col-md-7" data-bind='value: $parent.disbursedAmount, attr: {"data-rule-max":amountApproved, "data-msg-max":"Amount is more than approved "+amountApproved}' data-msg-required="Amount is required" required>
+									  <input type="number"  id="disbursedAmount" name="disbursedAmount" class="form-control col-md-7" data-bind='textInput: $parent.disbursedAmount, attr: {"data-rule-max":amountApproved, "data-msg-max":"Amount is more than approved "+amountApproved}' data-msg-required="Amount is required" required>
 									</div>
 								  </div>
 								  <div class="form-group" data-bind="with: account_details">
