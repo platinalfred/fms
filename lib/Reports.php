@@ -38,6 +38,9 @@ Class Reports{
 			case 'general';
 				$this->viewGeneral($this->data);
 			break;
+			case 'loanproducts';
+				$this->viewGeneral($this->data);
+			break;
 			case 'individual';
 				$this->viewIndividual($this->data);
 			break;
