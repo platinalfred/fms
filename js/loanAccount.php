@@ -52,7 +52,7 @@
 		self.groups = ko.observableArray([{"id":1,"groupNames":"Kiwatule Womens Savings Group"}]); 
 		self.clientTypes = ko.observableArray([{"type_id":1,"client_type":"Member"},{"type_id":2,"client_type":"Group Members"}]); 
 		<?php endif;?>
-		self.groupMembers = ko.observableArray([{"id":1,"memberNames":"Allan James Kintu"}]);
+		self.groupMembers = ko.observableArray([{"id":1,"groupId":1,"memberNames":"Allan James Kintu"}]);
 		self.clientType = ko.observable();
 		// Stores an array of all the Data for viewing on the page
 		self.loanProducts = ko.observableArray([{"id":1,"productName":"Group Savings Loan","description":"Suitable for group savings", "availableTo":"2"}]);
@@ -153,6 +153,21 @@
 				//console.log(loanProduct.availableTo);
 				return (clientType == parseInt(loanProduct.availableTo) || parseInt(loanProduct.availableTo)==3);
 			});
+		});
+		//when the users selects a particular group, the members in that group should be returned,
+		//when individual clients have been selected, then we return that client object as the only array element
+		self.filteredGroupMembers = ko.computed(function() {
+			if(self.client()){
+				if(parseInt(self.client().clientType)==1){
+					return [self.client()];
+				}
+				if(parseInt(self.client().clientType)==2){
+					return ko.utils.arrayFilter(self.groupMembers(), function(groupMember) {
+						return (parseInt(self.client().id)==parseInt(groupMember.groupId));
+					});
+				}
+			}
+			
 		});
 		//filter the loan product fees based on the currently selected product id
 		self.filteredLoanProductFees = ko.computed(function() {
