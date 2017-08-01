@@ -44,6 +44,14 @@ if(isset($_POST['origin'])){
 			//percentage increase/decrease
 			$percents['loan_portfolio'] = ($loan_portfolio_b4>0&&$figures['loan_portfolio']>0)?round(($figures['loan_portfolio']/$loan_portfolio_b4)*100,2):($figures['loan_portfolio']>0?100:0);
 
+			//Total expected interest
+			//1 in this period
+			$figures['loan_interest'] = $dashboard->getSumOfInterest("`disbursementDate` BETWEEN ".$start_date." AND ".$end_date);
+			//before this period
+			$loan_portfolio_b4 = $dashboard->getSumOfInterest("(`disbursementDate` < ".$start_date.")");
+			//percentage increase/decrease
+			$percents['loan_interest'] = ($loan_portfolio_b4>0&&$figures['loan_interest']>0)?round(($figures['loan_interest']/$loan_portfolio_b4)*100,2):($figures['loan_interest']>0?100:0);
+
 			//Total loan penalties
 			//1 in this period
 			$figures['loan_penalty'] = $dashboard->getSumOfLoans("`dateAdded` BETWEEN ".$start_date." AND ".$end_date);
@@ -279,11 +287,10 @@ if(isset($_POST['origin'])){
 				$data['account_details'] = $loanAccountObj->findAllDetailsById($_POST['loanAccountId']);
 				$data['account_details']['statement'] = $loanAccountObj->getStatement($_POST['loanAccountId']);
 			}else{
-				$members = $memberObj->findSelectList();
-				$groups = $saccoGroupObj->findSelectList();
-				$data['customers'] = array_merge($members,$groups);
+				$data['clients'] = $memberObj->findSelectList();
+				$data['groups'] = $saccoGroupObj->findSelectList();
+				$data['groupMembers'] = $saccoGroupObj->findGroupMembers();
 			}
-			
 			
 			echo json_encode($data);
 		break;

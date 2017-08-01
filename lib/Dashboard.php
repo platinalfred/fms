@@ -13,6 +13,10 @@ class Dashboard extends Db {
 		$result = $this->getfrec("loan_account", "sum(`disbursedAmount`) loanSum ", $where, "", "");
 		return !empty($result) ? (($result['loanSum']!=NULL)?(float)$result['loanSum']:0) : 0;
 	}
+	public function getSumOfInterest($where = 1){
+		$result = $this->getfrec("loan_account", "sum(`disbursedAmount`*(`interestRate`/100)) loanInterest ", $where, "", "");
+		return !empty($result) ? (($result['loanInterest']!=NULL)?(float)$result['loanInterest']:0) : 0;
+	}
 	public function getSumOfPenalties($where = 1){
 		$result = $this->getfrec("loan_penalty", "sum(`amount`) penaltySum ", $where, "", "");
 		return !empty($result) ? (($result['penaltySum']!=NULL)?(float)$result['penaltySum']:0) : 0;

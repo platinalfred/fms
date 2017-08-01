@@ -19,7 +19,7 @@ function numberWithCommas(x) {
 }
 function curr_format(n) {
 	var formatted = "";
-	if(n<0){
+	/* if(n<0){
 		n = n*-1;
 		formatted = n.toString().replace(/./g, function(c, i, a) {
 			return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
@@ -29,7 +29,8 @@ function curr_format(n) {
 		formatted = n.toString().replace(/./g, function(c, i, a) {
 			return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
 		})
-	}
+	} */
+	formatted = (n<0)?("("+ numberWithCommas(n*-1) + ")"):numberWithCommas(n);
 	return formatted;
 }
 //sum up values in an array
@@ -223,7 +224,7 @@ function showStatusMessage(message='', display_type='success'){
 			[{id:1,desc:'Average daily balance'},{id:2,desc:'Minimum balance on a given day'}],
 			[{id:1,desc:'Manual'},{id:2,desc:'Monthly Fee'}],
 			[{id:1,desc:'Monthly from Activation'},{id:2,desc:'Monthly from Start of Month'}],
-			[{id:1,desc:'days'},{id:2,desc:'weeks'},{id:3,desc:'months'}],
+			[{id:1,desc:'day(s)'},{id:2,desc:'week(s)'},{id:3,desc:'month(s)'}],
 			[{id:1,desc:'Flat amount'},{id:2,desc:'% of Disbursement Amount'}]
 		];
 		var description = "";
@@ -296,7 +297,7 @@ function showStatusMessage(message='', display_type='success'){
 	}
 	$(".modal").on("hide.bs.modal", function () {
 		// put your default event here
-		$('form', this)[0].reset();
+		//$('form', this)[0].reset();
 		$('input[name="id"]', this).val('');
 		if(typeof loanAccountModal!=='undefined'){
 			loanAccountModel.edit_client(0);

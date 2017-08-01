@@ -22,13 +22,17 @@ class SaccoGroup extends Db {
 		$result_array = $this->getfarray(self::$table_name, $fields, "", "", "");
 		return $result_array;
 	}
-	public function findGroupMembers($id){
-		$group_members = "(SELECT `memberId` FROM `group_members` WHERE `groupId` = $id)";
-		$member_persons = "(SELECT `personId` FROM `member` WHERE `id` IN ($group_members))";
-		$group_members_details = "SELECT CONCAT(`lastname`, ' ', `firstname`, ' ', `othername`) `memberNames` FROM `person` WHERE `id` IN ($member_persons)";
-		return $this->queryData($group_members_details);
-	}
 	
+	public function findGroupMembers($id=""){
+		$where = $id?"`groupId` = $id":"";
+		
+		$fields = "`group_members`.`memberId`, `groupId`, `memberNames`";
+		
+		$table = "`group_members` JOIN (SELECT `member`.`id` `memberId`, CONCAT(`lastname`, ' ', `firstname`, ' ', `othername`) `memberNames` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`) `all_members` ON `group_members`.`memberId`=`all_members`.`memberId`";
+		
+		$result_array = $this->getfarray($table, $fields, $where, "", "");
+		return $result_array;
+	}
 	
 	public function addSaccoGroup($data){
 		$fields = array_slice(self::$table_fields, 1);

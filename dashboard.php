@@ -19,19 +19,24 @@ include("include/header.php");
 						</div>
 						<div class="ibox-content">
 							<div class="row">
-								<div class="col-md-4">
+								<div class="col-md-3">
 									<small>Portfolio</small>
 									<h3 class="no-margins"><a title="Total disbursed loan amount" data-bind="text:curr_format(parseInt(figures.loan_portfolio)), attr:{href:'view_loans.php?status=4&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">40,642</a></h3>
 									<div class="font-bold text-navy"> <span data-bind="text: percents.loan_portfolio">44</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.loan_portfolio < 1, 'fa-level-up': percents.loan_portfolio > 0}"></i> </div>
 								</div>
-								<div class="col-md-4">
+								<div class="col-md-3">
+									<small>Interest</small>
+									<h3 class="no-margins"><a title="Total disbursed loan amount" data-bind="text:curr_format(parseInt(figures.loan_interest)), attr:{href:'view_loans.php?status=4&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">40,642</a></h3>
+									<div class="font-bold text-navy"> <span data-bind="text: percents.loan_interest">44</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.loan_interest < 1, 'fa-level-up': percents.loan_interest > 0}"></i> </div>
+								</div>
+								<div class="col-md-3">
 									<small>Penalties</small>
 									<h3 class="no-margins"><a title="Amount paid in penalties" data-bind="text:curr_format(parseInt(figures.loan_penalty)), attr:{href:'view_loans.php?status=4&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">40,642</a></h3>
 									<div class="font-bold text-navy"> <span data-bind="text: curr_format(parseInt(percents.loan_penalty))">44</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.loan_penalty < 1, 'fa-level-up': percents.loan_penalty > 0}"></i> </div>
 								</div>
-								<div class="col-md-4">
+								<div class="col-md-3">
 									<small>Payments</small>
-									<h3 class="no-margins"><a title="Amount that has been paid of the portfolio" data-bind="text:curr_format(parseInt(figures.loan_payments)), attr:{href:'view_loans.php?status=4&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">20,612</a></h3>
+									<h3 class="no-margins"><a title="Amount that has been paid off the total portfolio" data-bind="text:curr_format(parseInt(figures.loan_payments)), attr:{href:'view_loans.php?status=4&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">20,612</a></h3>
 									<div class="font-bold text-navy"><span data-bind="text:percents.loan_payments">22</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.loan_payments < 1, 'fa-level-up': percents.loan_payments > 0}"></i> </div>
 								</div>
 							</div>
