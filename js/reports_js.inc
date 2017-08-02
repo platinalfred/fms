@@ -58,6 +58,7 @@ $(document).ready(function(){
 				  { data: 'disbursementDate', render: function(data, type, full, meta) {return moment(data,'X').format('DD-MMM-YYYY');} },
 				  { data: 'disbursedAmount', render: function(data, type, full, meta) {return (data?curr_format(Number(Math.round(parseFloat(data)+'e2')+'e-2')):0);}},
 				  { data: 'principle', render: function(data, type, full, meta) {return (data?curr_format(Number(Math.round(parseFloat(data)+'e2')+'e-2')):0);}},
+
 				  { data: 'interest', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  { data: 'expInterest', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  { data: 'feesPaid', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},

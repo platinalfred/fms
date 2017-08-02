@@ -1,6 +1,8 @@
 <script type="text/javascript">
 
 	var dTable = new Object();
+	//guarantors 
+	var guarantors = [];
 	var Collateral = function() {
 			var self = this;
 			self.itemName = ko.observable();
@@ -46,48 +48,34 @@
 	};
 	var LoanAccount = function() {
 		var self = this;
-		//all members
-		<?php if(!isset($client)):?>
-		self.clients = ko.observableArray([{"id":1,"clientNames":"Allan James Kintu"}]); 
-		self.groups = ko.observableArray([{"id":1,"groupNames":"Kiwatule Womens Savings Group"}]); 
-		self.clientTypes = ko.observableArray([{"type_id":1,"client_type":"Member"},{"type_id":2,"client_type":"Group Members"}]); 
-		<?php endif;?>
-		self.groupMembers = ko.observableArray([{"id":1,"memberNames":"Allan James Kintu"}]);
-		self.clientType = ko.observable();
-		// Stores an array of all the Data for viewing on the page
-		self.loanProducts = ko.observableArray([{"id":1,"productName":"Group Savings Loan","description":"Suitable for group savings", "availableTo":"2"}]);
-		self.productFees = ko.observableArray();
-		self.loanAccountFees = ko.observableArray();
+		//application form details
+		self.requestedAmount = ko.observable(0);
+		self.interestRate = ko.observable(0);
+		self.offSetPeriod = ko.observable(0);
+		self.installments = ko.observable(0);
+		self.gracePeriod = ko.observable(0);
 		
-		//these are required as the datatable is being loaded
-		self.transactionHistory = ko.observableArray(); //for the account transacation history display
-		self.account_details = ko.observable();
-		
-		//this gets loaded when the loan is for approval/editing
-		self.edit_client = ko.observable(0);
-		self.loan_account_details = ko.observable();
-		self.loanAccountId = ko.observable();
-		
-		//loan repayment section form
-		self.payment_amount = ko.observable(0);
-		self.comments = ko.observable("");
-		
-		//loan account approval section
-		self.amountApproved = ko.observable(0);
-		self.approvalNotes = ko.observable();
-		self.applicationStatus = ko.observable(3);
-		
-		//loan amount disbursement section
-		self.disbursedAmount = ko.observable(0);
-		self.disbursementNotes = ko.observable();
-		
-		//guarantors 
-		self.guarantors = ko.observableArray();
-		// Stores an array of selectedGuarantors
-		// Put one guarantor in by default
+		// Stores an array of selected items
+		// Put one item (e.g guarantor) in by default
 		self.selectedGuarantors = ko.observableArray([new GuarantorSelection()]);
 		self.addedCollateral = ko.observableArray([new Collateral()]);
 		self.member_business = ko.observableArray([new Business()]);
+		self.loanAccountFees = ko.observableArray();
+		
+		//filter the guarantors based on the user type and selected client
+		self.filteredGuarantors = ko.computed(function() {
+			if(self.clientType){
+				var clientType = parseInt(self.clientType);
+				var clientId = parseInt(self.id);
+				return ko.utils.arrayFilter(guarantors, function(guarantor) {
+					return (clientId != parseInt(guarantor.id) && parseInt(clientType)==1);
+				});
+			}
+			else{
+				return guarantors;
+			}
+		});		
+
 		self.totalSavings = ko.pureComputed(function() {
 			var total = 0;
 			$.map(self.selectedGuarantors(), function(selectedGuarantor) {
@@ -123,16 +111,48 @@
 		self.removeCollateral = function(addedCollateral) { self.addedCollateral.remove(addedCollateral) };
 		self.addBusinnes = function() { self.member_business.push(new Business()); };
 		self.removeBusiness = function(business) { self.member_business.remove(business); };
+	}
+	var ViewModel = function() {
+		var self = this;
 		
-		
+		self.applicationDate = ko.observable('<?php echo date('d-m-Y');?>');
 		self.loanProduct = ko.observable();
 		self.client = ko.observable(<?php if(isset($client)) echo json_encode($client);?>);
-		self.requestedAmount = ko.observable(0);
-		self.interestRate = ko.observable(0);
-		self.applicationDate = ko.observable('<?php echo date('d-m-Y');?>');
-		self.offSetPeriod = ko.observable(0);
-		self.installments = ko.observable(0);
-		self.gracePeriod = ko.observable(0);
+		
+		//all members
+		<?php if(!isset($client)):?>
+		self.clients = ko.observableArray([{"id":1,"clientNames":"Allan James Kintu"}]); 
+		self.groups = ko.observableArray([{"id":1,"groupNames":"Kiwatule Womens Savings Group"}]); 
+		self.clientTypes = ko.observableArray([{"type_id":1,"client_type":"Member"},{"type_id":2,"client_type":"Group Members"}]); 
+		<?php endif;?>
+		self.groupMembers = ko.observableArray([{"id":1,"groupId":1,"memberNames":"Allan James Kintu"}]);
+		self.clientType = ko.observable();
+		// Stores an array of all the Data for viewing on the page
+		self.loanProducts = ko.observableArray([{"id":1,"productName":"Group Savings Loan","description":"Suitable for group savings", "availableTo":"2"}]);
+		
+		self.productFees = ko.observableArray();
+		
+		//these are required as the datatable is being loaded
+		self.transactionHistory = ko.observableArray(); //for the account transacation history display
+		self.account_details = ko.observable();
+		
+		//this gets loaded when the loan is for approval/editing
+		self.edit_client = ko.observable(0);
+		self.loan_account_details = ko.observable();
+		self.loanAccountId = ko.observable();
+		
+		//loan repayment section form
+		self.payment_amount = ko.observable(0);
+		self.comments = ko.observable("");
+		
+		//loan account approval section
+		self.amountApproved = ko.observable(0);
+		self.approvalNotes = ko.observable();
+		self.applicationStatus = ko.observable(3);
+		
+		//loan amount disbursement section
+		self.disbursedAmount = ko.observable(0);
+		self.disbursementNotes = ko.observable();
 		
 		// Operations
 		//set options value afterwards
@@ -154,6 +174,27 @@
 				return (clientType == parseInt(loanProduct.availableTo) || parseInt(loanProduct.availableTo)==3);
 			});
 		});
+		/**when the users selects a particular group, only the members in that group should be returned,
+		//when an individual client has been selected, then we return that client object as the only array element
+		//There can be 1 or more loan accounts created, depending on the client type selected
+		//so we join the join each of the member objects with that of the loan account*/
+		self.filteredGroupMembers = ko.computed(function() {
+			if(self.client()){
+				if(parseInt(self.client().clientType)==1){
+					return [$.extend(self.client(),new LoanAccount())];
+				}
+				if(parseInt(self.client().clientType)==2){
+					var thisGroupMembers = [];
+					ko.utils.arrayForEach(ko.utils.arrayFilter(self.groupMembers(), function(groupMember) {
+						return (parseInt(self.client().id)==parseInt(groupMember.groupId));
+					}), function(item) {
+						thisGroupMembers.push($.extend(item, new LoanAccount()));
+					});
+					return thisGroupMembers;
+				}
+			}
+			
+		});
 		//filter the loan product fees based on the currently selected product id
 		self.filteredLoanProductFees = ko.computed(function() {
 			if(self.loanProduct()){
@@ -166,20 +207,6 @@
 				return self.productFees();
 			}
 		});
-		//filter the guarantors based on the user type and current client selected
-		self.filteredGuarantors = ko.computed(function() {
-			if(self.client()){
-				var clientType = parseInt(self.client().clientType);
-				var clientId = parseInt(self.client().id);
-				return ko.utils.arrayFilter(self.guarantors(), function(guarantor) {
-					return (clientId != parseInt(guarantor.id) && parseInt(clientType)==1);
-				});
-			}
-			else{
-				return self.guarantors();
-			}
-			
-		});		
 		//reset the whole form after saving data in the database
 		self.resetForm = function() {
 			//self.client(null);
@@ -197,7 +224,7 @@
 				success: function(response){
 					self.loanProducts(response.products);
 					self.productFees(response.productFees);
-					self.guarantors(response.guarantors);
+					guarantors=response.guarantors;
 					<?php if(!isset($client)):?>
 					self.clients(response.clients); self.groups(response.groups); self.groupMembers(response.groupMembers); 
 					<?php endif;?>
@@ -381,13 +408,13 @@
 		};
 	};
 
-	var loanAccountModel = new LoanAccount();
-	loanAccountModel.getServerData();// get data to be populated on the page
-	ko.applyBindings(loanAccountModel, $("#loan_account_details")[0]);
-	$("#loanAccountForm").validate({submitHandler: loanAccountModel.save});
-	$("#loanPaymentForm").validate({submitHandler: loanAccountModel.makePayment});
-	$("#loanAccountApprovalForm").validate({submitHandler: loanAccountModel.approveLoan});
-	$("#loanDisbursementForm").validate({submitHandler: loanAccountModel.disburseLoan});
+	var viewModel = new ViewModel();
+	viewModel.getServerData();// get data to be populated on the page
+	ko.applyBindings(viewModel, $("#loan_account_details")[0]);
+	$("#loanAccountForm").validate({submitHandler: viewModel.save});
+	$("#loanPaymentForm").validate({submitHandler: viewModel.makePayment});
+	$("#loanAccountApprovalForm").validate({submitHandler: viewModel.approveLoan});
+	$("#loanDisbursementForm").validate({submitHandler: viewModel.disburseLoan});
 	
 	
 <!-- Datatables -->
@@ -714,7 +741,7 @@
 	  "use strict";
 	  return {
 		init: function() {
-			loanAccountModel.account_details(null);
+			viewModel.account_details(null);
 		  handleDataTableButtons();
 		}
 	  };
@@ -746,7 +773,7 @@
 		}
 	});
 	var editing = 0
-	<?php if((isset($_SESSION['loan_officer'])&&$_SESSION['loan_officer'])):?>editing = 1; loanAccountModel.edit_client(1);<?php endif;?>
+	<?php if((isset($_SESSION['loan_officer'])&&$_SESSION['loan_officer'])):?>editing = 1; viewModel.edit_client(1);<?php endif;?>
 	$('.table#applications').on('click', '.edit_loan', function () {
 		<?php if(!isset($_GET['loanId'])):?>
 		var row = $(this).closest("tr[role=row]");
@@ -756,18 +783,18 @@
 		var data = dTable['applications'].row(row).data() ;
 		<?php endif;?>
 		//var loanAccountId = <?php if(isset($_GET['loanId'])):?><?php echo $_GET['loanId']; else:?>data.id<?php endif;?>;
-		loanAccountModel.getLoanAccountDetails(editing);
+		viewModel.getLoanAccountDetails(editing);
 	});
 
 	$('.table tbody').on('click', 'tr[role=row]', function () {
 		var tbl = $(this).parent().parent();
 		var dt = dTable[$(tbl).attr("id")];
 		var data = dt.row(this).data();
-		loanAccountModel.account_details(data);
-		loanAccountModel.amountApproved(parseInt(data.requestedAmount));
+		viewModel.account_details(data);
+		viewModel.amountApproved(parseInt(data.requestedAmount));
 		//ajax to retrieve transactions history//
 		getTransactionHistory(data.id);
-		loanAccountModel.getLoanAccountDetails(0);
+		viewModel.getLoanAccountDetails(0);
 	});
 	
 	 function getTransactionHistory(loanAccountId){
@@ -777,7 +804,7 @@
 			type: 'POST',
 			dataType: 'json',
 			success: function (response) {
-				loanAccountModel.transactionHistory(response);			
+				viewModel.transactionHistory(response);			
 			}
 		});
 	 }
