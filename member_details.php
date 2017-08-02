@@ -64,7 +64,7 @@ p{
 					if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>
 						<div class="ibox-tools">
 							<a  data-toggle="modal" href="#update_member" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Edit </a>
-							<a href="#" class="btn btn-danger btn-sm delete_member" style="color:#fff;"><i class="fa fa-trash"></i> Delete</a>
+							<a id="<?php echo $_GET['id']; ?>" class="btn btn-danger btn-sm delete_member" style="color:#fff;"><i class="fa fa-trash"></i> Delete</a>
 						</div>
 					<?php 
 					}

@@ -16,6 +16,7 @@ if(!$group_data){
 	echo "<p>No group details found</p>";
 	return;
 }
+$client['clientType'] = 2;
 ?>
 <style>
 p{
@@ -33,7 +34,7 @@ p{
 					<h5>Group - <?php echo $names; ?> </h5>
 					<div class="ibox-tools">
 						<a  data-toggle="modal" href="#edit_group" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Edit </a>
-						<a href="#" class="btn btn-danger btn-sm delete_me" style="color:#fff;"><i class="fa fa-trash"></i> Delete</a>
+						<a id="<?php echo $_GET['id']; ?>" class="btn btn-danger btn-sm delete_me" style="color:#fff;"><i class="fa fa-trash"></i> Delete</a>
 					</div>
 				</div>
 				<div class="ibox-content" style="padding-top:3px;">
@@ -51,8 +52,36 @@ p{
 							</div>
 							<div class="ibox-content">
 								<div class="row">
-									<div class="col-md-12 col-sm-12 col-xs-12 " data-bind='foreach: $root.group_members'>
-										<div class="col-md-12 col-sm-12 col-xs-12 details" data-bind='text:memberNames'></div>
+									<div class="col-md-12 col-sm-12 col-xs-12 " >
+										<?php
+										//print_r($data['group_members']);
+										if($data['group_members']){ ?>
+											<div class="col-md-12 col-sm-12 col-xs-12" style="padding-top:10px;">
+												<div class="col-lg-3"><b>Name</b>
+												</div>
+												<div class="col-lg-3"><b>Person Number</b>
+												</div>
+												<div class="col-lg-3"><b>Phone</b></div>
+												<div class="col-lg-3"><b>Id Number</b></div>
+											</div>
+											<?php	
+											foreach($data['group_members'] as $single){ ?>
+												<div class="col-md-12 col-sm-12 col-xs-12" style="padding-top:10px;">
+													<div class="col-lg-3">
+														<a href="member_details.php?id=<?php echo $single['memberId']; ?>"><?php echo $single['memberNames']; ?></a>
+													</div>
+													<div class="col-lg-3"><?php echo $single['person_number']; ?>
+													</div>
+													<div class="col-lg-3"><?php echo $single['phone']; ?>
+													</div>
+													<div class="col-lg-3"><?php echo $single['id_number']; ?>
+													</div>
+												</div>
+												<?php												
+											}
+										}
+										?>
+										
 									</div>
 								</div>
 							</div>
@@ -98,6 +127,9 @@ p{
 		break;
 		case 'savings_accs':
 			include("js/depositAccount.php");
+		break;
+		case 'default':
+			include("js/loanAccount.php");
 		break;
 	  }
   }

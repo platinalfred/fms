@@ -55,23 +55,19 @@ $(document).ready(function(){
 					  }
 					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }},
 				  { data: 'clientNames'},
-<<<<<<< HEAD
 				  { data: 'disbursementDate', render: function(data, type, full, meta) {return moment(data,'X').format('DD-MMM-YYYY');} },
 				  { data: 'disbursedAmount', render: function(data, type, full, meta) {return (data?curr_format(Number(Math.round(parseFloat(data)+'e2')+'e-2')):0);}},
-=======
-				  { data: 'disbursementDate', render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');} },
-				  { data: 'disbursedAmount', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
->>>>>>> 16730c3c02b97c069e7a39e23d37c27a8b10a0bd
-				  { data: 'principle', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
+				  { data: 'principle', render: function(data, type, full, meta) {return (data?curr_format(Number(Math.round(parseFloat(data)+'e2')+'e-2')):0);}},
 				  { data: 'interest', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  { data: 'expInterest', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  { data: 'feesPaid', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
 				  { data: 'paidInstallments', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
 				  { data: 'balInstallments'},
-				  { data: 'paidPrinciple', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
-				  { data: 'interestPaid', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
+				  { data: 'paidPrinciple', render: function(data, type, full, meta) {return (data?curr_format(Number(Math.round(parseFloat(data)+'e2')+'e-2')):0);}},
+				  { data: 'interestPaid', render: function(data, type, full, meta) {return (data?curr_format(Number(Math.round(parseFloat(data)+'e2')+'e-2')):0);}},
 				  { data: 'paidPrinciple', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(full.disbursedAmount)-parseInt(data)):0;}},
-				  { data: 'interestPaid', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(full.expInterest)-(data?parseInt(data):0)):0;}},
+				  { data: 'interestPaid', render: function ( data, type, full, meta ) {
+					   return data?curr_format(parseInt(full.expInterest)-(data?parseInt(data):0)):0;}},
 				  { data: 'paidPrinciple', render: function ( data, type, full, meta ) {return data?curr_format((parseInt(full.disbursedAmount)-parseInt(data))+(parseInt(full.expInterest)-(full.interestPaid?parseInt(full.interestPaid):0))):0;}},
 				  { data: 'amountPaid', render: function(data, type, full, meta) {
 						var paid_amount = (data?parseInt(data):0);

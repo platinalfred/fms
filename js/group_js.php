@@ -10,7 +10,7 @@ $(document).ready(function(){
 				"processing": true,
 			  "serverSide": true,
 			  "deferRender": true,
-			  "order": [[ 1, 'asc' ]],
+			  "order": [[ 0, 'DESC' ]],
 			  "ajax": {
 				  "url":"find_data.php",
 				  "dataType": "JSON",
@@ -31,7 +31,7 @@ $(document).ready(function(){
 					{ data: 'groupName'},
 					{ data: 'description'}<?php 
 					if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>,
-					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <div class="btn-group"><button data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle">Action <span class="caret"></span></button><ul class="dropdown-menu"><li><a href="group_details.php?id='+ data +'"><i class="fa fa-folder"></i> Manage Group</a></li><li><a id="'+data+'"  class="delete_me"><i class="fa fa-trash" style="color:#ff0000"></i> Delete</a></li>   </ul></div>  ';}} <?php } ?> 
+					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <div class="btn-group"><a class="btn btn-xs btn-default" href="group_details.php?id='+ data +'&view=loan_accs"><i class="fa fa-folder"></i> Manage Group</a><a style="margin-left:15px;"class="btn btn-xs btn-default delete_me" id="'+data+'" ><i class="fa fa-trash" style="color:#ff0000"></i></a></button></div>  ';}} <?php } ?> 
 					] ,
 			  buttons: [
 				{
@@ -74,13 +74,55 @@ $(document).ready(function(){
 	  };
 	}();
 	TableManageButtons.init();
+	//Edit Group
 	$('#groupTable').on('click', 'tr .edit_group', function () {
-		var id = $(this).attr("id")
+		var id = $(this).attr("id");
 		 $('#DescModal').removeData('bs.modal');
         $('#DescModal').modal({remote: 'edit_group.php?id=' + id });
         $('#DescModal').modal('show');
 	})
-	$('#groupTable tbody').on('click', 'tr ', function () {
+	//Delete Group
+	$('#groupTable').on('click', 'tr .delete_me', function () {
+		var id = $(this).attr("id");
+		$.ajax({
+			url: "delete.php?tbl=saccogroup&id="+id,
+			type: 'GET',
+			success: function (response) {
+				if($.trim(response) == "success"){
+					showStatusMessage("Successfully deleted group" ,"success");
+					setTimeout(function(){
+						dTable.ajax.reload();
+					}, 2000);
+				}else{
+					showStatusMessage(response, "fail");
+				}
+				
+			}
+		});
+	})
+	
+	$(".delete_me").click(function(){
+		var id = $(this).attr("id");
+		var confirmation = confirm("Are you sure you would like to delete this group?");
+		if(confirmation){
+			$.ajax({
+				url: "delete.php?tbl=saccogroup&id="+id,
+				type: 'GET',
+				success: function (response) {
+					if($.trim(response) == "success"){
+						showStatusMessage("Successfully deleted group" ,"success");
+						setTimeout(function(){
+							window.location = "groups.php";
+						}, 2000);
+					}else{
+						showStatusMessage(response, "fail");
+					}
+					
+				}
+			});
+		}
+	})
+	$('#groupTable tbody').on('click', 'tr ', function () { 
 		var data = dTable.row(this).data();
 		groupModel.group_details(data);
 		//ajax to retrieve other member details
@@ -92,7 +134,6 @@ $(document).ready(function(){
 			type: 'GET',
 			dataType: 'json',
 			success: function (data) {
-				console.log(data.group_members);
 				if(data.group_members != "false"){
 					groupModel.all_group_members(data.group_members);
 				}
@@ -101,6 +142,7 @@ $(document).ready(function(){
 			}
 		});
 	}
+	
 	function showStatusMessage(message='', display_type='success'){
 		new PNotify({
 			  title: "Alert",
@@ -156,27 +198,31 @@ $(document).ready(function(){
 		// in the "action" attribute of the form when valid
 		submitHandler: function(form, event) {
 			event.preventDefault();
-			var form =  $("form[name='register_group']");
-			var frmdata = form.serialize();
-			$.ajax({
-				url: "save_data.php",
-				type: 'POST',
-				data: frmdata,
-				success: function (response) {
-					if($.trim(response) == "success"){
-						showStatusMessage("Successfully added new record" ,"success");
-						form[0].reset();
-						//groupModel.group_members(null);
-						dTable.ajax.reload();
+			/* if(){
+				
+			}else{ */
+				var form =  $("form[name='register_group']");
+				var frmdata = form.serialize();
+				$.ajax({
+					url: "save_data.php",
+					type: 'POST',
+					data: frmdata,
+					success: function (response) {
+						if($.trim(response) == "success"){
+							showStatusMessage("Successfully added new record" ,"success");
+							form[0].reset();
+							//groupModel.group_members(null);
+							dTable.ajax.reload();
+							
+						}else{
+							showStatusMessage(response, "fail");
+						}
 						
-					}else{
-						showStatusMessage(response, "fail");
 					}
-					
-				}
-			});
+				});
+			//}
 		}
-	  });
+	});
 });
 	 
 var GroupMember = function() {

@@ -42,28 +42,30 @@
 							<h1>Demographic Information</h1>
 							<fieldset>
 								<div class="row">
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label class="col-sm-4 control-label no_padding">Title</label>
-											<div class="col-sm-7">
-												<select class="form-control m-b" name="title" required>
-													<option value="">Choose option</option>
-													<option value="Mr" >Mr</option>
-													<option value="Mrs">Mrs</option>
-													<option value="Dr">Dr</option>
-													<option value="Prof">Prof</option>
-												</select>
+									<div class="col-lg-10">
+										<div class="col-sm-6 no_padding">
+											<div class="form-group">
+												<label class="col-sm-6 control-label no_padding">Title</label>
+												<div class="col-sm-6 input-group">
+													<select class="form-control m-b" name="title" required>
+														<option value="">Choose option</option>
+														<option value="Mr" >Mr</option>
+														<option value="Mrs">Mrs</option>
+														<option value="Dr">Dr</option>
+														<option value="Prof">Prof</option>
+													</select>
+												</div>
 											</div>
 										</div>
-									</div>	
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label class="col-sm-3 control-label no_padding">Member Type</label>
-											<div class="col-sm-7">
-												<select class="form-control m-b" name="memberType" >
-													<option value="0">Member Only</option>
-													<option value="1">Member and Share Holder</option>
-												</select>
+										<div class="col-sm-6 no_padding">
+											<div class="form-group">
+												<label class="col-sm-4 control-label no_padding">Member Type</label>
+												<div class="col-sm-8 input-group">
+													<select class="form-control m-b" name="memberType" >
+														<option value="0">Member Only</option>
+														<option value="1">Member and Share Holder</option>
+													</select>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -74,7 +76,7 @@
 												<div class="col-sm-3 no_padding">
 													<label>Name <span class="req">*</span></label>
 												</div>
-												<div class="col-sm-9">
+												<div class="col-sm-9 input-group">
 													<input type="text" class="form-control" name="lastname" placeholder="Sur Name" required />
 													<span class="input-group-btn" style="width:2px;"></span>
 													<input type="text" class="form-control" name="firstname" data-msg-require="Please enter name" placeholder="First Name" required/>
@@ -84,20 +86,20 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-sm-7 no_padding" style="margin-top:8px;margin-bottom:8px;">
+										<div class="col-sm-6 no_padding" style="margin-top:8px;margin-bottom:8px;">
 											<div class="form-group">
-												<div class="col-sm-5 no_padding"><label class="col-lg-12" >Gender</label></div>
-												<div class="col-sm-7">
+												<label class="col-lg-6 no_padding" >Gender</label>
+												<div class="col-sm-6 input-group">
 													<label > <input required name="gender" class="i-checks" type="radio" value="M" >Male</label>
 													<label > <input required name="gender" class="i-checks" type="radio" value="F"> Female</label>
 												</div>
 											</div>											
 												
 										</div>
-										<div class="col-sm-5" style="margin-top:8px;">
+										<div class="col-sm-6" style="margin-top:8px;">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no_padding">Marital Status</label>
-												<div class="col-sm-9">
+												<div class="col-sm-9 input-group">
 													<select class="form-control m-b" name="marital_status" required>
 														<option value="">Please select</option>
 														<option value="Single">Single</option>
@@ -112,17 +114,24 @@
 										<div class="col-sm-12 no_padding">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no_padding" >Date of Birth <span class="req">*</span></label>
+												<div class="col-sm-9 input-group date">
+													<input type="text" class="form-control" name="dateofbirth"  data-provide="datepicker" data-date-end-date="<?php echo date('d-m-Y', strtotime('-18 years'));?>" required>
+													<div class="input-group-addon">
+														<span class="fa fa-calendar"></span>
+													</div>
+												</div>
+												<!--
 												<div class="col-sm-9">
 													<input id="dateofbirth" name="dateofbirth" type="text" data-mask="99/99/9999" class="form-control" >
 													<span class="help-block">(dd/mm/yyyy)</span>
 
-												</div>
+												</div> -->
 											</div>
 										</div>
 										<div class="col-sm-12 no_padding">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no_padding" >Occupation</label>
-												<div class="col-sm-9">
+												<div class="col-sm-9 input-group">
 													<input  name="occupation" type="text" class="form-control">
 												</div>
 											</div>
