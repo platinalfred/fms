@@ -209,10 +209,10 @@
 		});
 		//reset the whole form after saving data in the database
 		self.resetForm = function() {
-			/* $("#loanAccountForm")[0].reset();
+			$("#loanAccountForm")[0].reset();
 			self.loanProduct(null);
 			self.client(null);
-			self.clientType(null); */
+			self.clientType(null);/**/
 			dTable['applications'].ajax.reload();
 		};		
 		//Retrieve page data from the server
