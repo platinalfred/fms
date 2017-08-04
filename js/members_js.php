@@ -431,13 +431,16 @@ $(document).ready(function(){
     submitHandler: function(form, event) {
 		event.preventDefault();
 		
-		var frmdata = new FormData($("form#form1")[0]);
+		var frmdata = new FormData($(form)[0]);
 		//var frmdata = form.serialize();
 		$.ajax({
 			url: "save_data.php",
 			type: 'POST',
 			data: frmdata,
 			async: false,
+			cache: false,
+			contentType: false,
+			processData: false,
 			success: function (response) {
 				
 				if($.trim(response) == "success"){
@@ -452,10 +455,7 @@ $(document).ready(function(){
 					showStatusMessage(response, "fail");
 				}
 				
-			},
-			cache: false,
-			contentType: false,
-			processData: false
+			}
 		});
     }
   });

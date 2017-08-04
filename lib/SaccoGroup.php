@@ -28,8 +28,15 @@ class SaccoGroup extends Db {
 
 		$fields = "`group_members`.`memberId`, `groupId`, `memberNames`, `phone`, `person_number`, `id_number` ";
 		
-		$table = "`group_members` JOIN (SELECT `member`.`id` `memberId`, CONCAT(`lastname`, ' ', `firstname`, ' ', `othername`) `memberNames`, `person`.`phone`, `person`.`person_number`, `person`.`id_number` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`) `all_members` ON `group_members`.`memberId`=`all_members`.`memberId`";
 
+		$table = "`group_members` JOIN (SELECT `member`.`id` `memberId`, CONCAT(`lastname`, ' ', `firstname`, ' ', `othername`) `memberNames`, `person`.`phone`, `person`.`person_number`, `person`.`id_number` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`) `all_members` ON `group_members`.`memberId`=`all_members`.`memberId`";
+/* 
+=======
+		$fields = "`id`,`group_members`.`memberId`, `groupId`, `clientNames`";
+		
+		$table = "`group_members` JOIN (SELECT `member`.`id` `memberId`, CONCAT(`lastname`, ' ', `firstname`, ' ', `othername`) `clientNames` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`) `all_members` ON `group_members`.`memberId`=`all_members`.`memberId`";
+		
+>>>>>>> 303909de2b7847593cebd7bcb4523a7e0d6d946b */
 		$result_array = $this->getfarray($table, $fields, $where, "", "");
 		return $result_array;
 	}
