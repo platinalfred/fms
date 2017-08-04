@@ -242,23 +242,39 @@ $(document).ready(function(){
 	});
 	
 	$('.table tbody').on('click', 'tr .delete', function () {
-		var confirmation = confirm("Are sure you would like to delete this item?");
 		var id = $(this).attr("id");
-		if(confirmation){
-			$.ajax({ // create an AJAX call...
-				url: "delete.php?id="+id+"&tbl=staff", // the file to call
-				success: function(response) { // on success..
-					if(response != "fail"){
-						showStatusMessage("Successfully deleted record", "success");
-						setTimeout(function(){
-							dTable.ajax.reload();
-						}, 1000);
-					}else{
-						showStatusMessage(response, "warning");
+		$.confirm({
+			icon: 'fa fa-warning',
+			title: 'Confirm!',
+			 boxWidth: '30%',
+			content: 'Are you sure you would like to delete this staff?',
+			typeAnimated: true,
+			buttons: {
+				Delete: {
+					text: 'Delete',
+					btnClass: 'btn-danger',
+					action: function(){
+						$.ajax({ // create an AJAX call...
+							url: "delete.php?id="+id+"&tbl=staff", // the file to call
+							success: function(response) { // on success..
+								if(response != "fail"){
+									showStatusMessage("Staff has been deleted.", "success");
+									setTimeout(function(){
+										dTable.ajax.reload();
+									}, 1000);
+								}else{
+									showStatusMessage(response, "warning");
+								}
+							}			
+						});
 					}
-				}			
-			}); 
-		}
+				},
+				Cancel: function () {
+					
+				}
+			}
+		});
+		
 	});
 });
 </script>

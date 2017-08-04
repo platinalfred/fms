@@ -84,21 +84,24 @@ $(document).ready(function(){
 	//Delete Group
 	$('#groupTable').on('click', 'tr .delete_me', function () {
 		var id = $(this).attr("id");
-		$.ajax({
-			url: "delete.php?tbl=saccogroup&id="+id,
-			type: 'GET',
-			success: function (response) {
-				if($.trim(response) == "success"){
-					showStatusMessage("Successfully deleted group" ,"success");
-					setTimeout(function(){
-						dTable.ajax.reload();
-					}, 2000);
-				}else{
-					showStatusMessage(response, "fail");
+		var confirmation = confirm("Are you sure you would like to delete this group?");
+		if(confirmation){
+			$.ajax({
+				url: "delete.php?tbl=saccogroup&id="+id,
+				type: 'GET',
+				success: function (response) {
+					if($.trim(response) == "success"){
+						showStatusMessage("Successfully deleted group" ,"success");
+						setTimeout(function(){
+							dTable.ajax.reload();
+						}, 2000);
+					}else{
+						showStatusMessage(response, "fail");
+					}
+					
 				}
-				
-			}
-		});
+			});
+		}
 	})
 	
 	$(".delete_me").click(function(){

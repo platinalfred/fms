@@ -16,6 +16,8 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+	 
+	<script src="js/jquery-confirm.min.js"></script>
 	 <!-- Form Validate -->
 	<script src="js/jquery.validate.min.js" type="text/javascript"></script>
 	

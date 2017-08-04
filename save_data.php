@@ -306,15 +306,7 @@ if(isset($_POST['tbl'])){
 				echo "success";
 			} 
 		break;
-		case "expense":
-			$expenses = new Expenses();
-			$_POST['date_of_expense'] = date("Y-m-d");
-			if($person_type->addExpense($_POST)){
-				$output = "success";
-			}else{
-				$output ="Expense could not be added";
-			}
-		break;
+		
 		case "person_type":
 			$person_type = new PersonType();
 			if(isset($_POST['id']) && $_POST['id'] != ""){
@@ -499,7 +491,7 @@ if(isset($_POST['tbl'])){
 			$data = $_POST;
 			if(isset($data['id']) && $data['id'] != ""){
 				if($expenses->updateExpense($data)){
-					$output = "success";
+					$output = "updated";
 				}else{
 					echo "Could not update an expense";
 				}

@@ -6,11 +6,11 @@ require_once("lib/DatatablesJSON.php");
 $data_table = new DataTable();
 $primary_key = $columns = $table = $where = $group_by = "";
 if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
-	
+	$where = "active=1";
 	//members, person, person relative, person employment, account,
 	$table = "`expense` JOIN `expensetypes` ON `expenseType` = `expensetypes`.`id` JOIN (SELECT CONCAT(`firstname`,' ', `lastname`) as staff_names, `staff`.`id` from `person` JOIN `staff` ON staff.personId = person.id) as staff_details ON staff_details.id = expense.staff"; 
 	$primary_key = "`expense`.`id`";
-	$columns = array( "expenseName", "amountUsed","staff_names", "amountDescription", "expenseDate" );
+	$columns = array( "expense.id","expenseName", "expenseType", "expensetypes.name expensetype","staff","amountUsed","staff_names", "amountDescription", "expenseDate", "createdBy" );
 }
 if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
 	

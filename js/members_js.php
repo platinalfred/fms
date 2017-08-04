@@ -11,24 +11,39 @@ $(document).ready(function(){
 	if(isset($_GET['id'])){ ?>
 		$('.delete_member').click(function () {
 			var id = $(this).attr("id");
-			var confirmation = confirm("Are you sure you would like to delete this member?");
-			if(confirmation){
-				$.ajax({
-					url: "delete.php?tbl=member&id="+id,
-					type: 'GET',
-					success: function (response) {
-						if($.trim(response) == "success"){
-							showStatusMessage("Successfully deleted member" ,"success");
-							setTimeout(function(){
-								window.location = "members.php";
-							}, 2000);
-						}else{
-							showStatusMessage(response, "fail");
+			$.confirm({
+				icon: 'fa fa-warning',
+				title: 'Confirm!',
+				 boxWidth: '30%',
+				content: 'Are you sure you would like to delete this member?',
+				typeAnimated: true,
+				buttons: {
+					Delete: {
+						text: 'Delete',
+						btnClass: 'btn-danger',
+						action: function(){
+							$.ajax({
+								url: "delete.php?tbl=member&id="+id,
+								type: 'GET',
+								success: function (response) {
+									if($.trim(response) == "success"){
+										showStatusMessage("Member has been deleted." ,"success");
+										setTimeout(function(){
+											window.location = "members.php";
+										}, 2000);
+									}else{
+										showStatusMessage(response, "fail");
+									}
+									
+								}
+							});
 						}
+					},
+					Cancel: function () {
 						
 					}
-				});
-			}
+				}
+			});
 			
 		});
 	<?php

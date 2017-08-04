@@ -66,7 +66,12 @@ if(isset($_GET['tbl'])){
 				$msg = "fail";
 			}
 		break;
-		case "loan_products_penalty":
+		case "expense":
+			if($db->turnOff("expense", "id=".$_GET['id'])){
+				$msg = "success";
+			}else{
+				$msg = "fail";
+			}
 		break;
 		case "repaymentduration":
 		break;
