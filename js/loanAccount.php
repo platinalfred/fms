@@ -209,9 +209,10 @@
 		});
 		//reset the whole form after saving data in the database
 		self.resetForm = function() {
-			//self.client(null);
-			//self.loanProduct(null);//
-			$("#loanAccountForm")[0].reset();
+			/* $("#loanAccountForm")[0].reset();
+			self.loanProduct(null);
+			self.client(null);
+			self.clientType(null); */
 			dTable['applications'].ajax.reload();
 		};		
 		//Retrieve page data from the server
@@ -240,42 +241,18 @@
 			})
 		};		
 		//send the items to the server for saving
-		self.save = function(form) {
-			var guarantors = $.map(self.selectedGuarantors(), function(current_guarantor) {
-				return current_guarantor.guarantor() ? {
-					id: current_guarantor.guarantor().id
-				} : undefined
-			});
+		self.save = function(form,event) {
+			event.preventDefault();
+			var frmdata = new FormData($(form)[0]);
 			$.ajax({
 				type: "post",
-				data:{
-					id : self.loanAccountId(),
-					clientId : (self.client()?self.client().id:undefined),
-					clientType : (self.client()?self.client().clientType:undefined),
-					status : (self.loanProduct()?self.loanProduct().initialAccountState:undefined),
-					loanProductId : (self.loanProduct()?self.loanProduct().id:undefined),
-					requestedAmount : self.requestedAmount(),
-					applicationDate : moment(self.applicationDate(), 'DD-MM-YYYY').format('X'),
-					interestRate : self.interestRate(),
-					offSetPeriod : self.offSetPeriod(),
-					gracePeriod : self.gracePeriod(),
-					repaymentsFrequency : self.loanProduct()?self.loanProduct().repaymentsFrequency:undefined,
-					repaymentsMadeEvery : self.loanProduct()?self.loanProduct().repaymentsMadeEvery:undefined,
-					installments : self.installments(),
-					penaltyCalculationMethodId : self.loanProduct()?self.loanProduct().penaltyCalculationMethodId:undefined,
-					penaltyTolerancePeriod : self.loanProduct()?self.loanProduct().penaltyTolerancePeriod:undefined,
-					penaltyRateChargedPer : self.loanProduct()?self.loanProduct().penaltyRateChargedPer:undefined,
-					penaltyRate : self.loanProduct()?self.loanProduct().penaltyRate:undefined,
-					linkToDepositAccount : self.loanProduct()?self.loanProduct().linkToDepositAccount:undefined,
-					guarantors:guarantors,//the chosen guarantors
-					feePostData:self.filteredLoanProductFees(), //the applicable fees
-					collateral:self.addedCollateral(), //the applicable fees
-					memberBusinesses:self.member_business(), //businesses of a member
-					origin : "loan_account"
-				},
 				url: "lib/AddData.php",
+				data: frmdata,
+				async: false,
+				cache: false,
+				contentType: false,
+				processData: false,
 				success: function(response){
-					// if it was an OK response, get the id of the inserted product and insert the product fees
 					var result = parseInt(response)||0;
 					if(result){
 							showStatusMessage("Data successfully saved" ,"success");

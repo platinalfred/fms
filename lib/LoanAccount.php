@@ -155,7 +155,7 @@ class LoanAccount extends Db {
 			foreach($loanAccountIds as $loanAccount){
 				$in_part_string .= $loanAccount['loanAccountId'].",";
 			}
-			$where .= " AND`id` IN (".substr($in_part_string, 0, -1).")";
+			$where .= " AND `id` IN (".substr($in_part_string, 0, -1).")";
 		}
 		$result_array = $this->getfrec(self::$table_name, implode(",",$fields), $where, "", "");
 		return !empty($result_array) ? $result_array : false;

@@ -26,7 +26,7 @@ class SaccoGroup extends Db {
 	public function findGroupMembers($id=""){
 		$where = $id?"`groupId` = $id":"";
 		
-		$fields = "`group_members`.`memberId`, `groupId`, `clientNames`";
+		$fields = "`id`,`group_members`.`memberId`, `groupId`, `clientNames`";
 		
 		$table = "`group_members` JOIN (SELECT `member`.`id` `memberId`, CONCAT(`lastname`, ' ', `firstname`, ' ', `othername`) `clientNames` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`) `all_members` ON `group_members`.`memberId`=`all_members`.`memberId`";
 		
