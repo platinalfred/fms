@@ -34,11 +34,11 @@
 												<!--ko if:type_id==1-->
 												<label class="control-label">Customer</label>
 												<div data-bind="if: $root.edit_client()==0">
-													<select data-placeholder="Select customer..." name="clientId" class="form-control chosen-select" data-bind='options: $root.clients, optionsText: "clientNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Client name is required" required>
+													<select data-placeholder="Select customer..." name="memberId" class="form-control chosen-select" data-bind='options: $root.clients, optionsText: "clientNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Client name is required" required>
 													</select>
-												<div data-bind="if: $root.edit_client()==1">
-													<div data-bind='with: $root.client'><span data-bind="text: clientNames"></span></div>
-												</div>
+													<div data-bind="if: $root.edit_client()==1">
+														<div data-bind='with: $root.client'><span data-bind="text: clientNames"></span></div>
+													</div>
 												</div>
 												<!--/ko-->
 												<!--ko if:type_id==2-->
@@ -91,8 +91,8 @@
 				<a class="collapse-link">
 					<i data-bind="css:{'fa':1,'fa-chevron-down':$index()>0,'fa-chevron-up':$index()==0}"></i>
 				</a>
-				<input type='hidden' data-bind="value:((typeof(memberId)!='undefined')?memberId:id), attr:{'name':'loanAccount['+$index()+'][clientId]'}"/>
-				<input type='hidden' data-bind="value:id, attr:{'name':'loanAccount['+$index()+'][groupMemberId]'}"/>
+				<input type='hidden' data-bind="value:((typeof(memberId)!='undefined')?memberId:id), attr:{'name':'loanAccount['+$index()+'][memberId]'}"/>
+				<!--input type='hidden' data-bind="value:id, attr:{'name':'loanAccount['+$index()+'][groupMemberId]'}"/-->
 				<a class="close-link">
 					<i class="fa fa-times"></i>
 				</a>
@@ -102,7 +102,10 @@
 			<div class="row">
 				<div data-bind="with: $root.loanProduct">
 					<div class="hr-line-dashed"></div>
+					<!-- Settings adapted from the product -->
 					<input type='hidden' data-bind="value:initialAccountState, attr:{'name':'loanAccount['+$parentContext.$index()+'][status]'}"/>
+					<input type='hidden' data-bind="value:repaymentsFrequency, attr:{'name':'loanAccount['+$parentContext.$index()+'][repaymentsFrequency]'}"/>
+					<input type='hidden' data-bind="value:repaymentsMadeEvery, attr:{'name':'loanAccount['+$parentContext.$index()+'][repaymentsMadeEvery]'}"/>
 					<div class="form-group">
 						<label class="col-md-3 control-label">Loan Amount</label>
 						<div class="col-md-3">
@@ -328,8 +331,13 @@
 								</div>
 							</div>
 						</div>
-						
 					</fieldset>
+					<div class="form-group">
+						<div class="clearboth"></div>
+						<div class="col-lg-12">
+						<label class="control-label">Comment</label>
+						<textarea class="form-control" data-bind='attr: {"name":"loanAccount["+$parentContext.$index()+"][comments]"}'></textarea></div>
+					</div>
 				</div>
 			</div>
 		</div>

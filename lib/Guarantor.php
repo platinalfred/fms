@@ -13,7 +13,7 @@ class Guarantor extends Db {
 	
 	protected static $shares_sql = "(SELECT COALESCE(SUM(`amount`),0) `shares`, `memberId` FROM `shares` GROUP BY `memberId`) `client_shares` ";
 	
-	protected static $loan_balances_sql = "(SELECT `memberId`, COALESCE(SUM(`amountApproved`),0) `loanAmount`, SUM(COALESCE(`amount`,0)) `amountPaid` FROM `loan_account` JOIN `member_loan_account` ON `loan_account`.`id` = `member_loan_account`.`loanAccountId` LEFT JOIN `loan_repayment` ON `loan_account`.`id`=`loan_repayment`.`loanAccountId` GROUP BY `memberId`) `loan_balances` ";
+	protected static $loan_balances_sql = "(SELECT `loan_account`.`memberId`, COALESCE(SUM(`disbursedAmount`),0) `loanAmount`, SUM(COALESCE(`amount`,0)) `amountPaid` FROM `loan_account` LEFT JOIN `loan_repayment` ON `loan_account`.`id`=`loan_repayment`.`loanAccountId` GROUP BY `memberId`) `loan_balances` ";
 	
 	public function findById($id){
 		$result = $this->getRecord(self::$table_name, "id=".$id, "");
@@ -42,7 +42,7 @@ class Guarantor extends Db {
 		}
 		
 		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`memberNames`", "");
-		return $result_array;
+		return !empty($result_array) ? $result_array : false;
 	}
 	
 	public function addGuarantor($data){

@@ -51,6 +51,7 @@ require_once("SaccoGroupDepositAccount.php");
 require_once("MemberDepositAccount.php");
 require_once("FeeType.php");
 require_once("LoanAccount.php");
+require_once("LoanAccountApproval.php");
 require_once("LoanAccountFee.php");
 require_once("SaccoGroupLoanAccount.php");
 require_once("MemberLoanAccount.php");

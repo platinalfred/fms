@@ -3,11 +3,11 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class LoanAccount extends Db {
 	protected static $table_name  = "loan_account";
-	protected static $table_fields = array("id", "loanNo", "branch_id", "status", "loanProductId", "requestedAmount", "applicationDate", "disbursedAmount", "disbursementDate", "interestRate", "offSetPeriod", "gracePeriod", "repaymentsFrequency", "repaymentsMadeEvery", "installments", "penaltyCalculationMethodId", "penaltyTolerancePeriod", "penaltyRateChargedPer", "penaltyRate", "linkToDepositAccount", "comments", "createdBy", "dateCreated", "modifiedBy", "dateModified");
+	protected static $table_fields = array("id", "loanNo", "branch_id", "memberId", "groupLoanAccountId", "status", "loanProductId", "requestedAmount", "applicationDate", "disbursedAmount", "disbursementDate", "interestRate", "offSetPeriod", "gracePeriod", "repaymentsFrequency", "repaymentsMadeEvery", "installments", "penaltyCalculationMethodId", "penaltyTolerancePeriod", "penaltyRateChargedPer", "penaltyRate", "linkToDepositAccount", "comments", "createdBy", "dateCreated", "modifiedBy", "dateModified");
 	
-	protected static $member_sql = "SELECT `members`.`id` `clientId`, loanAccountId, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, 1 `clientType` FROM `member_loan_account` JOIN (SELECT `member`.`id`, `firstname`, `lastname`, `othername` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`)`members` ON `memberId` = `members`.`id`";
-	
-	protected static $saccogroup_sql = "SELECT `saccogroup`.`id` `clientId`, `loanAccountId`, `groupName` `clientNames`, 2 as `clientType` FROM `group_loan_account` JOIN `saccogroup` ON `saccoGroupId` = `saccogroup`.`id`";
+	protected static $member_sql = "SELECT `member`.`id`, CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, `gender` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`";
+
+	protected static $saccogroup_sql2 = "SELECT `group_loan_account`.`id`, `saccogroup`.`id` `groupId`, `groupName` FROM `group_loan_account` JOIN `saccogroup` ON `saccoGroupId` = `saccogroup`.`id`";
 	
 	protected static $loan_payments_sql = "(SELECT `loanAccountId`, COUNT(`id`)`paidInstallments`, COALESCE(SUM(amount),0) `amountPaid`  FROM `loan_repayment` GROUP BY `loanAccountId`) `loan_payments`";
 	
@@ -56,22 +56,19 @@ class LoanAccount extends Db {
 	}
 	
 	public function getApplications($where = 1){
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`clientId`", "`clientType`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`amountApproved`", "`applicationDate`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`status`" , "`approvalNotes`" , "`installments`" , "`interestRate`", " `requestedAmount`*(`interestRate`/100) `interest`" );
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`gender`", "`memberId`", "`productName`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`requestedAmount`", "`disbursedAmount`", "`amountApproved`", "`applicationDate`", "`offSetPeriod`" , "`gracePeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`status`" , "`approvalNotes`" , "`comments`" , "`loan_account`.`createdBy`" ,"`installments`" , "`interestRate`", "`loan_products`.`id` loanProductId", " `requestedAmount`*(`interestRate`/100) `interest`" );
 		
-		$member_group_union_sql = self::$member_sql. " UNION ". self::$saccogroup_sql;
 		
-		$table = self::$table_name." JOIN (".$member_group_union_sql.") `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id`";
+		$table = self::$table_name." JOIN (".self::$member_sql.") `clients` ON `clients`.`id` = `memberId` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN (".self::$saccogroup_sql2.") `sacco_loan_acc_group` ON `sacco_loan_acc_group`.`id`=`groupLoanAccountId` ";
 	
 		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	
 	public function getApprovedLoans($where = 1){
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`offSetPeriod`", "`amountApproved`" , "`approvalNotes`" ,"`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`amountPaid`" , "`interestRate`" , " `disbursedAmount`*(`interestRate`/100) `interest`" );
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`memberId`", "`productName`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`offSetPeriod`", "`gracePeriod`" , "`amountApproved`" , "`approvalNotes`" , "`comments`" , "`loan_account`.`createdBy`" ,"`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`amountPaid`" , "`interestRate`" , "`loan_products`.`id` loanProductId", "`disbursedAmount`*(`interestRate`/100) `interest`" );
 		
-		$member_group_union_sql = self::$member_sql. " UNION ". self::$saccogroup_sql;
-		
-		$table = self::$table_name." JOIN (".$member_group_union_sql.") `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN ". self::$loan_payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId`";
+		$table = self::$table_name." JOIN (".self::$member_sql.") `clients` ON `clients`.`id` = `memberId` LEFT JOIN (".self::$saccogroup_sql2.") `sacco_loan_acc_group` ON `sacco_loan_acc_group`.`id`=`groupLoanAccountId` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN ". self::$loan_payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId`";
 	
 		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
 		return !empty($result_array) ? $result_array : false;
@@ -80,7 +77,7 @@ class LoanAccount extends Db {
 		$between = "BETWEEN FROM_UNIXTIME($start_date) AND FROM_UNIXTIME($end_date)";
 		$due_date = "GetDueDate(FROM_UNIXTIME(`disbursementDate`),`installments`,`repaymentsMadeEvery`,`repaymentsFrequency`,FROM_UNIXTIME($start_date),FROM_UNIXTIME($end_date))";
 		
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`clientType`", "`clientId`", "`disbursementDate`","`disbursedAmount`", "`installments`" , "COALESCE(`paidInstallments`, 0) paidInstallments" , "(`installments`-COALESCE(`paidInstallments`, 0))`balInstallments`" , "`feesPaid`" , "`amountPaid`" , " (`disbursedAmount`*(`interestRate`/100)/`installments`) `interest`" , " ((`disbursedAmount`*(`interestRate`/100)/`installments`)*COALESCE(`paidInstallments`, 0)) `interestPaid`",  " `disbursedAmount`*(`interestRate`/100) `expInterest`", "COALESCE((`disbursedAmount`/`installments`),0)`principle`", "(COALESCE((`disbursedAmount`/`installments`),0)*COALESCE(`paidInstallments`, 0)) `paidPrinciple`", "$due_date `due_date`" );
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`memberId`", "`disbursementDate`","`disbursedAmount`", "`installments`" , "COALESCE(`paidInstallments`, 0) paidInstallments" , "(`installments`-COALESCE(`paidInstallments`, 0))`balInstallments`" , "`feesPaid`" , "`amountPaid`" , " (`disbursedAmount`*(`interestRate`/100)/`installments`) `interest`" , " ((`disbursedAmount`*(`interestRate`/100)/`installments`)*COALESCE(`paidInstallments`, 0)) `interestPaid`",  " `disbursedAmount`*(`interestRate`/100) `expInterest`", "COALESCE((`disbursedAmount`/`installments`),0)`principle`", "(COALESCE((`disbursedAmount`/`installments`),0)*COALESCE(`paidInstallments`, 0)) `paidPrinciple`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "$due_date `due_date`" );
 		$where = ""; $payments_sql = self::$loan_payments_sql;
 		//specification of the category of loans to be returned
 		switch($category){
@@ -109,7 +106,7 @@ class LoanAccount extends Db {
 				
 				$payments_sql = "(SELECT `loanAccountId`, COUNT(`id`)`paidInstallments`, COALESCE(SUM(amount),0) `amountPaid`  FROM `loan_repayment` WHERE `transactionDate` <= $end_date GROUP BY `loanAccountId`) `loan_payments`";
 				
-				$where .= "`status`=4 AND $immediate_date IS NOT NULL AND ((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql>`amountPaid`";
+				$where .= "(`status`=4 OR `status`=5) AND $immediate_date IS NOT NULL AND ((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql>`amountPaid`";
 			break;
 			case 4: //due loans
 				$timestamp_diff_sql = "(CASE `repaymentsMadeEvery`
@@ -117,15 +114,21 @@ class LoanAccount extends Db {
 					WHEN 2 THEN TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(`disbursementDate`),$due_date)
 					WHEN 3 THEN TIMESTAMPDIFF(MONTH,FROM_UNIXTIME(`disbursementDate`),$due_date)
 					END)";
-				$where .= "`status`=4 AND $due_date IS NOT NULL AND ((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql>`amountPaid`";
+				$where .= "(`status`=4 OR `status`=5) AND $due_date IS NOT NULL AND ((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql>`amountPaid`";
 			break;
 			default;
-			$where .= "`status`=4";
+			$where .= "`status` IN (4,5)";
 		}
 		
-		$member_group_union_sql = $client_type==1?(self::$member_sql):($client_type==2?(self::$saccogroup_sql):(self::$member_sql. " UNION ". self::$saccogroup_sql));
+		$saccogroups_sql = "JOIN (".self::$saccogroup_sql2.") `sacco_loan_acc_group` ON `sacco_loan_acc_group`.`id`=`groupLoanAccountId`"; //this will  be the case when we have to view only member loans
+		if(($client_type!=1&&$client_type!=2)||$client_type!=2){//otherwise, when we want to view both member and group loans
+			$saccogroups_sql = "LEFT ".$saccogroups_sql;
+		}
+		if($client_type==2){//and if we want to view group loans only
+			$where .= " AND (`groupLoanAccountId` IS NULL OR `groupLoanAccountId`=0)";
+		}
 		
-		$table = self::$table_name." JOIN (".$member_group_union_sql.") `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` LEFT JOIN ". $payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId` LEFT JOIN ". self::$loan_fees_sql. " ON `loan_account`.`id` = `loan_fees`.`loanAccountId`";
+		$table = self::$table_name." JOIN (".self::$member_sql.") `clients` ON `clients`.`id` = `memberId` $saccogroups_sql LEFT JOIN ". $payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId` LEFT JOIN ". self::$loan_fees_sql. " ON `loan_account`.`id` = `loan_fees`.`loanAccountId`";
 		
 		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
 		return $result_array;
@@ -163,7 +166,8 @@ class LoanAccount extends Db {
 		
 	public function addLoanAccount($data){
 		$fields = array_slice(self::$table_fields, 1);
-		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
+		//$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
+		$result = $this->addSpecial(self::$table_name, $data);
 		return $result;
 	}
 	
