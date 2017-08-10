@@ -10,23 +10,41 @@ $(document).ready(function(){
 	<?php 
 	if(isset($_GET['id'])){ ?>
 		$('.delete_member').click(function () {
-			swal({
-					title: "Are you sure you would like to delete this member?",
-					text: "<?php echo $names; ?> will no longer be visible in the system!",
-					type: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Yes, Delete!",
-					cancelButtonText: "No, Thank you!",
-					closeOnConfirm: false,
-					closeOnCancel: false },
-				function (isConfirm) {
-					if (isConfirm) {
-						swal("Deleted!", "Your imaginary file has been deleted.", "success");
-					} else {
-						swal("Cancelled", "Thank you, member will not be deleted :)", "error");
+			var id = $(this).attr("id");
+			$.confirm({
+				icon: 'fa fa-warning',
+				title: 'Confirm!',
+				 boxWidth: '30%',
+				content: 'Are you sure you would like to delete this member?',
+				typeAnimated: true,
+				buttons: {
+					Delete: {
+						text: 'Delete',
+						btnClass: 'btn-danger',
+						action: function(){
+							$.ajax({
+								url: "delete.php?tbl=member&id="+id,
+								type: 'GET',
+								success: function (response) {
+									if($.trim(response) == "success"){
+										showStatusMessage("Member has been deleted." ,"success");
+										setTimeout(function(){
+											window.location = "members.php";
+										}, 2000);
+									}else{
+										showStatusMessage(response, "fail");
+									}
+									
+								}
+							});
+						}
+					},
+					Cancel: function () {
+						
 					}
-				});
+				}
+			});
+			
 		});
 	<?php
 	}
@@ -184,8 +202,88 @@ $(document).ready(function(){
 	var memberModel = new Member();
 	ko.applyBindings(memberModel, $("#update_member, #add_member")[0]);
 	
-<?php if(!isset($_GET['view'])):?>var dTable;<?php endif;?>
-$(document).ready(function(){
+
+//$(document).ready(function(){
+	<?php if(!isset($_GET['view'])):?>var dTable;
+	  <?php endif;?>
+	/* PICK DATA FOR DATA TABLE  */
+  <?php if(!isset($_GET['view'])):?>
+	
+	var handleDataTableButtons = function() {
+			
+		  if ($("#member_table").length ) {
+			  dTable = $('#member_table').DataTable({
+			  dom: "lfrtipB",
+				"processing": true,
+			  "serverSide": true,
+			  "deferRender": true,
+			  "order": [[ 1, 'desc' ]],
+			  "ajax": {
+				  "url":"find_data.php",
+				  "dataType": "JSON",
+				  "type": "POST",
+				  "data":  function(d){
+						d.page = 'view_members';
+						d.start_date = startDate;
+						d.end_date = endDate;
+					}
+			  },"columnDefs": [ {
+				  "targets": [0],
+				  "orderable": true,
+				  "searchable": false
+			  }],
+			  columns:[  
+					{ data: 'id'},
+					{ data: 'person_number'},
+					{ data: 'Name', render: function ( data, type, full, meta ) {return full.lastname + ' ' + full.othername + ' ' + full.firstname ; }},
+					{ data: 'phone'},
+					{ data: 'id_number'},
+					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}}<?php 
+					if(!isset($_SESSION['loan_officer'])){ ?>,
+					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <a href="member_details.php?id='+data+'" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> more </a> ';}} <?php } ?> 
+					] ,
+			  buttons: [
+				{
+				  extend: "copy",
+				  className: "btn-sm"
+				},
+				/* {
+				  extend: "csv",
+				  className: "btn-sm"
+				}, */
+				{
+				  extend: "excel",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "pdfHtml5",
+				  className: "btn-sm"
+				},
+				{
+				  extend: "print",
+				  className: "btn-sm"
+				},
+			  ],
+			  
+			   "initComplete": function(settings, json) {
+					ko.applyBindings(memberTableModel, $("#member_details")[0]);
+					$(".table tbody>tr:first").trigger('click');
+			  }
+			});
+			//$("#datatable-buttons").DataTable();
+		}
+	
+	};
+	TableManageButtons = function() {
+	  "use strict";
+	  return {
+		init: function() {
+		  handleDataTableButtons();
+		}
+	  };
+	}();
+	
+	TableManageButtons.init();
 	
 	$(".save").click(function(){
 		var frmdata = $(this).closest("form").serialize();
@@ -195,11 +293,13 @@ $(document).ready(function(){
 			data: frmdata,
 			success: function (response) {
 				if($.trim(response) == "success"){
-					
 					showStatusMessage("Successfully added new record" ,"success");
 					setTimeout(function(){
 						memberModel.resetForm();
-						<?php if(!isset($_GET['view'])):?>dTable.ajax.reload();<?php endif;?>
+						<?php if(!isset($_GET['view'])):?>
+						dTable.ajax.reload();
+						
+						<?php endif;?>
 					}, 2000);
 				}else{
 					
@@ -342,11 +442,15 @@ $(document).ready(function(){
 			contentType: false,
 			processData: false,
 			success: function (response) {
+				
 				if($.trim(response) == "success"){
+					
 					showStatusMessage("Successfully added new record" ,"success");
 					$("form#form1")[0].reset();
 					$('input[type="radio"]').removeAttr('checked').iCheck('update');
-					<?php if(!isset($_GET['view'])):?>dTable.ajax.reload();<?php endif;?>
+					  <?php if(!isset($_GET['view'])):?>
+						dTable.ajax.reload();	
+						<?php endif;?>
 				}else{
 					showStatusMessage(response, "fail");
 				}
@@ -369,86 +473,9 @@ $(document).ready(function(){
 	}
 	
 			  
-  /* PICK DATA FOR DATA TABLE  */
-  <?php if(!isset($_GET['view'])):?>
-	var handleDataTableButtons = function() {
-		  if ($("#member_table").length ) {
-			  dTable = $('#member_table').DataTable({
-			  dom: "lfrtipB",
-				"processing": true,
-			  "serverSide": true,
-			  "deferRender": true,
-			  "order": [[ 1, 'desc' ]],
-			  "ajax": {
-				  "url":"find_data.php",
-				  "dataType": "JSON",
-				  "type": "POST",
-				  "data":  function(d){
-						d.page = 'view_members';
-						d.start_date = startDate;
-						d.end_date = endDate;
-					}
-			  },"columnDefs": [ {
-				  "targets": [0],
-				  "orderable": true,
-				  "searchable": false
-			  }],
-			  columns:[  
-					{ data: 'id'},
-					{ data: 'person_number'},
-					{ data: 'Name', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname; }},
-					{ data: 'phone'},
-					{ data: 'id_number'},
-					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}}<?php 
-					if(!isset($_SESSION['loan_officer'])){ ?>,
-					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <a href="member_details.php?id='+data+'" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> more </a> ';}} <?php } ?> 
-					] ,
-			  buttons: [
-				{
-				  extend: "copy",
-				  className: "btn-sm"
-				},
-				/* {
-				  extend: "csv",
-				  className: "btn-sm"
-				}, */
-				{
-				  extend: "excel",
-				  className: "btn-sm"
-				},
-				{
-				  extend: "pdfHtml5",
-				  className: "btn-sm"
-				},
-				{
-				  extend: "print",
-				  className: "btn-sm"
-				},
-			  ],
-			  
-			   "initComplete": function(settings, json) {
-					ko.applyBindings(memberTableModel, $("#member_details")[0]);
-					$(".table tbody>tr:first").trigger('click');
-			  }
-			});
-			//$("#datatable-buttons").DataTable();
-		}
-	
-	};
-	TableManageButtons = function() {
-	  "use strict";
-	  return {
-		init: function() {
-		  handleDataTableButtons();
-		}
-	  };
-	}();
-	
-	TableManageButtons.init();
-	
+  
 	$('.table tbody').on('click', 'tr ', function () {
 		var data = dTable.row(this).data();
-		
 		memberTableModel.member_details(data);
 		//ajax to retrieve other member details
 		if(data){
@@ -509,10 +536,11 @@ $(document).ready(function(){
 	}
 	
 	
-});
+//});
 function handleDateRangePicker(start_date, end_date){
-		startDate = start_date;
-		endDate = end_date;
-		dTable.ajax.reload();
+	startDate = start_date;
+	endDate = end_date;
+	alert("Change");
+	dTable.ajax.reload();
  }
 </script>

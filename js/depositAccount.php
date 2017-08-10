@@ -17,7 +17,7 @@ $(document).ready(function() {
 			  "data":  function(d){
 					d.page = 'deposit_accounts';
 					<?php if(isset($client)):?> d.clientId=<?php echo $client['id'];?>; <?php endif;?>
-					d.type = <?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>; //loan_type for the datatable;
+					d.clientType = <?php echo isset($client['clientType'])?"'{$client['clientType']}'":0; ?>; //specify the type of the client (group/member) here;
 					d.start_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"moment().subtract(30, 'days').format('X')"; ?>;
 					d.end_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"moment().format('X')"; ?>;
 				}

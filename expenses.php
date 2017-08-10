@@ -32,11 +32,16 @@ $member = new Member();
 						<thead>
 							<tr>
 								<th>Expense Name</th>
+								<th>Expense Type</th>
 								<th>Amount Used</th>
 								<th>Amount Description</th>
 								<th>Expense By</th>
 								<th>Expense Date</th>
-								
+								<?php 
+								if(isset($_SESSION['admin']) || isset($_SESSION['branch_manager'])){ ?>
+									<th>Edit/Delete </th>
+								<?php 
+								} ?>
 							</tr>
 						</thead>
 						<tbody>
@@ -49,6 +54,13 @@ $member = new Member();
 								<th>&nbsp;</th>
 								<th>&nbsp;</th>
 								<th>&nbsp;</th>
+								<th>&nbsp;</th>
+								<?php
+								if(isset($_SESSION['admin']) || isset($_SESSION['branch_manager'])){ ?>
+									<th>&nbsp;</th>
+								<?php 
+								} 
+								?>
 							</tr>
 						</tfoot>
 					</table>
@@ -90,10 +102,12 @@ $(document).ready(function(){
 				}],
 				columns:[  
 					{ data: 'expenseName'},
+					{ data: 'expensetype'},
 					{ data: 'amountUsed', render:function(data, type, full, meta ){ return curr_format(parseInt(data)); }},
 					{ data: 'amountDescription'}, 
 					{ data: 'staff_names'} , 
-					{ data: 'expenseDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD MMM, YYYY');}} 
+					{ data: 'expenseDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD MMM, YYYY');}} <?php if(isset($_SESSION['admin']) || isset($_SESSION['branch_manager'])){ ?>,
+					{ data: 'id',  render: function ( data, type, full, meta ) { return  '<a id="'+data+'-expenses-expense" data-toggle="modal" href="#add_expense" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><a id="'+data+'" class="btn btn-white btn-sm delete_me"><i class="fa fa-trash"></i> Delete </a>'; }} <?php } ?> 
 					] ,
 				buttons: [
 				{
@@ -123,7 +137,7 @@ $(document).ready(function(){
 					$(".table tbody>tr:first").trigger('click'); */
 				},
 				  "footerCallback": function (tfoot, data, start, end, display ) {
-					var api = this.api(), cols = [1];
+					var api = this.api(), cols = [2];
 					$.each(cols, function(key, val){
 						var total = api.column(val).data().sum();
 						$(api.column(val).footer()).html( curr_format(total) );
@@ -144,12 +158,66 @@ $(document).ready(function(){
 	  };
 	}();
 	TableManageButtons.init();
-	$('#expenses').on('click', 'tr .edit_expense', function () {
+	/* Editing   */
+		$('#expenses').on('click', 'tr .edit_me', function () {
+			//id="'+data+'-person_type-personTypeTable" 
+			var tbl, id , frm, dt;
+			var d_id = $(this).attr("id");
+			var arr = d_id.split("-");
+			id = arr[0]; //The  row id 
+			tbl = arr[1]; // The table , 
+			frm = arr[2]; //The form id
+			dt = dTable;
+			
+			var row = $(this).parent().parent(); 
+			edit_data(dt.row(row).data(), frm);
+			
+		});
+	$('#expenses').on('click', 'tr .delete_me', function () {
+		var id = $(this).attr("id");
+		$.confirm({
+			icon: 'fa fa-warning',
+			title: 'Confirm!',
+			 boxWidth: '30%',
+			content: 'Are you sure you would like to delete this expense?',
+			typeAnimated: true,
+			buttons: {
+				Delete: {
+					text: 'Delete',
+					btnClass: 'btn-danger',
+					action: function(){
+						
+						$.ajax({
+							url: "delete.php?tbl=expense&id="+id,
+							type: 'GET',
+							success: function (response) {
+								if($.trim(response) == "success"){
+									showStatusMessage("Expense successfully deleted." ,"success");
+									setTimeout(function(){
+										dTable.ajax.reload();
+										return true;
+									}, 4000);
+								}else{
+									showStatusMessage(response, "fail");
+								}
+								
+							}
+						});
+					}
+				},
+				Cancel: function () {
+					
+				}
+			}
+		});
+		
+	});
+	/*$('#expenses').on('click', 'tr .edit_expense', function () {
 		var id = $(this).attr("id")
 		 $('#DescModal').removeData('bs.modal');
         $('#DescModal').modal({remote: 'edit_group.php?id=' + id });
         $('#DescModal').modal('show');
-	});
+	});*/
 	function showStatusMessage(message='', display_type='success'){
 		new PNotify({
 			  title: "Alert",
@@ -215,9 +283,15 @@ $(document).ready(function(){
 				data: frmdata,
 				success: function (response) {
 					if($.trim(response) == "success"){
-						showStatusMessage("Successfully saved your expense" ,"success");
+						showStatusMessage("Expense successfully saved." ,"success");
 						form[0].reset();
 						dTable.ajax.reload();
+					}else if($.trim(response) == "updated"){
+						showStatusMessage("Expense successfully updated." ,"success");
+						dTable.ajax.reload();
+						setTimeout(function(){
+							$('#add_expense').modal('toggle');
+						},3000);
 					}else{
 						showStatusMessage(response, "fail");
 					}

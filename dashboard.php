@@ -55,23 +55,23 @@ include("include/header.php");
 							<div class="row">
 								<div class="col-md-3">
 									<small>Pending</small>
-									<h3 class="no-margins"><a title="Loans pending approval" data-bind="text: curr_format(parseInt(figures.pending_loans)), attr:{href:'view_loans.php?status=1&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">40,642</a></h3>
-									<div class="font-bold text-navy"> <span data-bind="text: percents.pending_loans">44</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.pending_loans < 1, 'fa-level-up': percents.pending_loans > 0}"></i> </div>
+									<h3 class="no-margins"><a title="Loans pending approval" data-bind="text: curr_format(parseInt(figures.pending_loans)), attr:{href:'view_loans.php?status=1&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
+									<div class="font-bold text-navy"> <span data-bind="text: percents.pending_loans">0</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.pending_loans < 1, 'fa-level-up': percents.pending_loans > 0}"></i> </div>
 								</div>
 								<div class="col-md-3">
 									<small>Rejected</small>
-									<h3 class="no-margins"><a title="Loans that have been rejected" data-bind="text: curr_format(parseInt(figures.rejected_loans)), attr:{href:'view_loans.php?status=2&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">90,893</a></h3>
-									<div class="font-bold text-navy"><span data-bind="text: percents.rejected_loans">67</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.rejected_loans < 1, 'fa-level-up': percents.rejected_loans > 0}"></i> </div>
+									<h3 class="no-margins"><a title="Loans that have been rejected" data-bind="text: curr_format(parseInt(figures.rejected_loans)), attr:{href:'view_loans.php?status=2&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
+									<div class="font-bold text-navy"><span data-bind="text: percents.rejected_loans">0</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.rejected_loans < 1, 'fa-level-up': percents.rejected_loans > 0}"></i> </div>
 								</div>
 								<div class="col-md-3">
 									<small>Approved</small>
-									<h3 class="no-margins"><a title="Loans that have been approved" data-bind="text: curr_format(parseInt(figures.approved_loans)), attr:{href:'view_loans.php?status=3&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">90,893</a></h3>
-									<div class="font-bold text-navy"><span data-bind="text: percents.approved_loans">67</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.approved_loans < 1, 'fa-level-up': percents.approved_loans > 0}"></i> </div>
+									<h3 class="no-margins"><a title="Loans that have been approved" data-bind="text: curr_format(parseInt(figures.approved_loans)), attr:{href:'view_loans.php?status=3&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
+									<div class="font-bold text-navy"><span data-bind="text: percents.approved_loans">0</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.approved_loans < 1, 'fa-level-up': percents.approved_loans > 0}"></i> </div>
 								</div>
 								<div class="col-md-3">
 									<small>Disbursed</small>
-									<h3 class="no-margins"><a title="Loans that have been disbursed" data-bind="text: curr_format(parseInt(figures.disbursed_loans)), attr:{href:'view_loans.php?status=4&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">206,12</a></h3>
-									<div class="font-bold text-navy"><span data-bind="text: percents.disbursed_loans">22</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.disbursed_loans < 1, 'fa-level-up': percents.disbursed_loans > 0}"></i> </div>
+									<h3 class="no-margins"><a title="Loans that have been disbursed" data-bind="text: curr_format(parseInt(figures.disbursed_loans)), attr:{href:'view_loans.php?status=4&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
+									<div class="font-bold text-navy"><span data-bind="text: percents.disbursed_loans">0</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.disbursed_loans < 1, 'fa-level-up': percents.disbursed_loans > 0}"></i> </div>
 								</div>
 							</div>
 						</div>
@@ -88,20 +88,25 @@ include("include/header.php");
 						</div>
 						<div class="ibox-content">
 							<div class="row">
-								<div class="col-md-4">
+								<div class="col-md-3">
 									<small>Savings</small>
-									<h3 class="no-margins"><a title="Total members savings" data-bind="text:curr_format(parseInt(figures.savings)), attr:{href:'view_savings.php?startdate='+$root.startDate()+'&enddate='+$root.endDate()}">20,612</a></h3>
-									<div class="font-bold text-navy"><span data-bind="text:percents.savings">22</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.savings < 1, 'fa-level-up': percents.savings > 0}"></i> </div>
+									<h3 class="no-margins"><a title="Total members savings" data-bind="text:curr_format(parseInt(figures.savings)), attr:{href:'view_savings.php?startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
+									<div class="font-bold text-navy"><span data-bind="text:percents.savings">0</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.savings < 1, 'fa-level-up': percents.savings > 0}"></i> </div>
 								</div>
-								<div class="col-md-4">
-									<small>Members</small>
-									<h3 class="no-margins"><a title="The number of members registered in a specificied period" data-bind="text: figures.members, attr:{href:'members.php?startdate='+$root.startDate()+'&enddate='+$root.endDate()}">386,200</a></h3>
-									<div class="font-bold text-success"><span data-bind='text: percents.members'>98</span>% <i data-bind="css: { fa:1, 'fa-level-down': percents.members < 1, 'fa-level-up': percents.members > 0 }"></i></div>
-								</div>
-								<div class="col-md-4">
+								<div class="col-md-3">
 									<small>Subscription</small>
-									<h3 class="no-margins"><a title="The number of subscriptions by members in a specified period" data-bind="text: curr_format(parseInt(figures.total_scptions)), attr:{href:'view_reports.php?view=subscriptions&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">80,800</a></h3>
-									<div class="font-bold text-info"><span data-bind='text: percents.scptions_percent'>20</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.scptions_percent < 1, 'fa-level-up': percents.scptions_percent > 0}"></i></div>
+									<h3 class="no-margins"><a title="The number of subscriptions by members in a specified period" data-bind="text: curr_format(parseInt(figures.total_scptions)), attr:{href:'view_reports.php?view=subscriptions&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">00</a></h3>
+									<div class="font-bold text-info"><span data-bind='text: percents.scptions_percent'>0</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.scptions_percent < 1, 'fa-level-up': percents.scptions_percent > 0}"></i></div>
+								</div>
+								<div class="col-md-3">
+									<small>Shares</small>
+									<h3 class="no-margins"><a title="The number of shares bought by members in a specified period" data-bind="text: curr_format(parseInt(figures.total_shares)), attr:{href:'view_reports.php?view=shares&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
+									<div class="font-bold text-info"><span data-bind='text: percents.scptions_percent'>0</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.scptions_percent < 1, 'fa-level-up': percents.scptions_percent > 0}"></i></div>
+								</div>
+								<div class="col-md-3">
+									<small>Members</small>
+									<h3 class="no-margins"><a title="The number of members registered in a specificied period" data-bind="text: figures.members, attr:{href:'members.php?startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
+									<div class="font-bold text-success"><span data-bind='text: percents.members'>0</span>% <i data-bind="css: { fa:1, 'fa-level-down': percents.members < 1, 'fa-level-up': percents.members > 0 }"></i></div>
 								</div>
 							</div>
 						</div>

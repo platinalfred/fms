@@ -1,4 +1,10 @@
-<div class="row" >
+
+<?php 
+if(isset($_GET['id']) && $_GET['view'] == "ledger"){ ?>
+	<div class="row" >
+	<?php
+}
+?>
 	<div class="col-lg-12" >
 	<div class="ibox" id="ledger_data">
 		<?php if(!isset($_GET['id'])):?>
@@ -174,4 +180,9 @@
 		</div>
 	</div>
 </div>
-</div>
+<?php 
+if(isset($_GET['id']) && $_GET['view'] == "ledger"){ ?>
+	</div>
+	<?php
+}
+?>

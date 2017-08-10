@@ -63,7 +63,7 @@
 															<tbody data-bind='foreach: $root.group_members'>
 																<tr>
 																	<td>
-																		<select data-bind='attr:{name:"members["+$index()+"][memberId]"}, options: $root.sacco_members, optionsText: "memberNames", optionsCaption: "Select member...", optionsAfterRender: $root.setOptionValue("id")' class="form-control"> </select>
+																		<select data-bind='attr:{name:"members["+$index()+"][memberId]"}, options: $root.sacco_members, optionsText: "memberNames", optionsCaption: "Select member...", optionsAfterRender: $root.setOptionValue("id")' class="form-control" required> </select>
 																	</td>
 																	
 																	<td>
@@ -81,7 +81,7 @@
 									<!-- /ko -->
 									<div class="form-group">
 										<div class="col-sm-6 col-sm-offset-3">
-											<button class="btn btn-primary" type="submit">Submit</button>
+											<button class="btn btn-primary" data-bind="enable:$root.group_members().length > 2" type="submit">Submit</button>
 										</div>
 									</div>
 								</form>

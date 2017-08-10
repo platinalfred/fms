@@ -1,9 +1,9 @@
 <?php
 require_once("lib/Db.php");
 $db = new Db();
-print_r($_GET);
+
 if(isset($_GET['tbl'])){
-	$msg = "Item could not be deleted.Please try again";
+	$msg = "";
 	switch($_GET['tbl']){
 		case "staff":
 			require_once("lib/Staff.php");
@@ -16,7 +16,7 @@ if(isset($_GET['tbl'])){
 			require_once("lib/Member.php");
 			$member = new Member();
 			if($member->deleteMember($_GET['id'])){
-				echo "Successfully deleted this member from the system";
+				$msg =  "success";
 			}
 		break;
 		case "account_type":
@@ -59,9 +59,19 @@ if(isset($_GET['tbl'])){
 				echo "success";
 			}
 		break;
-		case "penalty_calculation_method":
+		case "saccogroup":
+			if($db->turnOff("saccogroup", "id=".$_GET['id'])){
+				$msg = "success";
+			}else{
+				$msg = "fail";
+			}
 		break;
-		case "loan_products_penalty":
+		case "expense":
+			if($db->turnOff("expense", "id=".$_GET['id'])){
+				$msg = "success";
+			}else{
+				$msg = "fail";
+			}
 		break;
 		case "repaymentduration":
 		break;

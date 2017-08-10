@@ -38,6 +38,9 @@ Class Reports{
 			case 'general';
 				$this->viewGeneral($this->data);
 			break;
+			case 'loanproducts';
+				$this->viewLoanProducts($this->data);
+			break;
 			case 'individual';
 				$this->viewIndividual($this->data);
 			break;
@@ -87,7 +90,11 @@ Class Reports{
 	}
 	public function viewGeneral(){
 		include_once('./general_reports.php');
-	}public function viewIndividual(){
+	}
+	public function viewLoanProducts(){
+		include_once('./loan_product_reports.php');
+	}
+	public function viewIndividual(){
 		include_once('./individual_reports.php');
 	}
 	public function generalSubsriptions(){

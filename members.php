@@ -131,6 +131,7 @@ $member = new Member();
 									</div>
 								
 									<div  data-bind='foreach: $root.member_employers2'>
+										 
 										<div class="row" >
 											<div class="col-lg-4" data-bind="text: employer" >Name</div>
 											<div class="col-lg-3" data-bind="text: years_of_employment"></div>
@@ -140,7 +141,7 @@ $member = new Member();
 									</div>
 								<!-- /ko -->
 								<div class="row" data-bind="with: member_details">
-									<div class="col-lg-10"><strong>Comments</strong></div>
+									<div class="col-lg-10" data-bind="with:comment"><strong>Comments</strong></div>
 									<div class="comments col-lg-10"  data-bind="text:comment"></div>
 								</div>
 								<hr/>

@@ -28,6 +28,15 @@ if(isset($_POST['origin'])){
 			$members_b4 = $member->noOfMembers(" `dateAdded` < ".$start_date." AND active=1");//(
 			$percents['members'] = ($figures['members']>0&&$members_b4>0)?round(($figures['members']/$members_b4)*100,2):($figures['members']>0?100:0);
 
+			
+			//Total amount of paid subscriptions
+			//1 in this period
+			$figures['total_shares'] = $dashboard->getSumOfShares("(`datePaid` BETWEEN ".$start_date." AND ".$end_date.")");
+			//before this period
+			$total_shares_b4 = $dashboard->getCountOfShares("(`datePaid` < ".$start_date.")");
+			//percentage increase/decrease
+			$percents['shares_percent'] = ($total_shares_b4>0&&$figures['total_shares']>0)?round(($figures['total_shares']/$total_shares_b4)*100,2):($figures['total_shares']>0?100:0);
+
 			//Total amount of paid subscriptions
 			//1 in this period
 			$figures['total_scptions'] = $dashboard->getCountOfSubscriptions("(`datePaid` BETWEEN ".$start_date." AND ".$end_date.")");
@@ -297,6 +306,11 @@ if(isset($_POST['origin'])){
 		case 'loan_report':
 			$loanReportObj = new LoanAccount();
 			$data['data'] = $loanReportObj->getReport($start_date,$end_date, $_POST['client_type'], $_POST['category']);
+			echo json_encode($data);
+		break;
+		case 'loan_product_report':
+			$loanReportObj = new LoanAccount();
+			$data['data'] = $loanReportObj->findLoans($start_date, $end_date);
 			echo json_encode($data);
 		break;
 		case 'loan_products':

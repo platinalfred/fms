@@ -1,7 +1,4 @@
 <?php
-/*
-
-*/
 $needed_files = array("headerdaterangepicker","daterangepicker","moment","dataTables","knockout"/*, "iCheck", "steps", "jasny", "datepicker"*/);
 
 if(isset($_GET['view'])){
@@ -30,7 +27,14 @@ include("lib/Reports.php");
 			<div class="col-lg-12">
 				<div class="ibox-content">
 					<a  href="?view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-dollar"></i> Income Statement</a>
-					<a  href="?view=general" class="btn btn-info btn-sm"><i class="fa fa-calculator"></i> Loans</a>
+					
+					<div class="btn-group">
+						<button data-toggle="dropdown" class="btn btn-info btn-sm dropdown-toggle">Loans <span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<li><a href="?view=general">General Loans</a></li>
+							<li><a href="?view=loanproducts">Loan Products</a></li>
+						</ul>
+					</div>
 					<div class="btn-group">
 						<a href="?view=allsavings" class="btn btn-info btn-sm"><i class="fa fa-dollar"></i> Savings</a>
 						
@@ -70,6 +74,9 @@ include("lib/Reports.php");
 		break;
 		case 'general':
 			include("js/reports_js.inc");
+		break;
+		case 'loanproducts':
+			include("js/loan_product_reports_js.inc");
 		break;
 		case 'ledger':
 			include("js/ledger_js.php");
