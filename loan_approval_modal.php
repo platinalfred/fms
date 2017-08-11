@@ -247,18 +247,21 @@
 											</table>
 										</div>
 									  <div class="form-group">
+									  <?php 
+										if(isset($_SESSION['branch_credit'])||isset($_SESSION['management_credit'])||isset($_SESSION['executive_board'])):?>
 									  <label class="col-md-12">Action</label>
+										<?php endif;?>
 										<?php if(isset($_SESSION['branch_manager'])&&$_SESSION['branch_manager']): ?>
-										<!-- ko if: status==1||status==2-->
+										<!-- ko if: (status==1||status==2)-->
 										<!-- reject only if loan has not yet been forwarded for approval -->
 										<div class="col-md-3">
 											<label class="control-label text-danger"><input type="radio" name="status" value="11" data-bind="checked: $parent.loanAccountStatus"/> Reject</label>
 										</div>
 										<!-- /ko -->
 										<?php endif;?>
-										<!-- ko if: status>1&&status<6-->
+										<!-- ko if: ((status>1&&status<6)||status==11)-->
 										<div class="col-md-3">
-											<label class="control-label text-warning"><input type="radio" name="status" value="-1" data-bind="checked: $parent.loanAccountStatus" /> Return</label>
+											<label class="control-label text-warning"><input type="radio" name="status" value="-1" data-bind="checked: $parent.loanAccountStatus" /> Previous State</label>
 										</div>
 										<!-- /ko -->
 										<?php if(isset($_SESSION['branch_manager'])&&$_SESSION['branch_manager']): ?>

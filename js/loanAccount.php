@@ -405,6 +405,7 @@
 							else{
 								self.loanAccountStatus(null);
 								self.account_details($.extend(self.account_details(),response));
+								console.log(self.account_details());
 							}
 							//if(loanAccount.status==4){self.transactionHistory(response.transactionHistory);}
 							//(loanAccount.groupLoanAccountId){self.groupLoanAccounts(response.groupLoanAccounts);}

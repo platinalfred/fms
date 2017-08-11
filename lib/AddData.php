@@ -21,6 +21,7 @@ if(isset($_POST['origin'])){
 		case "approve_loan":
 			if(isset($data['id'])){
 				$loanAccount = new LoanAccount();
+				$loan_account_approvals_obj = new LoanAccountApproval();
 				unset($data['origin']);
 				if(!isset($_SESSION['branch_manager'])){
 					$data['approvalDate'] = time();
@@ -30,12 +31,26 @@ if(isset($_POST['origin'])){
 				$approval_data['loanAccountId'] = $data['id'];
 				$approval_data['amountRecommended'] = $data['amountApproved'];
 				$approval_data['justification'] = $data['approvalNotes'];
+				//let's check if the status is -1 implies there is a request to revert to the previous status
+				//so we gotta find the previous status, which was not the rejected status
+				if($data['status']==-1){
+					$loan_account_approvals = $loan_account_approvals_obj->findAll("`loanAccountId`=".$approval_data['loanAccountId']);
+					if($loan_account_approvals){
+						foreach($loan_account_approvals as $key=>$loan_account_approval){
+							//if rejected status, check the next one
+							if($loan_account_approval['status'] != 11 && $key>0){
+								$data['status'] == $loan_account_approval['status'];
+								break;
+							}
+						}
+					}
+					if($data['status']==-1){$data['status'] == 11;}
+				}
 				$approval_data['status'] = $data['status'];
 				$approval_data['dateCreated'] = time();
 				$approval_data['staffId'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				$approval_data['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				
-				$loan_account_approvals_obj = new LoanAccountApproval();
 				$output = $loan_account_approvals_obj->addLoanAccountApproval($approval_data);
 				
 				unset($data, $approval_data); //clear the previous data
@@ -218,7 +233,6 @@ if(isset($_POST['origin'])){
 				//loop through all the accounts sent from the form
 				$loanAccount['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				
-				
 				if(!isset($loanAccount['id'])&&(integer)$data['clientType']==2&&$key==0){
 					//create loan account for group
 					$clientData['saccoGroupId'] = $data['groupId'] ;
@@ -240,9 +254,10 @@ if(isset($_POST['origin'])){
 				$loanAccount['applicationDate'] = $applicationDate->getTimestamp();
 				$loanAccount['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 				
-				//if the id is among the post variables, then we are supposed to update its record
+				//if the id is among the post variables, then we are supposed to update the loan account record
 				if(isset($loanAccount['id'])&&is_numeric($loanAccount['id'])){
-					$loan_account_obj->updateLoanAccount($data);
+					if($loanAccount['status']==11){$loanAccount['status'] == 1;}
+					$loan_account_obj->updateLoanAccount($loanAccount);
 				}else{
 					$loanAccount['dateCreated'] = time();
 					$loanAccount['branch_id'] = isset($_SESSION['branch_id'])?$_SESSION['branch_id']:1;
