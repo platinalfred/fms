@@ -248,27 +248,41 @@
 										</div>
 									  <div class="form-group">
 									  <label class="col-md-12">Action</label>
-										<div class="col-md-4">
+										<?php if(isset($_SESSION['branch_manager'])&&$_SESSION['branch_manager']): ?>
+										<!-- ko if: status==1||status==2-->
+										<!-- reject only if loan has not yet been forwarded for approval -->
+										<div class="col-md-3">
 											<label class="control-label text-danger"><input type="radio" name="status" value="11" data-bind="checked: $parent.loanAccountStatus"/> Reject</label>
 										</div>
-										<div class="col-md-4">
+										<!-- /ko -->
+										<?php endif;?>
+										<!-- ko if: status>1&&status<6-->
+										<div class="col-md-3">
 											<label class="control-label text-warning"><input type="radio" name="status" value="-1" data-bind="checked: $parent.loanAccountStatus" /> Return</label>
 										</div>
+										<!-- /ko -->
 										<?php if(isset($_SESSION['branch_manager'])&&$_SESSION['branch_manager']): ?>
 										<!-- ko if: status==1-->
-										<div class="col-md-4">
-											<label class="control-label text-info"><input type="radio" name="status" value="1" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Forward</label>
+										<div class="col-md-3">
+											<label class="control-label text-info"><input type="radio" name="status" value="2" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Forward</label>
 										</div>
 										<!-- /ko -->
-										<!-- ko if: status==2 -->
+										<!-- ko if: status<4-->
+										<!-- withdraw only if loan has not yet been disbursed -->
+										<div class="col-md-3">
+											<label class="control-label text-info"><input type="radio" name="status" value="12" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Close/Withdraw</label>
+										</div>
+										<!-- /ko -->
 										<?php 
 										elseif((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&& $_SESSION['executive_board'])):?>
-											<div class="col-sm-4">
-												<label class="control-label text-info"><input type="radio" name="status" value="4" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Approve</label>
+										<!-- ko if: status==2 -->
+										<!-- approve only if loan has been forwarded for approval-->
+											<div class="col-sm-3">
+												<label class="control-label text-info"><input type="radio" name="status" value="3" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Approve</label>
 											</div>
+										<!-- /ko -->
 										<?php else:?>
 										<?php endif;?>
-										<!-- /ko -->
 									  </div>
 								<!-- ko if: status==2 -->
 								<?php 
