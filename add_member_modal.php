@@ -71,7 +71,7 @@
 									</div>
 									<div class="col-lg-10">
 										<div class="col-sm-12">&nbsp;</div>
-											<div class="col-sm-12 no_padding">
+										<div class="col-sm-12 no_padding">
 											<div class="form-group">
 												<div class="col-sm-3 no_padding">
 													<label>Name <span class="req">*</span></label>

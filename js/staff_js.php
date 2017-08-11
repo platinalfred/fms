@@ -1,6 +1,4 @@
 <script>
-
-
 $(document).ready(function(){
 	
 	var dTable;
@@ -9,6 +7,9 @@ $(document).ready(function(){
 		 $('#DescModal').removeData('bs.modal');
         $('#DescModal').modal({remote: 'edit_staff.php?id=' + id });
         $('#DescModal').modal('show');
+		$('#DescModal').on('hidden.bs.modal', function () {
+			dTable.ajax.reload();
+		});
     });
 	$(".save").click(function(){
 		var frmdata = $(this).closest("form").serialize();
@@ -140,9 +141,10 @@ $(document).ready(function(){
 		self.member_employers = ko.observableArray();
 	}
 	var memberModel = new Member();
-  
+	
   /* PICK DATA FOR DATA TABLE  */
 	var handleDataTableButtons = function() {
+		var post_data = new Object();
 		  if ($("#staffTable").length ) {
 			  dTable = $('#staffTable').DataTable({
 			  dom: "lfrtipB",
@@ -174,7 +176,7 @@ $(document).ready(function(){
 					{ data: 'phone'},
 					{ data: 'id_number'},
 					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}},
-					{ data: 'status', render: function ( data, type, full, meta ) { if(data==1){return "<span class='label label-primary'>Active</span>"; }else{return "<span class='label label-danger'>Deleted</span>";} }},
+					{ data: 'status', render: function ( data, type, full, meta ) { if(data==1){return "<span class='label label-primary'>Active</span>"; }else{return "<span class='label label-danger activate' id="+ full.id +" style='cursor:pointer;'>Inactive</span>";} }},
 					{ data: 'id', render: function ( data, type, full, meta ) {  return '<a  id='+data +' class="btn btn-white btn-sm edit"><i class="fa fa-pencil"></i> Edit </a> <a class="btn btn-sm btn-danger delete" id='+data +'><i class="fa fa-trash"></i> </a>';}}
 					] ,
 			  buttons: [
@@ -240,7 +242,40 @@ $(document).ready(function(){
 		//memberModel.member_employers(data.member_employers);
 		//memberModel.member_relatives(data.member_relatives);
 	});
-	
+	$('.table tbody').on('click', 'tr .activate', function () {
+		var id = $(this).attr("id");
+		$.confirm({
+			icon: 'fa fa-warning',
+			title: 'Confirm!',
+			 boxWidth: '30%',
+			content: 'Are you sure you would like to activate this staff?',
+			typeAnimated: true,
+			buttons: {
+				Delete: {
+					text: 'Activate',
+					btnClass: 'btn-info',
+					action: function(){
+						$.ajax({ // create an AJAX call...
+							url: "delete.php?id="+id+"&tbl=staff&status=activate", // the file to call
+							success: function(response) { // on success..
+								if(response != "fail"){
+									showStatusMessage("Staff has been activated.", "success");
+									setTimeout(function(){
+										dTable.ajax.reload();
+									}, 1000);
+								}else{
+									showStatusMessage(response, "warning");
+								}
+							}			
+						});
+					}
+				},
+				Cancel: function () {
+					
+				}
+			}
+		});
+	});
 	$('.table tbody').on('click', 'tr .delete', function () {
 		var id = $(this).attr("id");
 		$.confirm({

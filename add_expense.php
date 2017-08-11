@@ -14,7 +14,7 @@
 									<input name ="expenseDate" type="hidden" value="<?php echo time(); ?>">
 									<input name ="tbl" type="hidden" value="add_expense">
 										
-									<h1>Expense Details</h1>
+									<h1>Add Expense Details</h1>
 									<fieldset>
 										<div class="row">
 											<div class="col-lg-8">
@@ -30,10 +30,13 @@
 												<div class="form-group">
 													<label>Staff </label><label class="req">*</label>
 													<select class="form-control" name="staff">
+														<option value="" >None selected</option>
 														<?php 
 														$person = new Person();
 														$all_staff = $person->queryData("SELECT p.firstname, p.lastname, s.id as staff_id, p.id FROM staff s ,person p WHERE p.id = s.personId ");
-														if($all_staff){
+														if($all_staff){ ?>
+															
+															<?php
 															foreach($all_staff as $single){ ?>
 																<option value="<?php echo $single['staff_id']; ?>" ><?php echo $single['firstname']." ".$single['lastname']; ?></option>
 																<?php
