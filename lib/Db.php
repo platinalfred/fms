@@ -500,8 +500,10 @@ class Db{
 	function addSpecial($table, $data){
 		$fields = $values = "";
 		foreach($data as $field=>$value){
-			$fields .= $field. ",";
-			$values .= "'".$this->escape_value($value). "',";
+			if(!is_array($value)){
+				$fields .= $field. ",";
+				$values .= "'".$this->escape_value($value). "',";
+			}
 		}
 		$ins = "INSERT INTO ".$table. " (".substr($fields,0,-1).") VALUES (".substr($values,0,-1).")";
 		 $inse = $this->conn->query($ins);
@@ -550,7 +552,9 @@ class Db{
 	function updateSpecial($table, $data, $where){
 		$sql = "";
 		foreach($data as $field=>$value){
-			$sql .= $field. "='". $this->escape_value($value). "',";
+			if(!is_array($value)){
+				$sql .= $field. "='". $this->escape_value($value). "',";
+			}
 		}
 		$update_sql = "UPDATE ".$table. " SET ".substr($sql,0,-1)." WHERE ".$where;
 		 $updated = $this->conn->query($update_sql);

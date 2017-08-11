@@ -154,7 +154,23 @@
 		self.disbursedAmount = ko.observable(0);
 		self.disbursementNotes = ko.observable();
 		
+		self.groupLoanAccounts = ko.observableArray();
+		self.curIndex = ko.computed(function(){
+			var index = 0;
+			$.each(self.groupLoanAccounts(), function(key, loanAccount){
+				//check if the current account_details object matches this one
+				if(self.account_details()&&self.account_details().id==loanAccount.id){
+					index = key+1;
+				}
+			});
+			return index;
+		});
+		
 		// Operations
+		//on navigating take the user to the next/previous item in the loan accounts array
+		self.nextPrevLoanAccount = function(index) {
+			self.account_details(self.groupLoanAccounts()[index]);
+		};
 		//set options value afterwards
 		self.setOptionValue = function(propId) {
 			return function (option, item) {
@@ -174,7 +190,7 @@
 				return (clientType == parseInt(loanProduct.availableTo) || parseInt(loanProduct.availableTo)==3);
 			});
 		});
-		/**when the users selects a particular group, only the members in that group should be returned,
+		/**when the user selects a particular group, only the members in that group should be returned,
 		//when an individual client has been selected, then we return that client object as the only array element
 		//There can be 1 or more loan accounts created, depending on the client type selected
 		//so we join the join each of the member objects with that of the loan account*/
@@ -358,15 +374,17 @@
 					origin:"loan_application_details",
 					id:(self.account_details()?self.account_details().id:undefined),
 					edit_loan:edit,
-					clientId: (self.account_details()?self.account_details().clientId:undefined),
-					clientType: (self.account_details()?self.account_details().clientType:undefined)
+					memberId: (self.account_details()?self.account_details().memberId:undefined),
+					clientType: 1,//(self.account_details()?self.account_details().clientType:undefined) 
+					status:(self.account_details()?self.account_details().status:undefined),
+					groupLoanAccountId:(self.account_details()?self.account_details().groupLoanAccountId:undefined)
 				},
 				url: "ajax_data.php",
 				success: function(response){
 					if(response){
 						if(edit){
 							self.loanAccountId(response.loan_account_details.id);
-							self.client({id:self.account_details().clientId, clientNames:self.account_details().clientNames, clientType:self.account_details().clientType});
+							self.client({id:self.account_details().memberId, clientNames:self.account_details().clientNames, clientType:1});
 							self.loanProduct(response.loan_product);
 							self.selectedGuarantors(response.guarantors);
 							//self.addedCollateral(response.collateral_items);
@@ -377,7 +395,13 @@
 							self.installments(response.loan_account_details.installments);
 							self.applicationDate(moment(response.loan_account_details.applicationDate,'X').format('DD-MM-YYYY'));
 						}
-						else{self.loan_account_details(response);
+						else{
+							if(typeof(self.account_details().groupLoanAccountId)!='undefined'&&self.account_details().groupLoanAccountId){self.groupLoanAccounts(response);}
+							else{
+								self.account_details($.extend(self.account_details(),response));
+							}
+							//if(loanAccount.status==4){self.transactionHistory(response.transactionHistory);}
+							//(loanAccount.groupLoanAccountId){self.groupLoanAccounts(response.groupLoanAccounts);}
 						}
 					}
 				}
@@ -398,320 +422,293 @@
 
 	var user_props = <?php echo json_encode($_SESSION); ?>;
 	$(document).ready(function() {
-		
 		  var post_data = new Object();
 		  <?php if(isset($client)):?>post_data = <?php echo json_encode($client);?>; <?php endif;?>
 	var handleDataTableButtons = function() {
-		switch(parseInt($('#loan_types').val())){
-			case 1: //applications pending approval
-				  if(typeof(dTable['applications'])!=='undefined'){
-					$(".tab-pane").removeClass("active");
-					$("#tab-1").addClass("active");
-					$(".table#applications tbody>tr:first").trigger('click');
-				  }
-				  else{
-					dTable['applications'] = $('#applications').DataTable({
-					  dom: "Bfrtip",
-					  "order": [ [3, 'desc' ]],
-					  "ajax": {
-						  "url":"ajax_data.php",
-						  "type": "POST",
-						  "data": function(d){
-									d.origin = 'loan_accounts';
-									d.status = 1; // status of pending loan applications;
-									d.start_date = startDate;
-									d.end_date = endDate;
-									$.extend(d,post_data);
-								}
+		var loan_type = parseInt($('#loan_types').val());
+		
+		post_data.origin = 'loan_accounts';
+		post_data.status = loan_type; // status of pending loan applications;
+		post_data.start_date = startDate;
+		post_data.end_date = endDate;
+		post_data.clientType = 3
+		
+		if(loan_type==1||loan_type==2||loan_type==11||loan_type==12){
+			//partial applications/pending approval/closed_rejected/closed_withdrawn
+			if(typeof(dTable['applications'])!=='undefined'){
+				$(".tab-pane").removeClass("active");
+				$("#tab-1").addClass("active");
+				dTable['applications'].ajax.reload();
+				$(".table#applications tbody>tr:first").trigger('click');//
+			}
+			else{
+				dTable['applications'] = $('#applications').DataTable({
+				  dom: "Bfrtip",
+				  "order": [ [4, 'desc' ]],
+				  "ajax": {
+					  "url":"ajax_data.php",
+					  "type": "POST",
+					  "data": function(d){
+								return post_data;
+							}
+				  },
+				  "initComplete": function(settings, json) {
+					  $(".tab-pane").removeClass("active");
+					  $("#tab-1").addClass("active");
+					  $(".table#applications tbody>tr:first").trigger('click');
+				  },
+				  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
+					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?id='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }
 					  },
-					  "initComplete": function(settings, json) {
-						  $(".tab-pane").removeClass("active");
-						  $("#tab-1").addClass("active");
-						  $(".table#applications tbody>tr:first").trigger('click');
-					  },
-					  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
-						  var page = "";
-						  if(full.clientType==1){
-							  page = "member_details.php?id=";
-						  }
-						  if(full.clientType==2){
-							  page = "group_details.php?id=";
-						  }
-						  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }
-						  },
-							{ data: 'clientNames'},
-							{ data: 'productName'},
-							{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-							{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}/*  ,
-							{ data: 'id', render: function ( data, type, full, meta ) {
-								var authorized =  false;
-								var role = '<?php //echo $_SESSION['branch_credit']; ?>';
-								return 
-							<?php if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])){?>
-								/* if(user_props['branch_credit']==true && parseInt(full.requestedAmount)<1000001){
-									authorized = true;
-								}
-								if(user_props['management_credit']==true && parseInt(full.requestedAmount)>1000000&&parseInt(full.requestedAmount)<5000001){
-									authorized = true;
-								}
-								if(user_props['executive_board']==true && parseInt(full.requestedAmount)>5000000){
-									authorized = true;
-								} '<a href="#'+(authorized?'approve_loan':'')+'-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> '+(authorized?'Approve':'Edit')+' </a>'
-								'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Approve </a>'
-							<?php } ?> +'';}} */
-							] ,
-					  buttons: [
-						{
-						  extend: "copy",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "csv",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "excel",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "pdfHtml5",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "print",
-						  className: "btn-sm"
-						},
-					  ],
-					  responsive: true/*, */
-					  
+						{ data: 'clientNames'},
+						{ data: 'groupName', render: function( data, type, full, meta ){return full.groupId?('<a href="group_details.php?id='+full.groupId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>'):'';}},
+						{ data: 'productName'},
+						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}/*  ,
+						{ data: 'id', render: function ( data, type, full, meta ) {
+							var authorized =  0;
+							var role = '<?php //echo $_SESSION['branch_credit']; ?>';
+							return 
+						<?php if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])){?>
+							/* if(user_props['branch_credit']==true && parseInt(full.requestedAmount)<1000001){
+								authorized = 1;
+							}
+							if(user_props['management_credit']==true && parseInt(full.requestedAmount)>1000000&&parseInt(full.requestedAmount)<5000001){
+								authorized = 1;
+							}
+							if(user_props['executive_board']==true && parseInt(full.requestedAmount)>5000000){
+								authorized = 1;
+							} '<a href="#'+(authorized?'approve_loan':'')+'-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> '+(authorized?'Approve':'Edit')+' </a>'
+							'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Approve </a>'
+						<?php } ?> +'';}} */
+						] ,
+				  buttons: [
+					{
+					  extend: "copy",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "csv",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "excel",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "pdfHtml5",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "print",
+					  className: "btn-sm"
+					},
+				  ],
+				  responsive: true/*, */
+				  
+				});
+			}
+		}
+		if(loan_type==16){//rejected loan applications
+			if(typeof(dTable['rejected'])!=='undefined'){
+				$(".tab-pane").removeClass("active");
+				$("#tab-2").addClass("active");
+				dTable['rejected'].ajax.reload();
+				$(".table#rejected tbody>tr:first").trigger('click');
+			}
+			else{
+				dTable['rejected'] = $('#rejected').DataTable({
+				  dom: "Bfrtip",
+				  "order": [ [4, 'asc' ]],
+				  "ajax": {
+					  "url":"ajax_data.php",
+					  "type": "POST",
+					  "data": function(d){
+								return post_data;
+							}
+				  },
+				  "initComplete": function(settings, json) {
+					  $(".tab-pane").removeClass("active");
+					  $("#tab-2").addClass("active");
+						$(".table#rejected tbody>tr:first").trigger('click');
+				  },
+				  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
+					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?><a href="member_details.php?id='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>';}},
+						{ data: 'clientNames'},
+						{ data: 'groupName', render: function( data, type, full, meta ){return full.groupId?('<a href="group_details.php?id='+full.groupId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>'):'';}},
+						{ data: 'productName'},
+						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
+						] ,
+				  buttons: [
+					{
+					  extend: "copy",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "csv",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "excel",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "pdfHtml5",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "print",
+					  className: "btn-sm"
+					},
+				  ],
+				  responsive: true/*, */
+				  
+				});	
+			}
+		}
+		if(loan_type==3){ //approved loan accounts
+			if(typeof(dTable['approved'])!=='undefined'){
+				$(".tab-pane").removeClass("active");
+				$("#tab-3").addClass("active");
+				dTable['approved'].ajax.reload();
+				$(".table#approved tbody>tr:first").trigger('click');
+			}
+			else{
+				dTable['approved'] = $('#approved').DataTable({
+				  dom: "Bfrtip",
+				  "order": [ [4, 'asc' ]],
+				  "ajax": {
+					  "url":"ajax_data.php",
+					  "type": "POST",
+					  "data": function(d){
+								return post_data;
+							}
+				  },
+				  "initComplete": function(settings, json) {
+					  $(".tab-pane").removeClass("active");
+					  $("#tab-3").addClass("active");
+						$(".table#approved tbody>tr:first").trigger('click');
+				  },
+				  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
+					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?><a href="member_details.php?id='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>';}},
+						{ data: 'clientNames'},
+						{ data: 'groupName', render: function( data, type, full, meta ){return full.groupId?('<a href="group_details.php?id='+full.groupId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>'):'';}},
+						{ data: 'productName'},
+						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+						{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.repaymentsFrequency)) + ' ' + getDescription(4,data);}},
+						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
+						{ data: 'amountApproved', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
+						] ,
+				  buttons: [
+					{
+					  extend: "copy",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "csv",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "excel",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "pdfHtml5",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "print",
+					  className: "btn-sm"
+					},
+				  ],
+				  responsive: true/*, */
+				  
+				});
+			}
+		}
+		if(loan_type==4||loan_type==5||loan_type==13||loan_type==14||loan_type==15){ //disbursed loans
+			if(typeof(dTable['disbursed'])!=='undefined'){
+				$(".tab-pane").removeClass("active");
+				$("#tab-4").addClass("active");
+				$(".table#disbursed tbody>tr:first").trigger('click');
+				dTable['disbursed'].ajax.reload();
+			}
+			else{
+				dTable['disbursed'] = $('#disbursed').DataTable({
+				  dom: "Bfrtip",
+				  <?php if(!isset($client)): ?>
+				  "order": [ [3, 'desc' ]],
+				  "processing": true,
+				  "serverSide": true,
+				  "deferRender": true,
+				  <?php endif; ?>
+				  "ajax": {
+					  "url":"<?php if(!isset($client)): ?>server_processing<?php else: ?>ajax_data<?php endif; ?>.php",
+					  "type": "POST",
+					  "data":  function(d){
+								d.<?php if(!isset($client)): ?>page<?php else: ?>origin<?php endif; ?> = 'loan_accounts';
+								d.status = loan_type;//status of the loan;
+								d.start_date = startDate;
+								d.end_date = endDate;
+								d.clientType = 3
+								<?php if(isset($client)): ?>$.extend(d,post_data);<?php endif; ?>
+							}
+				  },
+				  "initComplete": function(settings, json) {
+					  $(".tab-pane").removeClass("active");
+					  $("#tab-4").addClass("active");
+						$(".table#disbursed tbody>tr:first").trigger('click');
+				  },
+				  "footerCallback": function (tfoot, data, start, end, display ) {
+					var api = this.api(), cols = [5,9,10,11,12,13,14];
+					$.each(cols, function(key, val){
+						var total = api.column(val).data().sum();
+						$(api.column(val).footer()).html( curr_format(Math.round(total)) );
 					});
-				  }
-			break;
-			case 2: //rejected loan applications
-				if(typeof(dTable['rejected'])!=='undefined'){
-					$(".tab-pane").removeClass("active");
-					$("#tab-2").addClass("active");
-					$(".table#rejected tbody>tr:first").trigger('click');
-				}
-				else{
-					dTable['rejected'] = $('#rejected').DataTable({
-					  dom: "Bfrtip",
-					  "order": [ [3, 'asc' ]],
-					  "ajax": {
-						  "url":"ajax_data.php",
-						  "type": "POST",
-						  "data": function(d){
-									d.origin = 'loan_accounts';
-									d.status = 2; // status of a rejected loan;
-									d.start_date = startDate;
-									d.end_date = endDate;
-									$.extend(d,post_data);
-								}
-					  },
-					  "initComplete": function(settings, json) {
-						  $(".tab-pane").removeClass("active");
-						  $("#tab-2").addClass("active");
-							$(".table#rejected tbody>tr:first").trigger('click');
-					  },
-					  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
-						  var page = "";
-						  if(full.clientType==1){
-							  page = "member_details.php?id=";
-						  }
-						  if(full.clientType==2){
-							  page = "sacco_group_details.php?id=";
-						  }
-						  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?><a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>';}},
-							{ data: 'clientNames'},
-							{ data: 'productName'},
-							{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-							{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
-							] ,
-					  buttons: [
-						{
-						  extend: "copy",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "csv",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "excel",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "pdfHtml5",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "print",
-						  className: "btn-sm"
-						},
-					  ],
-					  responsive: true/*, */
-					  
-					});	
-				}
-			break;
-			case 3: //approved loan accounts
-				if(typeof(dTable['approved'])!=='undefined'){
-					$(".tab-pane").removeClass("active");
-					$("#tab-3").addClass("active");
-					$(".table#approved tbody>tr:first").trigger('click');
-				}
-				else{
-					dTable['approved'] = $('#approved').DataTable({
-					  dom: "Bfrtip",
-					  "order": [ [3, 'asc' ]],
-					  "ajax": {
-						  "url":"ajax_data.php",
-						  "type": "POST",
-						  "data": function(d){
-									d.origin = 'loan_accounts';
-									d.status = 3; // status of an approved loans;
-									d.start_date = startDate;
-									d.end_date = endDate;
-									$.extend(d,post_data);
-								}
-					  },
-					  "initComplete": function(settings, json) {
-						  $(".tab-pane").removeClass("active");
-						  $("#tab-3").addClass("active");
-							$(".table#approved tbody>tr:first").trigger('click');
-					  },
-					  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
-						  var page = "";
-						  if(full.clientType==1){
-							  page = "member_details.php?id=";
-						  }
-						  if(full.clientType==2){
-							  page = "sacco_group_details.php?id=";
-						  }
-						  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?><a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>';}},
-							{ data: 'clientNames'},
-							{ data: 'productName'},
-							{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-							{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.repaymentsFrequency)) + ' ' + getDescription(4,data);}},
-							{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
-							{ data: 'amountApproved', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
-							] ,
-					  buttons: [
-						{
-						  extend: "copy",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "csv",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "excel",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "pdfHtml5",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "print",
-						  className: "btn-sm"
-						},
-					  ],
-					  responsive: true/*, */
-					  
-					});
-				}
-			break;
-			case 4: //disbursed loans
-				if(typeof(dTable['disbursed'])!=='undefined'){
-					$(".tab-pane").removeClass("active");
-					$("#tab-4").addClass("active");
-					$(".table#disbursed tbody>tr:first").trigger('click');
-				}
-				else{
-					dTable['disbursed'] = $('#disbursed').DataTable({
-					  dom: "Bfrtip",
-					  <?php if(!isset($client)): ?>
-					  "order": [ [3, 'desc' ]],
-					  "processing": true,
-					  "serverSide": true,
-					  "deferRender": true,
-					  <?php endif; ?>
-					  "ajax": {
-						  "url":"<?php if(!isset($client)): ?>server_processing<?php else: ?>ajax_data<?php endif; ?>.php",
-						  "type": "POST",
-						  "data":  function(d){
-									d.<?php if(!isset($client)): ?>page<?php else: ?>origin<?php endif; ?> = 'loan_accounts';
-									d.status = 4;//status of the loan;
-									d.start_date = startDate;
-									d.end_date = endDate;
-									<?php if(isset($client)): ?>$.extend(d,post_data);<?php endif; ?>
-								}
-					  },
-					  "initComplete": function(settings, json) {
-						  $(".tab-pane").removeClass("active");
-						  $("#tab-4").addClass("active");
-							$(".table#disbursed tbody>tr:first").trigger('click');
-					  },
-					  "footerCallback": function (tfoot, data, start, end, display ) {
-						var api = this.api(), cols = [4,8,9,10,11,12,13];
-						$.each(cols, function(key, val){
-							var total = api.column(val).data().sum();
-							$(api.column(val).footer()).html( curr_format(Math.round(total)) );
-						});
-					  },columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
-						  var page = "";
-						  if(full.clientType==1){
-							  page = "member_details.php?id=";
-						  }
-						  if(full.clientType==2){
-							  page = "group_details.php?id=";
-						  }
-						  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?><a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>';}},
-							{ data: 'clientNames'},
-							{ data: 'productName'},
-							{ data: 'disbursementDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-							{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
-							{ data: 'installments', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
-							{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.installments)) + ' ' + getDescription(4,data);}},
-							{ data: 'interestRate'},
-							{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)/parseInt(full.installments));}},
-							{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)/parseInt(full.installments));}},
-							{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format((parseInt(data)/parseInt(full.installments))+parseInt(full.disbursedAmount)/parseInt(full.installments));}},
-							{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
-							{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)+parseInt(full.interest));}},
-							{ data: 'amountPaid', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(data)):0;}}
-							] ,
-					  buttons: [
-						{
-						  extend: "copy",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "csv",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "excel",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "pdfHtml5",
-						  className: "btn-sm"
-						},
-						{
-						  extend: "print",
-						  className: "btn-sm"
-						},
-					  ],
-					  responsive: true/*, */
-					  
-					});
-				}
-			break;
-			default:
-			break;
+				  },columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
+					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?><a href="member_details.php?id='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>';}},
+						{ data: 'clientNames'},
+						{ data: 'groupName', render: function( data, type, full, meta ){return full.groupId?('<a href="group_details.php?id='+full.groupId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>'):'';}},
+						{ data: 'productName'},
+						{ data: 'disbursementDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+						{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
+						{ data: 'installments', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
+						{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.installments)) + ' ' + getDescription(4,data);}},
+						{ data: 'interestRate'},
+						{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)/parseInt(full.installments));}},
+						{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)/parseInt(full.installments));}},
+						{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format((parseInt(data)/parseInt(full.installments))+parseInt(full.disbursedAmount)/parseInt(full.installments));}},
+						{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
+						{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)+parseInt(full.interest));}},
+						{ data: 'amountPaid', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(data)):0;}}
+						] ,
+				  buttons: [
+					{
+					  extend: "copy",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "csv",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "excel",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "pdfHtml5",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "print",
+					  className: "btn-sm"
+					},
+				  ],
+				  responsive: true/*, */
+				  
+				});
+			}
 		}
 	};
 	TableManageButtons = function() {
@@ -719,7 +716,7 @@
 	  return {
 		init: function() {
 			viewModel.account_details(null);
-		  handleDataTableButtons();
+			handleDataTableButtons();
 		}
 	  };
 	}();
@@ -750,8 +747,8 @@
 		}
 	});
 	var editing = 0
-	<?php if((isset($_SESSION['loan_officer'])&&$_SESSION['loan_officer'])):?>editing = 1; viewModel.edit_client(1);<?php endif;?>
-	$('.table#applications').on('click', '.edit_loan', function () {
+	<?php if((isset($_SESSION['loans_officer'])&&$_SESSION['loans_officer'])):?>editing = 1; viewModel.edit_client(1);<?php endif;?>
+	$('.table').on('click', '.edit_loan', function () {
 		<?php if(!isset($_GET['loanId'])):?>
 		var row = $(this).closest("tr[role=row]");
 		if(row.length == 0){
@@ -769,23 +766,11 @@
 		var data = dt.row(this).data();
 		viewModel.account_details(data);
 		viewModel.amountApproved(parseInt(data.requestedAmount));
-		//ajax to retrieve transactions history//
-		getTransactionHistory(data.id);
-		viewModel.getLoanAccountDetails(0);
+		/*if(((data.groupLoanAccountId||data.groupLoanAccountId>0)&&viewModel.groupLoanAccounts().length==0)||(!data.groupLoanAccountId||data.groupLoanAccountId==0)){
+			console.log('Group Loan Account Id '+data.groupLoanAccountId);
+		}*/
+			viewModel.getLoanAccountDetails(0);
 	});
-	
-	 function getTransactionHistory(loanAccountId){
-		 $.ajax({
-			url: "ajax_data.php",
-			data: {id:loanAccountId, origin:'loan_account_transactions'},
-			type: 'POST',
-			dataType: 'json',
-			success: function (response) {
-				viewModel.transactionHistory(response);			
-			}
-		});
-	 }
-	
 	 function handleDateRangePicker(start_date, end_date){
 		 startDate = start_date;
 		 endDate = end_date;

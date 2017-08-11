@@ -26,7 +26,7 @@ class SaccoGroupLoanAccount extends Db {
 	
 	public function addSaccoGroupLoanAccount($data){
 		$fields = array_slice(self::$table_fields, 1);
-		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
+		$result = $this->addSpecial(self::$table_name, $data);
 		return $result;
 	}
 	
@@ -35,7 +35,7 @@ class SaccoGroupLoanAccount extends Db {
 		$fields = array_slice(self::$table_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
-		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){
+		if($this->updateSpecial(self::$table_name, $data, "id=".$id)){
 			return true;
 		}
 		return false;

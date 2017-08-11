@@ -18,10 +18,23 @@
 							<div class="form-group">
 								<label class="control-label" for="product_name">Loans</label>
 								<select id="loan_types" class="form-control">
-								   <option value="1" <?php echo (isset($_GET['status'])&&$_GET['status']==1)?'selected':'selected';?>>Pending</option>
+								<?php
+								if(isset($_SESSION['loans_officer'])&& $_SESSION['loans_officer']):?>
+								   <option value="1" <?php echo (isset($_GET['status'])&&$_GET['status']==1)?'selected':'selected';?>>Partial Application</option>
+								   <?php endif;?>
+									<option value="2" <?php echo (isset($_GET['status'])&&$_GET['status']==2)?'selected':'';?>>Pending</option>
 								    <option value="3" <?php echo (isset($_GET['status'])&&$_GET['status']==3)?'selected':'';?>>Approved</option>
-								    <option value="4" <?php echo isset($_GET['status'])?(($_GET['status']==4)?'selected':''):'';?>>Disbursed</option>
-									<option value="2" <?php echo (isset($_GET['status'])&&$_GET['status']==2)?'selected':'';?>>Rejected</option>
+								    <option value="4" <?php echo isset($_GET['status'])?(($_GET['status']==4)?'selected':''):'';?>>Active</option>
+									<option value="5" <?php echo (isset($_GET['status'])&&$_GET['status']==5)?'selected':'';?>>Active/In Arrears</option>
+									<option value="11" <?php echo (isset($_GET['status'])&&$_GET['status']==11)?'selected':'';?>>Closed/Rejected</option>
+									<option value="12" <?php echo (isset($_GET['status'])&&$_GET['status']==12)?'selected':'';?>>Closed/Withdrawn</option>
+									<?php
+								if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&& $_SESSION['executive_board'])):?>
+									<option value="13" <?php echo (isset($_GET['status'])&&$_GET['status']==13)?'selected':'';?>>Closed/Paid Off</option>
+									<option value="14" <?php echo (isset($_GET['status'])&&$_GET['status']==14)?'selected':'';?>>Closed/Rescheduled</option>
+									<option value="15" <?php echo (isset($_GET['status'])&&$_GET['status']==15)?'selected':'';?>>Closed/Written Off</option>
+									<option value="16" <?php echo (isset($_GET['status'])&&$_GET['status']==16)?'selected':'';?>>Closed/Refinanced</option>
+								<?php endif;?>
 								</select >
 							</div>
 						</div>
@@ -50,7 +63,7 @@
 										<thead>
 											<tr>
 												<?php 
-												$header_keys = array("Loan No", "Client", "Loan Product","Appn Date", "Amount Requested"/* ,"Action" */);
+												$header_keys = array("Loan No", "Client", "Group", "Loan Product","Appn Date", "Amount Requested"/* ,"Action" */);
 												foreach($header_keys as $key){ ?>
 													<th><?php echo $key; ?></th>
 													<?php
@@ -71,7 +84,7 @@
 										<thead>
 											<tr>
 												<?php 
-												$header_keys = array("Loan No", "Client", "Loan Product","Appn Date", "Amount Requested");
+												$header_keys = array("Loan No", "Client", "Group", "Loan Product","Appn Date", "Amount Requested");
 												foreach($header_keys as $key){ ?>
 													<th><?php echo $key; ?></th>
 													<?php
@@ -92,7 +105,7 @@
 										<thead>
 											<tr>
 												<?php 
-												$header_keys = array("Loan No", "Client", "Loan Product","Appn Date", "Duration", "Requested Amount", "Amount Approved");
+												$header_keys = array("Loan No", "Client", "Group", "Loan Product","Appn Date", "Duration", "Requested Amount", "Amount Approved");
 												foreach($header_keys as $key){ ?>
 													<th><?php echo $key; ?></th>
 													<?php
@@ -104,7 +117,7 @@
 										</tbody>
 										<tfoot>
 											<tr>
-												<th colspan="5">Total (UGX)</th>
+												<th colspan="6">Total (UGX)</th>
 												<th>&nbsp;</th>
 												<th>&nbsp;</th>
 											</tr>
@@ -120,7 +133,7 @@
 										<thead>
 											<tr>
 												<?php 
-												$header_keys = array("Loan No", "Client", "Loan Product","Date Disbursed", "Loan Amount", "Installments", "Duration", "Interest Rate", "Principle", "Interest", "Total Installment", "Total Interest Expected", "Principle & Interest", "Amount Paid");
+												$header_keys = array("Loan No", "Client", "Group", "Loan Product","Date Disbursed", "Loan Amount", "Installments", "Duration", "Interest Rate", "Principle", "Interest", "Total Installment", "Total Interest Expected", "Principle & Interest", "Amount Paid");
 												foreach($header_keys as $key){ ?>
 													<th><?php echo $key; ?></th>
 													<?php
@@ -132,7 +145,7 @@
 										</tbody>
 										<tfoot>
 											<tr>
-												<th colspan="4">Total (UGX)</th>
+												<th colspan="5">Total (UGX)</th>
 												<th>&nbsp;</th>
 												<th colspan="3">&nbsp;</th>
 												<th>&nbsp;</th>
@@ -175,6 +188,13 @@
 								<li class="list-group-item">
 
 								<?php 
+								//If its a loans officer show the forward to branch manager if the status is 1
+								if(isset($_SESSION['loans_officer'])){ ?>
+									<!-- ko if: status==1-->
+										<a class="btn btn-info btn-sm edit" href='#add_loan_account-modal' data-toggle="modal"><i class="fa fa-edit"></i>Forward for approval </a>
+									<!-- /ko -->
+									
+								<?php }
 								//If its not a loans officer show the payment link
 								if(isset($_SESSION['accountant'])){ ?>
 									<!-- ko if: status==4-->
@@ -186,7 +206,7 @@
 									
 								<?php }
 								if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&& $_SESSION['executive_board'])):?>
-								<!-- ko if: status==1 -->
+								<!-- ko if: status==2 -->
 								<?php if(isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit']):?>
 									<!-- ko if: parseInt(requestedAmount)<1000001 -->
 										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-edit"></i> Approve Loan </a>
@@ -210,7 +230,7 @@
 								<strong>Comments</strong>
 								<p data-bind="text: approvalNotes"></p>
 							</div>
-							<div class="row m-b-lg" data-bind="if: $parent.transactionHistory().length>0">
+							<div class="row m-b-lg" data-bind="if: typeof(transactionHistory)!='undefined'">
 								<div class="table-responsive">
 									<table class="table table-condensed table-striped">
 										<caption>Transactions History</caption>
@@ -222,12 +242,12 @@
 												<th>Amount</th>
 											</tr>
 										</thead>
-										<tbody data-bind="foreach: $parent.transactionHistory">
+										<tbody data-bind="foreach: transactionHistory">
 											<tr>
 												<td data-bind="text: moment(transactionDate, 'X').format('DD-MMM-YYYY')"></td>
 												<td>payment</td>
 												<td data-bind="text: comments"></td>
-												<td data-bind="text: curr_format(parseInt(amount))"></td>
+												<td data-bind="text: curr_format(parseFloat(amount))"></td>
 											</tr>
 										</tbody>
 										<tfoot>
@@ -235,7 +255,7 @@
 												<th>Total (UGX)</th>
 												<th>&nbsp;</th>
 												<th>&nbsp;</th>
-												<th data-bind="text: curr_format(parseInt(array_total($parent.transactionHistory(),4)))">&nbsp;</th>
+												<th data-bind="text: curr_format(parseFloat(array_total($parent.transactionHistory(),4)))">&nbsp;</th>
 											</tr>
 										</tfoot>
 									</table>
