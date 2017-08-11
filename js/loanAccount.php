@@ -148,7 +148,7 @@
 		//loan account approval section
 		self.amountApproved = ko.observable(0);
 		self.approvalNotes = ko.observable();
-		self.applicationStatus = ko.observable(3);
+		self.loanAccountStatus = ko.observable();
 		
 		//loan amount disbursement section
 		self.disbursedAmount = ko.observable(0);
@@ -170,6 +170,7 @@
 		//on navigating take the user to the next/previous item in the loan accounts array
 		self.nextPrevLoanAccount = function(index) {
 			self.account_details(self.groupLoanAccounts()[index]);
+			self.loanAccountStatus(null);
 		};
 		//set options value afterwards
 		self.setOptionValue = function(propId) {
@@ -318,9 +319,9 @@
 				data:{
 					origin:"approve_loan",
 					id:(self.account_details()?self.account_details().id:undefined),
-					amountApproved: self.applicationStatus()==3?self.amountApproved():undefined,
+					amountApproved: self.amountApproved(),
 					approvalNotes: self.approvalNotes(),
-					status: self.applicationStatus()
+					status: self.loanAccountStatus()
 				},
 				url: "lib/AddData.php",
 				success: function(response){
@@ -346,7 +347,7 @@
 				data:{
 					origin:"disburse_loan",
 					id:(self.account_details()?self.account_details().id:undefined),
-					disbursedAmount: self.applicationStatus()==3?self.disbursedAmount():undefined,
+					disbursedAmount: ((self.account_details()&&self.account_details().status==3)?self.disbursedAmount():undefined),
 					disbursementNotes: self.disbursementNotes(),
 					status: 4
 				},
@@ -396,8 +397,13 @@
 							self.applicationDate(moment(response.loan_account_details.applicationDate,'X').format('DD-MM-YYYY'));
 						}
 						else{
-							if(typeof(self.account_details().groupLoanAccountId)!='undefined'&&self.account_details().groupLoanAccountId){self.groupLoanAccounts(response);}
+							if(typeof(self.account_details().groupLoanAccountId)!='undefined'&&(self.account_details().groupLoanAccountId>0)){
+								self.groupLoanAccounts(response);
+								self.account_details(self.groupLoanAccounts()[self.curIndex()-1]);
+								self.loanAccountStatus(null);
+							}
 							else{
+								self.loanAccountStatus(null);
 								self.account_details($.extend(self.account_details(),response));
 							}
 							//if(loanAccount.status==4){self.transactionHistory(response.transactionHistory);}
@@ -748,7 +754,7 @@
 	});
 	var editing = 0
 	<?php if((isset($_SESSION['loans_officer'])&&$_SESSION['loans_officer'])):?>editing = 1; viewModel.edit_client(1);<?php endif;?>
-	$('.table').on('click', '.edit_loan', function () {
+	$('.table tbody').on('click', '.edit_loan', function () {
 		<?php if(!isset($_GET['loanId'])):?>
 		var row = $(this).closest("tr[role=row]");
 		if(row.length == 0){
@@ -769,7 +775,7 @@
 		/*if(((data.groupLoanAccountId||data.groupLoanAccountId>0)&&viewModel.groupLoanAccounts().length==0)||(!data.groupLoanAccountId||data.groupLoanAccountId==0)){
 			console.log('Group Loan Account Id '+data.groupLoanAccountId);
 		}*/
-			viewModel.getLoanAccountDetails(0);
+		viewModel.getLoanAccountDetails(0);
 	});
 	 function handleDateRangePicker(start_date, end_date){
 		 startDate = start_date;
