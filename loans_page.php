@@ -19,7 +19,7 @@
 								<label class="control-label" for="product_name">Loans</label>
 								<select id="loan_types" class="form-control">
 								<?php
-								if(isset($_SESSION['loans_officer'])&& $_SESSION['loans_officer']):?>
+								if((isset($_SESSION['loans_officer'])&& $_SESSION['loans_officer'])||(isset($_SESSION['admin'])&& $_SESSION['admin'])):?>
 								   <option value="1" <?php echo (isset($_GET['status'])&&$_GET['status']==1)?'selected':'selected';?>>Partial Application</option>
 								   <?php endif;?>
 									<option value="2" <?php echo (isset($_GET['status'])&&$_GET['status']==2)?'selected':'';?>>Pending</option>
@@ -189,9 +189,9 @@
 
 								<?php 
 								//If its a loans officer show the forward to branch manager if the status is 1
-								if(isset($_SESSION['loans_officer'])){ ?>
+								if(isset($_SESSION['loans_officer'])||isset($_SESSION['admin'])){ ?>
 									<!-- ko if: status==1-->
-										<a class="btn btn-info btn-sm edit" href='#add_loan_account-modal' data-toggle="modal"><i class="fa fa-edit"></i>Forward for approval </a>
+										<a class="btn btn-warning btn-sm edit" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-edit"></i>Forward for approval </a>
 									<!-- /ko -->
 									
 								<?php }
