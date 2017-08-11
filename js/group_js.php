@@ -31,7 +31,7 @@ $(document).ready(function(){
 					{ data: 'groupName'},
 					{ data: 'description'}<?php 
 					if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>,
-					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <div class="btn-group"><a class="btn btn-xs btn-default" href="group_details.php?id='+ data +'&view=loan_accs"><i class="fa fa-folder"></i> Manage Group</a><a style="margin-left:15px;"class="btn btn-xs btn-default delete_me" id="'+data+'" ><i class="fa fa-trash" style="color:#ff0000"></i></a></button></div>  ';}} <?php } ?> 
+					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <div class="btn-group"><a class="btn btn-xs btn-default" href="group_details.php?id='+ data +'&view=loan_accs"><i class="fa fa-folder"></i> Manage</a><a style="margin-left:15px;"class="btn btn-xs btn-default delete_me" id="'+data+'" ><i class="fa fa-trash" style="color:#ff0000"></i></a></button></div>  ';}} <?php } ?> 
 					] ,
 			  buttons: [
 				{

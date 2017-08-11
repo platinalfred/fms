@@ -107,7 +107,7 @@ $(document).ready(function(){
 					{ data: 'amountDescription'}, 
 					{ data: 'staff_names'} , 
 					{ data: 'expenseDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD MMM, YYYY');}} <?php if(isset($_SESSION['admin']) || isset($_SESSION['branch_manager'])){ ?>,
-					{ data: 'id',  render: function ( data, type, full, meta ) { return  '<a id="'+data+'-expenses-expense" data-toggle="modal" href="#add_expense" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><a id="'+data+'" class="btn btn-white btn-sm delete_me"><i class="fa fa-trash"></i> Delete </a>'; }} <?php } ?> 
+					{ data: 'id',  render: function ( data, type, full, meta ) { return  '<a id="'+data+'-expenses-expense" data-toggle="modal" href="#add_expense" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a> <a class="btn btn-sm btn-danger delete_me" id='+data +'><i class="fa fa-trash"></i> </a>'; }} <?php } ?> 
 					] ,
 				buttons: [
 				{

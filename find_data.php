@@ -8,7 +8,7 @@ $primary_key = $columns = $table = $where = $group_by = "";
 if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
 	$where = "active=1";
 	//members, person, person relative, person employment, account,
-	$table = "`expense` JOIN `expensetypes` ON `expenseType` = `expensetypes`.`id` JOIN (SELECT CONCAT(`firstname`,' ', `lastname`) as staff_names, `staff`.`id` from `person` JOIN `staff` ON staff.personId = person.id) as staff_details ON staff_details.id = expense.staff"; 
+	$table = "`expense` JOIN `expensetypes` ON `expenseType` = `expensetypes`.`id` LEFT JOIN (SELECT CONCAT(`firstname`,' ', `lastname`) as staff_names, `staff`.`id` from `person` JOIN `staff` ON staff.personId = person.id) as staff_details ON staff_details.id = expense.staff"; 
 	$primary_key = "`expense`.`id`";
 	$columns = array( "expense.id","expenseName", "expenseType", "expensetypes.name expensetype","staff","amountUsed","staff_names", "amountDescription", "expenseDate", "createdBy" );
 }
@@ -40,8 +40,9 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 	$group_by = "person.id ";
 }
 if ( isset($_POST['page']) && $_POST['page'] == "view_staff" ) {
+	$where = "status=1";
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
-		$where = "(`dateAdded` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
+		$where .= " AND (`dateAdded` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
 	}		
 	//members, person, person relative, person employment, account,
 	//$table = "`staff` JOIN `person` ON `staff`.`personId` = `person`.`id`"; 

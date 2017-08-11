@@ -424,7 +424,9 @@ $(document).ready(function(){
 					showStatusMessage("Successfully updated staff record" ,"success");
 					form[0].reset();
 					$('input[type="checkbox"]').removeAttr('checked').iCheck('update');
-					dTable.ajax.reload();
+					//dTable.ajax.reload();
+					var oTable = $('#staffTable').dataTable();
+					oTable.ajax.reload();
 				}else{
 					showStatusMessage(response, "fail");
 				}

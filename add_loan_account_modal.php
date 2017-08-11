@@ -133,7 +133,7 @@
 					</div>
 					<div class="hr-line-dashed"></div>
 					<div class="form-group">
-						<label class="col-md-3 control-label">First installment Offset Period <sup data-toggle="tooltip" class="req" title="Period of time before which a client can start paying up the loan amount" data-placement="right"><i class="fa fa-question-circle"></i></sup></label>
+						<label class="col-md-3 control-label">First installment Offset Period <sup data-toggle="tooltip"  title="Period of time before which a client can start paying up the loan amount" data-placement="right"><i class="fa fa-question-circle"></i></sup></label>
 						<div class="col-md-3">
 							<input type="number" class="form-control input-sm" data-bind='attr: {"data-rule-min":(parseFloat(minOffSet)>0?minOffSet:null), "data-rule-max": (parseFloat(maxOffSet)>0?maxOffSet:null), "data-msg-min":"Offset period is less than "+minOffSet, "data-msg-max":"Offset period is more than "+maxOffSet,"name":"loanAccount["+$parentContext.$index()+"][offSetPeriod]", value:defOffSet}'>
 							<div>
@@ -143,7 +143,7 @@
 								<label class="col-sm-4" data-bind="visible: parseFloat(maxOffSet)>0, text: maxOffSet"></label>
 							</div>
 						</div>
-						<label class="col-md-3 control-label">Grace Period <sup data-toggle="tooltip" class="req" title="Number of days the client is given to pay up upon default of the payment contract" data-placement="right"><i class="fa fa-question-circle"></i></sup></label>
+						<label class="col-md-3 control-label">Grace Period <sup data-toggle="tooltip" class="" title="Number of days the client is given to pay up upon default of the payment contract" data-placement="right"><i class="fa fa-question-circle"></i></sup></label>
 						<div class="col-md-3">
 							<input type="number" class="form-control input-sm" data-bind='attr: {"data-rule-min":(parseFloat(minGracePeriod)>0?minGracePeriod:null), "data-rule-max": (parseFloat(maxGracePeriod)>0?maxGracePeriod:null), "data-msg-min":"Grace Period is less than "+minGracePeriod, "data-msg-max":"Grace Period is more than "+maxGracePeriod,"name":"loanAccount["+$parentContext.$index()+"][gracePeriod]", value:defGracePeriod}'>
 							<div>

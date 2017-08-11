@@ -76,6 +76,12 @@ class Staff extends Db {
 		}
 		return false;
 	}
+	public function activateStaff($id){
+		if($this->update(self::$table_name, array("status"), array("status"=>1), "id=".$id)){
+			return true;
+		}
+		return false;
+	}
 	
 }
 ?>

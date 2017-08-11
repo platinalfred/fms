@@ -79,17 +79,17 @@ if(isset($_POST['origin'])){
 
 			//Total pending loans
 			//1 in this period
-			$figures['pending_loans'] = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=1");
+			$figures['pending_loans'] = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
 			//before this period
-			$pending_loans_b4 = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=1");
+			$pending_loans_b4 = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
 			//percentage increase/decrease
 			$percents['pending_loans'] = ($pending_loans_b4>0&&$figures['pending_loans']>0)?round(($figures['pending_loans']/$pending_loans_b4)*100,2):($figures['pending_loans']>0?100:0);
 
 			//Total rejected loans
 			//1 in this period
-			$figures['rejected_loans'] = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
+			$figures['rejected_loans'] = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=11");
 			//before this period
-			$rejected_loans_b4 = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
+			$rejected_loans_b4 = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=11");
 			//percentage increase/decrease
 			$percents['rejected_loans'] = ($rejected_loans_b4>0&&$figures['rejected_loans']>0)?round(($figures['rejected_loans']/$rejected_loans_b4)*100,2):($figures['rejected_loans']>0?100:0);
 

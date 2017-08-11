@@ -8,8 +8,14 @@ if(isset($_GET['tbl'])){
 		case "staff":
 			require_once("lib/Staff.php");
 			$staff = new Staff();
-			if($staff->deleteStaff($_GET['id'])){
-				$msg =  "Successfully deleted this staff from the system.";
+			if(isset($_GET['status']) && $_GET['status'] == "activate"){
+				if($staff->activateStaff($_GET['id'])){
+					$msg =  "Successfully activated staff.";
+				}
+			}else{
+				if($staff->deleteStaff($_GET['id'])){
+					$msg =  "Successfully deleted staff from the system.";
+				}
 			}
 		break;
 		case "member":
