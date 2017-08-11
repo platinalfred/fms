@@ -34,10 +34,10 @@
 												<!--ko if:type_id==1-->
 												<label class="control-label">Customer</label>
 												<div data-bind="if: $root.edit_client()==0">
-													<select data-placeholder="Select customer..." name="memberId" class="form-control chosen-select" data-bind='options: $root.clients, optionsText: "clientNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Client name is required" required>
+													<select data-placeholder="Select customer..." name="memberId" class="form-control chosen-select" data-bind='options: $root.clients, optionsText: "memberNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Client name is required" required>
 													</select>
 													<div data-bind="if: $root.edit_client()==1">
-														<div data-bind='with: $root.client'><span data-bind="text: clientNames"></span></div>
+														<div data-bind='with: $root.client'><span data-bind="text: memberNames"></span></div>
 													</div>
 												</div>
 												<!--/ko-->
@@ -86,7 +86,7 @@
 <div data-bind='foreach: $root.filteredGroupMembers'>
 	<div class="ibox float-e-margins">
 		<div class="ibox-title">
-			<h5 data-bind='text: clientNames'>member</h5>
+			<h5 data-bind='text: memberNames'>member</h5>
 			<div class="ibox-tools">
 				<a class="collapse-link">
 					<i data-bind="css:{'fa':1,'fa-chevron-down':$index()>0,'fa-chevron-up':$index()==0}"></i>

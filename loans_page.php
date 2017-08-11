@@ -191,7 +191,7 @@
 								//If its a loans officer show the forward to branch manager if the status is 1
 								if(isset($_SESSION['loans_officer'])||isset($_SESSION['admin'])){ ?>
 									<!-- ko if: status==1-->
-										<a class="btn btn-warning btn-sm edit" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-edit"></i>Forward for approval </a>
+										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-list"></i> Account Details</a>
 									<!-- /ko -->
 									
 								<?php }
@@ -209,17 +209,17 @@
 								<!-- ko if: status==2 -->
 								<?php if(isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit']):?>
 									<!-- ko if: parseInt(requestedAmount)<1000001 -->
-										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-edit"></i> Approve Loan </a>
+										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-list"></i> Account Details </a>
 									<!-- /ko -->
 								<?php endif;?>
 								<?php if(isset($_SESSION['management_credit'])&& $_SESSION['management_credit']):?>
 									<!-- ko if: (parseInt(requestedAmount)>1000000&&parseInt(requestedAmount)<5000001) -->
-										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-edit"></i> Approve Loan </a>
+										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-list"></i> Account Details</a>
 									<!-- /ko -->
 								<?php endif;?>
 								<?php if(isset($_SESSION['executive_board'])&&$_SESSION['executive_board']):?>
 									<!-- ko if: parseInt(requestedAmount)>5000000 -->
-										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-edit"></i> Approve Loan </a>
+										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-list"></i> Account Details</a>
 									<!-- /ko -->
 								<?php endif;?>
 								<!-- /ko -->

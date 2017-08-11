@@ -6,7 +6,7 @@
 					<div class="col-lg-12">
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
-								<h5>Loan application approval <small>&nbsp;</small></h5>
+								<h5>Loan Account Details <small>&nbsp;</small></h5>
 								<div class="ibox-tools">
 								<!--ko with: account_details-->
 									<!--ko if: groupId-->
@@ -221,7 +221,7 @@
 												<thead>
 													<tr>
 														<th>Date</th>
-														<th>Recommended Amount (Ugx)</th>
+														<th>Recomm. Amount (Ugx)</th>
 														<th>Remarks</th>
 														<th>Officer</th>
 													</tr>
@@ -246,38 +246,33 @@
 												</tbody>
 											</table>
 										</div>
-								<?php
-								if(isset($_SESSION['branch_manager'])&&$_SESSION['branch_manager']): ?>
-									<!-- ko if: status==1-->
-										  <div class="form-group">
-											<label class="control-label">Forward/Return/Reject</label>
+									  <div class="form-group">
+									  <label class="col-md-12">Action</label>
+										<div class="col-md-4">
+											<label class="control-label text-danger"><input type="radio" name="status" value="11" data-bind="checked: $parent.loanAccountStatus"/> Reject</label>
+										</div>
+										<div class="col-md-4">
+											<label class="control-label text-warning"><input type="radio" name="status" value="-1" data-bind="checked: $parent.loanAccountStatus" /> Return</label>
+										</div>
+										<?php if(isset($_SESSION['branch_manager'])&&$_SESSION['branch_manager']): ?>
+										<!-- ko if: status==1-->
+										<div class="col-md-4">
+											<label class="control-label text-info"><input type="radio" name="status" value="1" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Forward</label>
+										</div>
+										<!-- /ko -->
+										<!-- ko if: status==2 -->
+										<?php 
+										elseif((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&& $_SESSION['executive_board'])):?>
 											<div class="col-sm-4">
-												<label class="control-label text-danger"><input type="radio" name="status" value="2" data-bind="checked: $parent.applicationStatus"/> Forward</label>
+												<label class="control-label text-info"><input type="radio" name="status" value="4" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Approve</label>
 											</div>
-											<div class="col-sm-4">
-												<label class="control-label text-warning"><input type="radio" name="status" value="1" data-bind="checked: $parent.applicationStatus" required data-msg-required="Please select option"/> Return</label>
-											</div>
-											<div class="col-sm-4">
-												<label class="control-label text-info"><input type="radio" name="status" value="11" data-bind="checked: $parent.applicationStatus" required data-msg-required="Please select option"/> Reject</label>
-											</div>
-										  </div>
-									<!-- /ko -->
-								<?php endif;?>
+										<?php else:?>
+										<?php endif;?>
+										<!-- /ko -->
+									  </div>
 								<!-- ko if: status==2 -->
 								<?php 
 								if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&& $_SESSION['executive_board'])):?>
-										  <div class="form-group">
-											<label class="control-label">Approve/reject</label>
-											<div class="col-sm-4">
-												<label class="control-label text-danger"><input type="radio" name="status" value="11" data-bind="checked: $parent.applicationStatus"/> Reject</label>
-											</div>
-											<div class="col-sm-4">
-												<label class="control-label text-warning"><input type="radio" name="status" value="1" data-bind="checked: $parent.applicationStatus" required data-msg-required="Please select option"/> Return</label>
-											</div>
-											<div class="col-sm-4">
-												<label class="control-label text-info"><input type="radio" name="status" value="4" data-bind="checked: $parent.applicationStatus" required data-msg-required="Please select option"/> Approve</label>
-											</div>
-										  </div>
 										  <div class="form-group">
 											<label class="control-label col-sm-4" for="amountApproved">Amount approved<span class="required">*</span></label>
 											<div class="col-sm-8">
@@ -300,9 +295,9 @@
 								<!-- /ko -->
 									  </div>
 									  <div class="form-group">
-										<div class="col-md-8 col-md-offset-4">
-										  <button data-bind="enable: status==2" type="reset" class="btn btn-white">Cancel</button>
-										  <button data-bind="enable: status==2" type="submit" class="btn btn-primary">Submit</button>
+										<div class="col-md-8 col-md-offset-4" data-bind="if: $parent.loanAccountStatus()">
+										  <button data-bind="click: function(){$parent.loanAccountStatus(null);}" type="reset" class="btn btn-white">Cancel</button>
+										  <button type="submit" class="btn btn-primary">Submit</button>
 										</div>
 									  </div>
 									</form>
