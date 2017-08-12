@@ -276,17 +276,31 @@
 											<label class="control-label text-info"><input type="radio" name="status" value="12" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Close/Withdraw</label>
 										</div>
 										<!-- /ko -->
-										<?php 
-										elseif((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&& $_SESSION['executive_board'])):?>
+									<?php else:?>
 										<!-- ko if: status==2 -->
 										<!-- approve only if loan has been forwarded for approval-->
-											<div class="col-sm-3">
-												<label class="control-label text-info"><input type="radio" name="status" value="3" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Approve</label>
-											</div>
+										<?php if(isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit']){?>
+										<!-- ko if: parseInt(requestedAmount)<1000001 -->
+										<div class="col-sm-3">
+											<label class="control-label text-info"><input type="radio" name="status" value="3" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Approve</label>
+										</div>
 										<!-- /ko -->
-										<?php else:?>
-										<?php endif;?>
-									  </div>
+										<?php }else if(isset($_SESSION['management_credit'])&& $_SESSION['management_credit']){?>
+										<!-- ko if: (parseInt(requestedAmount)>1000000&&parseInt(requestedAmount)<5000001) -->
+										<div class="col-sm-3">
+											<label class="control-label text-info"><input type="radio" name="status" value="3" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Approve</label>
+										</div>
+										<!-- /ko -->
+										<?php } else if(isset($_SESSION['executive_board'])&&$_SESSION['executive_board']){?>
+										<!-- ko if: parseInt(requestedAmount)>5000000 -->
+										<div class="col-sm-3">
+											<label class="control-label text-info"><input type="radio" name="status" value="3" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Approve</label>
+										</div>
+										<!-- /ko -->
+										<?php }?>
+										<!-- /ko -->
+									<?php endif;?>
+									</div>
 								<!-- ko if: status==2 -->
 								<?php 
 								if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&& $_SESSION['executive_board'])):?>

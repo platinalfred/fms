@@ -55,12 +55,12 @@ include("include/header.php");
 							<div class="row">
 								<div class="col-md-3">
 									<small>Pending</small>
-									<h3 class="no-margins"><a title="Loans pending approval" data-bind="text: curr_format(parseInt(figures.pending_loans)), attr:{href:'view_loans.php?status=1&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
+									<h3 class="no-margins"><a title="Loans pending approval" data-bind="text: curr_format(parseInt(figures.pending_loans)), attr:{href:'view_loans.php?status=2&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
 									<div class="font-bold text-navy"> <span data-bind="text: percents.pending_loans">0</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.pending_loans < 1, 'fa-level-up': percents.pending_loans > 0}"></i> </div>
 								</div>
 								<div class="col-md-3">
 									<small>Rejected</small>
-									<h3 class="no-margins"><a title="Loans that have been rejected" data-bind="text: curr_format(parseInt(figures.rejected_loans)), attr:{href:'view_loans.php?status=2&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
+									<h3 class="no-margins"><a title="Loans that have been rejected" data-bind="text: curr_format(parseInt(figures.rejected_loans)), attr:{href:'view_loans.php?status=11&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
 									<div class="font-bold text-navy"><span data-bind="text: percents.rejected_loans">0</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.rejected_loans < 1, 'fa-level-up': percents.rejected_loans > 0}"></i> </div>
 								</div>
 								<div class="col-md-3">

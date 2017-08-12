@@ -405,7 +405,6 @@
 							else{
 								self.loanAccountStatus(null);
 								self.account_details($.extend(self.account_details(),response));
-								console.log(self.account_details());
 							}
 							//if(loanAccount.status==4){self.transactionHistory(response.transactionHistory);}
 							//(loanAccount.groupLoanAccountId){self.groupLoanAccounts(response.groupLoanAccounts);}
@@ -420,6 +419,7 @@
 	viewModel.getServerData();// get data to be populated on the page
 	ko.applyBindings(viewModel, $("#loan_account_details")[0]);
 	$("#loanAccountForm").validate({submitHandler: viewModel.save});
+	$("#editLoanAccountForm").validate({submitHandler: viewModel.save});
 	$("#loanPaymentForm").validate({submitHandler: viewModel.makePayment});
 	$("#loanAccountApprovalForm").validate({submitHandler: viewModel.approveLoan});
 	$("#loanDisbursementForm").validate({submitHandler: viewModel.disburseLoan});
@@ -471,23 +471,10 @@
 						{ data: 'groupName', render: function( data, type, full, meta ){return full.groupId?('<a href="group_details.php?id='+full.groupId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>'):'';}},
 						{ data: 'productName'},
 						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}/*  ,
+						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} ,
 						{ data: 'id', render: function ( data, type, full, meta ) {
-							var authorized =  0;
-							var role = '<?php //echo $_SESSION['branch_credit']; ?>';
-							return 
-						<?php if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&&$_SESSION['executive_board'])){?>
-							/* if(user_props['branch_credit']==true && parseInt(full.requestedAmount)<1000001){
-								authorized = 1;
-							}
-							if(user_props['management_credit']==true && parseInt(full.requestedAmount)>1000000&&parseInt(full.requestedAmount)<5000001){
-								authorized = 1;
-							}
-							if(user_props['executive_board']==true && parseInt(full.requestedAmount)>5000000){
-								authorized = 1;
-							} '<a href="#'+(authorized?'approve_loan':'')+'-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> '+(authorized?'Approve':'Edit')+' </a>'
-							'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Approve </a>'
-						<?php } ?> +'';}} */
+							return '<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Edit</a>'+
+							'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-list"></i> Details </a>';}}/* /*  */
 						] ,
 				  buttons: [
 					{
@@ -755,17 +742,6 @@
 	});
 	var editing = 0
 	<?php if((isset($_SESSION['loans_officer'])&&$_SESSION['loans_officer'])):?>editing = 1; viewModel.edit_client(1);<?php endif;?>
-	$('.table tbody').on('click', '.edit_loan', function () {
-		<?php if(!isset($_GET['loanId'])):?>
-		var row = $(this).closest("tr[role=row]");
-		if(row.length == 0){
-			row = $(this).closest("tr").prev();
-		}
-		var data = dTable['applications'].row(row).data() ;
-		<?php endif;?>
-		//var loanAccountId = <?php if(isset($_GET['loanId'])):?><?php echo $_GET['loanId']; else:?>data.id<?php endif;?>;
-		viewModel.getLoanAccountDetails(editing);
-	});
 
 	$('.table tbody').on('click', 'tr[role=row]', function () {
 		var tbl = $(this).parent().parent();
