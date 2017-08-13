@@ -73,7 +73,7 @@
 					<i data-bind="css:{'fa':1,'fa-chevron-down':$index()>0,'fa-chevron-up':$index()==0}"></i>
 				</a>
 				<input type='hidden' data-bind="value:((typeof(memberId)!='undefined')?memberId:id), attr:{'name':'loanAccount['+$index()+'][memberId]'}"/>
-				<!--input type='hidden' data-bind="value:id, attr:{'name':'loanAccount['+$index()+'][groupMemberId]'}"/-->
+				<input type='hidden' data-bind="value:id, attr:{'name':'loanAccount['+$index()+'][id]'}"/>
 				<a class="close-link">
 					<i class="fa fa-times"></i>
 				</a>
