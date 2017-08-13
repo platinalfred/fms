@@ -239,17 +239,21 @@
 		self.filteredGroupMembers2 = ko.computed(function() {
 			if(self.account_details()){
 				if(!self.account_details().groupId||self.account_details().groupId==0){
-					var loan_account = new LoanAccount();
-					loan_account.requestedAmount2(self.account_details().requestedAmount); 
-					loan_account.interestRate2(self.account_details().interestRate); 
-					loan_account.offSetPeriod2(self.account_details().offSetPeriod); 
-					loan_account.installments2(self.account_details().installments); 
-					loan_account.gracePeriod2(self.account_details().gracePeriod); 
-					return [$.extend(self.account_details(),loan_account)];
+					if(self.account_details().status<3||self.account_details().status==3){
+						var loan_account = new LoanAccount();
+						loan_account.requestedAmount2(self.account_details().requestedAmount); 
+						loan_account.interestRate2(self.account_details().interestRate); 
+						loan_account.offSetPeriod2(self.account_details().offSetPeriod); 
+						loan_account.installments2(self.account_details().installments); 
+						loan_account.gracePeriod2(self.account_details().gracePeriod); 
+						return [$.extend(self.account_details(),loan_account)];
+					}
 				}
 				else{
 					var thisGroupMembers = [];
-					ko.utils.arrayForEach(self.groupLoanAccounts(), function(groupLoanAccount) {
+					ko.utils.arrayForEach(ko.utils.arrayFilter(self.groupLoanAccounts(), function(item) {
+						return (parseInt(item.status)<3||parseInt(item.status)==11);
+					}), function(groupLoanAccount) {
 						var loan_account = new LoanAccount();
 						loan_account.requestedAmount2(groupLoanAccount.requestedAmount); 
 						loan_account.interestRate2(groupLoanAccount.interestRate); 
@@ -522,8 +526,8 @@
 						{ data: 'productName'},
 						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
 						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} ,
-						{ data: 'id', render: function ( data, type, full, meta ) {
-							return '<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Update</a>'+
+						{ data: 'status', render: function ( data, type, full, meta ) {
+							return ((parseInt(data)<3||parseInt(data)==11)?'<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Update</a>':'')+
 							'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-list"></i> Details </a>';}}/* /*  */
 						] ,
 				  buttons: [

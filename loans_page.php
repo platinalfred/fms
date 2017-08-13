@@ -193,7 +193,7 @@
 									<!-- ko if: status==1-->
 										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-list"></i> Account Details</a>
 									<!-- /ko -->
-									<!-- ko if: status<3-->
+									<!-- ko if: (status<3||status==11)-->
 										<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Update</a>
 									<!-- /ko -->
 								<?php }
