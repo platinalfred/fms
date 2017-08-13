@@ -371,15 +371,26 @@ if(isset($_POST['origin'])){
 						
 						$personObj = new Person();
 						$memberObj = new Member();
+						$loanAccountFeeObj = new LoanAccountFee();
+						$loanProductObj = new LoanProduct();
+						
 						$memberData = $memberObj->findById($loanAccount['memberId']);
 						$data[$key]['member_details'] = $personObj->findById($memberData['personId']);
 						$data[$key]['relatives'] = $personObj->findPersonRelatives($memberData['personId']);
 						$data[$key]['employmentHistory'] = $personObj->findPersonEmploymentHistory($memberData['personId']);
+						$data[$key]['loan_account_fees'] = $loanAccountFeeObj->findAllDetailsByLoanAccountId($loanAccount['id']);
+						$data[$key]['loan_product'] = $loanProductObj->findById($loanAccount['loanProductId']);
 						$data[$key]['memberBusinesses'] = $personObj->findMemberBusiness($memberData['personId']);
 					}
 				}else{
 					$guarantorObj = new Guarantor();
 					$collateralObj = new LoanCollateral();
+					$loanAccountFeeObj = new LoanAccountFee();
+					$loanProductObj = new LoanProduct();
+					$personObj = new Person();
+					$memberObj = new Member();
+					$loanAccountObj = new LoanAccount();
+					
 					$data['guarantors'] = $guarantorObj->getLoanGuarantors($loanAccountId);
 					$data['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$loanAccountId);
 					
@@ -388,24 +399,15 @@ if(isset($_POST['origin'])){
 						$loan_account_transaction_obj = new LoanRepayment();
 						$data['transactionHistory'] = $loan_account_transaction_obj->getTransactionHistory($_POST['id']);
 					}
-					if(isset($_POST['edit_loan'])&&$_POST['edit_loan']==1){
-						
-						$loanAccountObj = new LoanAccount();
-						$loanAccountFeeObj = new LoanAccountFee();
-						$loanProductObj = new LoanProduct();
-						
-						$data['loan_account_details'] = $loanAccountObj->findById($loanAccountId);
-						$data['loan_product'] = $loanProductObj->findById($data['loan_account_details']['loanProductId']);
-						$data['loan_account_fees'] = $loanAccountFeeObj->findAllDetailsByLoanAccountId($loanAccountId);
-					}else{
-						$personObj = new Person();
-						$memberObj = new Member();
-						$memberData = $memberObj->findById($memberId);
-						$data['member_details'] = $personObj->findById($memberData['personId']);
-						$data['relatives'] = $personObj->findPersonRelatives($memberData['personId']);
-						$data['employmentHistory'] = $personObj->findPersonEmploymentHistory($memberData['personId']);
-						$data['memberBusinesses'] = $personObj->findMemberBusiness($memberData['personId']);
-					}
+					
+					$data = $loanAccountObj->findById($loanAccountId);
+					$data['loan_product'] = $loanProductObj->findById($data['loanProductId']);
+					$data['loan_account_fees'] = $loanAccountFeeObj->findAllDetailsByLoanAccountId($loanAccountId);
+					$memberData = $memberObj->findById($memberId);
+					$data['member_details'] = $personObj->findById($memberData['personId']);
+					$data['relatives'] = $personObj->findPersonRelatives($memberData['personId']);
+					$data['employmentHistory'] = $personObj->findPersonEmploymentHistory($memberData['personId']);
+					$data['memberBusinesses'] = $personObj->findMemberBusiness($memberData['personId']);
 				}
 				/* if($_POST['clientType'] == 2){
 					$saccoGroupObj = new SaccoGroup();

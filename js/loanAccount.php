@@ -49,11 +49,11 @@
 	var LoanAccount = function() {
 		var self = this;
 		//application form details
-		self.requestedAmount = ko.observable(0);
-		self.interestRate = ko.observable(0);
-		self.offSetPeriod = ko.observable(0);
-		self.installments = ko.observable(0);
-		self.gracePeriod = ko.observable(0);
+		self.requestedAmount2 = ko.observable(0);
+		self.interestRate2 = ko.observable(0);
+		self.offSetPeriod2 = ko.observable(0);
+		self.installments2 = ko.observable(0);
+		self.gracePeriod2 = ko.observable(0);
 		
 		// Stores an array of selected items
 		// Put one item (e.g guarantor) in by default
@@ -117,6 +117,7 @@
 		
 		self.applicationDate = ko.observable('<?php echo date('d-m-Y');?>');
 		self.loanProduct = ko.observable();
+		self.loanProduct2 = ko.observable();
 		self.client = ko.observable(<?php if(isset($client)) echo json_encode($client);?>);
 		
 		//all members
@@ -183,18 +184,24 @@
 			}
 		};
 		
-		//filter the loan products based on the user type
+		//filter the loan products based on the client type
 		self.filteredLoanProducts = ko.computed(function() {
-			var clientType = (self.client()?parseInt(self.client().clientType):3);
+			var clientType = (self.client()?parseInt(self.client().clientType):(self.account_details()?((self.account_details().groupId&&self.account_details().groupId>0)?2:1):3));
 			return ko.utils.arrayFilter(self.loanProducts(), function(loanProduct) {
-				//console.log(loanProduct.availableTo);
 				return (clientType == parseInt(loanProduct.availableTo) || parseInt(loanProduct.availableTo)==3);
 			});
 		});
+		//pick out loan product based on the product id of the account selected in the table
+		self.getLoanProduct = function(loanProductId) {
+			return ko.utils.arrayFirst(self.filteredLoanProducts(), function(loanProduct) {
+				return (loanProductId == parseInt(loanProduct.id));
+			});
+		};
 		/**when the user selects a particular group, only the members in that group should be returned,
 		//when an individual client has been selected, then we return that client object as the only array element
 		//There can be 1 or more loan accounts created, depending on the client type selected
-		//so we join the join each of the member objects with that of the loan account*/
+		//so we join the join each of the member objects with that of the loan account
+		**/
 		self.filteredGroupMembers = ko.computed(function() {
 			if(self.client()){
 				if(parseInt(self.client().clientType)==1){
@@ -206,6 +213,33 @@
 						return (parseInt(self.client().id)==parseInt(groupMember.groupId));
 					}), function(item) {
 						thisGroupMembers.push($.extend(item, new LoanAccount()));
+					});
+					return thisGroupMembers;
+				}
+			}
+			
+		});
+		self.filteredGroupMembers2 = ko.computed(function() {
+			if(self.account_details()){
+				if(!self.account_details().groupId||self.account_details().groupId==0){
+					var loan_account = new LoanAccount();
+					loan_account.requestedAmount2(self.account_details().requestedAmount); 
+					loan_account.interestRate2(self.account_details().interestRate); 
+					loan_account.offSetPeriod2(self.account_details().offSetPeriod); 
+					loan_account.installments2(self.account_details().installments); 
+					loan_account.gracePeriod2(self.account_details().gracePeriod); 
+					return [$.extend(self.account_details(),loan_account)];
+				}
+				else{
+					var thisGroupMembers = [];
+					ko.utils.arrayForEach(self.groupLoanAccounts(), function(groupLoanAccount) {
+						var loan_account = new LoanAccount();
+						loan_account.requestedAmount2(groupLoanAccount.requestedAmount); 
+						loan_account.interestRate2(groupLoanAccount.interestRate); 
+						loan_account.offSetPeriod2(groupLoanAccount.offSetPeriod); 
+						loan_account.installments2(groupLoanAccount.installments); 
+						loan_account.gracePeriod2(groupLoanAccount.gracePeriod); 
+						thisGroupMembers.push($.extend(groupLoanAccount, loan_account));
 					});
 					return thisGroupMembers;
 				}
@@ -229,7 +263,7 @@
 			$("#loanAccountForm")[0].reset();
 			self.loanProduct(null);
 			self.client(null);
-			self.clientType(null);/**/
+			self.clientType(null);
 			dTable['applications'].ajax.reload();
 		};		
 		//Retrieve page data from the server
@@ -400,14 +434,13 @@
 							if(typeof(self.account_details().groupLoanAccountId)!='undefined'&&(self.account_details().groupLoanAccountId>0)){
 								self.groupLoanAccounts(response);
 								self.account_details(self.groupLoanAccounts()[self.curIndex()-1]);
-								self.loanAccountStatus(null);
 							}
 							else{
-								self.loanAccountStatus(null);
 								self.account_details($.extend(self.account_details(),response));
 							}
-							//if(loanAccount.status==4){self.transactionHistory(response.transactionHistory);}
-							//(loanAccount.groupLoanAccountId){self.groupLoanAccounts(response.groupLoanAccounts);}
+							self.loanAccountStatus(null);//
+							self.loanProduct2(self.getLoanProduct(self.account_details().loanProductId));
+							//$("#loanProductId2").val(self.account_details().loanProductId);
 						}
 					}
 				}
