@@ -170,7 +170,7 @@
 											<td data-bind='text: feeName'></td>
 											<td data-bind='text: curr_format(amount)'></td>
 											<td data-bind='text: getDescription(5, $data.amountCalculatedAs)'></td>
-											<td><input type="hidden" data-bind="attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+$index()+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount(), amount, $data.amountCalculatedAs)}"/><span data-bind='text: getFeeAmount($parentContext.$parent.requestedAmount(), amount, $data.amountCalculatedAs)'></span></td>
+											<td><input type="hidden" data-bind="attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+$index()+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)}"/><span data-bind='text: getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)'></span></td>
 										</tr>
 									</tbody>
 								</table>
@@ -228,9 +228,9 @@
 						<div class="hr-line-dashed"></div>
 						<div class="form-group" data-bind="visible: $parent.addedCollateral().length>0">
 							<div class="col-md-12">
-								<div class="col-sm-6">Total Collateral: UGX <span data-bind="text: curr_format($parent.totalCollateral()), css: {'text-danger': $parent.totalCollateral()<((parseInt(minCollateral)/100)*(parseInt($parent.requestedAmount())+(parseInt($parent.requestedAmount())*parseInt($parent.interestRate())/100))), 'text-info': $parent.totalCollateral()>((parseInt(minCollateral)/100)*(parseInt($parent.requestedAmount())+(parseInt($parent.requestedAmount())*parseInt($parent.interestRate())/100)))}"></span> <i  data-bind="css: {'fa fa-check text-info':$parent.totalCollateral()>((parseInt(minCollateral)/100)*(parseInt($parent.requestedAmount())+(parseInt($parent.requestedAmount())*parseInt($parent.interestRate())/100)))}"></i></div>
+								<div class="col-sm-6">Total Collateral: UGX <span data-bind="text: curr_format($parent.totalCollateral()), css: {'text-danger': $parent.totalCollateral()<((parseInt(minCollateral)/100)*(parseInt($parent.requestedAmount2())+(parseInt($parent.requestedAmount2())*parseInt($parent.interestRate())/100))), 'text-info': $parent.totalCollateral()>((parseInt(minCollateral)/100)*(parseInt($parent.requestedAmount2())+(parseInt($parent.requestedAmount2())*parseInt($parent.interestRate())/100)))}"></span> <i  data-bind="css: {'fa fa-check text-info':$parent.totalCollateral()>((parseInt(minCollateral)/100)*(parseInt($parent.requestedAmount2())+(parseInt($parent.requestedAmount2())*parseInt($parent.interestRate2())/100)))}"></i></div>
 								<div class="col-sm-6" class="text-info">
-								Required Minimum: UGX <span data-bind='text: curr_format((parseInt(minCollateral)/100)*(parseInt($parent.requestedAmount())+(parseInt($parent.requestedAmount())*parseInt($parent.interestRate())/100)))+" at a rate of "+minCollateral+"%"'> </span>
+								Required Minimum: UGX <span data-bind='text: curr_format((parseInt(minCollateral)/100)*(parseInt($parent.requestedAmount2())+(parseInt($parent.requestedAmount2())*parseInt($parent.interestRate2())/100)))+" at a rate of "+minCollateral+"%"'> </span>
 								</div>
 							</div>
 							<div class="hr-line-dashed"></div><!--  -->
@@ -328,7 +328,7 @@
                                 <div class="form-group">
                                     <div class="col-sm-6 col-sm-offset-2">
                                         <button class="btn btn-warning" type="reset">Cancel</button>
-                                        <button class="btn btn-primary" type="submit" data-bind="enable: $root.loanProduct2">Submit</button><!--&&(selectedGuarantors().length>=loanProduct2.minGuarantors)&&(totalCollateral()>=(parseInt(loanProduct2.minCollateral)/100)*(parseInt(requestedAmount())+(parseInt(requestedAmount())*parseInt(interestRate())/100)))-->
+                                        <button class="btn btn-primary" type="submit" data-bind="enable: $root.loanProduct2">Submit</button><!--&&(selectedGuarantors().length>=loanProduct2.minGuarantors)&&(totalCollateral()>=(parseInt(loanProduct2.minCollateral)/100)*(parseInt(requestedAmount2())+(parseInt(requestedAmount2())*parseInt(interestRate2())/100)))-->
                                     </div>
                                 </div>
                             </form>
