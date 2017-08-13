@@ -83,6 +83,11 @@
 					total += parseFloat("0" + selectedGuarantor.guarantor().savings);
 				};
 			});
+			if(typeof(self.guarantors)!='undefined'){
+				$.map(self.guarantors, function(guarantor) {
+					total += parseFloat("0" + guarantor.savings);
+				});
+			}
 			return total;
 		});
 		self.totalCollateral = ko.pureComputed(function() {
@@ -92,6 +97,12 @@
 					total += parseFloat("0" + collateralItem.itemValue());
 				};
 			});
+			if(typeof(self.collateral_items)!='undefined'){
+				$.map(self.collateral_items, function(collateral_item) {
+					total += parseFloat("0" + collateral_item.itemValue());
+				});
+			}
+			
 			return total;
 		});
 		self.totalShares = ko.pureComputed(function() {
@@ -101,12 +112,18 @@
 					sum += parseFloat("0" + selectedGuarantor.guarantor().shares);
 				};
 			});
+			if(typeof(self.guarantors)!='undefined'){
+				$.map(self.guarantors, function(guarantor) {
+					sum += parseFloat("0" + guarantor.shares);
+				});
+			}
 			return sum;
 		});
 		 
 		// Operations
 		self.addGuarantor = function() { self.selectedGuarantors.push(new GuarantorSelection()) };
 		self.removeGuarantor = function(selectedGuarantor) { self.selectedGuarantors.remove(selectedGuarantor) };
+		//self.removeGuarantor2 = function(guarantor) { self.guarantors.remove(guarantor) };
 		self.addCollateral = function() { self.addedCollateral.push(new Collateral()) };
 		self.removeCollateral = function(addedCollateral) { self.addedCollateral.remove(addedCollateral) };
 		self.addBusinnes = function() { self.member_business.push(new Business()); };
@@ -506,7 +523,7 @@
 						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
 						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} ,
 						{ data: 'id', render: function ( data, type, full, meta ) {
-							return '<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Edit</a>'+
+							return '<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Update</a>'+
 							'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-list"></i> Details </a>';}}/* /*  */
 						] ,
 				  buttons: [

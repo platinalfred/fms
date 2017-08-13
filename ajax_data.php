@@ -372,21 +372,18 @@ if(isset($_POST['origin'])){
 						$personObj = new Person();
 						$memberObj = new Member();
 						$loanAccountFeeObj = new LoanAccountFee();
-						$loanProductObj = new LoanProduct();
 						
 						$memberData = $memberObj->findById($loanAccount['memberId']);
 						$data[$key]['member_details'] = $personObj->findById($memberData['personId']);
 						$data[$key]['relatives'] = $personObj->findPersonRelatives($memberData['personId']);
 						$data[$key]['employmentHistory'] = $personObj->findPersonEmploymentHistory($memberData['personId']);
 						$data[$key]['loan_account_fees'] = $loanAccountFeeObj->findAllDetailsByLoanAccountId($loanAccount['id']);
-						$data[$key]['loan_product'] = $loanProductObj->findById($loanAccount['loanProductId']);
 						$data[$key]['memberBusinesses'] = $personObj->findMemberBusiness($memberData['personId']);
 					}
 				}else{
 					$guarantorObj = new Guarantor();
 					$collateralObj = new LoanCollateral();
 					$loanAccountFeeObj = new LoanAccountFee();
-					$loanProductObj = new LoanProduct();
 					$personObj = new Person();
 					$memberObj = new Member();
 					$loanAccountObj = new LoanAccount();
@@ -401,7 +398,6 @@ if(isset($_POST['origin'])){
 					}
 					
 					$data = $loanAccountObj->findById($loanAccountId);
-					$data['loan_product'] = $loanProductObj->findById($data['loanProductId']);
 					$data['loan_account_fees'] = $loanAccountFeeObj->findAllDetailsByLoanAccountId($loanAccountId);
 					$memberData = $memberObj->findById($memberId);
 					$data['member_details'] = $personObj->findById($memberData['personId']);

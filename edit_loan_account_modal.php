@@ -48,8 +48,8 @@
 											</div>
 											<div class="col-md-4" data-bind="with: $root.loanProduct2">
 												<label class="control-label">Application Date</label>
-												<div class="input-group date">
-													<input type="text" class="form-control" name="applicationDate" id="applicationDate" data-bind="datePicker: $root.applicationDate, value:moment($parent.applicationDate,'X').format('DD-MM-YYYY')" data-date-end-date="<?php echo date('d-m-Y');?>" required>
+												<div class="input-group date" data-provide="datepicker"data-date-format="dd-mm-yyyy" data-date-end-date="<?php echo date('d-m-Y');?>">
+													<input type="text" class="form-control" name="applicationDate" data-bind="value:moment($parent.applicationDate,'X').format('DD-MM-YYYY')" required>
 													<div class="input-group-addon">
 														<span class="fa fa-calendar"></span>
 													</div>
@@ -164,21 +164,34 @@
 											<th>Amount(UGX)</th>
 										</tr>
 									</thead>
-									<tbody data-bind="foreach: $root.filteredLoanProductFees()">
+									<tbody>
+										<!-- ko if: typeof($parent.loan_account_fees)!='undefined' -->
+										<!-- ko foreach: $root.loan_account_fees -->
 										<tr>
-											<td><input class="icheckbox_square-green" style="position: relative;" name="fee" type="checkbox" data-bind="checkedValue: $data, checked: $parentContext.$parent.loanAccountFees, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+$index()+'][loanProductFeenId]', 'value':$data.id}" /></td>
+											<td><input class="icheckbox_square-green" style="position: relative;" name="fee" type="checkbox" checked data-bind=" attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+$index()+'][loanProductFeenId]', 'value':id}" /></td>
+											<td data-bind='text: feeName'></td>
+											<td data-bind='text: curr_format(amount)'></td>
+											<td data-bind='text: getDescription(5, amountCalculatedAs)'></td>
+											<td><input type="hidden" data-bind="attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+$index()+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount2(), amount, amountCalculatedAs)}"/><span data-bind='text: getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)'></span></td>
+										</tr>
+										<!--/ko-->
+										<!--/ko-->
+										<!-- ko foreach: $root.filteredLoanProductFees() -->
+										<tr>
+											<td><input class="icheckbox_square-green" style="position: relative;" name="fee" type="checkbox" data-bind="checkedValue: $data, checked: $parentContext.$parent.loanAccountFees, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+(typeof($parent.loan_account_fees)!='undefined'?$parent.loan_account_fees.length:0)+'][loanProductFeenId]', 'value':$data.id}" /></td>
 											<td data-bind='text: feeName'></td>
 											<td data-bind='text: curr_format(amount)'></td>
 											<td data-bind='text: getDescription(5, $data.amountCalculatedAs)'></td>
-											<td><input type="hidden" data-bind="attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+$index()+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)}"/><span data-bind='text: getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)'></span></td>
+											<td><input type="hidden" data-bind="attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+($index()+(typeof($parent.loan_account_fees)!='undefined'?$parent.loan_account_fees.length:0)+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)}"/><span data-bind='text: getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)'></span></td>
 										</tr>
+										<!--/ko-->
 									</tbody>
 								</table>
 							</div>
 						</div>
 					</fieldset>
 					<!-- /ko -->
-					<!--ko if: ($parent.filteredGuarantors().length>0) -->
+					<!--ko if: ($parent.filteredGuarantors().length>0||$parent.guarantors.length>0) -->
 					<h1>Guarantors <small>Choose Guarantors</small></h1>
 					<fieldset>
 						<div class="form-group">
@@ -193,10 +206,30 @@
 											<th>&nbsp;</th>
 										</tr>
 									</thead>
-									<tbody data-bind='foreach: $parent.selectedGuarantors'>
+									<tbody data-bind=''>
+										<!--ko if: typeof($parent.guarantors)!='undefined'-->
+										<!--ko foreach: $parent.guarantors-->
+										<tr>
+											<td data-bind='with: guarantor'>
+												<input type="hidden" data-bind="value:id, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+']guarantors['+$index()+'][memberId]'}">
+												<span data-bind='text: memberNames' > </span>
+											</td>
+											<td class='phone' data-bind='text: phone'>
+											</td>
+											<td class='shares' data-bind='text: shares'>
+											</td>
+											<td class='savings' data-bind='text: savings'>
+											</td>
+											<td>
+												<span title="Remove item" class="btn text-danger" data-bind='click: function(){$($element).parent().parent().remove();}'><i class="fa fa-minus"></i></span>
+											</td>
+										</tr>
+										<!--/ko-->
+										<!--/ko-->
+										<!--ko foreach: $parent.selectedGuarantors-->
 										<tr>
 											<td>
-												<select data-bind="options: $parentContext.$parent.filteredGuarantors, optionsText: 'memberNames', optionsValue, 'id', optionsCaption: 'Select guarantor...', attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+']guarantors['+$index()+'][memberId]'}" class="form-control"> </select>
+												<select data-bind="options: $parentContext.$parent.filteredGuarantors, optionsText: 'memberNames', optionsValue, 'id', optionsCaption: 'Select guarantor...', attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+']guarantors['+($index()+(typeof($parent.guarantors)!='undefined'?$parent.guarantors.length:0))+'][memberId]'}" class="form-control"> </select>
 											</td>
 											<td class='phone' data-bind='with: guarantor'>
 												<span data-bind='text: phone' > </span>
@@ -211,6 +244,7 @@
 												<span title="Remove item" class="btn text-danger" data-bind='click: $parent.removeGuarantor'><i class="fa fa-minus"></i></span>
 											</td>
 										</tr>
+										<!--/ko-->
 									</tbody>
 								</table>
 							</div>
@@ -245,7 +279,9 @@
 											<th>&nbsp;</th>
 										</tr>
 									</thead>
-									<tbody data-bind="foreach: $parent.addedCollateral">
+									<tbody>
+										<!--ko if: typeof($parent.collateral_items)!='undefined'-->
+										<!--ko foreach: $parent.collateral_items-->
 										<tr>
 											<td><input class="form-control input-sm" data-bind="value: itemName, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+$index()+'][itemName]'}" data-msg-required="Item name is required" required/></td>
 											<td><textarea class="form-control input-sm" data-bind="value: description, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+$index()+'][description]'}" data-msg-required="Item description is required" required></textarea></td>
@@ -253,8 +289,21 @@
 											<i><span data-bind="text: getWords(itemValue())+' Uganda shillings only'"></span></i>
 											</td>
 											<td><input class="input-sm" type="file" data-bind="value: attachmentUrl, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+$index()+'][attachmentUrl]'}"/></td>
+											<td><span title="Remove item" class="btn text-danger" data-bind='click: function(){$element.$parent().$parent().remove();}'><i class="fa fa-minus"></i></span></td>
+										</tr>
+										<!--/ko-->
+										<!--/ko-->
+										<!--ko foreach: $parent.addedCollateral-->
+										<tr>
+											<td><input class="form-control input-sm" data-bind="value: itemName, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+($index()+(typeof($parent.collateral_items)!='undefined'?$parent.collateral_items.length:0))+'][itemName]'}" data-msg-required="Item name is required" required/></td>
+											<td><textarea class="form-control input-sm" data-bind="value: description, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+($index()+(typeof($parent.collateral_items)!='undefined'?$parent.collateral_items.length:0))+'][description]'}" data-msg-required="Item description is required" required></textarea></td>
+											<td><input class="form-control input-sm" type="number" data-bind="textInput: itemValue, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+($index()+(typeof($parent.collateral_items)!='undefined'?$parent.collateral_items.length:0))+'][itemValue]'}" required/>
+											<i><span data-bind="text: getWords(itemValue)+' Uganda shillings only'"></span></i>
+											</td>
+											<td><input class="input-sm" type="file" data-bind="value: attachmentUrl, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+($index()+(typeof($parent.collateral_items)!='undefined'?$parent.collateral_items.length:0))+'][attachmentUrl]'}"/></td>
 											<td><span title="Remove item" class="btn text-danger" data-bind='click: $parentContext.$parent.removeCollateral'><i class="fa fa-minus"></i></span></td>
 										</tr>
+										<!--/ko-->
 									</tbody>
 								</table>
 							</div>
@@ -268,7 +317,8 @@
 					<!-- /ko -->
 					<h1>Businesses <small>Add Businesses</small></h1>
 					<fieldset>
-						<div class="row" data-bind="foreach: $parent.member_business">
+						<!--ko if: typeof($parent.memberBusinesses)!='undefined'-->
+						<div class="row" data-bind="foreach: $parent.memberBusinesses">
 							<h3 data-bind="text:'Business '+($index()+1)"></h3>
 							<div class="col-lg-6">
 								<div class="form-group">
@@ -299,6 +349,43 @@
 								<div class="form-group">
 									<label>URSB Number</label>
 									<input data-bind="value: ursbNumber, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][clientBusinesses]['+$index()+'][ursbNumber]'}"  type="text" class="form-control ">
+								</div>
+							</div>
+							<div class="col-lg-1"><span title="Remove Business" class="btn text-danger btn-lg"  data-bind='click: function(){$element.$parent().$parent().remove();}'><i class="fa fa-minus"></i></span></div>
+							<div class="clearboth"></div>
+						</div>
+						<!--/ko-->
+						<div class="row" data-bind="foreach: $parent.member_business">
+							<h3 data-bind="text:'Business '+($index()+(typeof($parent.memberBusinesses)!='undefined'?$parent.memberBusinesses.length:0)+1)"></h3>
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label>Name of Business</label>
+									<textarea data-bind="value: businessName, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][clientBusinesses]['+($index()+(typeof($parent.memberBusinesses)!='undefined'?$parent.memberBusinesses.length:0))+'][businessName]'}" required class="form-control"></textarea>
+								</div>
+								
+							</div>
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label>Business Location</label>
+									<textarea data-bind="value: businessLocation, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][clientBusinesses]['+($index()+(typeof($parent.memberBusinesses)!='undefined'?$parent.memberBusinesses.length:0)+'][businessLocation]'}" required class="form-control "></textarea>
+								</div>
+							</div>
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label>Number Of Employees</label>
+									<input data-bind="value: numberOfEmployees, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][clientBusinesses]['+($index()+(typeof($parent.memberBusinesses)!='undefined'?$parent.memberBusinesses.length:0)+'][numberOfEmployees]'}" required type="number" class="form-control ">
+								</div>
+							</div>
+							<div class="col-lg-2">
+								<div class="form-group">
+									<label>Business Worth</label>
+									<input data-bind="textInput: businessWorth, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][clientBusinesses]['+($index()+(typeof($parent.memberBusinesses)!='undefined'?$parent.memberBusinesses.length:0)+'][businessWorth]'}"  type="text" class="form-control">
+								</div>
+							</div>
+							<div class="col-lg-2">
+								<div class="form-group">
+									<label>URSB Number</label>
+									<input data-bind="value: ursbNumber, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][clientBusinesses]['+($index()+(typeof($parent.memberBusinesses)!='undefined'?$parent.memberBusinesses.length:0)+'][ursbNumber]'}"  type="text" class="form-control ">
 								</div>
 							</div>
 							<div class="col-lg-1"><span title="Remove Business" class="btn text-danger btn-lg" data-bind='click: $parentContext.$parent.removeBusiness'><i class="fa fa-minus"></i></span></div>

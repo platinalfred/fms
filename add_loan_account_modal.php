@@ -65,8 +65,8 @@
 											</div>
 											<div class="col-md-4" data-bind="with: $root.loanProduct">
 												<label class="control-label">Application Date</label>
-												<div class="input-group date">
-													<input type="text" class="form-control" name="applicationDate" id="applicationDate" data-bind="datePicker: $root.applicationDate" data-date-end-date="<?php echo date('d-m-Y');?>" required>
+												<div class="input-group date" data-provide="datepicker"data-date-format="dd-mm-yyyy" data-date-end-date="<?php echo date('d-m-Y');?>">
+													<input type="text" class="form-control" name="applicationDate"data-bind="attr:{value:$parent.applicationDate}"  required>
 													<div class="input-group-addon">
 														<span class="fa fa-calendar"></span>
 													</div>

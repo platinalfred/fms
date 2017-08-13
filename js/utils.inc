@@ -299,8 +299,8 @@ function showStatusMessage(message='', display_type='success'){
 		// put your default event here
 		//$('form', this)[0].reset();
 		$('input[name="id"]', this).val('');
-		if(typeof loanAccountModal!=='undefined'){
-			loanAccountModel.edit_client(0);
+		if(typeof viewModal!=='undefined'){
+			viewModel.edit_client(0);
 		}
 	});
 /*$(function () {
