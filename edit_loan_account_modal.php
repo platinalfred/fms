@@ -25,7 +25,7 @@
 												<input type='hidden' name="clientType" data-bind="attr:{'value':(groupId&&groupId>0)?2:1}"/>
 												<!--ko if:(!groupId||groupId==0)-->
 												<label class="col-sm-6">Member</label>
-												<label class="col-sm-6" data-bind="text: clientNames">Member</label>
+												<label class="col-sm-6" data-bind="text: ((typeof(clientNames)!='undefined')?clientNames:((typeof(memberNames)!='undefined')?memberNames:''))">Member</label>
 												<!--/ko-->
 												<!--ko if:(groupId&&groupId>0)-->
 												<label class="col-sm-6">Group</label>
@@ -67,7 +67,7 @@
 <div data-bind='foreach: $root.filteredGroupMembers2'>
 	<div class="ibox float-e-margins">
 		<div class="ibox-title">
-			<h5 data-bind="text: clientNames + '('+loanNo+')'">member</h5>
+			<h5 data-bind="text: ((typeof(clientNames)!='undefined')?clientNames:((typeof(memberNames)!='undefined')?memberNames:'')) + '('+loanNo+')'">member</h5>
 			<div class="ibox-tools">
 				<a class="collapse-link">
 					<i data-bind="css:{'fa':1,'fa-chevron-down':$index()>0,'fa-chevron-up':$index()==0}"></i>
