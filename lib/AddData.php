@@ -291,7 +291,7 @@ if(isset($_POST['origin'])){
 				if(isset($loanAccount['clientBusinesses'])){
 					$person_obj = new Person();
 					$member_obj = new Member();
-					$member_details = $member_obj->findById($loanAccount['clientId']);
+					$member_details = $member_obj->findById($loanAccount['memberId']);
 					$person_id = $member_details['personId'];
 					//lets first delete all the existing businesss
 					$person_obj->deleteBusiness($person_id);
@@ -353,7 +353,7 @@ if(isset($_POST['origin'])){
 										$output =  "Return Code: " . $_FILES['loanAccount']['error'][$key]['loanCollateral'][$lc_key]['attachmentUrl'] . "<br>";
 									}else{
 										$files_dir = "../img/loanAccounts/".$loanAccount['loanNo']."/collateral/";
-										$collateralItem['attachmentUrl'] = $files_dir.$_FILES['loanAccount']['name'][$key]['loanCollateral'][$lc_key]['attachmentUrl'];
+										$collateralItem['attachmentUrl'] = substr($files_dir,2).$_FILES['loanAccount']['name'][$key]['loanCollateral'][$lc_key]['attachmentUrl'];
 										//$images->load($_FILES['loanAccount']['tmp_name'][$key]['loanCollateral'][$lc_key]['attachmentUrl']);
 										//$images->resize(240, 120); 
 										//$images->output($_FILES['loanAccount']["type"][$key]['loanCollateral'][$lc_key]['attachmentUrl']);

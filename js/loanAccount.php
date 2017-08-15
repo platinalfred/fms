@@ -140,11 +140,11 @@
 		//all members
 		<?php if(!isset($client)):?>
 		self.clients = ko.observableArray([{"id":1,"clientNames":"Allan James Kintu"}]); 
-		self.groups = ko.observableArray([{"id":1,"groupNames":"Kiwatule Womens Savings Group"}]); 
+		self.groups = ko.observableArray([{"groupId":1,"groupNames":"Kiwatule Womens Savings Group"}]); 
 		self.clientTypes = ko.observableArray([{"type_id":1,"client_type":"Member"},{"type_id":2,"client_type":"Group Members"}]); 
 		<?php endif;?>
 		self.groupMembers = ko.observableArray([{"id":1,"groupId":1,"memberNames":"Allan James Kintu"}]);
-		self.clientType = ko.observable();
+		self.clientType = ko.observable(<?php if(isset($client)) echo $client['clientType']?>);
 		// Stores an array of all the Data for viewing on the page
 		self.loanProducts = ko.observableArray([{"id":1,"productName":"Group Savings Loan","description":"Suitable for group savings", "availableTo":"2"}]);
 		
@@ -227,7 +227,7 @@
 				if(parseInt(self.client().clientType)==2){
 					var thisGroupMembers = [];
 					ko.utils.arrayForEach(ko.utils.arrayFilter(self.groupMembers(), function(groupMember) {
-						return (parseInt(self.client().id)==parseInt(groupMember.groupId));
+						return (parseInt(self.client().groupId)==parseInt(groupMember.groupId));
 					}), function(item) {
 						thisGroupMembers.push($.extend(item, new LoanAccount()));
 					});
@@ -239,7 +239,7 @@
 		self.filteredGroupMembers2 = ko.computed(function() {
 			if(self.account_details()){
 				if(!self.account_details().groupId||self.account_details().groupId==0){
-					if(self.account_details().status<3||self.account_details().status==3){
+					if(self.account_details().status<4||self.account_details().status==11){
 						var loan_account = new LoanAccount();
 						loan_account.requestedAmount2(self.account_details().requestedAmount); 
 						loan_account.interestRate2(self.account_details().interestRate); 
@@ -252,7 +252,7 @@
 				else{
 					var thisGroupMembers = [];
 					ko.utils.arrayForEach(ko.utils.arrayFilter(self.groupLoanAccounts(), function(item) {
-						return (parseInt(item.status)<3||parseInt(item.status)==11);
+						return (parseInt(item.status)<4||parseInt(item.status)==11);
 					}), function(groupLoanAccount) {
 						var loan_account = new LoanAccount();
 						loan_account.requestedAmount2(groupLoanAccount.requestedAmount); 
@@ -302,10 +302,7 @@
 					self.clients(response.clients); self.groups(response.groups); self.groupMembers(response.groupMembers); 
 					<?php endif;?>
 					<?php if(isset($client)&&$client['clientType']==2):?>self.groupMembers(response.groupMembers);<?php endif;?>
-					<?php if(isset($_GET['loanId'])){
-						$clientId = $client['id'];
-						$client['clientId'] = $client['id'];
-						unset($client['id'],$clientId);?>
+					<?php if(isset($_GET['loanId'])){?>
 						var client_data = <?php echo json_encode($client);?>;
 						self.account_details($.extend(client_data, response.account_details));
 					<?php } ?>
@@ -402,7 +399,7 @@
 				data:{
 					origin:"disburse_loan",
 					id:(self.account_details()?self.account_details().id:undefined),
-					disbursedAmount: ((self.account_details()&&self.account_details().status==3)?self.disbursedAmount():undefined),
+					disbursedAmount: ((self.account_details()&&self.account_details().status==4)?self.disbursedAmount():undefined),
 					disbursementNotes: self.disbursementNotes(),
 					status: 4
 				},
@@ -486,13 +483,17 @@
 		  var post_data = new Object();
 		  <?php if(isset($client)):?>post_data = <?php echo json_encode($client);?>; <?php endif;?>
 	var handleDataTableButtons = function() {
+		viewModel.account_details(null);
+		viewModel.groupLoanAccounts([]);
 		var loan_type = parseInt($('#loan_types').val());
 		
 		post_data.origin = 'loan_accounts';
 		post_data.status = loan_type; // status of pending loan applications;
 		post_data.start_date = startDate;
 		post_data.end_date = endDate;
-		post_data.clientType = 3
+		<?php if(isset($_GET['groupId'])):?>post_data.groupId = <?php echo json_encode($_GET['groupId']);?>; <?php endif;?>//this caters for the display of all loans taken by groups
+		<?php if(isset($_GET['memberId'])):?>post_data.memberId = <?php echo json_encode($_GET['memberId']);?>; <?php endif;?>//this caters for the display of all loans taken by a member
+		<?php if(isset($_GET['grpLId'])):?>post_data.grpLId = <?php echo json_encode($_GET['grpLId']);?>; <?php endif;?>//this caters for the display of loans taken in group setting
 		
 		if(loan_type==1||loan_type==2||loan_type==11||loan_type==12){
 			//partial applications/pending approval/closed_rejected/closed_withdrawn
@@ -519,15 +520,16 @@
 					  $(".table#applications tbody>tr:first").trigger('click');
 				  },
 				  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
-					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?id='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }
+					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?memberId='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }
 					  },
 						{ data: 'clientNames'},
-						{ data: 'groupName', render: function( data, type, full, meta ){return full.groupId?('<a href="group_details.php?id='+full.groupId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>'):'';}},
+						<?php if(!isset($_GET['groupId'])):?>{ data: 'groupName', render: function( data, type, full, meta ){return data?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs" title="View details">'+data+'</a>'):'';}},<?php endif;?>
+						<?php if(!isset($_GET['grpLId'])):?>{ data: 'groupLoanAccountId', render: function( data, type, full, meta ){return (data&&data!=0)?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs&grpLId='+full.groupLoanAccountId+'" title="View details"> Ref#'+data+'</a>'):'';}},<?php endif;?>
 						{ data: 'productName'},
 						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
 						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} ,
 						{ data: 'status', render: function ( data, type, full, meta ) {
-							return ((parseInt(data)<3||parseInt(data)==11)?'<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Update</a>':'')+
+							return ((parseInt(data)<4||parseInt(data)==11)?'<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Update</a>':'')+
 							'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-list"></i> Details </a>';}}/* /*  */
 						] ,
 				  buttons: [
@@ -552,7 +554,7 @@
 					  className: "btn-sm"
 					},
 				  ],
-				  responsive: true/*, */
+				  responsive: false/*, */
 				  
 				});
 			}
@@ -581,12 +583,18 @@
 						$(".table#rejected tbody>tr:first").trigger('click');
 				  },
 				  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
-					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?><a href="member_details.php?id='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>';}},
+					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?memberId='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }
+					  },
 						{ data: 'clientNames'},
-						{ data: 'groupName', render: function( data, type, full, meta ){return full.groupId?('<a href="group_details.php?id='+full.groupId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>'):'';}},
+						<?php if(!isset($_GET['groupId'])):?>{ data: 'groupName', render: function( data, type, full, meta ){return data?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs" title="View details">'+data+'</a>'):'';}},<?php endif;?>
+						<?php if(!isset($_GET['grpLId'])):?>{ data: 'groupLoanAccountId', render: function( data, type, full, meta ){return (data&&data!=0)?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs&grpLId='+full.groupLoanAccountId+'" title="View details"> Ref#'+data+'</a>'):'';}},<?php endif;?>
+						{ data: 'productName'},
 						{ data: 'productName'},
 						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
+						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} ,
+						{ data: 'status', render: function ( data, type, full, meta ) {
+							return ((parseInt(data)<4||parseInt(data)==11)?'<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Update</a>':'')+
+							'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-list"></i> Details </a>';}}
 						] ,
 				  buttons: [
 					{
@@ -639,9 +647,12 @@
 						$(".table#approved tbody>tr:first").trigger('click');
 				  },
 				  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
-					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?><a href="member_details.php?id='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>';}},
+					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?memberId='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }
+					  },
 						{ data: 'clientNames'},
-						{ data: 'groupName', render: function( data, type, full, meta ){return full.groupId?('<a href="group_details.php?id='+full.groupId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>'):'';}},
+						<?php if(!isset($_GET['groupId'])):?>{ data: 'groupName', render: function( data, type, full, meta ){return data?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs" title="View details">'+data+'</a>'):'';}},<?php endif;?>
+						<?php if(!isset($_GET['grpLId'])):?>{ data: 'groupLoanAccountId', render: function( data, type, full, meta ){return (data&&data!=0)?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs&grpLId='+full.groupLoanAccountId+'" title="View details"> Ref#'+data+'</a>'):'';}},<?php endif;?>
+						{ data: 'productName'},
 						{ data: 'productName'},
 						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
 						{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.repaymentsFrequency)) + ' ' + getDescription(4,data);}},

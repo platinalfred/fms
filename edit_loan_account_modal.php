@@ -7,9 +7,9 @@
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>Loan Application <small>Update details</small></h5>
+                            <h5>Loan Account <small>Update details</small></h5>
                             <div class="ibox-tools">
-                                <a class="" data-dismiss="modal">
+                                <a data-dismiss="modal">
                                     <i class="fa fa-times lg"></i>
                                 </a>
                             </div>
@@ -17,10 +17,9 @@
                         <div class="ibox-content" data-bind="with: account_details">
                             <form id="editLoanAccountForm" class="form-horizontal wizard-big" enctype="multipart/form-data">
 								<input type='hidden' name="origin" value="loan_account"/>
-                                <h1>Loan Account <small>Account Information</small></h1>
+                                <h3>Account Information</h3>
 									<div class="row">
 										<fieldset>
-										<?php if(!isset($client)):?>
 										<div class="form-group">
 											<div class="col-md-6">
 												<input type='hidden' name="clientType" data-bind="attr:{'value':(groupId&&groupId>0)?2:1}"/>
@@ -62,6 +61,7 @@
 											</div>
 										</div>			
 										</fieldset>
+										<?php if(!isset($client)):?>
 										<?php endif;?>
 <div class="hr-line-dashed"></div>
 <div data-bind='foreach: $root.filteredGroupMembers2'>

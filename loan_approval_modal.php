@@ -25,12 +25,13 @@
 								<div class="col-.lg-12" data-bind="with: account_details">
 									<div class="col-md-12">
 										<strong>Client Details</strong><br/>
-										<i data-bind="css: {'fa':1, 'fa-male': gender=='M', 'fa-female': gender=='F'}"></i> <span data-bind="text: clientNames"></span>  
-										<!--ko if: typeof(member_details)!='undefined'-->,
+										<!--ko if: typeof(member_details)!='undefined'-->
+										<div class="col-sm-3"><img style="width:100px;"  data-bind="attr:{src:member_details.id_specimen}" /></div>
+										<div class="col-sm-9"><i data-bind="css: {'fa':1, 'fa-male': gender=='M', 'fa-female': gender=='F'}"></i> <span data-bind="text: clientNames"></span>  ,
 										<i class="fa fa-mobile"></i> <span data-bind="text: member_details.phone"></span>,  
 										<i class="fa fa-at"></i> <span data-bind="text: member_details.email"></span>,  
 										<i class="fa fa-map-envelope-square"></i> <span data-bind="text: member_details.postal_address">Kawempe, Kazo</span>
-										<i class="fa fa-map-marker"></i> <span data-bind="text: member_details.physical_address">Kawempe, Kazo</span>
+										<i class="fa fa-map-marker"></i> <span data-bind="text: member_details.physical_address">Kawempe, Kazo</span></div>
 										<!--/ko-->
 									</div>
 									<div class="col-md-12" data-bind="if: typeof(guarantors)!='undefined' &&guarantors.length>0">
@@ -73,6 +74,7 @@
 														<th>Item</th>
 														<th>Description</th>
 														<th>Item Value</th>
+														<th>Attachment</th>
 													</tr>
 												</thead>
 												<tbody data-bind="foreach: collateral_items">
@@ -80,6 +82,7 @@
 														<td data-bind="text: itemName"></td>
 														<td data-bind="text: description"></td>
 														<td data-bind="text: curr_format(parseInt(itemValue))"></td>
+														<td><img style="width:100px;"  data-bind="attr:{src:attachmentUrl}" /></td>
 													</tr>
 												</tbody>
 												<tfoot>
@@ -248,11 +251,11 @@
 										</div>
 									  <div class="form-group">
 									  <?php 
-										if(isset($_SESSION['branch_credit'])||isset($_SESSION['management_credit'])||isset($_SESSION['executive_board'])):?>
+										if(isset($_SESSION['branch_credit'])||isset($_SESSION['management_credit'])||isset($_SESSION['executive_board'])||isset($_SESSION['branch_manager'])):?>
 									  <label class="col-md-12">Action</label>
 										<?php endif;?>
 										<?php if(isset($_SESSION['branch_manager'])&&$_SESSION['branch_manager']): ?>
-										<!-- ko if: (status==1||status==2)-->
+										<!-- ko if: (status<4)-->
 										<!-- reject only if loan has not yet been forwarded for approval -->
 										<div class="col-md-3">
 											<label class="control-label text-danger"><input type="radio" name="status" value="11" data-bind="checked: $parent.loanAccountStatus"/> Reject</label>
@@ -264,46 +267,53 @@
 											<label class="control-label text-warning"><input type="radio" name="status" value="-1" data-bind="checked: $parent.loanAccountStatus" /> Previous State</label>
 										</div>
 										<!-- /ko -->
-										<?php if(isset($_SESSION['branch_manager'])&&$_SESSION['branch_manager']): ?>
-										<!-- ko if: status==1-->
+										<?php if(isset($_SESSION['loans_officer'])&&$_SESSION['loans_officer']||(isset($_SESSION['admin'])&&$_SESSION['admin'])): ?>
+											<!-- ko if: status==1-->
+											<div class="col-md-3">
+												<label class="control-label text-info"><input type="radio" name="status" value="2" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Forward</label>
+											</div>
+											<!-- /ko -->
+										<?php endif;?>
+										<?php if(isset($_SESSION['branch_manager'])&&$_SESSION['branch_manager']||(isset($_SESSION['admin'])&&$_SESSION['admin'])): ?>
+										<!-- ko if: status==2-->
 										<div class="col-md-3">
-											<label class="control-label text-info"><input type="radio" name="status" value="2" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Forward</label>
+											<label class="control-label text-info"><input type="radio" name="status" value="3" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Forward</label>
 										</div>
 										<!-- /ko -->
-										<!-- ko if: status<4-->
+										<!-- ko if: status<5-->
 										<!-- withdraw only if loan has not yet been disbursed -->
-										<div class="col-md-3">
+										<div class="col-md-4">
 											<label class="control-label text-info"><input type="radio" name="status" value="12" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Close/Withdraw</label>
 										</div>
 										<!-- /ko -->
 									<?php else:?>
-										<!-- ko if: status==2 -->
+										<!-- ko if: status==3 -->
 										<!-- approve only if loan has been forwarded for approval-->
-										<?php if(isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit']){?>
+										<?php if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['admin'])&&$_SESSION['admin'])){?>
 										<!-- ko if: parseInt(requestedAmount)<1000001 -->
 										<div class="col-sm-3">
-											<label class="control-label text-info"><input type="radio" name="status" value="3" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Approve</label>
+											<label class="control-label text-info"><input type="radio" name="status" value="4" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Approve</label>
 										</div>
 										<!-- /ko -->
 										<?php }else if(isset($_SESSION['management_credit'])&& $_SESSION['management_credit']){?>
 										<!-- ko if: (parseInt(requestedAmount)>1000000&&parseInt(requestedAmount)<5000001) -->
 										<div class="col-sm-3">
-											<label class="control-label text-info"><input type="radio" name="status" value="3" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Approve</label>
+											<label class="control-label text-info"><input type="radio" name="status" value="4" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Approve</label>
 										</div>
 										<!-- /ko -->
 										<?php } else if(isset($_SESSION['executive_board'])&&$_SESSION['executive_board']){?>
 										<!-- ko if: parseInt(requestedAmount)>5000000 -->
 										<div class="col-sm-3">
-											<label class="control-label text-info"><input type="radio" name="status" value="3" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Approve</label>
+											<label class="control-label text-info"><input type="radio" name="status" value="4" data-bind="checked: $parent.loanAccountStatus" required data-msg-required="Please select option"/> Approve</label>
 										</div>
 										<!-- /ko -->
 										<?php }?>
 										<!-- /ko -->
 									<?php endif;?>
 									</div>
-								<!-- ko if: status==2 -->
+								<!-- ko if: status==3 -->
 								<?php 
-								if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&& $_SESSION['executive_board'])):?>
+								if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['management_credit'])&&$_SESSION['management_credit'])||(isset($_SESSION['executive_board'])&& $_SESSION['executive_board'])||(isset($_SESSION['admin'])&&$_SESSION['admin'])):?>
 										  <div class="form-group">
 											<label class="control-label col-sm-4" for="amountApproved">Amount approved<span class="required">*</span></label>
 											<div class="col-sm-8">

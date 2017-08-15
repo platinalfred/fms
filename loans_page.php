@@ -21,11 +21,12 @@
 								<?php
 								if((isset($_SESSION['loans_officer'])&& $_SESSION['loans_officer'])||(isset($_SESSION['admin'])&& $_SESSION['admin'])):?>
 								   <option value="1" <?php echo (isset($_GET['status'])&&$_GET['status']==1)?'selected':'selected';?>>Partial Application</option>
+								   <option value="2" <?php echo (isset($_GET['status'])&&$_GET['status']==2)?'selected':'selected';?>>Complete Application</option>
 								   <?php endif;?>
-									<option value="2" <?php echo (isset($_GET['status'])&&$_GET['status']==2)?'selected':'';?>>Pending</option>
-								    <option value="3" <?php echo (isset($_GET['status'])&&$_GET['status']==3)?'selected':'';?>>Approved</option>
-								    <option value="4" <?php echo isset($_GET['status'])?(($_GET['status']==4)?'selected':''):'';?>>Active</option>
-									<option value="5" <?php echo (isset($_GET['status'])&&$_GET['status']==5)?'selected':'';?>>Active/In Arrears</option>
+									<option value="3" <?php echo (isset($_GET['status'])&&$_GET['status']==3)?'selected':'';?>>Pending</option>
+								    <option value="4" <?php echo (isset($_GET['status'])&&$_GET['status']==4)?'selected':'';?>>Approved</option>
+								    <option value="5" <?php echo isset($_GET['status'])?(($_GET['status']==5)?'selected':''):'';?>>Active</option>
+									<option value="6" <?php echo (isset($_GET['status'])&&$_GET['status']==6)?'selected':'';?>>Active/In Arrears</option>
 									<option value="11" <?php echo (isset($_GET['status'])&&$_GET['status']==11)?'selected':'';?>>Closed/Rejected</option>
 									<option value="12" <?php echo (isset($_GET['status'])&&$_GET['status']==12)?'selected':'';?>>Closed/Withdrawn</option>
 									<?php
@@ -63,7 +64,14 @@
 										<thead>
 											<tr>
 												<?php 
-												$header_keys = array("Loan No", "Client", "Group", "Loan Product","Appn Date", "Amount Requested", "Action" /**/);
+												$header_keys[] = "Loan No";
+												$header_keys[] = "Client";
+												if(!isset($_GET['groupId'])){$header_keys[] = "Group";}
+												if(!isset($_GET['grpLId'])){$header_keys[] = "Group Loan Ref";}
+												$header_keys[] = "Loan Product";
+												$header_keys[] = "Appn Date";
+												$header_keys[] = "Amount Requested";
+												$header_keys[] = "Action";
 												foreach($header_keys as $key){ ?>
 													<th><?php echo $key; ?></th>
 													<?php
@@ -84,7 +92,6 @@
 										<thead>
 											<tr>
 												<?php 
-												$header_keys = array("Loan No", "Client", "Group", "Loan Product","Appn Date", "Amount Requested");
 												foreach($header_keys as $key){ ?>
 													<th><?php echo $key; ?></th>
 													<?php
@@ -186,26 +193,7 @@
 									<strong>Loan Product</strong>
 								</li>
 								<li class="list-group-item">
-
-								<?php 
-								//If its a loans officer show the forward to branch manager if the status is 1
-								if(isset($_SESSION['loans_officer'])||isset($_SESSION['admin'])){ ?>
-									<!-- ko if: status==1-->
-										<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-list"></i> Account Details</a>
-									<!-- /ko -->
-									<!-- ko if: (status<3||status==11)-->
-										<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Update</a>
-									<!-- /ko -->
-								<?php }
-								//If its not a loans officer show the payment link
-								if(isset($_SESSION['accountant'])){ ?>
-									<!-- ko if: status==4-->
-										<a class="btn btn-info btn-sm" href='#make_payment-modal' data-toggle="modal"><i class="fa fa-edit"></i> Make Payment </a>
-									<!-- /ko -->
-									<!-- ko if: status==3 -->
-										<a class="btn btn-warning btn-sm" href='#disburse_loan-modal' data-toggle="modal"><i class="fa fa-money"></i> Disburse Loan </a>
-									<!-- /ko -->
-								<?php }?>
+									<?php include_once('loan_actions_section.php')?>
 								</li>
 							</ul>
 							<div class="row m-b-lg" data-bind="if: status==2">

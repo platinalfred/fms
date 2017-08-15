@@ -43,11 +43,14 @@
 												<!--/ko-->
 												<!--ko if:type_id==2-->
 												<label class="control-label">Member Groups</label>
-													<select data-placeholder="Select group..." name="groupId" class="form-control chosen-select" data-bind='options: $root.groups, optionsText: "clientNames", optionsCaption: "Select group...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Please select a group" required>
+													<select data-placeholder="Select group..." name="groupId" class="form-control chosen-select" data-bind='options: $root.groups, optionsText: "clientNames", optionsCaption: "Select group...", optionsAfterRender: $root.setOptionValue("groupId"), value: $root.client' data-msg-required="Please select a group" required>
 													</select>
 												<!--/ko-->
 											</div>
 										</div>	
+										<?php else:?>
+										<input type="hidden"  name="clientType" value="<?php echo $client['clientType'];?>"/>
+										<?php endif;?>
 										<div class="form-group">
 											<div class="col-md-6" data-bind='with: $root.client'>
 												<label class="control-label">Product</label>
@@ -79,9 +82,8 @@
 											</div>
 										</div>			
 										</fieldset>
-										<?php endif;?>
 <!--ko with:clientType-->
-<!--ko if:typeof($root.client())!='undefined'-->
+<!--ko if:(typeof($root.client())!='undefined'&&typeof($root.loanProduct())!='undefined')-->
 <div class="hr-line-dashed"></div>
 <div data-bind='foreach: $root.filteredGroupMembers'>
 	<div class="ibox float-e-margins">

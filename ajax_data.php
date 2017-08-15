@@ -297,9 +297,9 @@ if(isset($_POST['origin'])){
 				$data['account_details']['statement'] = $loanAccountObj->getStatement($_POST['loanAccountId']);
 			}else{
 				$data['clients'] = $memberObj->findSelectList();
-				$data['groups'] = $saccoGroupObj->findSelectList();
-				$data['groupMembers'] = $saccoGroupObj->findGroupMembers();
 			}
+			$data['groups'] = $saccoGroupObj->findSelectList();
+			$data['groupMembers'] = $saccoGroupObj->findGroupMembers();
 			
 			echo json_encode($data);
 		break;
@@ -330,13 +330,19 @@ if(isset($_POST['origin'])){
 			$loanAccount = new LoanAccount();
 			$where = "`status`=".$_POST['status'];
 			if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
-				$action_date = (in_array($_POST['status'],array(4,13,14,15,16)))?"disbursementDate":((in_array($_POST['status'],array(2,3)))?"approvalDate":"applicationDate");
+				$action_date = (in_array($_POST['status'],array(5,13,14,15,16)))?"disbursementDate":((in_array($_POST['status'],array(3,4)))?"approvalDate":"applicationDate");
 				$where .= " AND (`".($action_date)."` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
 			}
-			if(isset($_POST['id'])){
-				$where .= " AND `memberId`=".$_POST['id'];
+			if(isset($_POST['memberId'])){
+				$where .= " AND `memberId`=".$_POST['memberId'];
 			}
-			if($_POST['status']==3||$_POST['status']==4){
+			if(isset($_POST['groupId'])&&is_numeric($_POST['groupId'])){
+				$where .= " AND `groupId`=".$_POST['groupId'];
+			}
+			if(isset($_POST['grpLId'])&&is_numeric($_POST['grpLId'])){//this caters for the display of loans taken in groups 
+				$where .= " AND `groupLoanAccountId`=".$_POST['grpLId'];
+			}
+			if($_POST['status']==4||$_POST['status']==5){
 				$output['data'] = $loanAccount->getApprovedLoans($where);
 			}else{
 				$output['data'] = $loanAccount->getApplications($where);
@@ -349,8 +355,8 @@ if(isset($_POST['origin'])){
 				$loanAccountId = $_POST['id'];
 				$memberId = $_POST['memberId'];
 				$data = array();
-				//is this a group loan, then show all the others for approval purposes
-				if(isset($_POST['groupLoanAccountId'])&&is_numeric($_POST['groupLoanAccountId'])&&($_POST['groupLoanAccountId']>0)&&isset($_POST['status'])&&is_numeric($_POST['status'])&&(in_array($_POST['status'],array(1,2,3)))){
+				//is this a group loan, then retrieve all the other member loans for approval purposes
+				if(isset($_POST['groupLoanAccountId'])&&is_numeric($_POST['groupLoanAccountId'])&&($_POST['groupLoanAccountId']>0)&&isset($_POST['status'])&&is_numeric($_POST['status'])&&(in_array($_POST['status'],array(1,2,3,4)))){
 					$loan_account_obj = new LoanAccount();
 					$data = $loan_account_obj->getApplications("`groupLoanAccountId`=".$_POST['groupLoanAccountId']);
 					foreach($data as $key=>$loanAccount){
@@ -360,7 +366,7 @@ if(isset($_POST['origin'])){
 						$data[$key]['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$loanAccount['id']);
 						
 						//is the loan disbursed, if so show any payments that have been made
-						if(in_array($loanAccount['status'],array(4,5,))){
+						if(in_array($loanAccount['status'],array(5,6))){
 							$loan_account_transaction_obj = new LoanRepayment();
 							$data[$key]['transactionHistory'] = $loan_account_transaction_obj->getTransactionHistory($loanAccount['id']);
 						}
@@ -392,7 +398,7 @@ if(isset($_POST['origin'])){
 					$data['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$loanAccountId);
 					
 					//is the loan disbursed, if so show any payments that have been made
-					if(isset($_POST['status'])&&is_numeric($_POST['status'])&&$_POST['status']==4){
+					if(isset($_POST['status'])&&is_numeric($_POST['status'])&&$_POST['status']==5){
 						$loan_account_transaction_obj = new LoanRepayment();
 						$data['transactionHistory'] = $loan_account_transaction_obj->getTransactionHistory($_POST['id']);
 					}

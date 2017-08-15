@@ -8,7 +8,7 @@ $(document).ready(function(){
 		autoclose: true
 	});
 	<?php 
-	if(isset($_GET['id'])){ ?>
+	if(isset($_GET['memberId'])){ ?>
 		$('.delete_member').click(function () {
 			var id = $(this).attr("id");
 			$.confirm({
@@ -139,18 +139,18 @@ $(document).ready(function(){
 		};
 	var Member = function() {
 		var self = this;
-		self.member_employment = ko.observableArray(<?php if(!isset($_GET['id'])){ ?> [new MemberEmployment()]<?php } ?>);
+		self.member_employment = ko.observableArray(<?php if(!isset($_GET['memberId'])){ ?> [new MemberEmployment()]<?php } ?>);
 		self.addEmployment = function() { self.member_employment.push(new MemberEmployment()) };
 		self.removeEmployment = function(relative) {
 			self.member_employment.remove(relative);
 		};
-		self.member_business = ko.observableArray(<?php if(!isset($_GET['id'])){ ?> [new MemberBusiness()]<?php } ?>);
+		self.member_business = ko.observableArray(<?php if(!isset($_GET['memberId'])){ ?> [new MemberBusiness()]<?php } ?>);
 		self.addBusinnes = function() { self.member_business.push(new MemberBusiness()) };
 		self.removeBusiness = function(business) {
 			self.member_business.remove(business);
 		};
 		//Keeps track of member relatives, observing any changes
-		self.member_relatives = ko.observableArray(<?php if(!isset($_GET['id'])){ ?> [new MemberRelative()]<?php } ?> );
+		self.member_relatives = ko.observableArray(<?php if(!isset($_GET['memberId'])){ ?> [new MemberRelative()]<?php } ?> );
 		//Add a relative
 		self.addRelative = function() { self.member_relatives.push(new MemberRelative()) };
 		//remove relative
@@ -158,7 +158,7 @@ $(document).ready(function(){
 			self.member_relatives.remove(relative);
 		};
 		<?php 
-		if(isset($_GET['id'])){ 
+		if(isset($_GET['memberId'])){ 
 			?>
 			self.member_business2 = ko.observableArray(<?php if($member_business){echo json_encode($member_business);}  ?>);
 			
@@ -240,7 +240,7 @@ $(document).ready(function(){
 					{ data: 'id_number'},
 					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}}<?php 
 					if(!isset($_SESSION['loan_officer'])){ ?>,
-					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <a href="member_details.php?id='+data+'" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> more </a> ';}} <?php } ?> 
+					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <a href="member_details.php?memberId='+data+'" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> more </a> ';}} <?php } ?> 
 					] ,
 			  buttons: [
 				{

@@ -6,12 +6,12 @@ include("lib/Reports.php");
 $sacco_group = new SaccoGroup();
 global $client;
 $client  = array();
-$group_data  = $sacco_group->findById($_GET['id']);
+$group_data  = $sacco_group->findById($_GET['groupId']);
 $names =  $group_data['groupName']; 
 $data['group_members'] = $sacco_group->findGroupMembers($group_data['id']);
 $client['clientType'] = 2;
 $client['clientNames'] = $names;
-$client['id'] = $_GET['id'];
+$client['groupId'] = $_GET['groupId'];
 if(!$group_data){
 	echo "<p>No group details found</p>";
 	return;
@@ -34,7 +34,7 @@ p{
 					<h5>Group - <?php echo $names; ?> </h5>
 					<div class="ibox-tools">
 						<a  data-toggle="modal" href="#edit_group" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Edit </a>
-						<a id="<?php echo $_GET['id']; ?>" class="btn btn-danger btn-sm delete_me" style="color:#fff;"><i class="fa fa-trash"></i> Delete</a>
+						<a id="<?php echo $_GET['groupId']; ?>" class="btn btn-danger btn-sm delete_me" style="color:#fff;"><i class="fa fa-trash"></i> Delete</a>
 					</div>
 				</div>
 				<div class="ibox-content" style="padding-top:3px;">
@@ -90,9 +90,9 @@ p{
 					<div class="clearboth"></div>
 					<div class="col-md-12 col-sm-12 col-xs-12 " style="border-top:1px solid #09A; padding-top:10px;">
 						<p>
-							<a  href="?id=<?php echo  $_GET['id']; ?>&view=loan_accs" class="btn btn-sm btn-info" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Loan Accounts</a>
-							<a  href="?id=<?php echo  $_GET['id']; ?>&view=savings_accs" class="btn btn-info btn-sm"> <i class="fa fa-dollar"></i> Saving Accounts</a>
-							<a  href="?id=<?php echo  $_GET['id']; ?>&view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-calculator"></i> Ledger</a>
+							<a  href="?groupId=<?php echo  $_GET['groupId']; ?>&view=loan_accs" class="btn btn-sm btn-info" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Loan Accounts</a>
+							<a  href="?groupId=<?php echo  $_GET['groupId']; ?>&view=savings_accs" class="btn btn-info btn-sm"> <i class="fa fa-dollar"></i> Saving Accounts</a>
+							<a  href="?groupId=<?php echo  $_GET['groupId']; ?>&view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-calculator"></i> Ledger</a>
                         </p>
 					</div>
 					<div class="clearboth"></div>
