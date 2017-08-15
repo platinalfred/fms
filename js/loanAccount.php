@@ -305,6 +305,7 @@
 					<?php if(isset($_GET['loanId'])){?>
 						var client_data = <?php echo json_encode($client);?>;
 						self.account_details($.extend(client_data, response.account_details));
+						self.loanProduct2(self.getLoanProduct(self.account_details().loanProductId));
 					<?php } ?>
 				}
 			})
