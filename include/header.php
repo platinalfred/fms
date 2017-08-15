@@ -155,7 +155,7 @@ if(!isset($_SESSION['Logged'])){
                         </div>
                     </li>
 					<?php 
-					if(!isset($_SESSION['loan_officer'])){ ?>
+					if(!isset($_SESSION['loans_officer'])){ ?>
 						<li>
 							<a href="dashboard.php"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
 						</li>
@@ -173,7 +173,7 @@ if(!isset($_SESSION['Logged'])){
 					<?php 
 					if(!isset($_SESSION['executive_board']) && !isset($_SESSION['branch_credit'])&& !isset($_SESSION['management_credit'])){
 						
-						if(!isset($_SESSION['loan_officer'])){ ?>
+						if(!isset($_SESSION['loans_officer'])){ ?>
 							<li>
 								<a href="view_savings.php"><i class="fa fa-dollar"></i> <span class="nav-label">Savings Accounts</span>  </a>
 							</li>
@@ -234,7 +234,7 @@ if(!isset($_SESSION['Logged'])){
                         </li>
 						<?php 
 						} 
-						if(!isset($_SESSION['loan_officer'])){ ?>
+						if(!isset($_SESSION['loans_officer'])){ ?>
                         <!--
 						<li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
