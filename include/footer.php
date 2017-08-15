@@ -18,6 +18,7 @@
     <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 	 
 	<script src="js/jquery-confirm.min.js"></script>
+	<script src="js/plugins/bootstrap-select/bootstrap-select.js"></script>
 	 <!-- Form Validate -->
 	<script src="js/jquery.validate.min.js" type="text/javascript"></script>
 	

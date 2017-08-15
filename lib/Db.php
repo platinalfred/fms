@@ -129,7 +129,7 @@ class Db{
 							$this->setSessions("admin", true);
 						break;
 						case 2://Loan Officer 2
-							$this->setSessions("loan_officer", true);
+							$this->setSessions("loans_officer", true);
 						break;
 						
 						case 3: //Branch Manager 3

@@ -19,10 +19,12 @@
 								<label class="control-label" for="product_name">Loans</label>
 								<select id="loan_types" class="form-control">
 								<?php
-								if((isset($_SESSION['loans_officer'])&& $_SESSION['loans_officer'])||(isset($_SESSION['admin'])&& $_SESSION['admin'])):?>
+								if((isset($_SESSION['loans_officer'])&& $_SESSION['loans_officer'])||(isset($_SESSION['admin'])&& $_SESSION['admin'])){ ?>
 								   <option value="1" <?php echo (isset($_GET['status'])&&$_GET['status']==1)?'selected':'selected';?>>Partial Application</option>
-								   <option value="2" <?php echo (isset($_GET['status'])&&$_GET['status']==2)?'selected':'selected';?>>Complete Application</option>
-								   <?php endif;?>
+								   <option value="2" <?php echo (isset($_GET['status'])&&$_GET['status']==2)?'selected':'';?>>Complete Application</option>
+								   <?php 
+								}
+								?>
 									<option value="3" <?php echo (isset($_GET['status'])&&$_GET['status']==3)?'selected':'';?>>Pending</option>
 								    <option value="4" <?php echo (isset($_GET['status'])&&$_GET['status']==4)?'selected':'';?>>Approved</option>
 								    <option value="5" <?php echo isset($_GET['status'])?(($_GET['status']==5)?'selected':''):'';?>>Active</option>
