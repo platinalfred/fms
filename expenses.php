@@ -25,7 +25,7 @@ $member = new Member();
 					<h2>Expenses</h2>
 					<?php 
 					if(isset($_SESSION['admin']) || isset($_SESSION['accountant'])){ ?>
-					<div class="col-sm-12 col-lg-12 text-muted small pull-left" style="padding:10px;"><a data-toggle="modal" class="btn btn-primary" href="#add_expense"><i class="fa fa-plus"></i> Add Expense</a></div> <?php } ?>
+					<div class="col-sm-12 col-lg-12 text-muted small pull-left" style="padding:10px;"><a data-toggle="modal" class="btn btn-sm btn-primary" href="#add_expense"><i class="fa fa-plus"></i> Add Expense</a></div> <?php } ?>
 					<div class="clear:both;"></div>
 					
 					<table class="table table-striped table-hover" id="expenses">
@@ -107,7 +107,7 @@ $(document).ready(function(){
 					{ data: 'amountDescription'}, 
 					{ data: 'staff_names'} , 
 					{ data: 'expenseDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD MMM, YYYY');}} <?php if(isset($_SESSION['admin']) || isset($_SESSION['branch_manager'])){ ?>,
-					{ data: 'id',  render: function ( data, type, full, meta ) { return  '<a id="'+data+'-expenses-expense" data-toggle="modal" href="#add_expense" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a> <a class="btn btn-sm btn-danger delete_me" id='+data +'><i class="fa fa-trash"></i> </a>'; }} <?php } ?> 
+					{ data: 'id',  render: function ( data, type, full, meta ) { return  '<a id="'+data+'-expenses-expense" data-toggle="modal" href="#add_expense" class="btn  btn-info btn-sm edit_me"><i class="fa fa-edit"></i> Update </a> <a class="btn btn-sm btn-danger delete_me" id='+data +'><i class="fa fa-trash"></i> </a>'; }} <?php } ?> 
 					] ,
 				buttons: [
 				{

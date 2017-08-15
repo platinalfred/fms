@@ -338,8 +338,8 @@ if(!isset($_SESSION['Logged'])){
                             </a>
                         </li>
                     </ul>
-
                 </nav>
+				
             </div>
 			<div class="wrapper wrapper-content animated fadeInRight">
-            
+				
