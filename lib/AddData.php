@@ -353,7 +353,7 @@ if(isset($_POST['origin'])){
 										$output =  "Return Code: " . $_FILES['loanAccount']['error'][$key]['loanCollateral'][$lc_key]['attachmentUrl'] . "<br>";
 									}else{
 										$files_dir = "../img/loanAccounts/".$loanAccount['loanNo']."/collateral/";
-										$collateralItem['attachmentUrl'] = $files_dir.$_FILES['loanAccount']['name'][$key]['loanCollateral'][$lc_key]['attachmentUrl'];
+										$collateralItem['attachmentUrl'] = substr($files_dir,2).$_FILES['loanAccount']['name'][$key]['loanCollateral'][$lc_key]['attachmentUrl'];
 										//$images->load($_FILES['loanAccount']['tmp_name'][$key]['loanCollateral'][$lc_key]['attachmentUrl']);
 										//$images->resize(240, 120); 
 										//$images->output($_FILES['loanAccount']["type"][$key]['loanCollateral'][$lc_key]['attachmentUrl']);

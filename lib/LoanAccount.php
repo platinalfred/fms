@@ -33,9 +33,9 @@ class LoanAccount extends Db {
 	}
 	
 	public function findAllDetailsById($id){
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`productName`", "`requestedAmount`", "`applicationDate`", "`amountApproved`" , "`approvedBy`", "`approvalNotes`", "`approvalDate`", "`amountPaid`" , "`disbursedAmount`", "`disbursementDate`", "`disbursementNotes`", "`interestRate`", "`offSetPeriod`", "`gracePeriod`", "`loan_account`.`repaymentsFrequency`", "`loan_account`.`repaymentsMadeEvery`", "`installments`", "`loan_account`.`penaltyCalculationMethodId`", "`loan_account`.`penaltyTolerancePeriod`", "`loan_account`.`penaltyRateChargedPer`", "`penaltyRate`", "`loan_account`.`linkToDepositAccount`", "`comments`", "`loan_account`.`createdBy`", "`loan_account`.`dateCreated`");
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`productName`", "`loan_products`.`id` loanProductId", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`requestedAmount`", "`applicationDate`", "`amountApproved`" , "`approvedBy`", "`approvalNotes`", "`approvalDate`", "`amountPaid`" , "`disbursedAmount`", "`disbursementDate`", "`disbursementNotes`", "`interestRate`", "`offSetPeriod`", "`gracePeriod`", "`loan_account`.`repaymentsFrequency`", "`loan_account`.`repaymentsMadeEvery`", "`installments`", "`loan_account`.`penaltyCalculationMethodId`", "`loan_account`.`penaltyTolerancePeriod`", "`loan_account`.`penaltyRateChargedPer`", "`penaltyRate`", "`loan_account`.`linkToDepositAccount`", "`comments`", "`loan_account`.`createdBy`", "`loan_account`.`dateCreated`", " `requestedAmount`*(`interestRate`/100) `interest`" );
 		
-		$table = self::$table_name." JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN ". self::$loan_payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId`";
+		$table = self::$table_name." JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN ". self::$loan_payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId` LEFT JOIN (".self::$saccogroup_sql2.") `sacco_loan_acc_group` ON `sacco_loan_acc_group`.`id`=`groupLoanAccountId`";
 		
 		$result = $this->getfrec($table, implode(",",$fields), "`loan_account`.`id`=".$id, "", "");
 		return $result;

@@ -13,84 +13,84 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="ibox-content">
-                                <form id="loanAccountForm" class="form-horizontal wizard-big" enctype="multipart/form-data">
-                                    <input type='hidden' name="id" />
-                                    <input type='hidden' name="origin" value="loan_account" />
-                                    <h1>Loan Account <small>Account Information</small></h1>
-                                    <div class="row">
-                                        <fieldset>
-                                            <?php if(!isset($client)):?>
-                                                <div class="form-group">
-                                                    <div class="col-md-6">
-                                                        <label class="control-label">Client Type</label>
-                                                        <div data-bind="if: $root.edit_client()==0">
-                                                            <select class="form-control" name="clientType" data-bind='options: clientTypes, optionsText: "client_type", optionsCaption: "Select client type...", optionsAfterRender: $root.setOptionValue("type_id"), value: clientType' data-msg-required="Client type is required" required>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6" data-bind="with: clientType">
-                                                        <!--ko if:type_id==1-->
-                                                        <label class="control-label">Customer</label>
-                                                        <div data-bind="if: $root.edit_client()==0">
-														
-										
-                                                            <select data-placeholder="Select customer..." name="memberId" data-live-search="true" class="form-control chosen-select" data-bind='options: $root.clients, optionsText: "memberNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Client name is required" required>
-                                                            </select>
-                                                            <div data-bind="if: $root.edit_client()==1">
-                                                                <div data-bind='with: $root.client'><span data-bind="text: memberNames"></span></div>
-                                                            </div>
-                                                        </div>
-                                                        <!--/ko-->
-                                                        <!--ko if:type_id==2-->
-                                                        <label class="control-label">Member Groups</label>
-                                                        <select data-placeholder="Select group..." name="groupId" class="form-control chosen-select" data-bind='options: $root.groups, optionsText: "clientNames", optionsCaption: "Select group...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Please select a group" required>
-                                                        </select>
-                                                        <!--/ko-->
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-6" data-bind='with: $root.client'>
-                                                        <label class="control-label">Product</label>
-                                                        <div data-bind="if: $root.edit_client()==0">
-                                                            <select class="form-control" id="loanProductId" name="loanProductId" data-bind='options: $root.filteredLoanProducts, optionsText: "productName", optionsCaption: "Select product...", optionsAfterRender: $root.setOptionValue("id"), value: $root.loanProduct' data-msg-required="Loan product is required" required>
-                                                            </select>
-                                                            <span class="help-block m-b-none" data-bind="with: $root.loanProduct">
+                        </div>
+                        <div class="ibox-content">
+                            <form id="loanAccountForm" class="form-horizontal wizard-big" enctype="multipart/form-data">
+								<input type='hidden' name="id"/>
+								<input type='hidden' name="origin" value="loan_account"/>
+                                <h1>Loan Account <small>Account Information</small></h1>
+									<div class="row">
+										<fieldset>
+										<?php if(!isset($client)):?>
+										<div class="form-group">
+											<div class="col-md-6">
+												<label class="control-label">Client Type</label>
+												<div data-bind="if: $root.edit_client()==0">
+													<select class="form-control" name="clientType" data-bind='options: clientTypes, optionsText: "client_type", optionsCaption: "Select client type...", optionsAfterRender: $root.setOptionValue("type_id"), value: clientType' data-msg-required="Client type is required" required>
+													</select>
+												</div>
+											</div>
+											<div class="col-md-6" data-bind="with: clientType">
+												<!--ko if:type_id==1-->
+												<label class="control-label">Customer</label>
+												<div data-bind="if: $root.edit_client()==0">
+													<select data-placeholder="Select customer..." name="memberId" class="form-control chosen-select" data-bind='options: $root.clients, optionsText: "memberNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Client name is required" required>
+													</select>
+													<div data-bind="if: $root.edit_client()==1">
+														<div data-bind='with: $root.client'><span data-bind="text: memberNames"></span></div>
+													</div>
+												</div>
+												<!--/ko-->
+												<!--ko if:type_id==2-->
+												<label class="control-label">Member Groups</label>
+													<select data-placeholder="Select group..." name="groupId" class="form-control chosen-select" data-bind='options: $root.groups, optionsText: "clientNames", optionsCaption: "Select group...", optionsAfterRender: $root.setOptionValue("groupId"), value: $root.client' data-msg-required="Please select a group" required>
+													</select>
+												<!--/ko-->
+											</div>
+										</div>	
+										<?php else:?>
+										<input type="hidden"  name="clientType" value="<?php echo $client['clientType'];?>"/>
+										<?php endif;?>
+										<div class="form-group">
+											<div class="col-md-6" data-bind='with: $root.client'>
+												<label class="control-label">Product</label>
+												<div data-bind="if: $root.edit_client()==0">
+												<select class="form-control" id="loanProductId" name="loanProductId" data-bind='options: $root.filteredLoanProducts, optionsText: "productName", optionsCaption: "Select product...", optionsAfterRender: $root.setOptionValue("id"), value: $root.loanProduct' data-msg-required="Loan product is required" required>
+												</select>
+												<span class="help-block m-b-none" data-bind="with: $root.loanProduct">
 												<small data-bind="text: description">Product description goes here.</small>
 												</span>
-                                                        </div>
-                                                        <div data-bind="if: $root.edit_client()==1">
-                                                            <div data-bind='with: $root.loanProduct'><span data-bind="text: productName"></span>
-                                                                <span class="help-block m-b-none"><small data-bind="text: '('+description+')'"></small></span></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4" data-bind="with: $root.loanProduct">
-                                                        <label class="control-label">Application Date</label>
-                                                        <div class="input-group date" data-provide="datepicker" data-date-format="dd-mm-yyyy" data-date-end-date="<?php echo date('d-m-Y');?>">
-                                                            <input type="text" class="form-control" name="applicationDate" data-bind="attr:{value:$parent.applicationDate}" required>
-                                                            <div class="input-group-addon">
-                                                                <span class="fa fa-calendar"></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group" data-bind='with: loanProduct'>
-                                                    <div class="col-lg-12">
-                                                        <h3>Please fill in the loan application details for the client<span data-bind="text: ($root.filteredGroupMembers().length>1)?'s':''"></span> below</h3>
-                                                    </div>
-                                                </div>
-                                        </fieldset>
-                                        <?php endif;?>
-
-                                            <!--ko with:clientType-->
-                                            <!--ko if:typeof($root.client())!='undefined'-->
-                                            <div class="hr-line-dashed"></div>
-                                            <div data-bind='foreach: $root.filteredGroupMembers'>
-                                                <div class="ibox float-e-margins">
-                                                    <div class="ibox-title">
-                                                        <h5 data-bind='text: memberNames'>member</h5>
-                                                        <div class="ibox-tools">
-                                                            <a class="collapse-link">
+												</div>
+												<div data-bind="if: $root.edit_client()==1">
+													<div data-bind='with: $root.loanProduct'><span data-bind="text: productName"></span>
+													<span class="help-block m-b-none"><small data-bind="text: '('+description+')'"></small></span></div>
+												</div>
+											</div>
+											<div class="col-md-4" data-bind="with: $root.loanProduct">
+												<label class="control-label">Application Date</label>
+												<div class="input-group date" data-provide="datepicker"data-date-format="dd-mm-yyyy" data-date-end-date="<?php echo date('d-m-Y');?>">
+													<input type="text" class="form-control" name="applicationDate"data-bind="attr:{value:$parent.applicationDate}"  required>
+													<div class="input-group-addon">
+														<span class="fa fa-calendar"></span>
+													</div>
+												</div>
+											</div>
+										</div>			
+										<div class="form-group" data-bind='with: loanProduct'>
+											<div class="col-lg-12">
+											<h3>Please fill in the loan application details for the client<span data-bind="text: ($root.filteredGroupMembers().length>1)?'s':''"></span> below</h3>
+											</div>
+										</div>			
+										</fieldset>
+<!--ko with:clientType-->
+<!--ko if:(typeof($root.client())!='undefined'&&typeof($root.loanProduct())!='undefined')-->
+<div class="hr-line-dashed"></div>
+<div data-bind='foreach: $root.filteredGroupMembers'>
+	<div class="ibox float-e-margins">
+		<div class="ibox-title">
+			<h5 data-bind='text: memberNames'>member</h5>
+			<div class="ibox-tools">
+				<a class="collapse-link">
 					<i data-bind="css:{'fa':1,'fa-chevron-down':$index()>0,'fa-chevron-up':$index()==0}"></i>
 				</a>
                                                             <input type='hidden' data-bind="value:((typeof(memberId)!='undefined')?memberId:id), attr:{'name':'loanAccount['+$index()+'][memberId]'}" />

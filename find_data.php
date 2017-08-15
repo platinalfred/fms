@@ -20,7 +20,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
 	$columns = array( "income_sources.name as income_source", "amount","income.description", "dateAdded");
 }
 if ( isset($_POST['page']) && $_POST['page'] == "view_groups" ) {
-	$where = "active=1";	
+	//$where = "active=1";	
 	//members, person, person relative, person employment, account,
 	$table = "saccogroup"; 
 	$primary_key = "`saccogroup`.`id`";

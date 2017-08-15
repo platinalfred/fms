@@ -18,7 +18,7 @@ class SaccoGroup extends Db {
 	
 	//select the list of groups for display on the form select
 	public function findSelectList(){
-		$fields = "`id`, `groupName` `clientNames`, 2 as `clientType`";
+		$fields = "`id` `groupId`, `groupName` `clientNames`, 2 as `clientType`";
 		$result_array = $this->getfarray(self::$table_name, $fields, "", "", "");
 		return $result_array;
 	}

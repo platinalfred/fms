@@ -29,13 +29,13 @@ $shares = new Shares();
 $person = new Person();
 global $client;
 $client  = array();
-$member_data  = $member->findMemberDetails($_GET['id']);
+$member_data  = $member->findMemberDetails($_GET['memberId']);
 $page_title = $names =  $member_data['lastname']." ".$member_data['firstname']." ".$member_data['othername']; 
 include("include/header.php");
 $data['relatives'] = $person->findPersonRelatives($member_data['id']);
 $client['clientType'] = 1;
-$client['clientNames'] = $names;
-$client['id'] = $_GET['id'];
+$client['memberNames'] = $names;
+$client['memberId'] = $_GET['memberId'];
 if(!$member_data){
 	
 	echo "<p>No member details found</p>";
@@ -64,7 +64,7 @@ p{
 					if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>
 						<div class="ibox-tools">
 							<a  data-toggle="modal" href="#update_member" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Edit </a>
-							<a id="<?php echo $_GET['id']; ?>" class="btn btn-danger btn-sm delete_member" style="color:#fff;"><i class="fa fa-trash"></i> Delete</a>
+							<a id="<?php echo $_GET['memberId']; ?>" class="btn btn-danger btn-sm delete_member" style="color:#fff;"><i class="fa fa-trash"></i> Delete</a>
 						</div>
 					<?php 
 					}
@@ -239,16 +239,16 @@ p{
 					<div class="clearboth"></div>
 					<div class="col-md-12 col-sm-12 col-xs-12 " style="border-top:1px solid #09A; padding-top:10px;">
 						<p>
-							<a  href="?id=<?php echo  $_GET['id']; ?>&view=loan_accs" class="btn btn-sm btn-info" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Loan Accounts</a>
-							<a  href="?id=<?php echo  $_GET['id']; ?>&view=savings_accs" class="btn btn-info btn-sm"> <i class="fa fa-dollar"></i> Saving Accounts</a>
-							<a  href="?id=<?php echo  $_GET['id']; ?>&view=mysubscriptions" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Subscriptions</a>
+							<a  href="?memberId=<?php echo  $_GET['memberId']; ?>&view=loan_accs" class="btn btn-sm btn-info" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Loan Accounts</a>
+							<a  href="?memberId=<?php echo  $_GET['memberId']; ?>&view=savings_accs" class="btn btn-info btn-sm"> <i class="fa fa-dollar"></i> Saving Accounts</a>
+							<a  href="?memberId=<?php echo  $_GET['memberId']; ?>&view=mysubscriptions" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Subscriptions</a>
 							<?php 
 							if($member_data['memberType'] == 1){ ?>
-								<a  href="?id=<?php echo  $_GET['id']; ?>&view=myshares" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Shares</a>
+								<a  href="?memberId=<?php echo  $_GET['memberId']; ?>&view=myshares" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Shares</a>
 								<?php
 							}
 							?>
-							<a  href="?id=<?php echo  $_GET['id']; ?>&view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-calculator"></i> Ledger</a>
+							<a  href="?memberId=<?php echo  $_GET['memberId']; ?>&view=ledger" class="btn btn-info btn-sm"> <i class="fa fa-calculator"></i> Ledger</a>
                         </p>
 					</div>
 					<div class="clearboth"></div>
