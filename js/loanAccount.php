@@ -379,8 +379,8 @@
 				url: "lib/AddData.php",
 				success: function(response){
 					var result = parseInt(response)||0;
-					if(result){/*  */
-						showStatusMessage("Data successfully saved" ,"success");
+					if(result){
+						showStatusMessage("Success :)" ,"success");
 						setTimeout(function(){
 							$("#loanAccountApprovalForm")[0].reset();
 							$('#approve_loan-modal').modal('hide');
@@ -823,24 +823,22 @@
 	 function handleDateRangePicker(start_date, end_date){
 		 startDate = start_date;
 		 endDate = end_date;
-		switch(parseInt($('#loan_types').val())){
-			case 1: //applications pending approval
-				dTable['applications'].ajax.reload();
-				$(".table#applications tbody>tr:first").trigger('click');
-			break;
-			case 2: //rejected applications
-				dTable['rejected'].ajax.reload();
+		 var loan_status = parseInt($('#loan_types').val());
+		if(loan_type==1||loan_type==2||loan_type==11||loan_type==12){//applications pending approval
+			dTable['applications'].ajax.reload();
+			$(".table#applications tbody>tr:first").trigger('click');
+		}
+		if(loan_status == 16){//rejected applications
+			dTable['rejected'].ajax.reload();
 				$(".table#rejected tbody>tr:first").trigger('click');
-			break;
-			case 3: //approved applications
+		}
+		if(loan_status == 3){//approved applications
 				dTable['approved'].ajax.reload();
 				$(".table#approved tbody>tr:first").trigger('click');
-			break;
-			case 4: //disbursed loans
+		}
+		if(loan_type==4||loan_type==5||loan_type==13||loan_type==14||loan_type==15){ //disbursed loans
 				dTable['disbursed'].ajax.reload();
 				$(".table#disbursed tbody>tr:first").trigger('click');
-			break;
-			default:
 		}
 	 }
 </script>
