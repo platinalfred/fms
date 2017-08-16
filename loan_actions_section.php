@@ -6,7 +6,7 @@
 <!-- /ko -->
 <?php }
 	if(isset($_SESSION['loans_officer'])||isset($_SESSION['admin'])){ ?>
-	<!-- ko if: (status<3||status==11)-->
+	<!-- ko if: (status==1||status==11)-->
 		<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Update</a>
 	<!-- /ko -->
 <?php }
