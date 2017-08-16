@@ -1,4 +1,4 @@
-<!-- ko if: status<3 -->
+<!-- ko if: status<4 -->
 	<a class="btn btn-warning btn-sm" href='#approve_loan-modal' data-toggle="modal"><i class="fa fa-list"></i> Account Details</a>
 <!-- /ko -->
 <?php 
