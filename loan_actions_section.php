@@ -1,3 +1,4 @@
+
 <!-- If its a loans officer show the forward to branch manager if the status is 2 -->
 <?php 
 	if(isset($_SESSION['branch_credit'])||isset($_SESSION['management_credit'])||isset($_SESSION['executive_board'])||isset($_SESSION['branch_manager'])||isset($_SESSION['loans_officer'])||isset($_SESSION['admin'])){ ?>

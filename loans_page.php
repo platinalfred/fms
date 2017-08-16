@@ -5,8 +5,8 @@
 					<h5>Loan Accounts <small>loans list</small></h5>
 					<?php 
 					if(isset($_SESSION['loans_officer']) || isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>
-						 <div class="pull-right"><a href="#add_loan_account-modal" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i> New Loan Application</a>
-					
+						 <div class="pull-right">
+							<a href="#add_loan_account-modal" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i> New Loan Application</a>
 						</div>
 						<?php
 					}
