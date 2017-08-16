@@ -520,8 +520,8 @@
 					  $("#tab-1").addClass("active");
 					  $(".table#applications tbody>tr:first").trigger('click');
 				  },
-				  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
-					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?memberId='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }
+				  columns:[ { data: 'id', render: function ( data, type, full, meta ) {
+					  return '<?php if(isset($_SESSION['loans_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?memberId='+full.memberId+'&view=loan_accs&loanId='+data+'" title="View details">L'+data+'</a> <?php } ?>'; }
 					  },
 						{ data: 'clientNames'},
 						<?php if(!isset($_GET['groupId'])):?>{ data: 'groupName', render: function( data, type, full, meta ){return data?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs" title="View details">'+data+'</a>'):'';}},<?php endif;?>
@@ -583,8 +583,8 @@
 					  $("#tab-2").addClass("active");
 						$(".table#rejected tbody>tr:first").trigger('click');
 				  },
-				  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
-					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?memberId='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }
+				  columns:[ { data: 'id', render: function ( data, type, full, meta ) {
+					  return '<?php if(isset($_SESSION['loans_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?memberId='+full.memberId+'&view=loan_accs&loanId='+data+'" title="View details">L'+data+'</a> <?php } ?>'; }
 					  },
 						{ data: 'clientNames'},
 						<?php if(!isset($_GET['groupId'])):?>{ data: 'groupName', render: function( data, type, full, meta ){return data?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs" title="View details">'+data+'</a>'):'';}},<?php endif;?>
@@ -647,16 +647,15 @@
 					  $("#tab-3").addClass("active");
 						$(".table#approved tbody>tr:first").trigger('click');
 				  },
-				  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
-					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?memberId='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }
+				  columns:[ { data: 'id', render: function ( data, type, full, meta ) {
+					  return '<?php if(isset($_SESSION['loans_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?memberId='+full.memberId+'&view=loan_accs&loanId='+data+'" title="View details">L'+data+'</a> <?php } ?>'; }
 					  },
 						{ data: 'clientNames'},
 						<?php if(!isset($_GET['groupId'])):?>{ data: 'groupName', render: function( data, type, full, meta ){return data?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs" title="View details">'+data+'</a>'):'';}},<?php endif;?>
 						<?php if(!isset($_GET['grpLId'])):?>{ data: 'groupLoanAccountId', render: function( data, type, full, meta ){return (data&&data!=0)?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs&grpLId='+full.groupLoanAccountId+'" title="View details"> Ref#'+data+'</a>'):'';}},<?php endif;?>
 						{ data: 'productName'},
-						{ data: 'productName'},
 						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
-						{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.repaymentsFrequency)) + ' ' + getDescription(4,data);}},
+						{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(data)) + ' ' + getDescription(4,data);}},
 						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
 						{ data: 'amountApproved', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
 						] ,
@@ -682,7 +681,7 @@
 					  className: "btn-sm"
 					},
 				  ],
-				  responsive: true/*, */
+				  responsive: false/*, */
 				  
 				});
 			}
@@ -726,8 +725,8 @@
 						var total = api.column(val).data().sum();
 						$(api.column(val).footer()).html( curr_format(Math.round(total)) );
 					});
-				  },columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
-					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?><a href="member_details.php?id='+full.memberId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>';}},
+				  },columns:[ { data: 'id', render: function ( data, type, full, meta ) {
+				  return '<?php if(isset($_SESSION['loans_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?memberId='+full.memberId+'&view=loan_accs&loanId='+data+'" title="View details">L'+data+'</a> <?php } ?>'; }},
 						{ data: 'clientNames'},
 						{ data: 'groupName', render: function( data, type, full, meta ){return full.groupId?('<a href="group_details.php?id='+full.groupId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>'):'';}},
 						{ data: 'productName'},

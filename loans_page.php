@@ -113,10 +113,12 @@
 									<table id="approved" class="table table-striped table-bordered dt-responsive nowrap">
 										<thead>
 											<tr>
-												<?php 
-												$header_keys = array("Loan No", "Client", "Group", "Loan Product","Appn Date", "Duration", "Requested Amount", "Amount Approved");
-												foreach($header_keys as $key){ ?>
-													<th><?php echo $key; ?></th>
+												<?php
+												$array_len = count($header_keys);
+												$header_keys[$array_len-1] = "Payments Freq";
+												$header_keys[$array_len] = "Amount Approved";
+												foreach($header_keys as $key=>$value){ ?>
+													<th><?php echo $value; ?></th>
 													<?php
 												}
 												?>
@@ -126,9 +128,9 @@
 										</tbody>
 										<tfoot>
 											<tr>
-												<th colspan="6">Total (UGX)</th>
-												<th>&nbsp;</th>
-												<th>&nbsp;</th>
+												<?php foreach($header_keys as $key=>$value){ ?>
+												<th><?php echo ($key==0?("Total (UGX)"):""); ?></th>
+												<?php } ?>
 											</tr>
 										</tfoot>
 									</table>

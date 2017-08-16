@@ -143,7 +143,7 @@ class LoanAccount extends Db {
 		
 		$loan_account_penalties_sql = "SELECT `id` `ref`,2 `transactionType`, `amount`,CONCAT(`daysDelayed`, ' days (delay)' )`desc`,`dateCreated` `transactionDate` FROM `loan_account_penalty` WHERE `loanAccountId`=".$loanAccountId;
 		
-		$loan_account_sql = "SELECT `id` `ref`,1 `transactionType`, `disbursedAmount` `amount`,'Disbursed amount' `desc`,`disbursementDate` `transactionDate` FROM `loan_account` WHERE `id`=".$loanAccountId;
+		$loan_account_sql = "SELECT `id` `ref`,1 `transactionType`, `disbursedAmount` `amount`,'Disbursed amount' `desc`,`disbursementDate` `transactionDate` FROM `loan_account` WHERE (`disbursementDate` IS NOT NULL OR `disbursementDate` >0) AND `id`=".$loanAccountId;
 		
 		$account_statement_sql = $loan_repayments." UNION ".$account_fees_sql." UNION ".$loan_account_penalties_sql." UNION ".$loan_account_sql. " ORDER BY `transactionDate`";
 		

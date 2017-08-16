@@ -46,7 +46,7 @@ function sumUpAmount(items, transactionType){
 	var total = 0;
 	if(items){
 		$.map(items, function(item){
-			total += (parseInt(item['transactionType']) == transactionType)?parseInt(item['amount']):0;
+			total += (parseInt(item['transactionType']) == transactionType)?(item['amount']?parseInt(item['amount']):0):0;
 		});
 	}
 	

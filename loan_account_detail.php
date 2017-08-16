@@ -25,7 +25,7 @@
 								</div>
 							</div>
 						</div>
-						<!-- ko if: status>1-->
+						<!-- ko if: status>2-->
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h4 class="panel-title">
@@ -46,7 +46,7 @@
 							</div>
 						</div>
 						<!-- /ko -->
-						<!-- ko if: status>3-->
+						<!-- ko if: status>4-->
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h4 class="panel-title">
@@ -75,9 +75,9 @@
 							<div id="collapseFour" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
 								<table class="table table-bordered">
 									<tbody>
-										<tr> <th>Penalty Rate</th> <td data-bind="text: penaltyRate +'%'"></td> </tr>
+										<tr> <th>Penalty Rate</th> <td data-bind="text: penaltyRate?(penaltyRate +'%'):0"></td> </tr>
 										<tr> <th>Linked to Deposit Account</th> <td data-bind="text: (linkToDepositAccount==1)?'Yes':'No'"></td> </tr>
-										<tr> <th>Penalty Tolerance Period</th> <td data-bind="text: penaltyTolerancePeriod + ' days'"></td> </tr>
+										<tr> <th>Penalty Tolerance Period</th> <td data-bind="text: penaltyTolerancePeriod?(penaltyTolerancePeriod) + ' days':0"></td> </tr>
 										<tr> <th>Penalty Rate Charged Per</th> <td data-bind="text: penaltyRateChargedPer"></td> </tr>
 									</tbody>
 								</table>
@@ -110,8 +110,8 @@
 										<td data-bind="text: ref"> </td>
 										<td data-bind="text: moment(transactionDate, 'X').format('DD, MMM YYYY')"> </td>
 										<td data-bind="text: desc"> </td>
-										<td data-bind="text: transactionType==1?curr_format(parseInt(amount)):'-'"> </td>
-										<td data-bind="text: transactionType==2?curr_format(parseInt(amount)):'-'"></td>
+										<td data-bind="text: transactionType==1?(amount?curr_format(parseInt(amount)):0):'-'"> </td>
+										<td data-bind="text: transactionType==2?(amount?curr_format(parseInt(amount)):0):'-'"></td>
 									</tr>
 								</tbody>
 								<tfoot>
