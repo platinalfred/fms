@@ -120,7 +120,7 @@ $member = new Member();
 										</div>
 									</div>
 								<!-- /ko -->
-								<!--ko if: $root.member_employers2().length>0 -->
+								<!--ko if: $root.member_employers2().length > 0  -->
 									<h4>Employment History</h4>
 									
 									<div class="row" >

@@ -18,3 +18,8 @@
     color: red;
     font-size: 16px;
 }
+.bordered{
+	border: 1px dashed #dfe8f1;
+    margin: 5px;
+	padding:8px;
+}

@@ -185,15 +185,15 @@
 						<div class="full-height-scroll">
 							<ul class="list-group clear-list">
 								<li class="list-group-item fist-item">
-									<span class="pull-right" data-bind="text: clientNames"> Matovu Gideon </span>
+									<span class="pull-right" data-bind="text: clientNames"> Names </span>
 									<strong>Client</strong>
 								</li>
 								<li class="list-group-item">
-									<span class="pull-right" data-bind="text: loanNo"> 0439374938 </span>
+									<span class="pull-right" data-bind="text: loanNo"> Account No </span>
 									<strong>Account No.</strong>
 								</li>
 								<li class="list-group-item">
-									<span class="pull-right" data-bind="text: productName"> Development </span>
+									<span class="pull-right" data-bind="text: productName"> Loan Product </span>
 									<strong>Loan Product</strong>
 								</li>
 								<li class="list-group-item">

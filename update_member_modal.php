@@ -46,7 +46,8 @@ function addCommas(nStr){
 							<input type="hidden" name="tbl" value="update_member">
 							<input type="hidden" name="id" value="<?php echo $member_data["id"]; ?>">
 							<input type="hidden" name="personId" value="<?php echo $member_data["personId"]; ?>">
-							<h1>Demographic Information</h1>
+							<div class="bordered">
+							<h3>Demographic Information</h3>
 							<fieldset>
 								<div class="row">
 									<div class="col-lg-6">
@@ -141,448 +142,459 @@ function addCommas(nStr){
 								</div>
 
 							</fieldset>
-							<h1>Identification  Information</h1>
-							<fieldset>
-								<div class="row">
-									<div class="col-lg-6">
-										<div class="item form-group">
-											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding" for="id_type">ID Type <span class="required">*</span>
-											</label>
-											<div class="col-md-9 col-sm-9 col-xs-12">
-												<select class="form-control m-b" name="id_type" required >
-													<option>Please select</option>
-													<?php 
-													$idcardtype = new IdCardType();
-													$all_id_cardtype = $idcardtype->findAll();
-													if($all_id_cardtype){
-														foreach($all_id_cardtype as $single){ ?>
-															<option <?php if($member_data['id_type'] == $single['id']){ echo "selected"; } ?> value="<?php echo $single['id']; ?>" ><?php echo $single['id_type']; ?></option>
-															<?php
+							</div>
+							<div class="bordered">
+								<h3>Identification  Information</h3>
+								<fieldset>
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="item form-group">
+												<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding" for="id_type">ID Type <span class="required">*</span>
+												</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<select class="form-control m-b" name="id_type" required >
+														<option>Please select</option>
+														<?php 
+														$idcardtype = new IdCardType();
+														$all_id_cardtype = $idcardtype->findAll();
+														if($all_id_cardtype){
+															foreach($all_id_cardtype as $single){ ?>
+																<option <?php if($member_data['id_type'] == $single['id']){ echo "selected"; } ?> value="<?php echo $single['id']; ?>" ><?php echo $single['id_type']; ?></option>
+																<?php
+															}
 														}
-													}
-													?>
-												</select>
+														?>
+													</select>
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Id Number <span class="req">*</span></label>
-											<div class="col-md-9 col-sm-9 col-xs-12">
-												<input name="id_number" type="text" value="<?php echo $member_data['id_number']; ?>" class="form-control" required>
+										<div class="col-lg-6">
+											<div class="form-group">
+												<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Id Number <span class="req">*</span></label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="id_number" type="text" value="<?php echo $member_data['id_number']; ?>" class="form-control" required>
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-lg-12">
-										<div class="form-group">
-											<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Attach Id specimen <span class="required">*</span></label>
-											<div class="col-md-9 col-sm-9 col-xs-12"><span><?php if($member_data['id_specimen'] != ""){?> <img src="<?php echo $member_data['id_specimen']; ?>" style="width:30%;"> <input type="hidden" name="existing_specimen" value="<?php echo $member_data['id_specimen']; ?>" > <?php } ?> </span>
-												<input name="id_specimen" type="file" class="form-control" >
+										<div class="col-lg-12">
+											<div class="form-group">
+												<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Attach Id specimen <span class="required">*</span></label>
+												<div class="col-md-9 col-sm-9 col-xs-12"><span><?php if($member_data['id_specimen'] != ""){?> <img src="<?php echo $member_data['id_specimen']; ?>" style="width:30%;"> <input type="hidden" name="existing_specimen" value="<?php echo $member_data['id_specimen']; ?>" > <?php } ?> </span>
+													<input name="id_specimen" type="file" class="form-control" >
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-lg-12">&nbsp;</div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label>Credit Reference Bureau Card Number (CRB )</label>
-											<input  name="CRB_card_no" value="<?php echo $member_data['CRB_card_no']; ?>" type="text" class="form-control ">
+										<div class="col-lg-12">&nbsp;</div>
+										<div class="col-lg-6">
+											<div class="form-group">
+												<label>Credit Reference Bureau Card Number (CRB )</label>
+												<input  name="CRB_card_no" value="<?php echo $member_data['CRB_card_no']; ?>" type="text" class="form-control ">
+											</div>
+										</div>
+										<div class="col-lg-12">&nbsp;</div>
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label >Email </label>
+												<input id="email" name="email" value="<?php echo $member_data['email']; ?>" type="email" class="form-control ">
+												
+											</div>
+										</div>
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label>Telephone <span class="req">*</span></label>
+												<input id="phone" value="<?php echo $member_data['phone']; ?>" type="text" class="form-control" data-mask="(999) 999-9999" placeholder="" name="phone" required ><span class="help-block">(073) 000-0000</span>
+											</div>
+										</div>
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label>Physical Address <span class="req">*</span></label>
+												<input id="physical_address" value="<?php echo $member_data['physical_address']; ?>" name="physical_address" type="text" class="form-control" required>
+											</div>
+										</div>
+										<div class="clearboth"></div>
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label>Postal Address</label>
+												<input id="postal_address" value="<?php echo $member_data['postal_address']; ?>" name="postal_address" type="text" class="form-control ">
+											</div>
+										</div>
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label>District </label>
+												<input id="" name="district" value="<?php echo $member_data['district']; ?>" type="text" class="form-control">
+											</div>
+										</div>
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label>County </label>
+												<input id="" name="county" value="<?php echo $member_data['county']; ?>" type="text" class="form-control">
+											</div>
+										</div>
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label>Sub County </label>
+												<input id="" name="subcounty" value="<?php echo $member_data['subcounty']; ?>" type="text" class="form-control">
+											</div>
+										</div>
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label>Parish </label>
+												<input id="" name="parish" value="<?php echo $member_data['parish']; ?>" type="text" class="form-control">
+											</div>
+										</div>
+										<div class="col-lg-4">
+											<label class="control-label">Village</label>
+											<input id="" name="village" value="<?php echo $member_data['village']; ?>" type="text" class="form-control">
 										</div>
 									</div>
-									<div class="col-lg-12">&nbsp;</div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label >Email </label>
-											<input id="email" name="email" value="<?php echo $member_data['email']; ?>" type="email" class="form-control ">
+								</fieldset>
+							</div>
+							<div class="bordered">
+								<h3>Business</h3>
+								<fieldset>
+									<div class="row" data-bind="foreach: $root.member_business2">
+										<div class="col-md-12"><h3 data-bind="text:'business '+($index()+1)"></h3></div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Name of Business</label>
+												<input   data-bind="attr: {name:'business['+$index()+'][businessName]', value: businessName}"  type="text" class="form-control">
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Business Type</label>
+												<input   data-bind="attr: {name:'business['+$index()+'][natureOfBusiness]', value: natureOfBusiness}"  type="text" class="form-control">
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Business Location</label>
+												<input data-bind="attr: {name:'business['+$index()+'][businessLocation]',value: businessLocation}" type="text" class="form-control ">
+											</div>
+										</div>
+										<div class="col-lg-2">
+											<div class="form-group">
+												<label>Number Of Employees</label>
+												<input data-bind="attr: {name:'business['+$index()+'][numberOfEmployees]', value:numberOfEmployees}"  type="text" class="form-control athousand_separator">
+											</div>
+										</div>
+										<div class="col-lg-2">
+											<div class="form-group">
+												<label>Business Worth</label>
+												<input data-bind="attr: {name:'business['+$index()+'][businessWorth]', value:businessWorth}"  type="text" class="form-control athousand_separator">
+											</div>
+										</div>
+										<div class="col-lg-2">
+											<div class="form-group">
+												<label>URSB Number</label>
+												<input data-bind="attr: {name:'business['+$index()+'][ursbNumber]', value:ursbNumber}"  type="text" class="form-control athousand_separator">
+											</div>
+										</div>
+										<div class="col-lg-1"><span title="Remove Business" class="btn text-danger btn-lg" data-bind='click: $root.removeBusiness'><i class="fa fa-minus"></i></span></div>
+										<div class="clearboth"></div>
+									</div>
+									<div class="row" data-bind="foreach: $root.member_business">
+										<div class="col-lg-12"><h3 data-bind="text:'Business '+($index()+$root.member_business2().length+1)"></h3></div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Name of Business</label>
+												<input   data-bind="attr: {name:'business['+($index()+$root.member_business2().length+1)'][businessName]'}"  type="text" class="form-control">
+											</div>
 											
 										</div>
-									</div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label>Telephone <span class="req">*</span></label>
-											<input id="phone" value="<?php echo $member_data['phone']; ?>" type="text" class="form-control" data-mask="(999) 999-9999" placeholder="" name="phone" required ><span class="help-block">(073) 000-0000</span>
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Physical Address <span class="req">*</span></label>
-											<input id="physical_address" value="<?php echo $member_data['physical_address']; ?>" name="physical_address" type="text" class="form-control" required>
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Postal Address</label>
-											<input id="postal_address" value="<?php echo $member_data['postal_address']; ?>" name="postal_address" type="text" class="form-control ">
-										</div>
-									</div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label>District </label>
-											<input id="" name="district" value="<?php echo $member_data['district']; ?>" type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label>County </label>
-											<input id="" name="county" value="<?php echo $member_data['county']; ?>" type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label>Sub County </label>
-											<input id="" name="subcounty" value="<?php echo $member_data['subcounty']; ?>" type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label>Parish </label>
-											<input id="" name="parish" value="<?php echo $member_data['parish']; ?>" type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-lg-6">
-										<label class="control-label">Village</label>
-										<input id="" name="village" value="<?php echo $member_data['village']; ?>" type="text" class="form-control">
-									</div>
-								</div>
-							</fieldset>
-							
-							<h1>Business</h1>
-							<fieldset>
-								<div class="row" data-bind="foreach: $root.member_business2">
-									<h3 data-bind="text:'business '+($index()+1)"></h3>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Name of Business</label>
-											<input   data-bind="attr: {name:'business['+$index()+'][businessName]', value: businessName}"  type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Business Type</label>
-											<input   data-bind="attr: {name:'business['+$index()+'][natureOfBusiness]', value: natureOfBusiness}"  type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Business Location</label>
-											<input data-bind="attr: {name:'business['+$index()+'][businessLocation]',value: businessLocation}" type="text" class="form-control ">
-										</div>
-									</div>
-									<div class="col-lg-2">
-										<div class="form-group">
-											<label>Number Of Employees</label>
-											<input data-bind="attr: {name:'business['+$index()+'][numberOfEmployees]', value:numberOfEmployees}"  type="text" class="form-control athousand_separator">
-										</div>
-									</div>
-									<div class="col-lg-2">
-										<div class="form-group">
-											<label>Business Worth</label>
-											<input data-bind="attr: {name:'business['+$index()+'][businessWorth]', value:businessWorth}"  type="text" class="form-control athousand_separator">
-										</div>
-									</div>
-									<div class="col-lg-2">
-										<div class="form-group">
-											<label>URSB Number</label>
-											<input data-bind="attr: {name:'business['+$index()+'][ursbNumber]', value:ursbNumber}"  type="text" class="form-control athousand_separator">
-										</div>
-									</div>
-									<div class="col-lg-1"><span title="Remove employer" class="btn text-danger btn-lg" data-bind='click: $root.removeEmployment'><i class="fa fa-minus"></i></span></div>
-									<div class="clearboth"></div>
-								</div>
-								<div class="row" data-bind="foreach: $root.member_business">
-									<h3 data-bind="text:'Employer '+($index()+$root.member_business2().length+1)"></h3>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Name of Business</label>
-											<input   data-bind="attr: {name:'business['+($index()+$root.member_business2().length+1)'][businessName]'}"  type="text" class="form-control">
-										</div>
-										
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Business Location</label>
-											<input data-bind="attr: {name:'business['+($index()+$root.member_business2().length+1)+'][businessLocation]',value: businessLocation}" type="text" class="form-control ">
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Number Of Employees</label>
-											<input data-bind="attr: {name:'business['+($index()+$root.member_business2().length+1)+'][numberOfEmployees]', value:numberOfEmployees}"  type="text" class="form-control athousand_separator">
-										</div>
-									</div>
-									<div class="col-lg-2">
-										<div class="form-group">
-											<label>Business Worth</label>
-											<input data-bind="attr: {name:'business['+($index()+$root.member_business2().length+1)+'][businessWorth]', value:businessWorth}"  type="text" class="form-control athousand_separator">
-										</div>
-									</div>
-									<div class="col-lg-2">
-										<div class="form-group">
-											<label>URSB Number</label>
-											<input data-bind="attr: {name:'business['+($index()+$root.member_business2().length+1)+'][ursbNumber]', value:ursbNumber}"  type="text" class="form-control athousand_separator">
-										</div>
-									</div>
-									<div class="col-lg-1"><span title="Remove employer" class="btn text-danger btn-lg" data-bind='click: $root.removeBusiness'><i class="fa fa-minus"></i></span></div>
-									<div class="clearboth"></div>
-								</div>
-								<div class="row">
-									<div class="clearboth"></div>
-									<div class="col-lg-12">
-										 <div class="form-group">
-											<span class="btn btn-info btn-sm pull-right" data-bind='click: addBusinnes'><i class="fa fa-plus"></i> Add more</span>
-										</div>
-									</div>
-								</div>
-							</fieldset>
-							<h1>Employment</h1>
-							<fieldset>
-								<div class="row" data-bind="foreach: $root.member_employment2">
-									<h3 data-bind="text:'Employer '+($index()+1)"></h3>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Name of Employer</label>
-											<input   data-bind="attr: {name:'employment['+$index()+'][employer]', value: employer}"  type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Number of years with Employer</label>
-											<input  data-bind="attr: {name:'employment['+$index()+'][years_of_employment]', value: years_of_employment}"  type="number" class="form-control ">
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Nature of employment</label>
-											<input data-bind="attr: {name:'employment['+$index()+'][nature_of_employment]',value: nature_of_employment}" type="text" class="form-control ">
-										</div>
-									</div>
-									<div class="col-lg-2">
-										<div class="form-group">
-											<label>Monthly Salary</label>
-											<input data-bind="attr: {name:'employment['+$index()+'][monthlySalary]', value:monthlySalary}"  type="text" class="form-control athousand_separator">
-										</div>
-									</div>
-									<div class="col-lg-1"><span title="Remove employer" class="btn text-danger btn-lg" data-bind='click: $root.removeEmployment'><i class="fa fa-minus"></i></span></div>
-									<div class="clearboth"></div>
-								</div>
-								<div class="row" data-bind="foreach: $root.member_employment">
-									<h3 data-bind="text:'Employer '+($index()+$root.member_employment2().length+1)"></h3>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Name of Employer</label>
-											<input   data-bind="attr: {name:'employment['+($index()+$root.member_employment2().length+1)+'][employer]'}"  type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Number of years with Employer</label>
-											<input  data-bind="attr: {name:'employment['+($index()+$root.member_employment2().length+1)+'][years_of_employment]'}"  type="number" class="form-control ">
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Nature of employment</label>
-											<input data-bind="attr: {name:'employment['+($index()+$root.member_employment2().length+1)+'][nature_of_employment]'}" type="text" class="form-control ">
-										</div>
-									</div>
-									<div class="col-lg-2">
-										<div class="form-group">
-											<label>Monthly Salary</label>
-											<input data-bind="attr: {name:'employment['+($index()+$root.member_employment2().length+1)+'][monthlySalary]'}"  type="text" class="form-control athousand_separator">
-										</div>
-									</div>
-									<div class="col-lg-1"><span title="Remove employer" class="btn text-danger btn-lg" data-bind='click: $root.removeEmployment'><i class="fa fa-minus"></i></span></div>
-									<div class="clearboth"></div>
-								</div>
-								<div class="row">
-									<div class="clearboth"></div>
-									<div class="col-lg-12">
-										 <div class="form-group">
-											<span class="btn btn-info btn-sm pull-right" data-bind='click: addEmployment'><i class="fa fa-plus"></i> Add more</span>
-										</div>
-									</div>
-								</div>
-							</fieldset>
-							
-							<h1>Relatives</h1>
-							
-							<fieldset>
-								<div class="row" data-bind="foreach: $root.member_relatives2">
-									<h3 data-bind="text:'Relative '+($index()+1)"></h3>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Relationship</label>
-											<select class="form-control"  data-bind="attr: {name:'relative['+$index() + '][relationship]'}, options: relationships, optionsText: 'rel_type', optionsCaption: 'Select...', optionsValue: 'id', value: relationship" data-msg-required="Relationship is required"></select>
-										</div>
-									</div>
-									<div class="col-sm-3">
-										<div class="form-group"><label class="col-lg-12" >Gender</label>
-											<label > <input  data-bind="attr: {name:'relative['+$index()+'][relative_gender]'}, value: relative_gender, checked: relative_gender" class="i-checks" type="radio" value="1"  >Male</label>
-											<label > <input  data-bind="attr: {name:'relative['+$index()+'][relative_gender]'}, value: relative_gender, checked: relative_gender"  class="i-checks" type="radio" value="0" > Female</label>
-										</div>
-									</div>
-									<div class="col-lg-3">
-										 <div class="form-group">
-											<label  >Is Direct Next of Kin?</label>
-											<label > <input  class="i-checks" type="radio" value="1" data-bind="attr: {name:'relative['+$index()+'][is_next_of_kin]'}, checked: is_next_of_kin">Yes</label>
-											<label > <input data-bind="attr: {name:'relative['+$index()+'][is_next_of_kin]'}, checked: is_next_of_kin, " class="i-checks" type="radio" value="0" > No</label>
-										
-										</div>
-									</div>
-									<div class="col-lg-12">
-										<div class="form-group">
-											<div class="col-sm-2 no_padding">
-												<label>Name <span class="req">*</span></label>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Business Location</label>
+												<input data-bind="attr: {name:'business['+($index()+$root.member_business2().length+1)+'][businessLocation]',value: businessLocation}" type="text" class="form-control ">
 											</div>
-											<div class="col-sm-9">
-												<div class="col-sm-4">
-													<input type="text" class="form-control" placeholder="First Name" data-bind="attr: {name:'relative['+$index()+'][first_name]'}, value: first_name" />
-													<span class="input-group-btn" style="width:2px;"></span>
-												</div>
-												<div class="col-sm-4">
-													<input type="text" class="form-control" data-bind="attr: {name:'relative['+$index()+'][last_name]'}, value: last_name" placeholder="Last Name" />
-													<span class="input-group-btn" style="width:2px;"></span>
-												</div>
-												<div class="col-sm-4">
-													<input type="text" class="form-control" data-bind="attr: {name:'relative['+$index()+'][other_names]'}, value: other_names"   placeholder="Other Name" />
-												</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Number Of Employees</label>
+												<input data-bind="attr: {name:'business['+($index()+$root.member_business2().length+1)+'][numberOfEmployees]', value:numberOfEmployees}"  type="text" class="form-control athousand_separator">
+											</div>
+										</div>
+										<div class="col-lg-2">
+											<div class="form-group">
+												<label>Business Worth</label>
+												<input data-bind="attr: {name:'business['+($index()+$root.member_business2().length+1)+'][businessWorth]', value:businessWorth}"  type="text" class="form-control athousand_separator">
+											</div>
+										</div>
+										<div class="col-lg-2">
+											<div class="form-group">
+												<label>URSB Number</label>
+												<input data-bind="attr: {name:'business['+($index()+$root.member_business2().length+1)+'][ursbNumber]', value:ursbNumber}"  type="text" class="form-control athousand_separator">
+											</div>
+										</div>
+										<div class="col-lg-1"><span title="Remove Business" class="btn text-danger btn-lg" data-bind='click: $root.removeBusiness'><i class="fa fa-minus"></i></span></div>
+										<div class="clearboth"></div>
+									</div>
+									<div class="row">
+										<div class="clearboth"></div>
+										<div class="col-lg-12">
+											 <div class="form-group">
+												<span class="btn btn-info btn-sm pull-right" data-bind='click: addBusinnes'><i class="fa fa-plus"></i> Add more</span>
 											</div>
 										</div>
 									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Address</label>
-											<input id=""  data-bind="attr: {name:'relative['+$index()+'][address]'}, value: address" type="text" class="form-control " >
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Address 2</label>
-											<input  type="text" class="form-control"  data-bind="attr: {name:'relative['+$index()+'][address2]'}, value: address2">
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Phone </label>
-											<input data-mask="(999) 999-9999" data-bind="attr: {name:'relative['+$index()+'][telephone]'}, value: telephone" type="text" class="form-control ">
-										</div>
-									</div>
-									<div class="col-lg-3"><span title="Remove relative" class="btn text-danger btn-lg" data-bind='click: $root.removeRelative2'><i class="fa fa-minus"></i></span></div>
-									<div class="clearboth"></div>
-									
-										
-								</div>
-								<div class="row" data-bind="foreach: $root.member_relatives">
-									<h3 data-bind="text:'Relative '+($index()+$root.member_relatives2().length+1)"></h3>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Relationship</label>
-											<select class="form-control"  data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][relationship]'}, options: relationships, optionsText: 'rel_type', optionsCaption: 'Select...', , optionsAfterRender: $parent.setOptionValue('id'), value: relationship" data-msg-required="Relationship is required"></select>
-										</div>
-									</div>
-									<div class="col-sm-3">
-										<div class="form-group"><label class="col-lg-12" >Gender</label>
-											<label > <input  data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][relative_gender]'}, value: relative_gender" class="i-checks" type="radio" value="1"  >Male</label>
-											<label > <input  data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][relative_gender]'}, value: relative_gender"  class="i-checks" type="radio" value="0" > Female</label>
-										</div>
-									</div>
-									<div class="col-lg-3">
-										 <div class="form-group">
-											<label  >Is Direct Next of Kin?</label>
-											<label > <input  class="i-checks" type="radio" value="1" data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][is_next_of_kin]'}, checked: is_next_of_kin">Yes</label>
-											<label > <input data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][is_next_of_kin]'}, checked: is_next_of_kin" class="i-checks" type="radio" value="0" > No</label>
-										
-										</div>
-									</div>
-									<div class="col-lg-12">
-										<div class="form-group">
-											<div class="col-sm-2 no_padding">
-												<label>Name <span class="req">*</span></label>
-											</div>
-											<div class="col-sm-9">
-												<div class="col-sm-4">
-													<input type="text" class="form-control" placeholder="First Name" data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][first_name]'}, value: first_name" />
-													<span class="input-group-btn" style="width:2px;"></span>
-												</div>
-												<div class="col-sm-4">
-													<input type="text" class="form-control" data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][last_name]'}, value: last_name" placeholder="Last Name" />
-													<span class="input-group-btn" style="width:2px;"></span>
-												</div>
-												<div class="col-sm-4">
-													<input type="text" class="form-control" data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][other_names]'}, value: other_names"   placeholder="Other Name" />
-												</div>
+								</fieldset>
+							</div>
+							<div class="bordered">
+								<h3>Employment</h3>
+								<fieldset>
+									<div class="row" data-bind="foreach: $root.member_employment2">
+										<div class="col-md-12"><h3 data-bind="text:'Employer '+($index()+1)"></h3></div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Name of Employer</label>
+												<input   data-bind="attr: {name:'employment['+$index()+'][employer]', value: employer}"  type="text" class="form-control">
 											</div>
 										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Number of years with Employer</label>
+												<input  data-bind="attr: {name:'employment['+$index()+'][years_of_employment]', value: years_of_employment}"  type="number" class="form-control ">
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Nature of employment</label>
+												<input data-bind="attr: {name:'employment['+$index()+'][nature_of_employment]',value: nature_of_employment}" type="text" class="form-control ">
+											</div>
+										</div>
+										<div class="col-lg-2">
+											<div class="form-group">
+												<label>Monthly Salary</label>
+												<input data-bind="attr: {name:'employment['+$index()+'][monthlySalary]', value:monthlySalary}"  type="text" class="form-control athousand_separator">
+											</div>
+										</div>
+										<div class="col-lg-1"><span title="Remove employer" class="btn text-danger btn-lg" data-bind='click: $root.removeEmployment'><i class="fa fa-minus"></i></span></div>
+										<div class="clearboth"></div>
 									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Address</label>
-											<input id=""  data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][address]'}, value: address" type="text" class="form-control " >
+									<div class="row" data-bind="foreach: $root.member_employment">
+										<div class="col-md-12"><h3 data-bind="text:'Employer '+($index()+$root.member_employment2().length+1)"></h3></div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Name of Employer</label>
+												<input   data-bind="attr: {name:'employment['+($index()+$root.member_employment2().length+1)+'][employer]'}"  type="text" class="form-control">
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Number of years with Employer</label>
+												<input  data-bind="attr: {name:'employment['+($index()+$root.member_employment2().length+1)+'][years_of_employment]'}"  type="number" class="form-control ">
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Nature of employment</label>
+												<input data-bind="attr: {name:'employment['+($index()+$root.member_employment2().length+1)+'][nature_of_employment]'}" type="text" class="form-control ">
+											</div>
+										</div>
+										<div class="col-lg-2">
+											<div class="form-group">
+												<label>Monthly Salary</label>
+												<input data-bind="attr: {name:'employment['+($index()+$root.member_employment2().length+1)+'][monthlySalary]'}"  type="text" class="form-control athousand_separator">
+											</div>
+										</div>
+										<div class="col-lg-1"><span title="Remove employer" class="btn text-danger btn-lg" data-bind='click: $root.removeEmployment'><i class="fa fa-minus"></i></span></div>
+										<div class="clearboth"></div>
+									</div>
+									<div class="row">
+										<div class="clearboth"></div>
+										<div class="col-lg-12">
+											 <div class="form-group">
+												<span class="btn btn-info btn-sm pull-right" data-bind='click: addEmployment'><i class="fa fa-plus"></i> Add more</span>
+											</div>
 										</div>
 									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Address 2</label>
-											<input  type="text" class="form-control"  data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][address2]'}, value: address2">
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label>Phone </label>
-											<input data-mask="(999) 999-9999" data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][telephone]'}, value: telephone" type="text" class="form-control ">
-										</div>
-									</div>
-									<div class="col-lg-3"><span title="Remove relative" class="btn text-danger btn-lg" data-bind='click: $root.removeRelative'><i class="fa fa-minus"></i></span></div>
-									<div class="clearboth"></div>
-									
-										
-								</div>
-								<div class="row">
-									<div class="clearboth"></div>
-									<div class="col-lg-12">
-										 <div class="form-group">
-											<span class="btn btn-info btn-sm pull-right" data-bind='click: addRelative'><i class="fa fa-plus"></i> Add more</span>
-										</div>
-									</div>
-								</div>
+								</fieldset>
+							</div>
+							<div class="bordered">
+								<h3>Relatives</h3>
 								
-							</fieldset>
-							<h1>Dependants</h1>
-							<fieldset>
-								<div class="row">
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label>Number of Children </label>
-											<input id="children_no" name="children_no" type="number" class="form-control">
+								<fieldset>
+									<div class="row" data-bind="foreach: $root.member_relatives2">
+										<div class="col-md-12"><h3 data-bind="text:'Relative '+($index()+1)"></h3></div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Relationship</label>
+												<select class="form-control"  data-bind="attr: {name:'relative['+$index() + '][relationship]'}, options: relationships, optionsText: 'rel_type', optionsCaption: 'Select...', optionsValue: 'id', value: relationship" data-msg-required="Relationship is required"></select>
+											</div>
 										</div>
+										<div class="col-sm-3">
+											<div class="form-group"><label class="col-lg-12" >Gender</label>
+												<label > <input  data-bind="attr: {name:'relative['+$index()+'][relative_gender]'}, value: relative_gender, checked: relative_gender" class="i-checks" type="radio" value="1"  >Male</label>
+												<label > <input  data-bind="attr: {name:'relative['+$index()+'][relative_gender]'}, value: relative_gender, checked: relative_gender"  class="i-checks" type="radio" value="0" > Female</label>
+											</div>
+										</div>
+										<div class="col-lg-3">
+											 <div class="form-group">
+												<label  >Is Direct Next of Kin?</label>
+												<label > <input  class="i-checks" type="radio" value="1" data-bind="attr: {name:'relative['+$index()+'][is_next_of_kin]'}, checked: is_next_of_kin">Yes</label>
+												<label > <input data-bind="attr: {name:'relative['+$index()+'][is_next_of_kin]'}, checked: is_next_of_kin, " class="i-checks" type="radio" value="0" > No</label>
+											
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div class="form-group">
+												<div class="col-sm-2 no_padding">
+													<label>Name <span class="req">*</span></label>
+												</div>
+												<div class="col-sm-9">
+													<div class="col-sm-4">
+														<input type="text" class="form-control" placeholder="First Name" data-bind="attr: {name:'relative['+$index()+'][first_name]'}, value: first_name" />
+														<span class="input-group-btn" style="width:2px;"></span>
+													</div>
+													<div class="col-sm-4">
+														<input type="text" class="form-control" data-bind="attr: {name:'relative['+$index()+'][last_name]'}, value: last_name" placeholder="Last Name" />
+														<span class="input-group-btn" style="width:2px;"></span>
+													</div>
+													<div class="col-sm-4">
+														<input type="text" class="form-control" data-bind="attr: {name:'relative['+$index()+'][other_names]'}, value: other_names"   placeholder="Other Name" />
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Address</label>
+												<input id=""  data-bind="attr: {name:'relative['+$index()+'][address]'}, value: address" type="text" class="form-control " >
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Address 2</label>
+												<input  type="text" class="form-control"  data-bind="attr: {name:'relative['+$index()+'][address2]'}, value: address2">
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Phone </label>
+												<input data-mask="(999) 999-9999" data-bind="attr: {name:'relative['+$index()+'][telephone]'}, value: telephone" type="text" class="form-control ">
+											</div>
+										</div>
+										<div class="col-lg-3"><span title="Remove relative" class="btn text-danger btn-lg" data-bind='click: $root.removeRelative2'><i class="fa fa-minus"></i></span></div>
+										<div class="clearboth"></div>
+										
+											
 									</div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label>Number of Dependents</label>
-											<input id="no_of_dependents" name="dependants_no" type="number" class="form-control ">
+									<div class="row" data-bind="foreach: $root.member_relatives">
+										<div class="col-md-12"><h3 data-bind="text:'Relative '+($index()+$root.member_relatives2().length+1)"></h3></div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Relationship</label>
+												<select class="form-control"  data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][relationship]'}, options: relationships, optionsText: 'rel_type', optionsCaption: 'Select...', , optionsAfterRender: $parent.setOptionValue('id'), value: relationship" data-msg-required="Relationship is required"></select>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group"><label class="col-lg-12" >Gender</label>
+												<label > <input  data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][relative_gender]'}, value: relative_gender" class="i-checks" type="radio" value="1"  >Male</label>
+												<label > <input  data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][relative_gender]'}, value: relative_gender"  class="i-checks" type="radio" value="0" > Female</label>
+											</div>
+										</div>
+										<div class="col-lg-3">
+											 <div class="form-group">
+												<label  >Is Direct Next of Kin?</label>
+												<label > <input  class="i-checks" type="radio" value="1" data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][is_next_of_kin]'}, checked: is_next_of_kin">Yes</label>
+												<label > <input data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][is_next_of_kin]'}, checked: is_next_of_kin" class="i-checks" type="radio" value="0" > No</label>
+											
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div class="form-group">
+												<div class="col-sm-2 no_padding">
+													<label>Name <span class="req">*</span></label>
+												</div>
+												<div class="col-sm-9">
+													<div class="col-sm-4">
+														<input type="text" class="form-control" placeholder="First Name" data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][first_name]'}, value: first_name" />
+														<span class="input-group-btn" style="width:2px;"></span>
+													</div>
+													<div class="col-sm-4">
+														<input type="text" class="form-control" data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][last_name]'}, value: last_name" placeholder="Last Name" />
+														<span class="input-group-btn" style="width:2px;"></span>
+													</div>
+													<div class="col-sm-4">
+														<input type="text" class="form-control" data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][other_names]'}, value: other_names"   placeholder="Other Name" />
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Address</label>
+												<input id=""  data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][address]'}, value: address" type="text" class="form-control " >
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Address 2</label>
+												<input  type="text" class="form-control"  data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][address2]'}, value: address2">
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label>Phone </label>
+												<input data-mask="(999) 999-9999" data-bind="attr: {name:'relative['+($index()+$root.member_relatives2().length)+'][telephone]'}, value: telephone" type="text" class="form-control ">
+											</div>
+										</div>
+										<div class="col-lg-3"><span title="Remove relative" class="btn text-danger btn-lg" data-bind='click: $root.removeRelative'><i class="fa fa-minus"></i></span></div>
+										<div class="clearboth"></div>
+										
+											
+									</div>
+									<div class="row">
+										<div class="clearboth"></div>
+										<div class="col-lg-12">
+											 <div class="form-group">
+												<span class="btn btn-info btn-sm pull-right" data-bind='click: addRelative'><i class="fa fa-plus"></i> Add more</span>
+											</div>
 										</div>
 									</div>
 									
-								</div>
-								
-							</fieldset>
-							
-							<h1>Finish</h1>
-							<fieldset>
-								<label>Comment</label>
-								<textarea name="comment" class="form-control " rows="5"><?php echo $member_data['comment']; ?></textarea>
-								
-								<div class="row" style="margin-top:10px;">
-									<div class="col-lg-12">
-										<span class="alert-danger" id="accept_msg"></span>
-										<div class="col-lg-1"><input id="acceptTerms" name="acceptTerms" type="radio" class="i-checks" required> </div><br/>
-									<div class="col-lg-12">	<label for="acceptTerms">I Accept that all member details captured are correct.</label></div>
+								</fieldset>
+							</div>
+							<div class="bordered">
+								<h3>Dependants</h3>
+								<fieldset>
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="form-group">
+												<label>Number of Children </label>
+												<input id="children_no" name="children_no" type="number" class="form-control">
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<div class="form-group">
+												<label>Number of Dependents</label>
+												<input id="no_of_dependents" name="dependants_no" type="number" class="form-control ">
+											</div>
+										</div>
+										
 									</div>
-								</div>
-								
-								<div class="col-lg-4">
-									<button class="btn btn-lg btn-primary" type="submit">Update Member</button>
-								</div>
-							</fieldset>
+									
+								</fieldset>
+							</div>
+							<div class="bordered">
+								<h3>Finish</h3>
+								<fieldset>
+									<label>Comment</label>
+									<textarea name="comment" class="form-control " rows="5"><?php echo $member_data['comment']; ?></textarea>
+									
+									<div class="row" style="margin-top:10px;">
+										<div class="col-lg-12">
+											<span class="alert-danger" id="accept_msg"></span>
+											<div class="col-lg-1"><input id="acceptTerms" name="acceptTerms" type="radio" class="i-checks" required> </div><br/>
+										<div class="col-lg-12">	<label for="acceptTerms">I Accept that all member details captured are correct.</label></div>
+										</div>
+									</div>
+									
+									<div class="col-lg-4">
+										<button class="btn btn-lg btn-primary" type="submit">Update Member</button>
+									</div>
+								</fieldset>
+							</div>
 						</form>
 					</div>
 				</div>

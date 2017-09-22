@@ -20,6 +20,12 @@ class Db{
 	   $this->password = "";
 	   $this->database = "fms";
 	   //Connects to the database;
+	   /* 
+	    $this->server = "localhost";
+	   $this->user = "buladde_user";
+	   $this->password = "Buladdeor@Ug";
+	   $this->database = "buladde_fms";
+		*/
 	   $this->connectDB();
 	   
 	}
@@ -104,6 +110,9 @@ class Db{
 		}
 		return $_SESSION[$name] = $value;
 	}
+	function unSetSessions(){
+		session_destroy();
+	}
 	function  getLogin($username, $password){
 		if(!isset($_SESSION)) {
 			session_start();
@@ -111,7 +120,6 @@ class Db{
 		$to_add = array("id","username", "branch_id", "personId");
 		$password = md5($password);
 		$results = $this->getfrec("staff", implode(",",$to_add), "username=BINARY '$username' AND password='$password' AND status=1", "", "");
-		
 		if(count($results) > 0){
 		   $_SESSION['Logged'] = true;
 		   foreach($results as $key => $value){
@@ -123,6 +131,7 @@ class Db{
 		   }
 		   $access_levels = $this->getfarray("staff_roles", "role_id","personId=".$results['personId'], "", "");
 			if($access_levels){
+				
 				foreach($access_levels as $single){
 					switch($single["role_id"]){
 						case 1://Administrator 1

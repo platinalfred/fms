@@ -133,8 +133,8 @@ Class Reports{
 			}
 		}
 	
-		$member_data = $member->findById($_GET['id']);
-		$all_client_subscriptions = $subscription->findMemberSubscriptions($_GET['id']); 
+		$member_data = $member->findById($_GET['memberId']);
+		$all_client_subscriptions = $subscription->findMemberSubscriptions($_GET['memberId']); 
 		include("subscribe.php"); ?>
 		 <div class="row">
 			<div class="ibox">

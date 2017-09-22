@@ -7,6 +7,7 @@ unset($_SESSION['user_id']);
 unset($_SESSION['personId']);
 unset($_SESSION['admin']);
 unset($_SESSION['loan_officer']);
+unset($_SESSION['loans_officer']);
 unset($_SESSION['branch_manager']);
 unset($_SESSION['branch_credit']);
 unset($_SESSION['management_credit']);

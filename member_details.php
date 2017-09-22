@@ -187,7 +187,7 @@ p{
 											}
 											?>
 										</div>
-											<div class="col-md-12 col-sm-12 col-xs-12 details">
+										<div class="col-md-12 col-sm-12 col-xs-12 details">
 										<?php
 										$member_deposit_account_obj = new MemberDepositAccount();
 										$deposit_account_obj = new DepositAccount();
@@ -229,7 +229,7 @@ p{
 													<p class="p"><b>Unpaid Loan Balances (UGX): <?php  echo number_format($balances,2,".",",");  ?></b></p>
 												</div>
 										<?php }?>												
-											</div>
+										</div>
 									</div>
 									
 								</div>

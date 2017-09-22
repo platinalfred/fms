@@ -240,7 +240,7 @@ $(document).ready(function(){
 					{ data: 'id_number'},
 					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}}<?php 
 					if(!isset($_SESSION['loan_officer'])){ ?>,
-					{ data: 'id', render: function ( data, type, full, meta ) {  return '  <a href="member_details.php?id='+data+'" class="btn btn-warning btn-sm"><i class="fa fa-list"></i> Details</a> ';}} <?php } ?> 
+					{ data: 'id', render: function ( data, type, full, meta ) {  return '  <a href="member_details.php?memberId='+data+'" class="btn btn-warning btn-sm"><i class="fa fa-list"></i> Details</a> ';}} <?php } ?> 
 					] ,
 			  buttons: [
 				{

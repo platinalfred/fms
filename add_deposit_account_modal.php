@@ -16,13 +16,13 @@
 							<div class="ibox-content">
 								<form id="depAccountForm" class="form-horizontal">
 									<div class="form-group">
-									<?php if(!isset($client)):?>
+										<?php if(!isset($client)):?>
 										<div class="col-sm-6">
 											<label class="control-label">Customer/Member Group</label>
 												<select data-placeholder="Select customer/member group..." class="form-control chosen-select" data-bind='options: customers, optionsText: "clientNames", optionsCaption: "Select customer/member group...", optionsAfterRender: setOptionValue("id"), value: client' data-msg-required="Client name is required" required>
 												</select>
 										</div>
-									<?php endif;?>
+										<?php endif;?>
 										<div class="col-sm-6" data-bind='with: client'>
 											<label class="control-label">Product</label>
 											<select class="form-control" id="depositProduct" name="depositProduct" data-bind='options: $root.filteredDepositProducts, optionsText: "productName", optionsCaption: "Select product...", optionsAfterRender: $root.setOptionValue("id"), value: $root.depositProduct' data-msg-required="Deposit product is required" required>
