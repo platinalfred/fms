@@ -15,7 +15,7 @@ $(document).ready(function() {
 			  "type": "POST",
 			  "data":  function(d){
 					d.page = 'deposit_accounts';
-					<?php if(isset($client)):?> d.clientId=<?php echo $client['id'];?>; <?php endif;?>
+					<?php if(isset($client)):?> d.clientId=<?php echo isset($client['memberId'])?$client['memberId']:(isset($client['groupId'])?$client['groupId']:"");?>; <?php endif;?>
 					d.clientType = <?php echo isset($client['clientType'])?"'{$client['clientType']}'":0; ?>; //specify the type of the client (group/member) here;
 					d.start_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"moment().subtract(30, 'days').format('X')"; ?>;
 					d.end_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"moment().format('X')"; ?>;
@@ -33,10 +33,10 @@ $(document).ready(function() {
 		  },columns:[ { data: 'id', render: function ( data, type, full, meta ) {
 			  var page = "";
 			  if(full.clientType==1){
-				  page = "member_details.php?id=";
+				  page = "member_details.php?memberId=";
 			  }
 			  if(full.clientType==2){
-				  page = "group_details.php?id=";
+				  page = "group_details.php?groupId=";
 			  }
 			  return '<a href="'+page+full.clientId+'&view=savings_accs&depAcId='+data+'" title="View details">'+(full.productName + '-'+data).replace(/\s/g,'')+'</a>';}},
 				{ data: 'clientNames'},
@@ -194,8 +194,8 @@ $(document).ready(function() {
 					self.productFees(response.productFees);
 					<?php if(!isset($client)):?>self.customers(response.customers); <?php endif;?>
 					<?php if(isset($_GET['depAcId'])){
-						$clientId = $client['id'];
-						$client['clientId'] = $client['id'];
+						$clientId = isset($client['memberId'])?$client['memberId']:(isset($client['groupId'])?$client['groupId']:"");
+						$client['clientId'] = $clientId;
 						unset($client['id'],$clientId);?>
 						var client_data = <?php echo json_encode($client);?>;
 						self.account_details($.extend(client_data, response.account_details));
