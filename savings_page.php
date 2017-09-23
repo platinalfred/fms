@@ -4,7 +4,7 @@
 				<div class="ibox-title">
 					<h5>Savings Accounts <small>Deposits and withdraws</small></h5>
 					<?php
-					if(isset($_SESSION['accountant'])){ ?>
+					if(isset($_SESSION['accountant'])||isset($_SESSION['admin'])){ ?>
 					  <div class="pull-right">
 						<div><a href="#add_deposit_account" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i>New Savings Account</a></div>
 					  </div>

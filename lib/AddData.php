@@ -261,7 +261,7 @@ if(isset($_POST['origin'])){
 				}else{
 					$loanAccount['dateCreated'] = time();
 					$loanAccount['branch_id'] = isset($_SESSION['branch_id'])?$_SESSION['branch_id']:1;
-					$output = $loanAccountId = $loan_account_obj->addLoanAccount($loanAccount);
+					$output .= $loanAccountId = $loan_account_obj->addLoanAccount($loanAccount);
 				}
 				
 				
@@ -284,7 +284,7 @@ if(isset($_POST['origin'])){
 							$guarantorDataItem['dateCreated'] = time();
 							$guarantorDataItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 							$guarantorDataItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-							$output = $guarantor->addGuarantors($guarantorDataItem);
+							$output .= $guarantor->addGuarantors($guarantorDataItem);
 						}
 					}
 				}
@@ -319,7 +319,7 @@ if(isset($_POST['origin'])){
 							$feeDataItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 							$feeDataItem['dateModified'] = time();
 							$feeDataItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-							$output = $loan_account_fee_obj->addLoanAccountFee($feeDataItem );
+							$output .= $loan_account_fee_obj->addLoanAccountFee($feeDataItem );
 						}
 					}
 				}
@@ -345,15 +345,15 @@ if(isset($_POST['origin'])){
 							$file_name = '';
 							//upload any file that came with this data
 							if ($_FILES['loanAccount']['error'][$key]['loanCollateral'][$lc_key]['attachmentUrl'] == UPLOAD_ERR_OK) {
-								$images = new SimpleImage();
-								$allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "PNG", "GIF", "application/pdf");
+								//$images = new SimpleImage();
+								$allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "PNG", "GIF", "pdf", "doc", "docx");
 								$extension = end(explode(".", $_FILES['loanAccount']["name"][$key]['loanCollateral'][$lc_key]['attachmentUrl']));
 								if(($_FILES['loanAccount']["size"][$key]['loanCollateral'][$lc_key]['attachmentUrl'] < 200000000) && in_array($extension, $allowedExts)){ 							
 									if($_FILES['loanAccount']['error'][$key]['loanCollateral'][$lc_key]['attachmentUrl'] > 0){
-										$output =  "Return Code: " . $_FILES['loanAccount']['error'][$key]['loanCollateral'][$lc_key]['attachmentUrl'] . "<br>";
+										$output .=  "Return Code: " . $_FILES['loanAccount']['error'][$key]['loanCollateral'][$lc_key]['attachmentUrl'] . "<br>";
 									}else{
 										$files_dir = "../img/loanAccounts/".$loanAccount['loanNo']."/collateral/";
-										$collateralItem['attachmentUrl'] = substr($files_dir,2).$_FILES['loanAccount']['name'][$key]['loanCollateral'][$lc_key]['attachmentUrl'];
+										$collateralItem['attachmentUrl'] = substr($files_dir,3).$_FILES['loanAccount']['name'][$key]['loanCollateral'][$lc_key]['attachmentUrl'];
 										//$images->load($_FILES['loanAccount']['tmp_name'][$key]['loanCollateral'][$lc_key]['attachmentUrl']);
 										//$images->resize(240, 120); 
 										//$images->output($_FILES['loanAccount']["type"][$key]['loanCollateral'][$lc_key]['attachmentUrl']);
@@ -361,7 +361,7 @@ if(isset($_POST['origin'])){
 										if(!file_exists($files_dir)){
 											mkdir($files_dir, 0777, true);
 										}
-										move_uploaded_file($_FILES['loanAccount']['tmp_name'][$key]['loanCollateral'][$lc_key]['attachmentUrl'], $collateralItem['attachmentUrl']);
+										move_uploaded_file($_FILES['loanAccount']['tmp_name'][$key]['loanCollateral'][$lc_key]['attachmentUrl'], "../".$collateralItem['attachmentUrl']);
 										//$images->save($collateralItem['attachmentUrl']);
 									}
 								} 
@@ -373,7 +373,7 @@ if(isset($_POST['origin'])){
 							$collateralItem['dateCreated'] = time();
 							$collateralItem['createdBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 							$collateralItem['modifiedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
-							$output = $loan_collateral_obj->addLoanCollateral($collateralItem);
+							$output .= $loan_collateral_obj->addLoanCollateral($collateralItem);
 						}
 					}
 				}

@@ -36,7 +36,7 @@
 											<!--/ko-->
 										</div>
 									</div>
-									<div class="col-md-12" data-bind="if: typeof(guarantors)!='undefined' &&guarantors.length>0">
+									<div class="col-md-12" data-bind="if: typeof(guarantors)!='undefined' && guarantors.length>0">
 										<div class="col-md-12 bordered">
 											<h3>Guarantors</h3>
 											<div class="table-responsive">
@@ -87,14 +87,14 @@
 															<td data-bind="text: itemName"></td>
 															<td data-bind="text: description"></td>
 															<td data-bind="text: curr_format(parseInt(itemValue))"></td>
-															<td><img style="width:100px;"  data-bind="attr:{src:attachmentUrl}" /></td>
+															<td><img style="width:100px;" data-bind="attr:{src:attachmentUrl}" /></td>
 														</tr>
 													</tbody>
 													<tfoot>
 														<tr>
-															<th>Total</th>
-															<th></th>
+															<th colspan="2">Total</th>
 															<th data-bind="text: curr_format(parseInt(array_total(collateral_items,4)))"></th>
+															<th></th>
 														</tr>
 													</tfoot>
 												</table>
@@ -164,7 +164,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-12" data-bind="if: typeof(employmentHistory)!='undefined' &&employmentHistory.length>0">
+									<div class="col-md-12" data-bind="if: typeof(employmentHistory)!='undefined' && employmentHistory.length > 0">
 										<div class="col-md-12 bordered">
 											<h3>Employment</h3>
 											<div class="table-responsive">

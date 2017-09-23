@@ -70,7 +70,7 @@ class Member extends Db {
 	//list of the members for special kinds of select lists
 	public function findSelectList(){
 		$table = self::$table_name. " JOIN `person` ON `member`.`personId` = `person`.`id`";
-		$fields = "`member`.`id`, CONCAT(`lastname`,' ',`firstname`,' ',`othername`) `memberNames`, 1 `clientType`";
+		$fields = "`member`.`id`, CONCAT(`lastname`,' ',`firstname`,' ',`othername`) `clientNames`, 1 `clientType`";
 		$result_array = $this->getfarray($table, $fields, "", "", "");
 		return $result_array;
 	}

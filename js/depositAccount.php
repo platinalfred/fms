@@ -1,4 +1,3 @@
-
 <!-- Datatables -->
 <script>
 var dTable = new Object();
@@ -98,7 +97,6 @@ $(document).ready(function() {
 		type: 'POST',
 		dataType: 'json',
 		success: function (response) {
-			console.log(response);
 			depositAccountModel.transactionHistory(response);			
 		}
 	});

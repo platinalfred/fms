@@ -394,6 +394,7 @@ if(isset($_POST['origin'])){
 					$memberObj = new Member();
 					$loanAccountObj = new LoanAccount();
 					
+					$data = $loanAccountObj->findById($loanAccountId);
 					$data['guarantors'] = $guarantorObj->getLoanGuarantors($loanAccountId);
 					$data['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$loanAccountId);
 					
@@ -403,7 +404,6 @@ if(isset($_POST['origin'])){
 						$data['transactionHistory'] = $loan_account_transaction_obj->getTransactionHistory($_POST['id']);
 					}
 					
-					$data = $loanAccountObj->findById($loanAccountId);
 					$data['loan_account_fees'] = $loanAccountFeeObj->findAllDetailsByLoanAccountId($loanAccountId);
 					$memberData = $memberObj->findById($memberId);
 					$data['member_details'] = $personObj->findById($memberData['personId']);
@@ -411,10 +411,6 @@ if(isset($_POST['origin'])){
 					$data['employmentHistory'] = $personObj->findPersonEmploymentHistory($memberData['personId']);
 					$data['memberBusinesses'] = $personObj->findMemberBusiness($memberData['personId']);
 				}
-				/* if($_POST['clientType'] == 2){
-					$saccoGroupObj = new SaccoGroup();
-					$data['groupMembers'] = $saccoGroupObj->findSaccoGroupMembers($memberId);
-				} */
 				echo json_encode($data);
 			}
 		break;
