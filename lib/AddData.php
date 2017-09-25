@@ -23,6 +23,7 @@ if(isset($_POST['origin'])){
 				$loanAccount = new LoanAccount();
 				$loan_account_approvals_obj = new LoanAccountApproval();
 				unset($data['origin']);
+				//branch manager cannot really approve the loan, but can give some comments when forwarding the loan
 				if(!isset($_SESSION['branch_manager'])){
 					$data['approvalDate'] = time();
 					$data['approvedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
@@ -37,13 +38,14 @@ if(isset($_POST['origin'])){
 					$loan_account_approvals = $loan_account_approvals_obj->findAll("`loanAccountId`=".$approval_data['loanAccountId']);
 					if($loan_account_approvals){
 						foreach($loan_account_approvals as $key=>$loan_account_approval){
-							//if rejected status, check the next one
+							//if rejected status (11), check the next one
 							if($loan_account_approval['status'] != 11 && $key>0){
 								$data['status'] == $loan_account_approval['status'];
-								break;
+								break; //stop the loop from here since we got the status which we wanted
 							}
 						}
 					}
+					//since we did not find an appropriate status from the for loop, then we are supposed to revert to rejected status (of the loan)
 					if($data['status']==-1){$data['status'] == 11;}
 				}
 				$approval_data['status'] = $data['status'];
@@ -342,10 +344,8 @@ if(isset($_POST['origin'])){
 					//first delete all the existing loan account collateral
 					foreach($loanAccount['loanCollateral'] as $lc_key=>$collateralItem){
 						if($collateralItem['itemName']!='undefined'){
-							$file_name = '';
 							//upload any file that came with this data
 							if ($_FILES['loanAccount']['error'][$key]['loanCollateral'][$lc_key]['attachmentUrl'] == UPLOAD_ERR_OK) {
-								//$images = new SimpleImage();
 								$allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "PNG", "GIF", "pdf", "doc", "docx");
 								$extension = end(explode(".", $_FILES['loanAccount']["name"][$key]['loanCollateral'][$lc_key]['attachmentUrl']));
 								if(($_FILES['loanAccount']["size"][$key]['loanCollateral'][$lc_key]['attachmentUrl'] < 200000000) && in_array($extension, $allowedExts)){ 							
@@ -365,9 +365,9 @@ if(isset($_POST['origin'])){
 										//$images->save($collateralItem['attachmentUrl']);
 									}
 								} 
-							} else {
-								$output =  "Error: " . $_FILES['loanAccount']['error'][$key]['loanCollateral'][$lc_key]['attachmentUrl'] . "<br />";
-							}	
+							} /* else {
+								$output .=  "Error: " . $_FILES['loanAccount']['error'][$key]['loanCollateral'][$lc_key]['attachmentUrl'] . "<br />";
+							} */	
 							//insert the collateral
 							$collateralItem['loanAccountId'] = $loanAccountId;
 							$collateralItem['dateCreated'] = time();

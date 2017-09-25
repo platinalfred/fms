@@ -23,19 +23,19 @@
 							</div>
 							<div class="ibox-content">
 								<div class="" data-bind="with: account_details">
+									<!--ko if: typeof(member_details)!='undefined'-->
 									<div class="col-md-12" >
-										<div class="col-md-12 bordered" style="padding:8px;">
+										<div class="col-md-12 bordered" style="padding:4px;">
 											<h3>Client Details</h3><br/>
-											<!--ko if: typeof(member_details)!='undefined'-->
 											<div class="col-sm-3"><img style="width:100px;"  data-bind="attr:{src:member_details.id_specimen}" /></div>
 											<div class="col-sm-9"><i data-bind="css: {'fa':1, 'fa-male': gender=='M', 'fa-female': gender=='F'}"></i> <span data-bind="text: clientNames"></span>  ,
 											<i class="fa fa-mobile"></i> <span data-bind="text: member_details.phone"></span>,  
 											<i class="fa fa-at"></i> <span data-bind="text: member_details.email"></span>,  
 											<i class="fa fa-map-envelope-square"></i> <span data-bind="text: member_details.postal_address">Kawempe, Kazo</span>
 											<i class="fa fa-map-marker"></i> <span data-bind="text: member_details.physical_address">Kawempe, Kazo</span></div>
-											<!--/ko-->
 										</div>
 									</div>
+									<!--/ko-->
 									<div class="col-md-12" data-bind="if: typeof(guarantors)!='undefined' && guarantors.length>0">
 										<div class="col-md-12 bordered">
 											<h3>Guarantors</h3>
@@ -345,13 +345,13 @@
 													</div>
 												  </div>
 												<?php endif;?>
+												<!-- /ko -->
 												  <div class="form-group">
 													<div class="col-sm-12">
 														<label class="control-label" for="textarea">Justification </label>
 													  <textarea id="approvalNotes"  name="approvalNotes" class="form-control" data-bind="value: $parent.approvalNotes" data-msg-required="Justification is required" required></textarea>
 													</div>
 												  </div>
-												<!-- /ko -->
 											
 												<div class="form-group">
 													<div class="col-md-8 col-md-offset-4" data-bind="if: $parent.loanAccountStatus()">

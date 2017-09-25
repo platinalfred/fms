@@ -34,14 +34,15 @@ $page_title = $names =  $member_data['lastname']." ".$member_data['firstname']."
 include("include/header.php");
 $data['relatives'] = $person->findPersonRelatives($member_data['id']);
 $client['clientType'] = 1;
-$client['memberNames'] = $names;
-$client['memberId'] = $_GET['memberId'];
+$client['clientNames'] = $names;
+$client['id'] = $_GET['memberId'];
 if(!$member_data){
 	
 	echo "<p>No member details found</p>";
 	return;
 }
 $member_relatives = $person->findRelatives($member_data['personId']);
+$member_relatives2 = $person->findPersonRelatives($member_data['personId']);
 $member_employment_history = $person->findEmploymentHistory($member_data['personId']);
 $member_business = $person->findMemberBusiness($member_data['personId']);
 ?>
