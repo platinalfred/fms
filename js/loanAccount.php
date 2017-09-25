@@ -9,26 +9,6 @@
 			self.description = ko.observable();
 			self.itemValue = ko.observable(0);
 			self.attachmentUrl = ko.observable();
-			//self.uploadImage = function(file){
-				//Is the file an image??
-				//if(!file||!file.type.match(/image.*/)) return;
-				
-				//it is
-			/* 	document.body.className = "uploading";
-				
-				//let's build a FormData object
-				var fd = new FormData();
-				fd.append('image',file); //append the file
-				fd.append("key","262662626262");
-				var xhr = new XMLHttpRequest();//
-				xhr.open("POST","http://localhost/fms/uploadImage.php");
-				xhr.onload = function(){
-					document.querySelector("#link").href = JSON.parse(xhr.responseText).upload.links.imgur_page;
-					document.body.className = "uploaded";
-				}
-				//And now, we send the formdata
-				xhr.send(fd);
-			}; */
 		};
 
 	//any business owned by the applicant?
@@ -57,9 +37,9 @@
 		
 		// Stores an array of selected items
 		// Put one item (e.g guarantor) in by default
-		self.selectedGuarantors = ko.observableArray([new GuarantorSelection()]);
-		self.addedCollateral = ko.observableArray([new Collateral()]);
-		self.member_business = ko.observableArray([new Business()]);
+		self.selectedGuarantors = ko.observableArray(); //[new GuarantorSelection()]
+		self.addedCollateral = ko.observableArray(); //[new Collateral()]
+		self.member_business = ko.observableArray(); //[new Business()]
 		self.loanAccountFees = ko.observableArray();
 		
 		//filter the guarantors based on the user type and selected client
@@ -83,23 +63,27 @@
 					total += parseFloat("0" + selectedGuarantor.guarantor().savings);
 				};
 			});
-			if(typeof(self.guarantors)!='undefined'){
-				$.map(self.guarantors, function(guarantor) {
+			if(typeof(self.guarantors())!='undefined'){
+				$.map(self.guarantors(), function(guarantor) {
 					total += parseFloat("0" + guarantor.savings);
 				});
 			}
 			return total;
 		});
-		self.totalCollateral = ko.pureComputed(function() {
+		self.collateral_items = ko.observableArray([{itemName:'LL', itemValue:1000, attachmentUrl:'',description:'Desc'}]);
+		self.guarantors = ko.observableArray([{memberId:2, memberNames:'Member', shares:1000, savings:36500,phone:'0414546823'}]);
+		self.totalCollateral = ko.computed(function() {
 			var total = 0;
-			$.map(self.addedCollateral(), function(collateralItem) {
-				if(collateralItem.itemValue()) {
-					total += parseFloat("0" + collateralItem.itemValue());
-				};
-			});
-			if(typeof(self.collateral_items)!='undefined'){
-				$.map(self.collateral_items, function(collateral_item) {
-					total += parseFloat("0" + collateral_item.itemValue());
+			if(self.addedCollateral()){
+				$.map(self.addedCollateral(), function(collateralItem) {
+					if(collateralItem.itemValue()) {
+						total += parseFloat("0" + collateralItem.itemValue());
+					};
+				});
+			}
+			if(typeof(self.collateral_items())!='undefined'){
+				$.map(self.collateral_items(), function(collateral_item) {
+					total += parseFloat("0" + collateral_item.itemValue);
 				});
 			}
 			
@@ -107,13 +91,16 @@
 		});
 		self.totalShares = ko.pureComputed(function() {
 			var sum = 0;
-			$.map(self.selectedGuarantors(), function(selectedGuarantor) {
-				if(selectedGuarantor.guarantor()) {
-					sum += parseFloat("0" + selectedGuarantor.guarantor().shares);
-				};
-			});
-			if(typeof(self.guarantors)!='undefined'){
-				$.map(self.guarantors, function(guarantor) {
+			if(self.selectedGuarantors()){
+				$.map(self.selectedGuarantors(), function(selectedGuarantor) {
+					if(selectedGuarantor.guarantor()) {
+						sum += parseFloat("0" + selectedGuarantor.guarantor().shares);
+					};
+				});
+			}
+			
+			if(typeof(self.guarantors())!='undefined'){
+				$.map(self.guarantors(), function(guarantor) {
 					sum += parseFloat("0" + guarantor.shares);
 				});
 			}
@@ -123,7 +110,6 @@
 		// Operations
 		self.addGuarantor = function() { self.selectedGuarantors.push(new GuarantorSelection()) };
 		self.removeGuarantor = function(selectedGuarantor) { self.selectedGuarantors.remove(selectedGuarantor) };
-		//self.removeGuarantor2 = function(guarantor) { self.guarantors.remove(guarantor) };
 		self.addCollateral = function() { self.addedCollateral.push(new Collateral()) };
 		self.removeCollateral = function(addedCollateral) { self.addedCollateral.remove(addedCollateral) };
 		self.addBusinnes = function() { self.member_business.push(new Business()); };
@@ -227,7 +213,7 @@
 				if(parseInt(self.client().clientType)==2){
 					var thisGroupMembers = [];
 					ko.utils.arrayForEach(ko.utils.arrayFilter(self.groupMembers(), function(groupMember) {
-						return (parseInt(self.client().groupId)==parseInt(groupMember.groupId));
+						return (parseInt(self.client().id)==parseInt(groupMember.groupId));
 					}), function(item) {
 						thisGroupMembers.push($.extend(item, new LoanAccount()));
 					});
@@ -241,12 +227,20 @@
 				if(!self.account_details().groupId||self.account_details().groupId==0){
 					if(self.account_details().status<4||self.account_details().status==11){
 						var loan_account = new LoanAccount();
+						
+						/* loan_account.selectedGuarantors(null);
+						loan_account.addedCollateral(null);
+						loan_account.member_business(null); */
+						
 						loan_account.requestedAmount2(self.account_details().requestedAmount); 
 						loan_account.interestRate2(self.account_details().interestRate); 
 						loan_account.offSetPeriod2(self.account_details().offSetPeriod); 
 						loan_account.installments2(self.account_details().installments); 
-						loan_account.gracePeriod2(self.account_details().gracePeriod); 
-						return [$.extend(self.account_details(),loan_account)];
+						loan_account.gracePeriod2(self.account_details().gracePeriod);
+						loan_account.collateral_items(self.account_details().collateral_items);
+						loan_account.guarantors(self.account_details().guarantors);
+						var group_member = $.extend(self.account_details(),loan_account);
+						return [group_member];
 					}
 				}
 				else{
@@ -255,6 +249,7 @@
 						return (parseInt(item.status)<4||parseInt(item.status)==11);
 					}), function(groupLoanAccount) {
 						var loan_account = new LoanAccount();
+						
 						loan_account.requestedAmount2(groupLoanAccount.requestedAmount); 
 						loan_account.interestRate2(groupLoanAccount.interestRate); 
 						loan_account.offSetPeriod2(groupLoanAccount.offSetPeriod); 
@@ -304,8 +299,8 @@
 					<?php if(isset($client)&&$client['clientType']==2):?>self.groupMembers(response.groupMembers);<?php endif;?>
 					<?php if(isset($_GET['loanId'])){?>
 						var client_data = <?php echo json_encode($client);?>;
-						self.account_details($.extend(client_data, response.account_details));
 						self.loanProduct2(self.getLoanProduct(self.account_details().loanProductId));
+						self.account_details($.extend(client_data, response.account_details));
 					<?php } ?>
 				}
 			})
@@ -450,6 +445,7 @@
 							self.applicationDate(moment(response.loan_account_details.applicationDate,'X').format('DD-MM-YYYY'));
 						}
 						else{
+							self.loanProduct2(self.getLoanProduct(self.account_details().loanProductId));
 							if(typeof(self.account_details().groupLoanAccountId)!='undefined'&&(self.account_details().groupLoanAccountId>0)){
 								self.groupLoanAccounts(response);
 								self.account_details(self.groupLoanAccounts()[self.curIndex()-1]);
@@ -458,7 +454,6 @@
 								self.account_details($.extend(self.account_details(),response));
 							}
 							self.loanAccountStatus(null);//
-							self.loanProduct2(self.getLoanProduct(self.account_details().loanProductId));
 							//$("#loanProductId2").val(self.account_details().loanProductId);
 						}
 					}

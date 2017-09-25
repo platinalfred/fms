@@ -18,7 +18,7 @@ class SaccoGroup extends Db {
 	
 	//select the list of groups for display on the form select
 	public function findSelectList(){
-		$fields = "`id` `groupId`, `groupName` `clientNames`, 2 as `clientType`";
+		$fields = "`id`, `groupName` `clientNames`, 2 as `clientType`";
 		$result_array = $this->getfarray(self::$table_name, $fields, "", "", "");
 		return $result_array;
 	}
@@ -26,10 +26,10 @@ class SaccoGroup extends Db {
 	public function findGroupMembers($id=""){
 		$where = $id?"`groupId` = $id":"";
 
-		$fields = "`group_members`.`memberId`, `groupId`, `memberNames`, `phone`, `person_number`, `id_number` ";
+		$fields = "`group_members`.`memberId`, `groupId`, `clientNames`, `phone`, `person_number`, `id_number` ";
 		
 
-		$table = "`group_members` JOIN (SELECT `member`.`id` `memberId`, CONCAT(`lastname`, ' ', `firstname`, ' ', `othername`) `memberNames`, `person`.`phone`, `person`.`person_number`, `person`.`id_number` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`) `all_members` ON `group_members`.`memberId`=`all_members`.`memberId`";
+		$table = "`group_members` JOIN (SELECT `member`.`id` `memberId`, CONCAT(`lastname`, ' ', `firstname`, ' ', `othername`) `clientNames`, `person`.`phone`, `person`.`person_number`, `person`.`id_number` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`) `all_members` ON `group_members`.`memberId`=`all_members`.`memberId`";
 /* 
 =======
 		$fields = "`id`,`group_members`.`memberId`, `groupId`, `clientNames`";
