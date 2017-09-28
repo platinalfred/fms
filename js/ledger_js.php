@@ -12,7 +12,7 @@
 			$.ajax({
 				type: "post",
 				dataType: "json",
-				data:{start_date:self.startDate, end_date:self.endDate, origin:"ledger"<?php if(isset($_GET['id'])):?>, id:<?php echo $_GET['id'];?>, clientType:<?php echo $client['clientType'];?> <?php endif;?>},
+				data:{start_date:self.startDate, end_date:self.endDate, origin:"ledger"<?php if(isset($_GET['memberId'])):?>, id:<?php echo $_GET['memberId'];?>, clientType:<?php echo $client['clientType'];?> <?php endif;?>},
 				url: "ajax_data.php",
 				success: function(response){
 					self.ledger_data(response);
