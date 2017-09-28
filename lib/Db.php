@@ -131,9 +131,11 @@ class Db{
 		   }
 		   $access_levels = $this->getfarray("staff_roles", "role_id","personId=".$results['personId'], "", "");
 			if($access_levels){
-				
+				$levels  = array();
 				foreach($access_levels as $single){
+					$levels[] = $single['role_id'];
 					switch($single["role_id"]){
+						
 						case 1://Administrator 1
 							$this->setSessions("admin", true);
 						break;
@@ -159,6 +161,7 @@ class Db{
 					}
 					
 				}
+				$this->setSessions("access_levels", $levels);
 				$this->setSessions("user_id", $results['id']);
 				return $_SESSION;
 			}  
