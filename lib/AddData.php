@@ -24,11 +24,11 @@ if(isset($_POST['origin'])){
 				$loan_account_approvals_obj = new LoanAccountApproval();
 				unset($data['origin']);
 				//branch manager cannot really approve the loan, but can give some comments when forwarding the loan
-				if(!isset($_SESSION['branch_manager'])){
+				//if(!isset($_SESSION['branch_manager'])){
 					$data['approvalDate'] = time();
 					$data['approvedBy'] = isset($_SESSION['user_id'])?$_SESSION['user_id']:1;
 					$output = $loanAccount->updateLoanAccount($data);
-				}
+				//}
 				$approval_data['loanAccountId'] = $data['id'];
 				$approval_data['amountRecommended'] = $data['amountApproved'];
 				$approval_data['justification'] = $data['approvalNotes'];

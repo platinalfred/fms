@@ -229,7 +229,7 @@
 		<script src="js/plugins/daterangepicker/daterangepicker.js"></script>
 		<script>
 			//initial dates to be added to the datatables post parameters
-			var startDate = <?php echo (isset($_GET['startdate'])&&is_numeric($_GET['startdate']))?$_GET['startdate']:strtotime("-30 day");?>;
+			var startDate = <?php echo (isset($_GET['startdate'])&&is_numeric($_GET['startdate']))?$_GET['startdate']:strtotime((isset($member)?"-1 year":"-30 day"));?>;
 			var endDate = <?php echo (isset($_GET['enddate'])&&is_numeric($_GET['enddate']))?$_GET['enddate']:time();?>;
 			$(document).ready(function () {
 				<?php include_once("./js/daterangepicker.inc"); //daterangepicker function?>
