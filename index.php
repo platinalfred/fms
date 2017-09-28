@@ -48,7 +48,7 @@
 						$msg = "";
 						if(isset($_POST['logon'])){
 							if($db->getLogin($_POST['username'], $_POST['password'])){ 
-								if(isset($_SESSION['loan_officer'])){
+								if(isset($_SESSION['loans_officer'])){
 									?>
 									<script>
 										window.location = "view_loans.php";
@@ -91,8 +91,8 @@
                         </p>
                         
                     </form>
-                    <p class="m-t">
-                        <small>FMS APP &copy; <?php echo date("Y"); ?> developed by <a href="www.connectsoftz.com" target="_blank"><img style="width:25%;" src="http://www.connectsoftz.com/images/logo.png"></a></small>
+                    <p class="m-t" style="text-align:right;">
+                        <small>BFS  &copy; <?php echo date("Y"); ?> All rights reserved</small><!-- developed by <a href="www.connectsoftz.com" target="_blank"><img style="width:25%;" src="http://www.connectsoftz.com/images/logo.png"></a></small>-->
                     </p>
                 </div>
             </div>

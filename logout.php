@@ -13,5 +13,6 @@ unset($_SESSION['branch_credit']);
 unset($_SESSION['management_credit']);
 unset($_SESSION['executive_board']);
 unset($_SESSION['accountant']);
+unset($_SESSION['access_level']);
 header("location:index.php");
 ?>
