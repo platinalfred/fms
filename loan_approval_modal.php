@@ -69,7 +69,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-12" data-bind="if: typeof(collateral_items)!='undefined'&&collateral_items.length>0">
+									<div class="col-md-12" data-bind="if: typeof(collateral_items())!='undefined'&&collateral_items().length>0">
 										<div class="col-md-12 bordered">
 											<h3>Collateral</h3>
 											<div class="table-responsive">
@@ -82,7 +82,7 @@
 															<th>Attachment</th>
 														</tr>
 													</thead>
-													<tbody data-bind="foreach: collateral_items">
+													<tbody data-bind="foreach: collateral_items()">
 														<tr>
 															<td data-bind="text: itemName"></td>
 															<td data-bind="text: description"></td>
@@ -93,7 +93,7 @@
 													<tfoot>
 														<tr>
 															<th colspan="2">Total</th>
-															<th data-bind="text: curr_format(parseInt(array_total(collateral_items,4)))"></th>
+															<th data-bind="text: curr_format(parseInt(array_total(collateral_items(),4)))"></th>
 															<th></th>
 														</tr>
 													</tfoot>
