@@ -7,7 +7,7 @@ if(isset($_GET['id']) && $_GET['view'] == "ledger"){ ?>
 ?>
 <div class="col-lg-12" >
 	<div class="ibox" id="ledger_data">
-		<?php if(!isset($_GET['id'])):?>
+		<?php if(!isset($_GET['memberId'])):?>
 		<div class="ibox-title" style="border-top:none;">
 			<h5>Statement of Comprehensive Income</h5>
 			<div class="ibox-tools">
@@ -23,7 +23,7 @@ if(isset($_GET['id']) && $_GET['view'] == "ledger"){ ?>
 					<div class="panel-body">
 						<div class="panel-group" id="accordion">
 							<div class="panel panel-default">
-								<?php if(isset($_GET['id'])):?>
+								<?php if(isset($_GET['memberId'])):?>
 								<div class="panel-heading">
 									<h5 class="panel-title">
 										<a data-toggle="collapse" href="#collapseOne" aria-expanded="true">Personal <small>Account</small></a>
@@ -31,7 +31,7 @@ if(isset($_GET['id']) && $_GET['view'] == "ledger"){ ?>
 								</div>
 								<?php endif;?>
 								<div id="collapseOne" class="panel-collapse collapse in" aria-expanded="true" style="">
-									<?php if(isset($_GET['id'])):?>
+									<?php if(isset($_GET['memberId'])):?>
 									<table id="ledger" class="table table-condensed">
 										<thead>
 											<tr>
@@ -89,7 +89,6 @@ if(isset($_GET['id']) && $_GET['view'] == "ledger"){ ?>
 											<tr>
 												<td>Loan Application Fees</td><td><span data-bind="text: (loan_account_fees?curr_format(parseInt(loan_account_fees)):0)">0.0</span></td>
 											</tr>
-											
 											<tr>
 												<td>Interest from Loans</td><td><span data-bind="text: curr_format((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0)))">0.0</span></td>
 											</tr>
@@ -110,7 +109,7 @@ if(isset($_GET['id']) && $_GET['view'] == "ledger"){ ?>
 					<div class="panel-body">
 						<div class="panel-group" id="accordion">
 							<div class="panel panel-default">
-								<?php if(isset($_GET['id'])):?>
+								<?php if(isset($_GET['memberId'])):?>
 								<div class="panel-heading">
 									<h5 class="panel-title">
 										<a data-toggle="collapse" href="#collapseThree" class="" aria-expanded="true">Loans <small>Account</small></a>
@@ -118,7 +117,7 @@ if(isset($_GET['id']) && $_GET['view'] == "ledger"){ ?>
 								</div>
 								<?php endif;?>
 								<div id="collapseThree" class="panel-collapse collapse in" aria-expanded="true" style="">
-									<?php if(isset($_GET['id'])):?>
+									<?php if(isset($_GET['memberId'])):?>
 									<table class="table table-condensed">
 										<thead>
 											<tr>

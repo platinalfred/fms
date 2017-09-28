@@ -255,9 +255,10 @@ if(isset($_POST['origin'])){
 					$data['deposits'] = empty($deposit_account_ids_array) ? 0 : $depositAccountTransactionObj->getMoneySum("1 ". ($between?"AND (dateCreated ".$between:""), $deposit_account_ids_array);
 					$data['withdraws'] = empty($deposit_account_ids_array) ? 0 :  $depositAccountTransactionObj->getMoneySum("2 ". ($between?"AND (dateCreated ".$between:""), $deposit_account_ids_array);
 					$data['deposit_account_fees'] = empty($deposit_account_ids_array) ? 0 :  $depositAccountFeeObj->getSum(($between?"(dateCreated ".$between:"1 "),$deposit_account_ids_array);
-					$data['disbursedLoan'] = empty($loan_account_ids_array) ? 0 :  $loanAccountObj->getSumOfFields(($between?"(`disbursementDate` ".$between:"1"),$loan_account_ids_array);
+					$data['disbursedLoan'] = empty($loan_account_ids_array) ? array('loanAmount'=>0,'interestAmount'=>0) :  $loanAccountObj->getSumOfFields(($between?"(`disbursementDate` ".$between:"1"),$loan_account_ids_array);
 					$data['loan_payments'] = empty($loan_account_ids_array) ? 0 :  $loanAccountPaymentObj->getPaidAmount(($between?"(`transactionDate` ".$between:"1"),$loan_account_ids_array);
 					$data['loan_account_fees'] = empty($loan_account_ids_array) ? 0 :  $loanAccountFeeObj->getSum(($between?"(`dateCreated` ".$between:"1 "),$loan_account_ids_array);
+					$data['opening_balances'] = $depositAccountObj->getSumOfFields(($between?"(`dateCreated` ".$between:"1 "), $deposit_account_ids_array);
 				}
 			}else{
 				$sharesObj = new Shares();
