@@ -9,7 +9,7 @@ class LoanAccountApproval extends Db {
 		return !empty($result) ? $result:false;
 	}
 	public function findAll($where = 1){
-		$result_array = $this->getarray(self::$table_name, $where, "", "");
+		$result_array = $this->getarray(self::$table_name, $where, "dateCreated desc", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function getLoanAccountApprovals($where = 1){

@@ -70,8 +70,8 @@
 			}
 			return total;
 		});
-		self.collateral_items = ko.observableArray([{itemName:'LL', itemValue:1000, attachmentUrl:'',description:'Desc'}]);
-		self.guarantors = ko.observableArray([{memberId:2, memberNames:'Member', shares:1000, savings:36500,phone:'0414546823'}]);
+		self.collateral_items = ko.observableArray();
+		self.guarantors = ko.observableArray();
 		self.totalCollateral = ko.computed(function() {
 			var total = 0;
 			if(self.addedCollateral()){
@@ -141,7 +141,6 @@
 		self.account_details = ko.observable();
 		
 		//this gets loaded when the loan is for approval/editing
-		self.edit_client = ko.observable(0);
 		self.loan_account_details = ko.observable();
 		self.loanAccountId = ko.observable();
 		
@@ -280,14 +279,16 @@
 			self.loanProduct(null);
 			self.client(null);
 			self.clientType(null);
-			dTable['applications'].ajax.reload();
+		
+			endDate = moment().format('X'); //get the current time
+			dTable['applications'].ajax.reload(null,true);
 		};		
 		//Retrieve page data from the server
 		self.getServerData = function() {
 			$.ajax({
 				type: "post",
 				dataType: "json",
-				data:{origin:"loan_account"<?php if(isset($_GET['loanId'])):?>, loanAccountId:<?php echo $_GET['loanId'];?> <?php endif;?>},
+				data:{origin:"loan_account"<?php if(isset($_GET['loanId'])):?>, loanAccountId:<?php echo (int)$_GET['loanId'];?> <?php endif;?>},
 				url: "ajax_data.php",
 				success: function(response){
 					self.loanProducts(response.products);
@@ -299,8 +300,8 @@
 					<?php if(isset($client)&&$client['clientType']==2):?>self.groupMembers(response.groupMembers);<?php endif;?>
 					<?php if(isset($_GET['loanId'])){?>
 						var client_data = <?php echo json_encode($client);?>;
+						self.account_details($.extend(client_data, response.account_details, {memberBusinesses: <?php echo json_encode($member_business);?>}, {employmentHistory: <?php echo json_encode($member_employment_history);?>}, {relatives: <?php echo json_encode($member_relatives2);?>}));
 						self.loanProduct2(self.getLoanProduct(self.account_details().loanProductId));
-						self.account_details($.extend(client_data, response.account_details));
 					<?php } ?>
 				}
 			})
@@ -349,9 +350,10 @@
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
 							$("#loanPaymentForm")[0].reset();
+							endDate = moment().format('X'); //get the current time
 							dTable['disbursed'].ajax.reload(function(){
 								self.account_details(dTable['disbursed'].row('#loanAcc'+self.account_details().id).data());
-								},false);
+								},true);
 							getTransactionHistory(self.account_details().id);
 						}, 3000);
 					}else{
@@ -379,7 +381,8 @@
 						setTimeout(function(){
 							$("#loanAccountApprovalForm")[0].reset();
 							$('#approve_loan-modal').modal('hide');
-							dTable['applications'].ajax.reload();
+							endDate = moment().format('X'); //get the current time
+							dTable['applications'].ajax.reload(null,true);
 							self.account_details(null);
 						}, 3000);
 					}else{
@@ -397,7 +400,7 @@
 					id:(self.account_details()?self.account_details().id:undefined),
 					disbursedAmount: ((self.account_details()&&self.account_details().status==4)?self.disbursedAmount():undefined),
 					disbursementNotes: self.disbursementNotes(),
-					status: 4
+					status: 5
 				},
 				url: "lib/AddData.php",
 				success: function(response){
@@ -407,7 +410,8 @@
 						setTimeout(function(){
 							$("#loanAccountApprovalForm")[0].reset();
 							$('#disburse_loan-modal').modal('hide');
-							dTable['approved'].ajax.reload();
+							endDate = moment().format('X'); //get the current time
+							dTable['approved'].ajax.reload(null,true);
 						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while approving: \n"+response ,"fail");
@@ -481,22 +485,22 @@
 	var handleDataTableButtons = function() {
 		viewModel.account_details(null);
 		viewModel.groupLoanAccounts([]);
-		var loan_type = parseInt($('#loan_types').val());
-		
+		var loan_status = parseInt($('#loan_types').val());
+			
 		post_data.origin = 'loan_accounts';
-		post_data.status = loan_type; // status of pending loan applications;
+		post_data.status = loan_status; // status of pending loan applications;
 		post_data.start_date = startDate;
 		post_data.end_date = endDate;
 		<?php if(isset($_GET['groupId'])):?>post_data.groupId = <?php echo json_encode($_GET['groupId']);?>; <?php endif;?>//this caters for the display of all loans taken by groups
 		<?php if(isset($_GET['memberId'])):?>post_data.memberId = <?php echo json_encode($_GET['memberId']);?>; <?php endif;?>//this caters for the display of all loans taken by a member
 		<?php if(isset($_GET['grpLId'])):?>post_data.grpLId = <?php echo json_encode($_GET['grpLId']);?>; <?php endif;?>//this caters for the display of loans taken in group setting
 		
-		if(loan_type==1||loan_type==2||loan_type==11||loan_type==12){
+		if(loan_status==1||loan_status==2||loan_status==11||loan_status==12){
 			//partial applications/pending approval/closed_rejected/closed_withdrawn
 			if(typeof(dTable['applications'])!=='undefined'){
 				$(".tab-pane").removeClass("active");
 				$("#tab-1").addClass("active");
-				dTable['applications'].ajax.reload();
+				dTable['applications'].ajax.reload(null,true);
 				$(".table#applications tbody>tr:first").trigger('click');//
 			}
 			else{
@@ -555,11 +559,11 @@
 				});
 			}
 		}
-		if(loan_type==16){//rejected loan applications
+		if(loan_status==16){//rejected loan applications
 			if(typeof(dTable['rejected'])!=='undefined'){
 				$(".tab-pane").removeClass("active");
 				$("#tab-2").addClass("active");
-				dTable['rejected'].ajax.reload();
+				dTable['rejected'].ajax.reload(null,true);
 				$(".table#rejected tbody>tr:first").trigger('click');
 			}
 			else{
@@ -619,11 +623,11 @@
 				});	
 			}
 		}
-		if(loan_type==3){ //approved loan accounts
+		if(loan_status==3){ //approved loan accounts
 			if(typeof(dTable['approved'])!=='undefined'){
 				$(".tab-pane").removeClass("active");
 				$("#tab-3").addClass("active");
-				dTable['approved'].ajax.reload();
+				dTable['approved'].ajax.reload(null,true);
 				$(".table#approved tbody>tr:first").trigger('click');
 			}
 			else{
@@ -681,12 +685,12 @@
 				});
 			}
 		}
-		if(loan_type==4||loan_type==5||loan_type==13||loan_type==14||loan_type==15){ //disbursed loans
+		if(loan_status==4||loan_status==5||loan_status==13||loan_status==14||loan_status==15){ //disbursed loans
 			if(typeof(dTable['disbursed'])!=='undefined'){
 				$(".tab-pane").removeClass("active");
 				$("#tab-4").addClass("active");
+				dTable['disbursed'].ajax.reload(null,true);
 				$(".table#disbursed tbody>tr:first").trigger('click');
-				dTable['disbursed'].ajax.reload();
 			}
 			else{
 				dTable['disbursed'] = $('#disbursed').DataTable({
@@ -702,7 +706,7 @@
 					  "type": "POST",
 					  "data":  function(d){
 								d.<?php if(!isset($client)): ?>page<?php else: ?>origin<?php endif; ?> = 'loan_accounts';
-								d.status = loan_type;//status of the loan;
+								d.status = loan_status;//status of the loan;
 								d.start_date = startDate;
 								d.end_date = endDate;
 								d.clientType = 3
@@ -794,14 +798,12 @@
 				success: function(response) { // on success..
 					showStatusMessage(response, "success");
 					setTimeout(function(){
-						dTable['applications'].ajax.reload();
+						dTable['applications'].ajax.reload(null,true);
 					}, 300);
 				}			
 			}); 
 		}
 	});
-	var editing = 0
-	<?php if((isset($_SESSION['loans_officer'])&&$_SESSION['loans_officer'])):?>editing = 1; viewModel.edit_client(1);<?php endif;?>
 
 	$('.table tbody').on('click', 'tr[role=row]', function () {
 		var tbl = $(this).parent().parent();
@@ -817,22 +819,23 @@
 	 function handleDateRangePicker(start_date, end_date){
 		 startDate = start_date;
 		 endDate = end_date;
-		 var loan_status = parseInt($('#loan_types').val());
-		if(loan_type==1||loan_type==2||loan_type==11||loan_type==12){//applications pending approval
-			dTable['applications'].ajax.reload();
+		 TableManageButtons.init();
+		/*  var loan_status = parseInt($('#loan_types').val());
+		if(loan_status==1||loan_status==2||loan_status==11||loan_status==12){//applications pending approval/rejected
+			dTable['applications'].ajax.reload(null,true);
 			$(".table#applications tbody>tr:first").trigger('click');
 		}
 		if(loan_status == 16){//rejected applications
-			dTable['rejected'].ajax.reload();
+			dTable['rejected'].ajax.reload(null,true);
 				$(".table#rejected tbody>tr:first").trigger('click');
 		}
 		if(loan_status == 3){//approved applications
-				dTable['approved'].ajax.reload();
+				dTable['approved'].ajax.reload(null,true);
 				$(".table#approved tbody>tr:first").trigger('click');
 		}
-		if(loan_type==4||loan_type==5||loan_type==13||loan_type==14||loan_type==15){ //disbursed loans
-				dTable['disbursed'].ajax.reload();
+		if(loan_status==4||loan_status==5||loan_status==13||loan_status==14||loan_status==15){ //disbursed loans
+				dTable['disbursed'].ajax.reload(null,true);
 				$(".table#disbursed tbody>tr:first").trigger('click');
-		}
+		} */
 	 }
 </script>

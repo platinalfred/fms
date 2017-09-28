@@ -55,7 +55,7 @@ include("include/header.php");
 							<div class="row">
 								<div class="col-md-3">
 									<small>Pending</small>
-									<h3 class="no-margins"><a title="Loans pending approval" data-bind="text: curr_format(parseInt(figures.pending_loans)), attr:{href:'view_loans.php?status=2&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
+									<h3 class="no-margins"><a title="Loans pending approval" data-bind="text: curr_format(parseInt(figures.pending_loans)), attr:{href:'view_loans.php?status=3&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
 									<div class="font-bold text-navy"> <span data-bind="text: percents.pending_loans">0</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.pending_loans < 1, 'fa-level-up': percents.pending_loans > 0}"></i> </div>
 								</div>
 								<div class="col-md-3">
@@ -65,12 +65,12 @@ include("include/header.php");
 								</div>
 								<div class="col-md-3">
 									<small>Approved</small>
-									<h3 class="no-margins"><a title="Loans that have been approved" data-bind="text: curr_format(parseInt(figures.approved_loans)), attr:{href:'view_loans.php?status=3&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
+									<h3 class="no-margins"><a title="Loans that have been approved" data-bind="text: curr_format(parseInt(figures.approved_loans)), attr:{href:'view_loans.php?status=4&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
 									<div class="font-bold text-navy"><span data-bind="text: percents.approved_loans">0</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.approved_loans < 1, 'fa-level-up': percents.approved_loans > 0}"></i> </div>
 								</div>
 								<div class="col-md-3">
 									<small>Disbursed</small>
-									<h3 class="no-margins"><a title="Loans that have been disbursed" data-bind="text: curr_format(parseInt(figures.disbursed_loans)), attr:{href:'view_loans.php?status=4&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
+									<h3 class="no-margins"><a title="Loans that have been disbursed" data-bind="text: curr_format(parseInt(figures.disbursed_loans)), attr:{href:'view_loans.php?status=5&startdate='+$root.startDate()+'&enddate='+$root.endDate()}">0</a></h3>
 									<div class="font-bold text-navy"><span data-bind="text: percents.disbursed_loans">0</span>% <i data-bind="css: {  fa:1, 'fa-level-down': percents.disbursed_loans < 1, 'fa-level-up': percents.disbursed_loans > 0}"></i> </div>
 								</div>
 							</div>

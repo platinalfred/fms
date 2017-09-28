@@ -25,21 +25,14 @@
 										<div class="form-group">
 											<div class="col-md-6">
 												<label class="control-label">Client Type</label>
-												<div data-bind="if: $root.edit_client()==0">
-													<select class="form-control" name="clientType" data-bind='options: clientTypes, optionsText: "client_type", optionsCaption: "Select client type...", optionsAfterRender: $root.setOptionValue("type_id"), value: clientType' data-msg-required="Client type is required" required>
-													</select>
-												</div>
+												<select class="form-control" name="clientType" data-bind='options: clientTypes, optionsText: "client_type", optionsCaption: "Select client type...", optionsAfterRender: $root.setOptionValue("type_id"), value: clientType' data-msg-required="Client type is required" required>
+												</select>
 											</div>
 											<div class="col-md-6" data-bind="with: clientType">
 												<!--ko if:type_id==1-->
 												<label class="control-label">Customer</label>
-												<div data-bind="if: $root.edit_client()==0">
-													<select data-placeholder="Select customer..." name="memberId" class="form-control chosen-select" data-bind='options: $root.clients, optionsText: "clientNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Client name is required" required>
-													</select>
-													<div data-bind="if: $root.edit_client()==1">
-														<div data-bind='with: $root.client'><span data-bind="text: clientNames"></span></div>
-													</div>
-												</div>
+												<select data-placeholder="Select customer..." name="memberId" class="form-control chosen-select" data-bind='options: $root.clients, optionsText: "clientNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Client name is required" required>
+												</select>
 												<!--/ko-->
 												<!--ko if:type_id==2-->
 												<label class="control-label">Member Groups</label>
@@ -54,17 +47,11 @@
 										<div class="form-group">
 											<div class="col-md-6" data-bind='with: $root.client'>
 												<label class="control-label">Product</label>
-												<div data-bind="if: $root.edit_client()==0">
 												<select class="form-control" id="loanProductId" name="loanProductId" data-bind='options: $root.filteredLoanProducts, optionsText: "productName", optionsCaption: "Select product...", optionsAfterRender: $root.setOptionValue("id"), value: $root.loanProduct' data-msg-required="Loan product is required" required>
 												</select>
 												<span class="help-block m-b-none" data-bind="with: $root.loanProduct">
 												<small data-bind="text: description">Product description goes here.</small>
 												</span>
-												</div>
-												<div data-bind="if: $root.edit_client()==1">
-													<div data-bind='with: $root.loanProduct'><span data-bind="text: productName"></span>
-													<span class="help-block m-b-none"><small data-bind="text: '('+description+')'"></small></span></div>
-												</div>
 											</div>
 											<div class="col-md-4" data-bind="with: $root.loanProduct">
 												<label class="control-label">Application Date</label>

@@ -79,9 +79,9 @@ if(isset($_POST['origin'])){
 
 			//Total pending loans
 			//1 in this period
-			$figures['pending_loans'] = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
+			$figures['pending_loans'] = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
 			//before this period
-			$pending_loans_b4 = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=2");
+			$pending_loans_b4 = $dashboard->getCountOfLoans("(`applicationDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
 			//percentage increase/decrease
 			$percents['pending_loans'] = ($pending_loans_b4>0&&$figures['pending_loans']>0)?round(($figures['pending_loans']/$pending_loans_b4)*100,2):($figures['pending_loans']>0?100:0);
 
@@ -95,17 +95,17 @@ if(isset($_POST['origin'])){
 
 			//Total approveded loans
 			//1 in this period
-			$figures['approved_loans'] = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
+			$figures['approved_loans'] = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4");
 			//before this period
-			$approved_loans_b4 = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=3");
+			$approved_loans_b4 = $dashboard->getCountOfLoans("(`approvalDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4");
 			//percentage increase/decrease
 			$percents['approved_loans'] = ($approved_loans_b4>0&&$figures['approved_loans']>0)?round(($figures['approved_loans']/$approved_loans_b4)*100,2):($figures['approved_loans']>0?100:0);
 
 			//Total disbursed loans
 			//1 in this period
-			$figures['disbursed_loans'] = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4");
+			$figures['disbursed_loans'] = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=5");
 			//before this period
-			$disbursed_loans_b4 = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=4");
+			$disbursed_loans_b4 = $dashboard->getCountOfLoans("(`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=5");
 			//percentage increase/decrease
 			$percents['disbursed_loans'] = ($disbursed_loans_b4>0&&$figures['disbursed_loans']>0)?round(($figures['disbursed_loans']/$disbursed_loans_b4)*100,2):($figures['disbursed_loans']>0?100:0);
 
@@ -293,8 +293,14 @@ if(isset($_POST['origin'])){
 			$data['guarantors'] = $guarantorObj->getLoanGuarantors();
 			if(isset($_POST['loanAccountId'])&&is_numeric($_POST['loanAccountId'])){
 				$loanAccountObj = new LoanAccount();
+				$collateralObj = new LoanCollateral();
+				$loanAccountFeeObj = new LoanAccountFee();
+				
 				$data['account_details'] = $loanAccountObj->findAllDetailsById($_POST['loanAccountId']);
 				$data['account_details']['statement'] = $loanAccountObj->getStatement($_POST['loanAccountId']);
+				$data['account_details']['guarantors'] = $guarantorObj->getLoanGuarantors($_POST['loanAccountId']);
+				$data['account_details']['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$_POST['loanAccountId']);
+				$data['account_details']['loan_account_fees'] = $loanAccountFeeObj->findAllDetailsByLoanAccountId($_POST['loanAccountId']);
 			}else{
 				$data['clients'] = $memberObj->findSelectList();
 			}
