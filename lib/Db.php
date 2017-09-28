@@ -133,9 +133,9 @@ class Db{
 			if($access_levels){
 				$levels  = array();
 				foreach($access_levels as $single){
-					$levels[] = $single['role_id'];
+					
+					$levels[] = $single['role_id'];//This will keep all access levels and can checked by doing if in_array($_SESSION['access_levels']) whenever you are checking a user role.
 					switch($single["role_id"]){
-						
 						case 1://Administrator 1
 							$this->setSessions("admin", true);
 						break;
