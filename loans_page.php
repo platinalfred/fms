@@ -47,7 +47,7 @@
 						<div class="col-sm-5">
 							<div class="form-group">
 								<label class="control-label" for="principle">Select Period</label>
-								<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 10px; border: 1px solid #ccc">
+								<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 5px; border: 1px solid #ccc">
 								  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 								  <span>December 30, 2016 - January 28, 2017</span> <b class="caret"></b>
 								</div>

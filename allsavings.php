@@ -9,9 +9,9 @@
 				<div class="col-sm-2">
 					<div class="form-group">
 						<select id="client_type" class="form-control">
-							<option value="0" <?php echo isset($_GET['cat'])?(($_GET['cat']==1)?'selected':''):'selected';?>>Client Type</option>
-						   <option value="1" <?php echo (isset($_GET['cat'])&&$_GET['cat']==2)?'selected':'';?>>Individual Loans</option>
-							<option value="2" <?php echo (isset($_GET['cat'])&&$_GET['cat']==3)?'selected':'';?>>Group Loans</option>
+							<option value="0" <?php echo isset($_GET['cat'])?(($_GET['cat']==1)?'selected':''):'selected';?>>Client Type...</option>
+						   <option value="1" <?php echo (isset($_GET['cat'])&&$_GET['cat']==2)?'selected':'';?>>Individual Savings</option>
+							<option value="2" <?php echo (isset($_GET['cat'])&&$_GET['cat']==3)?'selected':'';?>>Group Savings</option>
 						</select >
 					</div>
 				</div>

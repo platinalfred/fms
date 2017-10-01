@@ -199,7 +199,7 @@
 				return (loanProductId == parseInt(loanProduct.id));
 			});
 		};
-		/**when the user selects a particular group, only the members in that group should be returned,
+		/** when the user selects a particular group, only the members in that group should be returned,
 		//when an individual client has been selected, then we return that client object as the only array element
 		//There can be 1 or more loan accounts created, depending on the client type selected
 		//so we join the join each of the member objects with that of the loan account
@@ -221,15 +221,12 @@
 			}
 			
 		});
+		//this array main applies to the loan application details page
 		self.filteredGroupMembers2 = ko.computed(function() {
 			if(self.account_details()){
 				if(!self.account_details().groupId||self.account_details().groupId==0){
 					if(self.account_details().status<4||self.account_details().status==11){
 						var loan_account = new LoanAccount();
-						
-						/* loan_account.selectedGuarantors(null);
-						loan_account.addedCollateral(null);
-						loan_account.member_business(null); */
 						
 						loan_account.requestedAmount2(self.account_details().requestedAmount); 
 						loan_account.interestRate2(self.account_details().interestRate); 
@@ -254,6 +251,7 @@
 						loan_account.offSetPeriod2(groupLoanAccount.offSetPeriod); 
 						loan_account.installments2(groupLoanAccount.installments); 
 						loan_account.gracePeriod2(groupLoanAccount.gracePeriod); 
+						//loan_account.collateral_items(groupLoanAccount.collateral_items);
 						thisGroupMembers.push($.extend(groupLoanAccount, loan_account));
 					});
 					return thisGroupMembers;
@@ -785,16 +783,10 @@
 	$('.table tbody').on('click', 'tr .delete_me', function () {
 		var confirmation = confirm("Are sure you would like to delete this loan application?");
 		if(confirmation){
-			var tbl;
-			var id;
-			var d_id = $(this).attr("id")
-			var arr = d_id.split("-");
-			id = arr[0];//This is the row id
-			tbl = arr[1]; //This is the table to delete from 
-			 $.ajax({ // create an AJAX call...
+			$.ajax({ // create an AJAX call...
 				type: 'POST',
 				url: "delete.php",
-				data: {id:id, tbl:tbl}, // the file to call
+				data: {id:viewModel.account_details().id, tbl:'loan_account'}, // the file to call
 				success: function(response) { // on success..
 					showStatusMessage(response, "success");
 					setTimeout(function(){

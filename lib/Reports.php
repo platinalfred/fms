@@ -141,7 +141,7 @@ Class Reports{
 			  <div class="ibox-title">
 				<h2> <small>Subscriptions </small></h2>
 				<?php
-				if(isset($_SESSION['accountant'])){ ?>
+				if(in_array(1, $_SESSION['access_levels'])||in_array(7, $_SESSION['access_levels'])){ ?>
 					<div class="ibox-tools">
 						<a data-toggle="modal" class="btn btn-sm btn-primary" href="#add_subscription"><i class="fa fa-plus"></i> Subscribe</a>
 					</div>

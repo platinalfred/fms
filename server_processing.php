@@ -38,6 +38,9 @@ if ( isset($_POST['page']) && $_POST['page'] == "loan_accounts" ) {
 	$loan_payments_sql = "LEFT JOIN (SELECT `loanAccountId`, COALESCE(SUM(`amount`),0) `amountPaid` FROM `loan_repayment` GROUP BY `loanAccountId`) `loan_payments` ON `loan_account`.`id` = `loan_payments`.`loanAccountId` ";
 	
 	$saccogroups_sql = " JOIN (SELECT `group_loan_account`.`id`, `saccogroup`.`id` `groupId`, `groupName` FROM `group_loan_account` JOIN `saccogroup` ON `saccoGroupId` = `saccogroup`.`id`) `sacco_loan_acc_group` ON `sacco_loan_acc_group`.`id`=`groupLoanAccountId`"; //this will  be the case when we have to view only member loans
+	
+	$staff_sql = " JOIN (SELECT `staff`.`id`,CONCAT(`lastname`,' ',`firstname`)`staffNames` FROM `staff` JOIN `person` ON `staff`.`personId`=`person`.`id` ) `staff_details` ON `loan_account`.`createdBy`=`staff_details`.`id`";
+	
 	if((isset($_POST['clientType'])&&$_POST['clientType']!=1&&$_POST['clientType']!=2)||(isset($_POST['clientType'])&&$_POST['clientType']!=2)){//otherwise, when we want to view both member and group loans
 		$saccogroups_sql = " LEFT ".$saccogroups_sql;
 	}
@@ -45,11 +48,11 @@ if ( isset($_POST['page']) && $_POST['page'] == "loan_accounts" ) {
 		$where = ($where?$where." AND ":"")."`groupLoanAccountId` IS NULL ";
 	}
 	
-	$table = "`loan_account` JOIN ($member_sql) `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` $saccogroups_sql $loan_payments_sql";
+	$table = "`loan_account` JOIN ($member_sql) `clients` ON `clients`.`loanAccountId` = `loan_account`.`id` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` $saccogroups_sql $loan_payments_sql $staff_sql";
 	
 	$primary_key = "`loan_account`.`id`";
 
-	$columns = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`disbursementDate`", "`productName`", "`disbursedAmount`", "`applicationDate`", "`requestedAmount`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`interestRate`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`", "`clientType`", "`clientId`","`status`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "CONCAT('loanAcc',`loan_account`.`id`) `DT_RowId`"/**/);
+	$columns = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`disbursementDate`", "`productName`", "`disbursedAmount`", "`applicationDate`", "`requestedAmount`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`interestRate`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`", "`clientType`", "`clientId`","`status`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`staffNames`", "CONCAT('loanAcc',`loan_account`.`id`) `DT_RowId`"/**/);
 }
 //list of the income transactions
 if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
@@ -57,9 +60,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
 		$where = "(`date_added` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}
 	$table = "`income` JOIN `income_sources` ON `income_type` = `income_sources`.`id`";
-
 	$primary_key = "`income`.`id`";
-
 	$columns = array( "`name`", "`amount`", "`income`.`description`", "`date_added`", "`income`.`id`");
 }
 //list of all the shares held by the clients
@@ -105,7 +106,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loan_payments" ) {
 
 	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`comments`", "`transaction_date`", "`loan_number`", "`loan_id`");
 }
-//list of all the member deposit accounts
+//list of all the client deposit accounts
 if ( isset($_POST['page']) && $_POST['page'] == "deposit_accounts" ) {	
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where = "(`deposit_account`.`dateCreated` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";

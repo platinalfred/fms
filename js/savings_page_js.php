@@ -39,7 +39,6 @@ $(document).ready(function() {
 				$(api.column(6).footer()).html(curr_format(actual_balance));
 		  },columns:[ { data: 'id', render: function ( data, type, full, meta ) {
 			  var page = "";
-			  alert("Here");
 			  if(full.clientType==1){
 				  page = "member_details.php?memberId=";
 			  }

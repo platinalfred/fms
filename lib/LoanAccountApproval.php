@@ -15,7 +15,7 @@ class LoanAccountApproval extends Db {
 	public function getLoanAccountApprovals($where = 1){
 		$fields =( "`amountRecommended`,`justification`,`status`,`dateCreated`, `staffNames`" );
 		
-		$table = self::$table_name." JOIN (SELECT `staff`.`id`,CONCAT(`lastname`,' ',`othername`,' ',`firstname`)`staffNames` FROM `staff` JOIN `person` ON `staff`.`personId`=`person`.`id` ) `staff_details` ON `loan_account_approval`.`staffId`=`staff_details`.`id`";
+		$table = self::$table_name." JOIN (SELECT `staff`.`id`,CONCAT(`lastname`,' ',`firstname`)`staffNames` FROM `staff` JOIN `person` ON `staff`.`personId`=`person`.`id` ) `staff_details` ON `loan_account_approval`.`staffId`=`staff_details`.`id`";
 	
 		$result_array = $this->getfarray($table, $fields, $where, "`dateCreated`", "");
 		return !empty($result_array) ? $result_array : false;

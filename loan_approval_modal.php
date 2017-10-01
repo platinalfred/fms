@@ -69,7 +69,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-12" data-bind="if: typeof(collateral_items())!='undefined'&&collateral_items().length>0">
+									<div class="col-md-12" data-bind="if: !groupLoanAccountId&&typeof(collateral_items())!='undefined'&&collateral_items().length>0">
 										<div class="col-md-12 bordered">
 											<h3>Collateral</h3>
 											<div class="table-responsive">
@@ -172,9 +172,9 @@
 													<thead>
 														<tr>
 															<th>Employer</th>
-															<th>Years of employment</th>
-															<th>Nature of employment</th>
-															<th>Monthly salary</th>
+															<th>Years of Employment</th>
+															<th>Nature of Employment</th>
+															<th>Monthly Salary</th>
 														</tr>
 													</thead>
 													<tbody data-bind="foreach: employmentHistory">
@@ -250,7 +250,7 @@
 																<td data-bind="text: moment(applicationDate,'X').format('DD-MMM-YYYY')"></td>
 																<td data-bind="text: curr_format(parseFloat(requestedAmount))"></td>
 																<td data-bind="text: comments">remark</td>
-																<td data-bind="text: 'Officer '+createdBy">officer</td>
+																<td data-bind="text: staffNames">officer</td>
 															</tr>
 															<!--ko if: typeof(approvals)!='undefined' &&approvals.length>0-->
 															<!--ko foreach: approvals-->

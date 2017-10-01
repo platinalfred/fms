@@ -225,7 +225,7 @@ if(isset($_POST['origin'])){
 						$deposit_account_ids_array = $member_deposit_account_obj->getAccountIds($member_id);
 						$loan_account_ids_array = $member_loan_account_obj->getAccountIds($member_id);
 						
-						$data['subscriptions'] = $subscriptionsObj->findSubscriptionAmount('memberId='.$member_id. ($between?"AND (datePaid ".$between:""));
+						$data['subscriptions'] = $subscriptionsObj->findSubscriptionAmount('memberId='.$member_id. ($between?" AND (datePaid ".$between:""));
 						$data['shares'] = $sharesObj->findShareAmount('memberId='.$member_id);
 						break;
 						
@@ -252,13 +252,13 @@ if(isset($_POST['origin'])){
 						$loanAccountIds = substr($loanAccountIds,0,-1).")";
 					} */
 					
-					$data['deposits'] = empty($deposit_account_ids_array) ? 0 : $depositAccountTransactionObj->getMoneySum("1 ". ($between?"AND (dateCreated ".$between:""), $deposit_account_ids_array);
-					$data['withdraws'] = empty($deposit_account_ids_array) ? 0 :  $depositAccountTransactionObj->getMoneySum("2 ". ($between?"AND (dateCreated ".$between:""), $deposit_account_ids_array);
+					$data['deposits'] = empty($deposit_account_ids_array) ? 0 : $depositAccountTransactionObj->getMoneySum("1 ". ($between?" AND (dateCreated ".$between:""), $deposit_account_ids_array);
+					$data['withdraws'] = empty($deposit_account_ids_array) ? 0 :  $depositAccountTransactionObj->getMoneySum("2 ". ($between?" AND (dateCreated ".$between:""), $deposit_account_ids_array);
 					$data['deposit_account_fees'] = empty($deposit_account_ids_array) ? 0 :  $depositAccountFeeObj->getSum(($between?"(dateCreated ".$between:"1 "),$deposit_account_ids_array);
 					$data['disbursedLoan'] = empty($loan_account_ids_array) ? array('loanAmount'=>0,'interestAmount'=>0) :  $loanAccountObj->getSumOfFields(($between?"(`disbursementDate` ".$between:"1"),$loan_account_ids_array);
 					$data['loan_payments'] = empty($loan_account_ids_array) ? 0 :  $loanAccountPaymentObj->getPaidAmount(($between?"(`transactionDate` ".$between:"1"),$loan_account_ids_array);
 					$data['loan_account_fees'] = empty($loan_account_ids_array) ? 0 :  $loanAccountFeeObj->getSum(($between?"(`dateCreated` ".$between:"1 "),$loan_account_ids_array);
-					$data['opening_balances'] = $depositAccountObj->getSumOfFields(($between?"(`dateCreated` ".$between:"1 "), $deposit_account_ids_array);
+					$data['opening_balances'] = empty($deposit_account_ids_array)?0:$depositAccountObj->getSumOfFields(($between?"(`dateCreated` ".$between:"1 "), $deposit_account_ids_array);
 				}
 			}else{
 				$sharesObj = new Shares();
@@ -273,8 +273,8 @@ if(isset($_POST['origin'])){
 				
 				
 				
-				$data['deposits'] = $depositAccountTransactionObj->getMoneySum("1 ". ($between?"AND (`dateCreated` ".$between:""),  $deposit_account_ids_array);
-				$data['withdraws'] = $depositAccountTransactionObj->getMoneySum("2 ". ($between?"AND (`dateCreated` ".$between:""),  $deposit_account_ids_array);
+				$data['deposits'] = $depositAccountTransactionObj->getMoneySum("1 ". ($between?" AND (`dateCreated` ".$between:""),  $deposit_account_ids_array);
+				$data['withdraws'] = $depositAccountTransactionObj->getMoneySum("2 ". ($between?" AND (`dateCreated` ".$between:""),  $deposit_account_ids_array);
 				$data['deposit_account_fees'] = $depositAccountFeeObj->getSum(($between?"(dateCreated ".$between:"1 "),$deposit_account_ids_array);
 				$data['disbursedLoan'] = $loanAccountObj->getSumOfFields(($between?"(`disbursementDate` ".$between:"1 "),$loan_account_ids_array);
 				$data['loan_payments'] = $loanAccountPaymentObj->getPaidAmount(($between?"(`transactionDate` ".$between:"1"),$loan_account_ids_array);
@@ -368,9 +368,9 @@ if(isset($_POST['origin'])){
 					$data = $loan_account_obj->getApplications("`groupLoanAccountId`=".$_POST['groupLoanAccountId']);
 					foreach($data as $key=>$loanAccount){
 						$guarantorObj = new Guarantor();
-						$collateralObj = new LoanCollateral();
+						//$collateralObj = new LoanCollateral();
 						$data[$key]['guarantors'] = $guarantorObj->getLoanGuarantors($loanAccount['id']);
-						$data[$key]['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$loanAccount['id']);
+						//$data[$key]['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$loanAccount['id']);
 						
 						//is the loan disbursed, if so show any payments that have been made
 						if(in_array($loanAccount['status'],array(5,6))){
@@ -400,10 +400,14 @@ if(isset($_POST['origin'])){
 					$personObj = new Person();
 					$memberObj = new Member();
 					$loanAccountObj = new LoanAccount();
+					$loan_account_approvals_obj = new LoanAccountApproval();
 					
 					$data = $loanAccountObj->findById($loanAccountId);
 					$data['guarantors'] = $guarantorObj->getLoanGuarantors($loanAccountId);
 					$data['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$loanAccountId);
+					
+					//any approvals/forwarding
+					$data['approvals'] = $loan_account_approvals_obj->getLoanAccountApprovals("`loanAccountId`=".$loanAccountId);
 					
 					//is the loan disbursed, if so show any payments that have been made
 					if(isset($_POST['status'])&&is_numeric($_POST['status'])&&$_POST['status']==5){

@@ -17,8 +17,8 @@ $(document).ready(function() {
 					d.page = 'deposit_accounts';
 					<?php if(isset($client)):?> d.clientId=<?php echo isset($client['memberId'])?$client['memberId']:(isset($client['groupId'])?$client['groupId']:"");?>; <?php endif;?>
 					d.clientType = <?php echo isset($client['clientType'])?"'{$client['clientType']}'":0; ?>; //specify the type of the client (group/member) here;
-					d.start_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"moment().subtract(30, 'days').format('X')"; ?>;
-					d.end_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"moment().format('X')"; ?>;
+					d.start_date = startDate;
+					d.end_date = endDate;
 				}
 		  },
 		   "initComplete": function(settings, json) {
@@ -93,7 +93,7 @@ $(document).ready(function() {
  function getTransactionHistory(depositAccountId){
 	 $.ajax({
 		url: "ajax_data.php",
-		data: {id:depositAccountId, origin:'member_savings', start_date:self.startDate, end_date:self.endDate},
+		data: {id:depositAccountId, origin:'member_savings', start_date:startDate, end_date:endDate},
 		type: 'POST',
 		dataType: 'json',
 		success: function (response) {
@@ -132,8 +132,8 @@ $(document).ready(function() {
 		self.openingBal = ko.observable(self.depositProduct()?self.depositProduct().defaultOpeningBal:0);
 		self.termLength = ko.observable(self.depositProduct()?self.depositProduct().defaultTermLength:0);
 		self.interestRate = ko.observable(self.depositProduct()?self.depositProduct().defaultInterestRate:0);
-		self.startDate = ko.observable(moment().subtract(30, 'days').format('X'));
-		self.endDate = ko.observable(moment().format('X'));
+		self.startDate = ko.observable(startDate);
+		self.endDate = ko.observable(endDate);
 		// Operations
 		//set options value afterwards
 		self.setOptionValue = function(propId) {
@@ -330,5 +330,6 @@ $(document).ready(function() {
 			depositAccountModel.startDate(start_date);
 			depositAccountModel.endDate(end_date);
 			depositAccountModel.getServerData();
+			dTable.ajax.reload(null, true);
 	 }
 	</script>

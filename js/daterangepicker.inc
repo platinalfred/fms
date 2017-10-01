@@ -5,11 +5,11 @@
    var optionSet1 = {
           startDate: moment(startDate,'X'),
           endDate: moment(endDate,'X'),
-          minDate: '01/01/2012',
-          maxDate: '12/31/2020',
-          dateLimit: {
-            months: 18
-          },
+          minDate: '01/01/2010',
+          maxDate: '<?php echo date('d/m/Y');//12/31/2020 ?>',
+          /*dateLimit: {
+            years: 3
+          },*/
           showDropdowns: true,
           showWeekNumbers: true,
           timePicker: false,
@@ -24,7 +24,7 @@
             'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
             'Full Records': [moment().subtract(1.5, 'year').startOf('month'), moment()]
           },
-          opens: 'right',
+          opens: 'left',
           buttonClasses: ['btn btn-default'],
           applyClass: 'btn-small btn-primary',
           cancelClass: 'btn-small',
@@ -52,7 +52,9 @@
 		//console.log("hide event fired");
 		});
 		$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-			handleDateRangePicker(picker.startDate.format('X'), picker.endDate.format('X'))
+		startDate = picker.startDate.format('X');
+			endDate = picker.endDate.format('X');
+			handleDateRangePicker(startDate, endDate)
 		});
 		$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
 			console.log("cancel event fired");

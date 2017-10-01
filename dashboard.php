@@ -164,7 +164,7 @@ include("include/header.php");
 										</thead>
 										<tbody data-bind="foreach: tables.expenses">
 											<tr>
-												<td data-bind="text: id">1</td>
+												<td data-bind="text: $index()+1">1</td>
 												<td data-bind="text: moment(expenseDate,'X').format('DD MMMM, YYYY')"></td>
 												<td data-bind="text: amountDescription"></td>
 												<td data-bind="text: curr_format(parseInt(amountUsed))"></td>
@@ -192,7 +192,6 @@ include("include/header.php");
 								<a class="collapse-link">
 									<i class="fa fa-chevron-up"></i>
 								</a>
-								
 								<a class="close-link">
 									<i class="fa fa-times"></i>
 								</a>
@@ -201,7 +200,7 @@ include("include/header.php");
 						<div class="ibox-content no-padding">
 							<div>
 								<div class="table-responsive">
-									<table class="table table-striped">
+									<table class="table table-stripped">
 										<thead>
 											<tr>
 												<th>#</th>
@@ -213,7 +212,7 @@ include("include/header.php");
 										</thead>
 										<tbody data-bind="foreach: tables.income">
 											<tr>
-												<td data-bind="text: id">1</td>
+												<td data-bind="text: $index()+1">1</td>
 												<td data-bind="text: source"></td>
 												<td data-bind="text: curr_format(parseInt(amount))"></td>
 												<td data-bind="text: moment(dateAdded,'X').format('DD MMMM, YYYY')"></td>
@@ -316,7 +315,7 @@ include("include/header.php");
 										</thead>
 										<tbody data-bind="foreach: tables.savings">
 											<tr>
-												<td data-bind="text: id">1</td>
+												<td data-bind="text: $index()+1">1</td>
 												<td data-bind="text: clientNames"></td>
 												<td data-bind="text: productName"></td>
 												<td data-bind="text: curr_format(parseInt(sumDeposited))"></td>

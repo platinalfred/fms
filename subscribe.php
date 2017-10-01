@@ -15,7 +15,7 @@
 								<form id="subTable" name="register_group" action="" method="post" class="wizard-big">
 									<input name ="receivedBy" type="hidden" value="<?php echo $_SESSION['personId']; ?>">
 									<input name ="modifiedBy" type="hidden" value="<?php echo $_SESSION['personId']; ?>">
-									<input name ="memberId" type="hidden" value="<?php echo $_GET['id']; ?>">
+									<input name ="memberId" type="hidden" value="<?php echo $_GET['memberId']; ?>">
 									<input name ="datePaid" type="hidden" value="<?php echo time(); ?>">
 									<input name ="tbl" type="hidden" value="add_subscription">
 									<fieldset>

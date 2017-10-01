@@ -13,6 +13,8 @@ class LoanAccount extends Db {
 	
 	protected static $loan_fees_sql = "(SELECT  COALESCE(SUM(feeAmount),0) `feesPaid`, `loanAccountId` FROM `loan_account_fee` GROUP BY `loanAccountId`) loan_fees";
 	
+	protected static $staff_sql = " JOIN (SELECT `staff`.`id`,CONCAT(`lastname`,' ',`firstname`)`staffNames` FROM `staff` JOIN `person` ON `staff`.`personId`=`person`.`id` ) `staff_details` ON `loan_account`.`createdBy`=`staff_details`.`id`";
+	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
 		return !empty($result) ? $result:false;
@@ -33,9 +35,9 @@ class LoanAccount extends Db {
 	}
 	
 	public function findAllDetailsById($id){
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`productName`", "`loan_products`.`id` loanProductId", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`requestedAmount`", "`applicationDate`", "`amountApproved`" , "`approvedBy`", "`approvalNotes`", "`approvalDate`", "`amountPaid`" , "`disbursedAmount`", "`disbursementDate`", "`disbursementNotes`", "`interestRate`", "`offSetPeriod`", "`gracePeriod`", "`loan_account`.`repaymentsFrequency`", "`loan_account`.`repaymentsMadeEvery`", "`installments`", "`loan_account`.`penaltyCalculationMethodId`", "`loan_account`.`penaltyTolerancePeriod`", "`loan_account`.`penaltyRateChargedPer`", "`penaltyRate`", "`loan_account`.`linkToDepositAccount`", "`comments`", "`loan_account`.`createdBy`", "`loan_account`.`dateCreated`", " `requestedAmount`*(`interestRate`/100) `interest`" );
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`productName`", "`loan_products`.`id` loanProductId", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`requestedAmount`", "`applicationDate`", "`amountApproved`" , "`approvedBy`", "`approvalNotes`", "`approvalDate`", "`amountPaid`" , "`disbursedAmount`", "`disbursementDate`", "`disbursementNotes`", "`interestRate`", "`offSetPeriod`", "`gracePeriod`", "`loan_account`.`repaymentsFrequency`", "`loan_account`.`repaymentsMadeEvery`", "`installments`", "`loan_account`.`penaltyCalculationMethodId`", "`loan_account`.`penaltyTolerancePeriod`", "`loan_account`.`penaltyRateChargedPer`", "`penaltyRate`", "`loan_account`.`linkToDepositAccount`", "`comments`", "`staffNames`" ,"`loan_account`.`createdBy`", "`loan_account`.`dateCreated`", " `requestedAmount`*(`interestRate`/100) `interest`" );
 		
-		$table = self::$table_name." JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN ". self::$loan_payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId` LEFT JOIN (".self::$saccogroup_sql2.") `sacco_loan_acc_group` ON `sacco_loan_acc_group`.`id`=`groupLoanAccountId`";
+		$table = self::$table_name." JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN ". self::$loan_payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId` LEFT JOIN (".self::$saccogroup_sql2.") `sacco_loan_acc_group` ON `sacco_loan_acc_group`.`id`=`groupLoanAccountId`".self::$staff_sql;
 		
 		$result = $this->getfrec($table, implode(",",$fields), "`loan_account`.`id`=".$id, "", "");
 		return $result;
@@ -56,19 +58,19 @@ class LoanAccount extends Db {
 	}
 	
 	public function getApplications($where = 1){
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`gender`", "`memberId`", "`productName`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`requestedAmount`", "`disbursedAmount`", "`amountApproved`", "`applicationDate`", "`offSetPeriod`" , "`gracePeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`status`" , "`approvalNotes`" , "`comments`" , "`loan_account`.`createdBy`" ,"`installments`" , "`interestRate`", "`loan_products`.`id` loanProductId", " `requestedAmount`*(`interestRate`/100) `interest`" );
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`gender`", "`memberId`", "`productName`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`requestedAmount`", "`disbursedAmount`", "`amountApproved`", "`applicationDate`", "`offSetPeriod`" , "`gracePeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`status`" , "`approvalNotes`" , "`comments`" , "`loan_account`.`createdBy`" , "`staffNames`" ,"`installments`" , "`interestRate`", "`loan_products`.`id` loanProductId", " `requestedAmount`*(`interestRate`/100) `interest`" );
 		
 		
-		$table = self::$table_name." JOIN (".self::$member_sql.") `clients` ON `clients`.`id` = `memberId` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN (".self::$saccogroup_sql2.") `sacco_loan_acc_group` ON `sacco_loan_acc_group`.`id`=`groupLoanAccountId` ";
+		$table = self::$table_name." JOIN (".self::$member_sql.") `clients` ON `clients`.`id` = `memberId` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN (".self::$saccogroup_sql2.") `sacco_loan_acc_group` ON `sacco_loan_acc_group`.`id`=`groupLoanAccountId` ".self::$staff_sql;
 	
 		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	
 	public function getApprovedLoans($where = 1){
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`memberId`", "`productName`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`offSetPeriod`", "`gracePeriod`" , "`amountApproved`" , "`approvalNotes`" , "`comments`" , "`loan_account`.`createdBy`" ,"`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`amountPaid`" , "`interestRate`" , "`loan_products`.`id` loanProductId", "`disbursedAmount`*(`interestRate`/100) `interest`" );
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`memberId`", "`productName`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`offSetPeriod`", "`gracePeriod`" , "`amountApproved`" , "`approvalNotes`" , "`comments`" , "`loan_account`.`createdBy`" ,"`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`amountPaid`" , "`interestRate`" , "`staffNames`" ,"`loan_products`.`id` loanProductId", "`disbursedAmount`*(`interestRate`/100) `interest`" );
 		
-		$table = self::$table_name." JOIN (".self::$member_sql.") `clients` ON `clients`.`id` = `memberId` LEFT JOIN (".self::$saccogroup_sql2.") `sacco_loan_acc_group` ON `sacco_loan_acc_group`.`id`=`groupLoanAccountId` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN ". self::$loan_payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId`";
+		$table = self::$table_name." JOIN (".self::$member_sql.") `clients` ON `clients`.`id` = `memberId` LEFT JOIN (".self::$saccogroup_sql2.") `sacco_loan_acc_group` ON `sacco_loan_acc_group`.`id`=`groupLoanAccountId` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN ". self::$loan_payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId`".self::$staff_sql;
 	
 		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
 		return !empty($result_array) ? $result_array : false;
