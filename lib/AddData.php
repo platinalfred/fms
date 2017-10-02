@@ -116,35 +116,38 @@ if(isset($_POST['origin'])){
 			$loanProduct = new LoanProduct();
 			$data['dateCreated'] = time();
 			$data['createdBy'] = isset($_SESSION['personId'])?$_SESSION['personId']:1;
-			//$data['dateModified'] = time();
 			$data['modifiedBy'] = isset($_SESSION['personId'])?$_SESSION['personId']:1;
 			unset($data['origin']);
 			$output = $loanProductId = $loanProduct->addLoanProduct($data);
 			
 			if($loanProductId){
 				//insert new loan product fees to the loan products table
-				$productFees = array();
+				$productFees = $new_existing_product_fees = array();
 				if(isset($data['newLoanProductFees'])){
 					$loanProductFee = new LoanProductFee();
 					foreach($data['newLoanProductFees'] as $feeDataItem){
 						$feeDataItem['dateCreated'] = time();
 						$feeDataItem['createdBy'] = isset($_SESSION['personId'])?$_SESSION['personId']:1;
-						//$feeDataItem['dateModified'] = time();
 						$feeDataItem['modifiedBy'] = isset($_SESSION['personId'])?$_SESSION['personId']:1;
-						/*  */
 						$productFees[] = $loanProductFee->addLoanProductFee($feeDataItem);
 					}
+					$new_existing_product_fees = $productFees;
 				}
-				
 				//then the actual fees assigned to this product
 				if(isset($data['existingLoanProductFees'])){
-					array_merge($productFees, $data['existingLoanProductFees']);
+					if(!empty($productFees)){
+						$new_existing_product_fees =  array_merge($productFees, $data['existingLoanProductFees']);
+					}
+					else{
+						$new_existing_product_fees = $data['existingLoanProductFees'];
+					}
+				}
+				if(!empty($new_existing_product_fees)){
 					$loanProductFeen = new LoanProductFeen();
 					$loanProductFees = array();
-					foreach($data['existingLoanProductFees'] as $productFeeDataItem){
+					foreach($new_existing_product_fees as $productFeeDataItem){
 						$loanProductFees['dateCreated'] = time();
 						$loanProductFees['createdBy'] = isset($_SESSION['personId'])?$_SESSION['personId']:1;
-						$loanProductFees['dateModified'] = time();
 						$loanProductFees['modifiedBy'] = isset($_SESSION['personId'])?$_SESSION['personId']:1;
 						$loanProductFees['loanProductId'] = $loanProductId;
 						$loanProductFees['loanProductFeeId'] = $productFeeDataItem;

@@ -99,12 +99,12 @@
                                                             <div class="form-group">
                                                                 <label class="col-md-3 control-label">Loan Amount</label>
                                                                 <div class="col-md-3">
-                                                                    <input type="number" class="form-control input-sm" data-bind='textInput: $parent.requestedAmount2, attr: {"data-rule-min":(parseFloat(minAmount)>0?minAmount:null), "data-rule-max": (parseFloat(maxAmount)>0?maxAmount:null), "data-msg-min":"Loan amount is less than "+curr_format(parseInt(minAmount)), "data-msg-max":"Loan amount is more than "+curr_format(parseInt(maxAmount)),"name":"loanAccount["+$parentContext.$index()+"][requestedAmount]"}' />
+                                                                    <input type="number" class="form-control input-sm" data-bind='textInput: $parent.requestedAmount2, attr: {"data-rule-min":((parseFloat(minAmount)>0&&$root.clientType==1)?minAmount:null), "data-rule-max": ((parseFloat(maxAmount)>0&&$root.clientType==1)?maxAmount:null), "data-msg-min":"Loan amount is less than "+curr_format(parseInt(minAmount)), "data-msg-max":"Loan amount is more than "+curr_format(parseInt(maxAmount)),"name":"loanAccount["+$parentContext.$index()+"][requestedAmount]"}' />
                                                                     <div>
-                                                                        <label class="col-sm-2" data-bind="visible: parseFloat(minAmount)>0">Min</label>
-                                                                        <label class="col-sm-4" data-bind="visible: parseFloat(minAmount)>0, text: curr_format(parseInt(minAmount))"></label>
-                                                                        <label class="col-sm-2" data-bind='visible: parseFloat(maxAmount)>0'>Max</label>
-                                                                        <label class="col-sm-4" data-bind="visible: parseFloat(maxAmount)>0, text: curr_format(parseInt(maxAmount))"></label>
+                                                                        <label class="col-sm-2" data-bind="visible: (parseFloat(minAmount)>0&&$root.clientType==1)">Min</label>
+                                                                        <label class="col-sm-4" data-bind="visible: (parseFloat(minAmount)>0&&$root.clientType==1), text: curr_format(parseInt(minAmount))"></label>
+                                                                        <label class="col-sm-2" data-bind='visible: (parseFloat(maxAmount)>0&&$root.clientType==1)'>Max</label>
+                                                                        <label class="col-sm-4" data-bind="visible: (parseFloat(maxAmount)>0&&$root.clientType==1), text: curr_format(parseInt(maxAmount))"></label>
                                                                     </div>
                                                                 </div>
                                                                 <label class="col-md-3 control-label">Interest Rate</label>
