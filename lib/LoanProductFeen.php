@@ -4,7 +4,7 @@ require_once($curdir.'/Db.php');
 class LoanProductFeen extends Db {
 	protected static $table_name = "loan_product_feen";
 	
-	protected static $table_fields = array("id", "loanProductId", "loanProductFeeId", "dateCreated", "createdBy", "dateModified", "modifiedBy");
+	protected static $table_fields = array("id", "loanProductId", "loanProductFeeId", "dateCreated", "createdBy", "modifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");

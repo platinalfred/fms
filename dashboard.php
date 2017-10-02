@@ -189,7 +189,7 @@ include("include/header.php");
 						<div class="ibox-title">
 							<h5>Income From Other Sources</h5><span class="label label-primary">Recent 10</span>
 							<div class="ibox-tools">
-								<a class="collapse-link">
+								<a class="collapse-link" data-target="#income_source_panel">
 									<i class="fa fa-chevron-up"></i>
 								</a>
 								<a class="close-link">
@@ -197,7 +197,7 @@ include("include/header.php");
 								</a>
 							</div>
 						</div>
-						<div class="ibox-content no-padding">
+						<div class="ibox-content no-padding" id="income_source_panel">
 							<div>
 								<div class="table-responsive">
 									<table class="table table-stripped">
@@ -240,7 +240,7 @@ include("include/header.php");
 						<div class="ibox-title">
 							<h5>Loan Products Revenue</h5> <span class="label label-primary">Top 10</span>
 							<div class="ibox-tools">
-								<a class="collapse-link">
+								<a class="collapse-link" data-toggle="collapse" data-target="#loan_products_panel">
 									<i class="fa fa-chevron-up"></i>
 								</a>
 								
@@ -249,7 +249,7 @@ include("include/header.php");
 								</a>
 							</div>
 						</div>
-						<div class="ibox-content">
+						<div class="ibox-content" id="loan_products_panel">
 							<div>
 								<div class="table-responsive">
 									<table class="table table-striped">
@@ -290,7 +290,7 @@ include("include/header.php");
 						<div class="ibox-title">
 							<h5>Member Savings </h5><span class="label label-primary">Recent 10</span>
 							<div class="ibox-tools">
-								<a class="collapse-link">
+								<a class="collapse-link" data-toggle="collapse" data-target="#savings_panel">
 									<i class="fa fa-chevron-up"></i>
 								</a>
 								
@@ -299,7 +299,7 @@ include("include/header.php");
 								</a>
 							</div>
 						</div>
-						<div class="ibox-content no-padding">
+						<div class="ibox-content no-padding" id="savings_panel">
 							<div>
 								<div class="table-responsive">
 									<table class="table table-striped">
@@ -337,9 +337,7 @@ include("include/header.php");
 									</table>
 									<p data-bind="if: tables.savings" class="pull-right"><a data-bind="attr: { href: 'view_reports.php?view=allsavings&start_date='+$parent.startDate()+'&amp;end_date='+$parent.endDate()}" class="btn btn-info" title="View all savings">View all...</a></p>
 								</div>
-
 							</div>
-						
 						</div>
 					</div>
 				</div>

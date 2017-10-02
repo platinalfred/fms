@@ -11,7 +11,7 @@ $names =  $group_data['groupName'];
 $data['group_members'] = $sacco_group->findGroupMembers($group_data['id']);
 $client['clientType'] = 2;
 $client['clientNames'] = $names;
-$client['groupId'] = $_GET['groupId'];
+$client['id'] = $_GET['groupId'];
 if(!$group_data){
 	echo "<p>No group details found</p>";
 	return;

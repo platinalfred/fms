@@ -121,7 +121,7 @@
                                     <div class="col-sm-2">
 										<input type="number" name="minGuarantors" id="minGuarantors" class="form-control input-sm" data-bind="value: minGuarantors" >
                                     </div>
-										<label class="control-label col-sm-4">Minimum Collateral Amount Required</label>
+										<label class="control-label col-sm-4">Minimum Collateral Amount Required (%)</label>
                                     <div class="col-sm-3">
 										<input type="number" name="minCollateral" id="minCollateral" data-bind="value: minCollateral" class="form-control input-sm" data-rule-min="0" data-rule-max="100">
                                     </div>
@@ -234,7 +234,6 @@
 													<th>Amount Calculated As</th>
 													<th>Amount</th>
 													<th>Fee Type</th>
-													
 													<th>Required Fee?</th>
 													<th>&nbsp;</th>
 												</tr>
