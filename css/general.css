@@ -1,3 +1,6 @@
+table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:after{
+	bottom: 2px !important;
+}
 .details{
     border-bottom: 1px dotted #DFE3FC;
 	padding-top:8px;
@@ -20,6 +23,6 @@
 }
 .bordered{
 	border: 1px dashed #dfe8f1;
-    margin: 5px;
-	padding:8px;
+       margin: 3px;
+    padding: 4px;
 }

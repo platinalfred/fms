@@ -44,8 +44,9 @@ h5 {
 .nav > li > a {
   color: #a7b1c2;
   font-weight: 600;
-  padding: 14px 20px 14px 25px;
-      font-size: 14px;
+  padding: 8px 20px 8px 25px;
+  /* padding: 14px 20px 14px 25px; */
+  font-size: 14px;
 }
 .nav.navbar-right > li > a {
   color: #999c9e;
@@ -1834,16 +1835,16 @@ div.dt-button-info {
 }
 .form-control,
 .single-line {
-  background-color: #FFFFFF;
-  background-image: none;
-  border: 1px solid #e5e6e7;
-  border-radius: 1px;
-  color: inherit;
-  display: block;
-  padding: 6px 12px;
-  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-  width: 100%;
-  font-size: 14px;
+     background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #e5e6e7;
+    border-radius: 1px;
+    color: inherit;
+    display: block;
+    padding: 2px 4px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%;
+    font-size: 12px;
 }
 .form-control:focus,
 .single-line:focus {
@@ -3305,7 +3306,7 @@ body.tour-open .animated {
 body {
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   background-color: #2f4050;
-  font-size: 13px;
+  font-size: 12px;
   color: #676a6c;
   overflow-x: hidden;
 }
@@ -3369,7 +3370,7 @@ a:focus {
   color: #ffffff;
   background-color: #ffffff;
   height: 1px;
-  margin: 20px 0;
+  margin: 8px 0
 }
 .hr-line-solid {
   border-bottom: 1px solid #e7eaec;
@@ -3568,9 +3569,10 @@ body.body-small .footer.fixed {
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
   border-top: 1px solid #e7eaec;
-  line-height: 1.12857;
-  padding: 4px;
-  vertical-align: top;
+   
+    line-height: 1.0;
+    padding: 1px 4px;
+    vertical-align: middle;
 }
 /* PANELS */
 .panel.blank-panel {
@@ -3752,12 +3754,12 @@ code {
   color: inherit;
   margin-bottom: 0;
   padding: 8px 8px 7px;
-  min-height: 48px;
+  min-height: 18px;
 }
 .ibox-content {
   background-color: #ffffff;
   color: inherit;
-  padding: 15px 20px 20px 20px;
+  padding: 2px 20px 2px 20px;
   border-color: #e7eaec;
   border-image: none;
   border-style: solid solid none;
@@ -4512,7 +4514,7 @@ body.mini-navbar.fixed-sidebar .logo-element {
   border-bottom: 0;
   border-right: 0;
   border-left: 0;
-  padding: 10px 0;
+  padding: 3px 0;
 }
 ul.clear-list:first-child {
   border-top: none !important;

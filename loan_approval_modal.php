@@ -26,7 +26,7 @@
 									<!--ko if: typeof(member_details)!='undefined'-->
 									<div class="col-md-12" >
 										<div class="col-md-12 bordered" style="padding:4px;">
-											<h3>Client Details</h3><br/>
+											<h3>Client Details</h3>
 											<div class="col-sm-3"><img style="width:100px;"  data-bind="attr:{src:member_details.id_specimen}" /></div>
 											<div class="col-sm-9"><i data-bind="css: {'fa':1, 'fa-male': gender=='M', 'fa-female': gender=='F'}"></i> <span data-bind="text: clientNames"></span>  ,
 											<i class="fa fa-mobile"></i> <span data-bind="text: member_details.phone"></span>,  
