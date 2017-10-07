@@ -1116,7 +1116,7 @@ $(document).ready(function(){
 			  columns:[ { data: 'productName'},
 				  { data: 'description'},
 				  { data: 'typeName'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_loan_product" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-loan_product-loanProductForm" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_loan_product" class="btn btn-white btn-xs"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-loan_product-loanProductForm" class="btn btn-danger btn-xs delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [

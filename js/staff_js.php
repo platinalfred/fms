@@ -65,11 +65,12 @@ $(document).ready(function(){
 				  nonblock: true
 			  }
 			  
-		  });
+		});
 		
 	}
-  // It has the name attribute "registration"
-  $("form[name='registration']").validate({
+	
+	// It has the name attribute "registration"
+	$("form[name='registration']").validate({
     // Specify validation rules
     rules: {
 		// The key name on the left side is the name attribute
@@ -85,7 +86,7 @@ $(document).ready(function(){
 		  }, */
 		password: {
 			required: true,
-			minlength: 5
+			minlength: 7
 		},
 		password2: {
 			equalTo: "#password"

@@ -89,7 +89,7 @@
 											<div class="form-group">
 												<label class="control-label col-md-3 col-sm-3 col-xs-12 no_padding">Password <span class="req">*</span></label>
 												<div class="col-md-9 col-sm-9 col-xs-12">
-													<input id="password" name="password" type="password" class="form-control" required>
+													<input  id="password" name="password" type="password" class="form-control" required>
 												</div>
 											</div>
 										</div>
