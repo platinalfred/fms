@@ -221,7 +221,7 @@
 			}
 			
 		});
-		//this array main applies to the loan application details page
+		//this array mainly applies to the loan application details page
 		self.filteredGroupMembers2 = ko.computed(function() {
 			if(self.account_details()){
 				if(!self.account_details().groupId||self.account_details().groupId==0){
@@ -279,7 +279,7 @@
 			self.clientType(null);
 		
 			endDate = moment().format('X'); //get the current time
-			dTable['applications'].ajax.reload(null,true);
+			dTable['applications'].ajax.reload(null,false);
 		};		
 		//Retrieve page data from the server
 		self.getServerData = function() {
@@ -487,11 +487,13 @@
 			
 		post_data.origin = 'loan_accounts';
 		post_data.status = loan_status; // status of pending loan applications;
-		post_data.start_date = startDate;
-		post_data.end_date = endDate;
+		<?php if(!isset($_GET['grpLId'])):?> //shouldn't query dates if referring to a group loan
+			post_data.start_date = startDate;
+			post_data.end_date = endDate;
+		<?php endif; ?>
 		<?php if(isset($_GET['groupId'])):?>post_data.groupId = <?php echo json_encode($_GET['groupId']);?>; <?php endif;?>//this caters for the display of all loans taken by groups
 		<?php if(isset($_GET['memberId'])):?>post_data.memberId = <?php echo json_encode($_GET['memberId']);?>; <?php endif;?>//this caters for the display of all loans taken by a member
-		<?php if(isset($_GET['grpLId'])):?>post_data.grpLId = <?php echo json_encode($_GET['grpLId']);?>; <?php endif;?>//this caters for the display of loans taken in group setting
+		<?php if(isset($_GET['grpLId'])):?>post_data.grpLId = <?php echo json_encode($_GET['grpLId']);?>; <?php endif;?>//this caters for the display of loans taken by a group
 		
 		if(loan_status==1||loan_status==2||loan_status==11||loan_status==12){
 			//partial applications/pending approval/closed_rejected/closed_withdrawn
@@ -778,8 +780,10 @@
 	}();
 	TableManageButtons.init();
 	$('#loan_types').change(TableManageButtons.init);
+	//reload the tables every 30 seconds
+	//setInterval( TableManageButtons.init, 30000 );
   });
-	  
+	
 	$('.table tbody').on('click', 'tr .delete_me', function () {
 		var confirmation = confirm("Are sure you would like to delete this loan application?");
 		if(confirmation){

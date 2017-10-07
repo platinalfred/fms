@@ -68,7 +68,7 @@ p{
 											foreach($data['group_members'] as $single){ ?>
 												<div class="col-md-12 col-sm-12 col-xs-12" style="padding-top:10px;">
 													<div class="col-lg-3">
-														<a href="member_details.php?id=<?php echo $single['memberId']; ?>"><?php echo $single['memberNames']; ?></a>
+														<a href="member_details.php?id=<?php echo $single['memberId']; ?>"><?php echo $single['clientNames']; ?></a>
 													</div>
 													<div class="col-lg-3"><?php echo $single['person_number']; ?>
 													</div>

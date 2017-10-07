@@ -295,12 +295,12 @@
 										<!--/ko-->
 										<!--ko foreach: $parent.addedCollateral-->
 										<tr>
-											<td><input class="form-control input-sm" data-bind="value: itemName, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+($index()+(typeof($parent.collateral_items())!='undefined'?$parent.collateral_items().length:0))+'][itemName]'}" data-msg-required="Item name is required" required/></td>
-											<td><textarea class="form-control input-sm" data-bind="value: description, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+($index()+(typeof($parent.collateral_items())!='undefined'?$parent.collateral_items().length:0))+'][description]'}" data-msg-required="Item description is required" required></textarea></td>
-											<td><input class="form-control input-sm" type="number" data-bind="textInput: itemValue, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+($index()+(typeof($parent.collateral_items())!='undefined'?$parent.collateral_items().length:0))+'][itemValue]'}" required/>
+											<td><input class="form-control input-sm" data-bind="value: itemName, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+($index()+(typeof($parentContext.$parent.collateral_items())!='undefined'?$parentContext.$parent.collateral_items().length:0))+'][itemName]'}" data-msg-required="Item name is required" required/></td>
+											<td><textarea class="form-control input-sm" data-bind="value: description, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+($index()+(typeof($parentContext.$parent.collateral_items())!='undefined'?$parentContext.$parent.collateral_items().length:0))+'][description]'}" data-msg-required="Item description is required" required></textarea></td>
+											<td><input class="form-control input-sm" type="number" data-bind="textInput: itemValue, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+($index()+(typeof($parentContext.$parent.collateral_items())!='undefined'?$parentContext.$parent.collateral_items().length:0))+'][itemValue]'}" required/>
 											<i><span data-bind="text: getWords(itemValue())+' Uganda shillings only'"></span></i>
 											</td>
-											<td><input class="input-sm" type="file" data-bind="value: attachmentUrl, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+($index()+(typeof($parent.collateral_items())!='undefined'?$parent.collateral_items().length:0))+'][attachmentUrl]'}"/></td>
+											<td><input class="input-sm" type="file" data-bind="value: attachmentUrl, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+($index()+(typeof($parentContext.$parent.collateral_items())!='undefined'?$parentContext.$parent.collateral_items().length:0))+'][attachmentUrl]'}"/></td>
 											<td><span title="Remove item" class="btn text-danger" data-bind='click: $parentContext.$parent.removeCollateral'><i class="fa fa-minus"></i></span></td>
 										</tr>
 										<!--/ko-->
