@@ -2,7 +2,7 @@
 		<div class="col-lg-8">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
-					<h5>Loan Accounts <small>loans list</small></h5>
+					<h5>Loan Accounts <small><?php if(isset($_GET['grpLId'])):?>(Ref#<?php echo $_GET['grpLId'];?>)<?php else:?>loans list<?php endif; ?></small></h5>
 					<?php 
 					if(isset($_SESSION['loans_officer'])  || isset($_SESSION['admin'])){ ?>
 						 <div class="pull-right">
@@ -14,9 +14,8 @@
 				</div>
 				<div class="ibox-content m-b-sm border-bottom">
 					<div class="row">
-						<div class="col-sm-4">
+						<div class="col-md-4">
 							<div class="form-group">
-								<label class="control-label" for="product_name">Loans</label>
 								<select id="loan_types" class="form-control">
 								<?php
 								if((isset($_SESSION['loans_officer'])&& $_SESSION['loans_officer'])||(isset($_SESSION['admin'])&& $_SESSION['admin'])){ ?>
@@ -29,8 +28,8 @@
 								if(isset($_SESSION['access_levels'])&& !in_array(7, $_SESSION['access_levels'])){ ?>
 									<option value="3" <?php echo (isset($_GET['status'])&&$_GET['status']==3)?'selected':'';?>>Pending</option>
 								<?php } ?>
-								    <option value="4" <?php echo (isset($_GET['status'])&&$_GET['status']==4)?'selected':'';?>>Approved</option>
-								    <option value="5" <?php echo isset($_GET['status'])?(($_GET['status']==5)?'selected':''):'';?>>Active</option>
+									<option value="4" <?php echo (isset($_GET['status'])&&$_GET['status']==4)?'selected':'';?>>Approved</option>
+									<option value="5" <?php echo isset($_GET['status'])?(($_GET['status']==5)?'selected':''):'';?>>Active</option>
 									<option value="6" <?php echo (isset($_GET['status'])&&$_GET['status']==6)?'selected':'';?>>Active/In Arrears</option>
 									<option value="11" <?php echo (isset($_GET['status'])&&$_GET['status']==11)?'selected':'';?>>Closed/Rejected</option>
 									<option value="12" <?php echo (isset($_GET['status'])&&$_GET['status']==12)?'selected':'';?>>Closed/Withdrawn</option>
@@ -44,16 +43,17 @@
 								</select >
 							</div>
 						</div>
-						<div class="col-sm-5">
+						<div class="col-md-5">
+							<?php if(!isset($_GET['grpLId'])):?>
 							<div class="form-group">
-								<label class="control-label" for="principle">Select Period</label>
 								<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 5px; border: 1px solid #ccc">
 								  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 								  <span>December 30, 2016 - January 28, 2017</span> <b class="caret"></b>
 								</div>
 							</div>
+							<?php endif; ?>
 						</div>
-						<div class="col-sm-2" style="padding-top:2%;">
+						<div class="col-md-3">
 							<!-- a  class="btn btn-sm btn-success" style="vertical-align:middle;" ><i class="fa fa-folder-open-o"></i> Show results</a-->
 						</div>
 					</div>
@@ -118,7 +118,8 @@
 											<tr>
 												<?php
 												$array_len = count($header_keys);
-												$header_keys[$array_len-1] = "Payments Freq";
+												$header_keys[$array_len-2] = "Payments Freq";
+												$header_keys[$array_len-1] = "Amount Requested";
 												$header_keys[$array_len] = "Amount Approved";
 												foreach($header_keys as $key=>$value){ ?>
 													<th><?php echo $value; ?></th>
