@@ -12,12 +12,12 @@ class LoanProductType extends Db {
 	}
 	
 	public function findAll(){
-		$result_array = $this->getarray(self::$table_name, "", "", "");
+		$result_array = $this->getarray(self::$table_name, "active=1", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	
 	
-	public function addProductType($data){
+	public function addLoanProductType($data){
 		$fields = array_slice(self::$table_fields, 1);
 		$result = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
 		return $result;

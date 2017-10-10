@@ -3370,7 +3370,7 @@ a:focus {
   color: #ffffff;
   background-color: #ffffff;
   height: 1px;
-  margin: 8px 0
+  margin: 15px 0
 }
 .hr-line-solid {
   border-bottom: 1px solid #e7eaec;
@@ -3754,7 +3754,7 @@ code {
   color: inherit;
   margin-bottom: 0;
   padding: 8px 8px 7px;
-  min-height: 18px;
+	min-height: 38px;
 }
 .ibox-content {
   background-color: #ffffff;

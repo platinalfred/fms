@@ -325,10 +325,19 @@ if(isset($_POST['tbl'])){
 		break;
 		case "marital_status":
 			$marital_status = new MaritalStatus();
-			if($marital_status->addMaritalStatus($_POST)){
-				$output = "success";
+			$data = $_POST;
+			if(isset($data['id']) && $data['id'] != ""){
+				if($marital_status->updateMaritalStatus($data)){
+					$output = "success";
+				}else{
+					$output ="Marital Status could not be updated";
+				}
 			}else{
-				$output ="Marital Status could not be added";
+				if($marital_status->addMaritalStatus($data)){
+					$output = "success";
+				}else{
+					$output ="Marital Status could not be added";
+				}
 			}
 		break;
 		
@@ -376,18 +385,36 @@ if(isset($_POST['tbl'])){
 		break;
 		case "income_source":
 			$income_source = new IncomeSource();
-			if($income_source->addIncomeSource($_POST)){
-				$output = "success";
+			$data = $_POST;
+			if(isset($data['id']) && $data['id'] != ""){
+				if($income_source->updatIncomeSource($data)){
+					$output = "success";
+				}else{
+					echo "Could not update income source";
+				}
 			}else{
-				$output ="Income source could not be added";
+				if($income_source->addIncomeSource($data)){
+					$output = "success";
+				}else{
+					$output ="Income source could not be added";
+				}
 			}
 		break;
 		case "individual_type":
 			$individual_type = new IndividualType();
-			if($individual_type->addIndividualType($_POST)){
-				$output = "success";
+			$data = $_POST;
+			if(isset($data['id']) && $data['id'] != ""){
+				if($individual_type->updateIndividualType($data)){
+					$output = "success";
+				}else{
+					$output ="Individual type could not be updated.";
+				}
 			}else{
-				$output ="Individual type could not be added";
+				if($individual_type->addIndividualType($data)){
+					$output = "success";
+				}else{
+					$output ="Individual type could not be added";
+				}
 			}
 		break;
 		case "loan_type":
@@ -416,10 +443,19 @@ if(isset($_POST['tbl'])){
 		break;
 		case "relation_type":
 			$relation_type = new RelationshipType();
-			if($relation_type->addRelationshipType($_POST)){
-				$output = "success";
+			$data = $_POST;
+			if(isset($data['id']) && $data['id'] != ""){
+				if($relation_type->updateRelationshipType($data)){
+					$output = "success";
+				}else{
+					$output ="Relationship type could not be updated";
+				}
 			}else{
-				$output ="Relationship type could not be added";
+				if($relation_type->addRelationshipType($data)){
+					$output = "success";
+				}else{
+					$output ="Relationship type could not be added";
+				}
 			}
 		break;
 		case "repayment_duration":
@@ -432,35 +468,72 @@ if(isset($_POST['tbl'])){
 		break;
 		case "security_type":
 			$security_type = new SecurityType();
-			if($security_type->addSecurityType($_POST)){
-				$output = "success";
-			}else{
-				$output ="Security type could not be added";
+			$data = $_POST;
+			if(isset($data['id']) && $data['id'] != ""){
+				if($security_type->updateSecurityType($data)){
+					$output = "success";
+				}else{
+					$output ="Security type could not be updated";
+				}
+			}else{	
+				if($security_type->addSecurityType($data)){
+					$output = "success";
+				}else{
+					$output ="Security type could not be added";
+				}
 			}
 		break;
 		case "position":
 			$position = new Position();
-			if($position->addPosition($_POST)){
-				$output = "success";
+			$data = $_POST;
+			if(isset($data['id']) && $data['id'] != ""){
+				if($position->updatePosition($data)){
+					$output = "success";
+				}else{
+					$output ="Position could not be updated";
+				}
 			}else{
-				$output ="Position could not be added";
+				if($position->addPosition($_POST)){
+					$output = "success";
+				}else{
+					$output ="Position could not be added";
+				}
 			}
 		break;
 		case "id_card_type":
 			$id_card_type = new IdCardType();
-			if($id_card_type->addIdCardType($_POST)){
-				$output = "success";
+			$data  = $_POST;
+			if(isset($data['id']) && $data['id'] != ""){
+				if($id_card_type->updateIdCardType($data)){
+					$output = "success";
+				}else{
+					$output ="Id Card Type could not be updated";
+				}
 			}else{
-				$output ="Id Card Type could not be added";
+				if($id_card_type->addIdCardType($data)){
+					$output = "success";
+				}else{
+					$output ="Id Card Type could not be added";
+				}
 			}
 		break;
 		case "loan_product_type":
+			$data = $_POST;
 			$loan_product_type = new LoanProductType();
-			if($loan_product_type->addLoanProductType($_POST)){
-				$output = "success";
+			if(isset($data['id']) && $data['id'] != ""){
+				if($loan_product_type->updateProductType($data)){
+					$output = "success";
+				}else{
+					echo "Could not update loan product type";
+				}
 			}else{
-				$output ="Loan Product Type could not be added";
+				if($loan_product_type->addLoanProductType($data)){
+					$output = "success";
+				}else{
+					$output ="Loan Product Type could not be added";
+				}
 			}
+			
 		break;
 		case "address_type":
 			$address_type = new AddressType();

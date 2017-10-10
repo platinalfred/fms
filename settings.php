@@ -394,10 +394,11 @@ require_once("lib/Libraries.php");
 											<div class="modal-body">
 												<div class="row">
 													<div class="col-sm-12">
-														<p>Add ID Card Type</p>
+														<p>Add / Update ID Card Type</p>
 														<div class="ibox-content">
 															<form class="form-horizontal" method="post" id="tblCardType">
 																<input type="hidden" name="tbl" value="id_card_type">
+																<input type="hidden" name="id" >
 																<div class="form-group"><label class="col-lg-2 control-label">Name</label>
 
 																	<div class="col-lg-10"><input name="id_type" type="text" placeholder="Name" class="form-control"> <span class="help-block m-b-none">ID card Type (e.g National ID).</span>
@@ -462,10 +463,11 @@ require_once("lib/Libraries.php");
 											<div class="modal-body">
 												<div class="row">
 													<div class="col-sm-12">
-														<p>Add Income Source.</p>
+														<p>Add / Update Income Source.</p>
 														<div class="ibox-content">
 															<form class="form-horizontal" method="post" id="tblIncomeSource">
 																<input name="tbl" value="income_source" type="hidden">
+																<input name="id"  type="hidden">
 																<div class="form-group"><label class="col-lg-2 control-label">Name</label>
 																	<div class="col-lg-10"><input name="name" type="text" placeholder="Name" class="form-control"> <span class="help-block m-b-none">Add source of organization income.</span>
 																	</div>
@@ -529,10 +531,11 @@ require_once("lib/Libraries.php");
 											<div class="modal-body">
 												<div class="row">
 													<div class="col-sm-12">
-														<p>Add Individual Type.</p>
+														<p>Add / Update Individual Type.</p>
 														<div class="ibox-content">
 															<form class="form-horizontal" method="post" id="tblIndividualType">
 																<input type="hidden" name="tbl" value="individual_type">
+																<input type="hidden" name="id" >
 																<div class="form-group"><label class="col-lg-2 control-label">Name</label>
 
 																	<div class="col-lg-10"><input name="name" type="text" placeholder="Name" class="form-control"> <span class="help-block m-b-none">Specify the forms by which an individual can be registered (e.g Member Only).</span>
@@ -590,7 +593,7 @@ require_once("lib/Libraries.php");
 						<div class="panel-body">
 							<div class="col-lg-2 col-offset-sm-8">
 								<div class="text-center">
-									<a data-toggle="modal" class="btn btn-primary" href="#loan_product_type"><i class="fa fa-plus"></i> Add Loan Product type</a>
+									<a data-toggle="modal" class="btn btn-primary" id="loan_product_type_modal" href="#loan_product_type"><i class="fa fa-plus"></i> Add Loan Product type</a>
 								</div>
 								<div id="loan_product_type" class="modal fade" aria-hidden="true">
 									<div class="modal-dialog">
@@ -598,17 +601,18 @@ require_once("lib/Libraries.php");
 											<div class="modal-body">
 												<div class="row">
 													<div class="col-sm-12">
-														<p>Add Loan Product Type.</p>
+														<p>Add/update Loan Product Type.</p>
 														<div class="ibox-content">
 															<form class="form-horizontal" method="post" id="tblLoanProductType">
 																<input type="hidden" name="tbl" value="loan_product_type">
+																<input name="id"  type="hidden">
 																<input type="hidden" name="dateCreated" value="<?php echo time(); ?>">
 																<input type="hidden" name="dateModified" value="<?php echo time(); ?>">				
 																<input type="hidden" name="createdBy" value="<?php echo $_SESSION['user_id']; ?>">
 																<input type="hidden" name="modifiedBy" value="<?php echo $_SESSION['user_id']; ?>">
 																<div class="form-group"><label class="col-lg-2 control-label">Title</label>
 
-																	<div class="col-lg-10"><input name="title" type="text" placeholder="Name" class="form-control"> 
+																	<div class="col-lg-10"><input name="typeName" type="text" placeholder="Name" class="form-control"> 
 																	</div>
 																</div>
 																<div class="form-group"><label class="col-lg-2 control-label">Description</label>
@@ -743,10 +747,11 @@ require_once("lib/Libraries.php");
 											<div class="modal-body">
 												<div class="row">
 													<div class="col-sm-12">
-														<p>Add Relationhip Type.</p>
+														<p>Add / Update Relationhip Type.</p>
 														<div class="ibox-content">
 															<form class="form-horizontal" id="tblRelationType">
 																<input type="hidden" name="tbl"  value="relation_type">
+																<input type="hidden" name="id" >
 																<div class="form-group"><label class="col-lg-2 control-label">Name</label>
 																	<div class="col-lg-10"><input type="text" name="rel_type" placeholder="Name" class="form-control"> 
 																	</div>
@@ -878,9 +883,10 @@ require_once("lib/Libraries.php");
 											<div class="modal-body">
 												<div class="row">
 													<div class="col-sm-12">
-														<p>Add Security Type.</p>
+														<p>Add / Update Security Type.</p>
 														<div class="ibox-content">
 															<form class="form-horizontal" id="tblSecurityType">
+																<input type="hidden" name="id"  >
 																<input type="hidden" name="tbl"  value="security_type">
 																<div class="form-group"><label class="col-lg-2 control-label">Name</label>
 																	<div class="col-lg-10"><input type="text" name="name" placeholder="Name" class="form-control"> 
@@ -945,9 +951,10 @@ require_once("lib/Libraries.php");
 											<div class="modal-body">
 												<div class="row">
 													<div class="col-sm-12">
-														<p>Add Position</p>
+														<p>Add /Update Position</p>
 														<div class="ibox-content">
 															<form class="form-horizontal" id="tblPosition">
+																<input type="hidden" name="id" >
 																<input type="hidden" name="tbl"  value="position">
 																<div class="form-group"><label class="col-lg-2 control-label">Name</label>
 																	<div class="col-lg-10"><input type="text" name="name" placeholder="Name" class="form-control"> 
@@ -1101,9 +1108,10 @@ require_once("lib/Libraries.php");
 											<div class="modal-body">
 												<div class="row">
 													<div class="col-sm-12">
-														<p>Add  Marital Status</p>
+														<p>Add / update Marital Status</p>
 														<div class="ibox-content">
 															<form class="form-horizontal" id="tblMaritalStatus">
+																<input type="hidden" name="id" >
 																<input type="hidden" name="tbl"  value="marital_status">
 																<div class="form-group"><label class="col-lg-2 control-label">Name</label>
 																	<div class="col-lg-10"><input type="text" name="name" placeholder="Adress Type" class="form-control"> 

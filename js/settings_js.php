@@ -1,6 +1,15 @@
 <script>
 var dTable = new Object();
 $(document).ready(function(){
+	
+	//This function is supposed to make sure when the pop up is not an edit no data is displayed in the form. It picks the id field and makes sure if empty then the form is empty for adding new data
+	$('.modal').on('show.bs.modal', function (e) {
+		var id = $(this).find('input[name="id"]').val();
+		var frm = $(this).find("form");
+		if(id == ""){
+			frm[0].reset(); 
+		}
+	});
 	/* Number inputs a thousandsSeparator separator */
 		$('input.athousand_separator').keyup(function(event) {
 
@@ -15,7 +24,7 @@ $(document).ready(function(){
 		  });
 		});
 
-		function numberWithCommas(x) {
+	function numberWithCommas(x) {
 			var parts = x.toString().split(".");
 			parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			return parts.join(".");
@@ -59,8 +68,9 @@ $(document).ready(function(){
 	
 	deleteDataTableRowData();
 	saveData();
-	//This is an object that will hold data table names acrross the settings insterface
-
+	
+	/*To have a form editable first add a class .edit_me on the row, also add an Id-tbl_name-formId and also add an empty id field in the form */
+	
 	//With this one function all settings will be sent to save_data.php for saving
 	function saveData(){
 		$(".save").click(function(){
@@ -156,7 +166,7 @@ $(document).ready(function(){
 					{ data: 'description'},//, render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}
 					//{ data: 'date_added', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
 					
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#expense_type"  id="'+data+'-expense_types-tblExpenseType" data-toggle="modal" href="#edit_person_type" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-expense_type-personTypeTable" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#expense_type"  id="'+data+'-expense_types-tblExpenseType" data-toggle="modal" href="#expense_type" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-expense_types-tblExpenseType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -447,7 +457,7 @@ $(document).ready(function(){
 			  "autoWidth": false,
 			  columns:[ { data: 'name'},
 					{ data: 'description'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_account_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-income_sources-tblbranch" onclick="editClick(this)"  class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#income_source" id="'+data+'-income_sources-tblIncomeSource" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-income_sources-tblIncomeSource"   class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -502,7 +512,7 @@ $(document).ready(function(){
 			  "autoWidth": false,
 			  columns:[ { data: 'name'},
 					{ data: 'description'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_account_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-individual_types-tblIndividualType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" id="'+data+'-individual_types-tblIndividualType" href="#individual_type" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-individual_types-tblIndividualType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -557,7 +567,7 @@ $(document).ready(function(){
 			  "autoWidth": false,
 			  columns:[ { data: 'name'},
 					{ data: 'description'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_account_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-loan_types-tblLoanType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#loan_product_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-loan_types-tblLoanType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -728,7 +738,7 @@ $(document).ready(function(){
 			  columns:[ { data: 'name'},
 					{ data: 'description'},
 					{ data: 'access_level'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_account_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-position-tblPosition" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" id="'+data+'-position-tblPosition" href="#position" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-position-tblPosition" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -758,7 +768,7 @@ $(document).ready(function(){
 			//$("#datatable-buttons").DataTable();
 		}
 		/*END Position- --*/
-		/*Position */
+		/*Id Card Types */
 	  	if ($("#id_card_types").length) {
 			  dTable['tblCardType'] = $('#id_card_types').DataTable({
 			  dom: "lfrtipB",
@@ -783,7 +793,7 @@ $(document).ready(function(){
 			  "autoWidth": false,
 			  columns:[ { data: 'id_type'},
 			  { data: 'description'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_account_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-id_card_types-tblCardType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" id="'+data+'-id_card_types-tblCardType" href="#id_card_type" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-id_card_types-tblCardType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -812,7 +822,7 @@ $(document).ready(function(){
 			});
 			//$("#datatable-buttons").DataTable();
 		}
-		/*END Position- --*/
+		/*END Card Types- --*/
 		/*Loan Product Types */
 	  	if ($("#loan_product_types").length) {
 			  dTable['tblLoanProductType'] = $('#loan_product_types').DataTable({
@@ -838,7 +848,7 @@ $(document).ready(function(){
 			  "autoWidth": false,
 			  columns:[ { data: 'typeName'},
 			  { data: 'description'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_account_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-loan_product_types-tblLoanProductType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" id="'+data+'-loan_product_types-tblLoanProductType" href="#loan_product_type" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-loan_product_types-tblLoanProductType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -893,7 +903,7 @@ $(document).ready(function(){
 			  "autoWidth": false,
 			  columns:[ { data: 'name'},
 			  { data: 'description'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_account_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-security_types-tblSecurityType"  class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" id="'+data+'-security_types-tblSecurityType" href="#security_type" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-security_types-tblSecurityType"  class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -950,7 +960,7 @@ $(document).ready(function(){
 			  "autoWidth": false,
 			  columns:[ { data: 'rel_type'},
 			  { data: 'description'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_account_type" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-relationship_type-tblRelationType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" id="'+data+'-relationship_type-tblRelationType" href="#relation_type" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-relationship_type-tblRelationType" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -1060,7 +1070,7 @@ $(document).ready(function(){
 			  "autoWidth": false,
 			  columns:[ { data: 'name'},
 			  { data: 'description'},
-					{ data: 'id', render: function ( data, type, full, meta ) { return '<a data-toggle="modal" href="#edit_marital_status" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-marital_status-tblMaritalStatus" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) { return '<a data-toggle="modal" id="'+data+'-marital_status-tblMaritalStatus" href="#marital_status" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-marital_status-tblMaritalStatus" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -1217,6 +1227,7 @@ $(document).ready(function(){
 	/* Editing Several tables */
 		$('.table tbody').on('click', 'tr .edit_me', function () {
 			//id="'+data+'-person_type-personTypeTable" 
+			
 			var tbl, id , frm, dt;
 			var d_id = $(this).attr("id");
 			var arr = d_id.split("-");

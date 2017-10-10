@@ -534,24 +534,39 @@
 						] ,
 				  buttons: [
 					{
-					  extend: "copy",
-					  className: "btn-sm"
+						extend: "copy",
+						className: "btn-sm",
+						exportOptions: {
+							columns: [ 0, 1, 2,3,4,5, 6]
+						}
 					},
 					{
 					  extend: "csv",
-					  className: "btn-sm"
+					  className: "btn-sm",
+					  exportOptions: {
+							columns: [ 0, 1, 2,3,4,5, 6]
+						}
 					},
 					{
 					  extend: "excel",
-					  className: "btn-sm"
+					  className: "btn-sm",
+					  exportOptions: {
+							columns: [ 0, 1, 2,3,4,5, 6]
+						}
 					},
 					{
 					  extend: "pdfHtml5",
-					  className: "btn-sm"
+					  className: "btn-sm",
+					  exportOptions: {
+							columns: [ 0, 1, 2,3,4,5, 6]
+						}
 					},
 					{
 					  extend: "print",
-					  className: "btn-sm"
+					  className: "btn-sm",
+					  exportOptions: {
+							columns: [ 0, 1, 2,3,4,5, 6]
+						}
 					},
 				  ],
 				  responsive: false/*, */

@@ -11,11 +11,11 @@ class Position extends Db {
 	}
 	
 	public function findAll(){
-		$result_array = $this->getarray(self::$table_name, "", "", "");
+		$result_array = $this->getarray(self::$table_name, "active=1", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findPositionDetails(){
-		$result_array = $this->getfarray(self::$table_name." p, accesslevel a", "p.id, p.name,p.description, a.name as access_level, a.name as access_level_id", "p.access_level = a.id",  "", "");
+		$result_array = $this->getfarray(self::$table_name." p, accesslevel a", "p.id, p.name,p.description, a.name as access_level, a.name as access_level_id", "p.access_level = a.id AND p.active=1 ",  "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findPositionName($id){

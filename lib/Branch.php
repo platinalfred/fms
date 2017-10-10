@@ -28,7 +28,7 @@ class Branch extends Db {
 		return !empty($result) ? $result['id']:false;
 	}
 	public function findAll(){
-		$result_array = $this->getarray(self::$table_name, "","id DESC", "");
+		$result_array = $this->getarray(self::$table_name, "active=1","id DESC", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findBranchNameByNumber($bno){

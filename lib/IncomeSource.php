@@ -11,7 +11,7 @@ class IncomeSource extends Db {
 	}
 	
 	public function findAll(){
-		$result_array = $this->getarray(self::$table_name, "", "", "");
+		$result_array = $this->getarray(self::$table_name, "active=1", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findIncomeSourceName($id){

@@ -1,6 +1,6 @@
 <?php 
 $needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout");
-$page_title = "Members";
+$page_title = "Staff Members";
 include("include/header.php"); 
 require_once("lib/Libraries.php");
 $staff = new Staff();
@@ -24,7 +24,7 @@ $staff
 			<div class="ibox">
 				<div class="ibox-content">
 					<!--<span class="text-muted small pull-right">Last modification: <i class="fa fa-clock-o"></i> 2:10 pm - 12.06.2014</span>-->
-					<h2><b>STAFF</b></h2>
+					<h2><b>Staff</b></h2>
 					
 					<div class="col-sm-5 text-muted small pull-left" style="padding:10px;"> <a data-toggle="modal" href="#add_staff" class="btn btn-primary btn-xs"> <i class="fa fa-plus"></i> Add new Staff</a></div>
 						

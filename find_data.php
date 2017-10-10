@@ -6,7 +6,7 @@ require_once("lib/DatatablesJSON.php");
 $data_table = new DataTable();
 $primary_key = $columns = $table = $where = $group_by = "";
 if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
-	$where = "active=1";
+	$where = "expense.active=1";
 	//members, person, person relative, person employment, account,
 	$table = "`expense` JOIN `expensetypes` ON `expenseType` = `expensetypes`.`id` LEFT JOIN (SELECT CONCAT(`firstname`,' ', `lastname`) as staff_names, `staff`.`id` from `person` JOIN `staff` ON staff.personId = person.id) as staff_details ON staff_details.id = expense.staff"; 
 	$primary_key = "`expense`.`id`";

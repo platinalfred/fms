@@ -12,6 +12,15 @@ if(isset($_GET['view'])){
 		break;
 		case 'subscriptions':
 			$page_title = "General Members Subscriptions";
+		break;
+		case 'allsavings':
+			$page_title = "Members Savings";
+		break;
+		case 'loanproducts':
+			$page_title = "Loan Products";
+		break; 
+		case 'expenses':
+			$page_title = "All expense reports";
 		break; 
 		default:
 			$page_title = "Reports";

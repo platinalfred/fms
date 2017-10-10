@@ -11,7 +11,7 @@ class SecurityType extends Db {
 	}
 	
 	public function findAll(){
-		$result_array = $this->getarray(self::$table_name, "", "", "");
+		$result_array = $this->getarray(self::$table_name, "active=1", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findSecurityType($id){
@@ -26,7 +26,7 @@ class SecurityType extends Db {
 		return false;
 	}
 	public function updateSecurityType($data){
-		$fields = array_slice(1, self::$db_fields);
+		$fields = array_slice(self::$db_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
 		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){

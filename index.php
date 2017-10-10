@@ -82,9 +82,9 @@
                             <input type="password" name="password" class="form-control" placeholder="Password" >
                         </div>
                         <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
-
+						
                         <a href="#">
-                            <small>Forgot password?</small>
+                            <small>&nbsp;</small>
                         </a>
 
                         <p class="text-muted text-center">
