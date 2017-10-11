@@ -279,7 +279,8 @@
 			self.clientType(null);
 		
 			endDate = moment().format('X'); //get the current time
-			dTable['applications'].ajax.reload(null,false);
+			handleDateRangePicker(startDate, endDate);
+			//dTable['applications'].ajax.reload(null,false);
 		};		
 		//Retrieve page data from the server
 		self.getServerData = function() {
@@ -495,7 +496,7 @@
 		<?php if(isset($_GET['memberId'])):?>post_data.memberId = <?php echo json_encode($_GET['memberId']);?>; <?php endif;?>//this caters for the display of all loans taken by a member
 		<?php if(isset($_GET['grpLId'])):?>post_data.grpLId = <?php echo json_encode($_GET['grpLId']);?>; <?php endif;?>//this caters for the display of loans taken by a group
 		
-		if(loan_status==1||loan_status==2||loan_status==11||loan_status==12){
+		if(loan_status==1||loan_status==2||loan_status==3||loan_status==11||loan_status==12){
 			//partial applications/pending approval/closed_rejected/closed_withdrawn
 			if(typeof(dTable['applications'])!=='undefined'){
 				$(".tab-pane").removeClass("active");
@@ -523,8 +524,8 @@
 					  return '<?php if(isset($_SESSION['loans_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?memberId='+full.memberId+'&view=loan_accs&loanId='+data+'" title="View details">L'+data+'</a> <?php } ?>'; }
 					  },
 						{ data: 'clientNames'},
-						<?php if(!isset($_GET['groupId'])):?>{ data: 'groupName', render: function( data, type, full, meta ){return data?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs" title="View details">'+data+'</a>'):'';}},<?php endif;?>
-						<?php if(!isset($_GET['grpLId'])):?>{ data: 'groupLoanAccountId', render: function( data, type, full, meta ){return (data&&data!=0)?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs&grpLId='+full.groupLoanAccountId+'" title="View details"> Ref#'+data+'</a>'):'';}},<?php endif;?>
+						<?php if(!isset($_GET['groupId'])):?>{ data: 'groupName', render: function( data, type, full, meta ){return data?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs" title="View loans by this group">'+data+'</a>'):'';}},<?php endif;?>
+						<?php if(!isset($_GET['grpLId'])):?>{ data: 'groupLoanAccountId', render: function( data, type, full, meta ){return (data&&data!=0)?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs&grpLId='+full.groupLoanAccountId+'" title="View loans with this reference number"> Ref#'+data+'</a>'):'';}},<?php endif;?>
 						{ data: 'productName'},
 						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
 						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} ,
@@ -638,7 +639,7 @@
 				});	
 			}
 		}
-		if(loan_status==3){ //approved loan accounts
+		if(loan_status==4){ //approved loan accounts
 			if(typeof(dTable['approved'])!=='undefined'){
 				$(".tab-pane").removeClass("active");
 				$("#tab-3").addClass("active");
@@ -700,7 +701,7 @@
 				});
 			}
 		}
-		if(loan_status==4||loan_status==5||loan_status==13||loan_status==14||loan_status==15){ //disbursed loans
+		if(loan_status==5||loan_status==13||loan_status==14||loan_status==15){ //disbursed loans
 			if(typeof(dTable['disbursed'])!=='undefined'){
 				$(".tab-pane").removeClass("active");
 				$("#tab-4").addClass("active");

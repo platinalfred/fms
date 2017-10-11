@@ -95,7 +95,7 @@ if(isset($_GET['id']) && $_GET['view'] == "ledger"){ ?>
 										</tbody>
 										<tfoot>
 											<tr>
-												<th>Total Revenues &amp; Gains</th><td><strong><span data-bind="text: curr_format((subscriptions?parseInt(subscriptions):0)+(other_income_sources?parseInt(other_income_sources):0)+(shares?parseInt(shares):0)+((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0))))">0.0</span></strong></td>
+												<th>Total Revenues &amp; Gains</th><td><strong><span data-bind="text: curr_format((subscriptions?parseInt(subscriptions):0)+(other_income_sources?parseInt(other_income_sources):0)+(shares?parseInt(shares):0)+((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0)+(loan_account_fees?parseInt(loan_account_fees):0))))">0.0</span></strong></td>
 											</tr>
 										</tfoot>
 									</table>
@@ -165,7 +165,7 @@ if(isset($_GET['id']) && $_GET['view'] == "ledger"){ ?>
 										</tbody>
 										<tfoot>
 											<tr>
-												<th>NET INCOME</th><td><strong><span data-bind="text: curr_format((subscriptions?parseInt(subscriptions):0)+(other_income_sources?parseInt(other_income_sources):0)+(shares?parseInt(shares):0)+((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0)))-(expenses?parseInt(expenses):0))">0.0</span></strong></td>
+												<th>NET INCOME</th><td><strong><span data-bind="text: curr_format((subscriptions?parseInt(subscriptions):0)+(other_income_sources?parseInt(other_income_sources):0)+(shares?parseInt(shares):0)+((loan_payments?parseInt(loan_payments):0)-((disbursedLoan.loanAmount?parseInt(disbursedLoan.loanAmount):0)+(disbursedLoan.interestAmount?parseInt(disbursedLoan.interestAmount):0)+(loan_account_fees?parseInt(loan_account_fees):0)))-(expenses?parseInt(expenses):0))">0.0</span></strong></td>
 											</tr>
 										</tfoot>
 									</table>

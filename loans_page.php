@@ -243,10 +243,10 @@
 					</div>
 				</div>
 			</div>
-		<?php include_once("edit_loan_account_modal.php"); ?>
+		<?php //include_once("edit_loan_account_modal.php"); ?>
 		<?php include_once("add_loan_account_modal.php"); ?>
 		<?php include_once("make_payment_modal.php"); ?>
 		<?php include_once("loan_approval_modal.php"); ?>
-		<?php include_once("disburse_loan_modal.php"); ?>
+		<?php include_once("disburse_loan_modal.php"); //?>
 		</div>
 	</div>	

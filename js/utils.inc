@@ -238,7 +238,7 @@ function showStatusMessage(message='', display_type='success'){
 	function getFeeAmount(amount, rate, rateAs) {
 		//var arrays = [{id:1,desc:'Flat amount'},{id:2,desc:'% of Disbursement Amount'}];
 		//return (parseInt(rateAs) == 0?(parseFloat(rate)*parseFloat(amount)):rate);
-		return curr_format((parseInt(rateAs) == 2?((parseFloat(rate)/100)*parseFloat(amount)):parseFloat(rate)));
+		return (parseInt(rateAs) == 2?((parseFloat(rate)/100)*parseFloat(amount)):parseFloat(rate));
 	};
 	function getWords(s){
 		// American Numbering System

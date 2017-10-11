@@ -28,7 +28,7 @@
 										<div class="col-md-12 bordered" style="padding:4px;">
 											<h3>Client Details</h3>
 											<div class="col-sm-3"><img style="width:100px;"  data-bind="attr:{src:member_details.id_specimen}" /></div>
-											<div class="col-sm-9"><i data-bind="css: {'fa':1, 'fa-male': gender=='M', 'fa-female': gender=='F'}"></i> <span data-bind="text: clientNames"></span>  ,
+											<div class="col-sm-9"><i data-bind="css: {'fa':1, 'fa-male': member_details.gender=='M', 'fa-female': member_details.gender=='F'}"></i> <span data-bind="text: clientNames"></span>  ,
 											<i class="fa fa-mobile"></i> <span data-bind="text: member_details.phone"></span>,  
 											<i class="fa fa-at"></i> <span data-bind="text: member_details.email"></span>,  
 											<i class="fa fa-map-envelope-square"></i> <span data-bind="text: member_details.postal_address">Kawempe, Kazo</span>
@@ -69,7 +69,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-12" data-bind="if: !groupLoanAccountId&&typeof(collateral_items())!='undefined'&&collateral_items().length>0">
+									<div class="col-md-12" data-bind="if: status<4&&!groupLoanAccountId&&typeof(collateral_items())!='undefined'&&collateral_items().length>0">
 										<div class="col-md-12 bordered">
 											<h3>Collateral</h3>
 											<div class="table-responsive">
@@ -267,10 +267,10 @@
 												</div>
 											</div>
 											<div class="col-md-12 bordered">
+												  <h3>Choose Action</h3>
 												<div class="form-group">
 												  <?php 
 													if(isset($_SESSION['branch_credit'])||isset($_SESSION['management_credit'])||isset($_SESSION['executive_board'])||isset($_SESSION['branch_manager'])):?>
-												  <h3>Choose Action</h3>
 													<?php endif;?>
 													<?php if(isset($_SESSION['branch_manager'])&&$_SESSION['branch_manager']): ?>
 													<!-- ko if: (status<4)-->
@@ -281,7 +281,7 @@
 													<!-- /ko -->
 													<?php endif;?>
 													<!-- ko if: ((status>1&&status<6)||status==11)-->
-													<div class="col-md-3">
+													<div class="col-md-4">
 														<label class="control-label text-warning"><input type="radio" name="status" value="-1" data-bind="checked: $parent.loanAccountStatus" /> Previous State</label>
 													</div>
 													<!-- /ko -->

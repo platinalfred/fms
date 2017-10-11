@@ -20,7 +20,7 @@
 									<label class="col-md-8" data-bind="text: loanNo"></label>
 								  </div>
 									  <div class="form-group" data-bind="with: account_details">
-										<label class="control-label col-md-4">Maximum required</label>
+										<label class="control-label col-md-4">Amount approved</label>
 										<label class="col-md-8" data-bind="text: 'UGX ' + curr_format(parseInt(amountApproved))"></label>
 									  </div>
 								  <div class="form-group" data-bind="with: account_details">

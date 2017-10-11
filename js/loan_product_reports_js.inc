@@ -85,7 +85,7 @@ $(document).ready(function(){
 					},
 					{
 					extend: 'colvis',	
-					text: 'Choose columns to show <span class="caret"></span>',
+					text: 'Choose fields to show <span class="caret"></span>',
 					className: 'btn-sm',
 					}
 			  ],

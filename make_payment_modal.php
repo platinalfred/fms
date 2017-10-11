@@ -21,7 +21,7 @@
 								  </div>
 								  <div class="form-group">
 									<label class="control-label col-md-4">Minimum required</label>
-									<label class="col-md-8" data-bind="text: 'UGX ' + curr_format(parseInt((parseInt(interest)/parseInt(installments))+parseInt(disbursedAmount)/parseInt(installments)))"></label>
+									<label class="col-md-8" data-bind="text: 'UGX ' + curr_format(parseInt((parseInt(interest)+parseInt(disbursedAmount))/installments))"></label>
 								  </div>
 								  <div class="form-group">
 									<label class="control-label col-md-4" for="payment_amount">Amount paid<span class="required">*</span></label>

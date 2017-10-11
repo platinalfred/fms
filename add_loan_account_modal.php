@@ -14,10 +14,10 @@
                                 </div>
                             </div>
                             <div class="ibox-content">
-                                <form id="loanAccountForm" class="form-horizontal wizard-big" enctype="multipart/form-data">
+                                <form id="loanAccountForm" class="form-horizontal wizard-big" method="post" enctype="multipart/form-data">
                                     <input type='hidden' name="id" />
                                     <input type='hidden' name="origin" value="loan_account" />
-                                    <h1>Loan Account <small>Account Information</small></h1>
+                                    <h3>Loan Account <small>Account Information</small></h3>
                                     <div class="row">
                                         <fieldset>
                                             <?php if(!isset($client)):?>
@@ -162,7 +162,7 @@
                                                                 </div>
                                                             </div>
                                                             <!--ko if: $root.filteredLoanProductFees().length>0 -->
-                                                            <h1>Loan Fees <small>Applicable Fees (<span data-bind="text: $root.filteredLoanProductFees().length"></span>)</small></h1>
+                                                            <h3>Loan Fees <small>Applicable Fees (<span data-bind="text: $root.filteredLoanProductFees().length"></span>)</small></h3>
                                                             <fieldset>
                                                                 <div class="form-group">
                                                                     <div class="table-responsive">
@@ -185,7 +185,7 @@
                                                                                     <td data-bind='text: curr_format(amount)'></td>
                                                                                     <td data-bind='text: getDescription(5, $data.amountCalculatedAs)'></td>
                                                                                     <td>
-                                                                                        <input type="hidden" data-bind="attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+$index()+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)}" /><span data-bind='text: getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)'></span></td>
+                                                                                        <input type="hidden" data-bind="attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+$index()+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)}" /><span data-bind='text: curr_format(getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs))'></span></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -194,7 +194,7 @@
                                                             </fieldset>
                                                             <!-- /ko -->
                                                             <!--ko if: ($parent.filteredGuarantors().length>0) -->
-                                                            <h1>Guarantors <small>Choose Guarantors</small></h1>
+                                                            <h3>Guarantors <small>Choose Guarantors</small></h3>
                                                             <fieldset>
                                                                 <div class="form-group">
                                                                     <div class="table-responsive">
@@ -238,7 +238,7 @@
                                                             </fieldset>
                                                             <!-- /ko -->
                                                             <!--ko if: (parseInt($root.client().clientType)==1) -->
-                                                            <h1>Collateral <small>Add Collateral</small></h1>
+                                                            <h3>Collateral <small>Add Collateral</small></h3>
                                                             <fieldset>
                                                                 <div class="hr-line-dashed"></div>
                                                                 <div class="form-group" data-bind="visible: $parent.addedCollateral().length>0">
@@ -289,7 +289,7 @@
                                                                 </div>
                                                             </fieldset>
                                                             <!-- /ko -->
-                                                            <h1>Businesses <small>Add Businesses</small></h1>
+                                                            <h3>Businesses <small>Add Businesses</small></h3>
                                                             <fieldset>
                                                                 <div class="row" data-bind="foreach: $parent.member_business">
                                                                     <h3 data-bind="text:'Business '+($index()+1)"></h3>

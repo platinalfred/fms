@@ -15,7 +15,7 @@
                             </div>
                         </div>
                         <div class="ibox-content" data-bind="with: account_details">
-                            <form id="editLoanAccountForm" class="form-horizontal wizard-big" enctype="multipart/form-data">
+                            <form id="editLoanAccountForm" class="form-horizontal wizard-big" method="post" enctype="multipart/form-data">
 								<input type='hidden' name="origin" value="loan_account"/>
                                 <h3>Account Information</h3>
 									<div class="row">
@@ -150,7 +150,7 @@
 						<div class="col-md-6"><label class="control-label"></label><label>made every <span data-bind="text: repaymentsFrequency +' '+getDescription(4,repaymentsMadeEvery)"></span></label></div>
 					</div>
 					<!--ko if: $root.filteredLoanProductFees().length>0 -->
-					<h1>Loan Fees <small>Applicable Fees (<span data-bind="text: $root.filteredLoanProductFees().length"></span>)</small></h1>
+					<h3>Loan Fees <small>Applicable Fees (<span data-bind="text: $root.filteredLoanProductFees().length"></span>)</small></h3>
 					<fieldset>
 						<div class="form-group">
 							<div class="table-responsive">
@@ -172,7 +172,7 @@
 											<td data-bind='text: feeName'></td>
 											<td data-bind='text: curr_format(amount)'></td>
 											<td data-bind='text: getDescription(5, amountCalculatedAs)'></td>
-											<td><input type="hidden" data-bind="attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+$index()+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount2(), amount, amountCalculatedAs)}"/><span data-bind='text: getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)'></span></td>
+											<td><input type="hidden" data-bind="attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+$index()+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount2(), amount, amountCalculatedAs)}"/><span data-bind='text: curr_format(getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs))'></span></td>
 										</tr>
 										<!--/ko-->
 										<!--/ko-->
@@ -182,7 +182,7 @@
 											<td data-bind='text: feeName'></td>
 											<td data-bind='text: curr_format(amount)'></td>
 											<td data-bind='text: getDescription(5, $data.amountCalculatedAs)'></td>
-											<td><input type="hidden" data-bind="attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+($index()+(typeof($parent.loan_account_fees)!='undefined'?$parent.loan_account_fees.length:0)+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)}"/><span data-bind='text: getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)'></span></td>
+											<td><input type="hidden" data-bind="attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+($index()+(typeof($parent.loan_account_fees)!='undefined'?$parent.loan_account_fees.length:0)+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)}"/><span data-bind='text: curr_format(getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs))'></span></td>
 										</tr>
 										<!--/ko-->
 									</tbody>
@@ -192,7 +192,7 @@
 					</fieldset>
 					<!-- /ko -->
 					<!--ko if: ($parent.filteredGuarantors().length>0||(typeof($parent.guarantors)!='undefined'&&$parent.guarantors.length>0)) -->
-					<h1>Guarantors <small>Choose Guarantors</small></h1>
+					<h3>Guarantors <small>Choose Guarantors</small></h3>
 					<fieldset>
 						<div class="form-group">
 							<div class="table-responsive">
@@ -257,7 +257,7 @@
 					</fieldset>
 					<!-- /ko -->
 					<!--ko if: (!$parent.groupId||$parent.groupId==0) -->
-					<h1>Collateral <small>Add Collateral</small></h1>
+					<h3>Collateral <small>Add Collateral</small></h3>
 					<fieldset>
 						<div class="hr-line-dashed"></div>
 						<div class="form-group" data-bind="visible: ($parent.addedCollateral()&&$parent.addedCollateral().length>0)||(typeof($parent.collateral_items())!='undefined'&&$parent.collateral_items()!=false)">
@@ -315,7 +315,7 @@
 						</div>
 					</fieldset>
 					<!-- /ko -->
-					<h1>Businesses <small>Add Businesses</small></h1>
+					<h3>Businesses <small>Add Businesses</small></h3>
 					<fieldset>
 						<!--ko if: typeof($parent.memberBusinesses)!='undefined'&&$parent.memberBusinesses!=false-->
 						<div class="row" data-bind="foreach: $parent.memberBusinesses">
