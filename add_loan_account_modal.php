@@ -35,7 +35,7 @@
                                                         <!--/ko-->
                                                         <!--ko if:type_id==2-->
                                                         <label class="control-label">Member Groups</label>
-                                                        <select data-placeholder="Select group..." name="groupId" class="form-control chosen-select" data-bind='options: $root.groups, optionsText: "clientNames", optionsCaption: "Select group...", optionsAfterRender: $root.setOptionValue("groupId"), value: $root.client' data-msg-required="Please select a group" required>
+                                                        <select data-placeholder="Select group..." name="groupId" class="form-control chosen-select" data-bind='options: $root.groups, optionsText: "clientNames", optionsCaption: "Select group...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Please select a group" required>
                                                         </select>
                                                         <!--/ko-->
                                                     </div>
