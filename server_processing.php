@@ -64,7 +64,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "loan_accounts" ) {
 	
 	$primary_key = "`loan_account`.`id`";
 
-	$columns = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`disbursementDate`", "`productName`", "`disbursedAmount`", "`applicationDate`", "`requestedAmount`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`interestRate`" , "`amountApproved`" , "`approvalNotes`" , "`comments`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`", "`clientType`", "`memberId`","`status`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`staffNames`", "CONCAT('loanAcc',`loan_account`.`id`) `DT_RowId`"/**/);
+	$columns = array( "`loan_account`.`id`", "`loanNo`", "`clientNames`", "`disbursementDate`", "`productName`", "`disbursedAmount`", "`applicationDate`", "`approvalDate`", "`requestedAmount`", "`offSetPeriod`" , "`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`interestRate`" , "`amountApproved`" , "`approvalNotes`" , "`comments`" , "`amountPaid`" , " `disbursedAmount`*(`interestRate`/100) `interest`", "`clientType`", "`memberId`","`status`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`staffNames`", "CONCAT('loanAcc',`loan_account`.`id`) `DT_RowId`"/**/);
 }
 //list of the income transactions
 if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
