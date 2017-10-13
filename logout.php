@@ -3,7 +3,7 @@ session_start();
 unset($_SESSION['branch_id']);
 unset($_SESSION['Logged']);
 unset($_SESSION['username']);
-unset($_SESSION['user_id']);
+unset($_SESSION['staffId']);
 unset($_SESSION['personId']);
 unset($_SESSION['admin']);
 unset($_SESSION['loan_officer']);
