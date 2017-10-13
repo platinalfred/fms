@@ -507,7 +507,7 @@
 			else{
 				dTable['applications'] = $('#applications').DataTable({
 				  dom: "Bfrtip",
-				  "order": [ [4, 'desc' ]],
+				  "order": [ [5,'desc' ],[2,'desc'],[3,'desc']],
 				  "ajax": {
 					  "url":"ajax_data.php",
 					  "type": "POST",
@@ -527,11 +527,11 @@
 						<?php if(!isset($_GET['groupId'])):?>{ data: 'groupName', render: function( data, type, full, meta ){return data?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs" title="View loans by this group">'+data+'</a>'):'';}},<?php endif;?>
 						<?php if(!isset($_GET['grpLId'])):?>{ data: 'groupLoanAccountId', render: function( data, type, full, meta ){return (data&&data!=0)?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs&grpLId='+full.groupLoanAccountId+'" title="View loans with this reference number"> Ref#'+data+'</a>'):'';}},<?php endif;?>
 						{ data: 'productName'},
-						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+						{ data: 'applicationDate',  render: function ( data, type, full, meta )  {if ( type === 'display' || type === 'filter' ){return moment(data, 'X').format('DD-MMM-YYYY');}else return data;}},
 						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} ,
 						{ data: 'status', render: function ( data, type, full, meta ) {
 							return ((parseInt(data)==1||parseInt(data)==11)?'<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Update</a>':'')+
-							'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-list"></i> Details </a>';}}/* /*  */
+							'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-list"></i> Details </a>';}}
 						] ,
 				  buttons: [
 					{
@@ -606,7 +606,7 @@
 						<?php if(!isset($_GET['grpLId'])):?>{ data: 'groupLoanAccountId', render: function( data, type, full, meta ){return (data&&data!=0)?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs&grpLId='+full.groupLoanAccountId+'" title="View details"> Ref#'+data+'</a>'):'';}},<?php endif;?>
 						{ data: 'productName'},
 						{ data: 'productName'},
-						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {if ( type === 'display' || type === 'filter' ) {return moment(data, 'X').format('DD-MMM-YYYY');}else return data;}},
 						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}} ,
 						{ data: 'status', render: function ( data, type, full, meta ) {
 							return ((parseInt(data)==1||parseInt(data)==11)?'<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Update</a>':'')+
@@ -669,7 +669,7 @@
 						<?php if(!isset($_GET['groupId'])):?>{ data: 'groupName', render: function( data, type, full, meta ){return data?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs" title="View details">'+data+'</a>'):'';}},<?php endif;?>
 						<?php if(!isset($_GET['grpLId'])):?>{ data: 'groupLoanAccountId', render: function( data, type, full, meta ){return (data&&data!=0)?('<a href="group_details.php?groupId='+full.groupId+'&view=loan_accs&grpLId='+full.groupLoanAccountId+'" title="View details"> Ref#'+data+'</a>'):'';}},<?php endif;?>
 						{ data: 'productName'},
-						{ data: 'applicationDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+						{ data: 'approvalDate',  render: function ( data, type, full, meta ) {if ( type === 'display' || type === 'filter' ) {return moment(data, 'X').format('DD-MMM-YYYY');}else return data;}},
 						{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(data)) + ' ' + getDescription(4,data);}},
 						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
 						{ data: 'amountApproved', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}}
@@ -745,7 +745,7 @@
 						{ data: 'clientNames'},
 						{ data: 'groupName', render: function( data, type, full, meta ){return full.groupId?('<a href="group_details.php?id='+full.groupId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>'):'';}},
 						{ data: 'productName'},
-						{ data: 'disbursementDate',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},
+						{ data: 'disbursementDate',  render: function ( data, type, full, meta ) {if ( type === 'display' || type === 'filter' ) {return moment(data, 'X').format('DD-MMM-YYYY');}else return data;}},
 						{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
 						{ data: 'installments', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
 						{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.installments)) + ' ' + getDescription(4,data);}},

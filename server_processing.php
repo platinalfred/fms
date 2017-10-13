@@ -32,6 +32,17 @@ if ( isset($_POST['page']) && $_POST['page'] == "loan_accounts" ) {
 	}
 	if(isset($_POST['status']) && is_numeric($_POST['status'])){
 		$where = ($where?$where." AND ":"")."`loan_account`.`status`=".$_POST['status'];
+		if($_POST['status']==4){
+			if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['admin'])&&$_SESSION['admin'])){
+				 $where .= " AND `requestedAmount` < 1000001";
+			 }else
+			 if(isset($_SESSION['management_credit'])&& $_SESSION['management_credit']){
+				$where .= " AND `requestedAmount` BETWEEN 1000000 AND 5000000";
+			}else
+			if(isset($_SESSION['executive_board'])&&$_SESSION['executive_board']){
+				$where .= " AND `requestedAmount` > 5000000";
+			}
+		}
 	}
 	$member_sql = "SELECT `member`.`id`, 1 `clientType` , CONCAT(`firstname`,' ',`lastname`,' ',`othername`) `clientNames`, `gender` FROM `member` JOIN `person` ON `member`.`personId`=`person`.`id`";
 	

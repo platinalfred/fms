@@ -21,7 +21,7 @@
 								if((isset($_SESSION['loans_officer'])&& $_SESSION['loans_officer'])||(isset($_SESSION['admin'])&& $_SESSION['admin'])){ ?>
 								   <option value="1" <?php echo (isset($_GET['status'])&&$_GET['status']==1)?'selected':'';?>>Partial Application</option>
 								   <?php } ?>
-								<?php if((isset($_SESSION['access_levels'])&& $_SESSION['access_levels'])||(isset($_SESSION['admin'])&& $_SESSION['admin'])||(isset($_SESSION['branch_manager'])&&$_SESSION['branch_manager'])){ ?>
+								<?php if((isset($_SESSION['admin'])&& $_SESSION['admin'])||(isset($_SESSION['branch_manager'])&&$_SESSION['branch_manager'])){ ?>
 								   <option value="2" <?php echo (isset($_GET['status'])&&$_GET['status']==2)?'selected':'';?>>Complete Application</option>
 								   <?php } ?>
 								<?php

@@ -269,14 +269,6 @@ if(isset($_POST['origin'])){
 					$output .= $loanAccountId = $loan_account_obj->addLoanAccount($loanAccount);
 				}
 				
-				
-				 /* if((integer)$data['clientType']==1){
-					//create loan account for member
-					$clientData['loanAccountId'] = $loanAccountId ;
-					$clientData['memberId'] = $loanAccount['clientId'] ;
-					$memberLoanAccount = new MemberLoanAccount();
-					$memberLoanAccountId = $memberLoanAccount->addMemberLoanAccount($clientData);
-				}*/
 				//then add the guarantors					
 				if(isset($loanAccount['guarantors'])){
 					if($loanAccount['guarantors'] !== "false"){
