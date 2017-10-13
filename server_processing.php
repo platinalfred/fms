@@ -38,7 +38,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "loan_accounts" ) {
 				 $where .= " AND `requestedAmount` < 1000001";
 			 }else
 			 if(isset($_SESSION['management_credit'])&& $_SESSION['management_credit']){
-				$where .= " AND `requestedAmount` BETWEEN 1000000 AND 5000000";
+				$where .= " AND `requestedAmount` BETWEEN 1000000 AND 5000001";
 			}else
 			if(isset($_SESSION['executive_board'])&&$_SESSION['executive_board']){
 				$where .= " AND `requestedAmount` > 5000000";
