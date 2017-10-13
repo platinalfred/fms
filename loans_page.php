@@ -118,9 +118,10 @@
 											<tr>
 												<?php
 												$array_len = count($header_keys);
-												$header_keys[$array_len-2] = "Payments Freq";
-												$header_keys[$array_len-1] = "Amount Requested";
+												$header_keys[$array_len-2] = "Amount Requested";
+												$header_keys[$array_len-1] = "Date approved";
 												$header_keys[$array_len] = "Amount Approved";
+												$header_keys[$array_len+1] = "Payments Freq";
 												foreach($header_keys as $key=>$value){ ?>
 													<th><?php echo $value; ?></th>
 													<?php

@@ -68,7 +68,7 @@ class LoanAccount extends Db {
 	}
 	
 	public function getApprovedLoans($where = 1){
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`memberId`", "`productName`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`offSetPeriod`", "`gracePeriod`" , "`amountApproved`" , "`approvalNotes`" , "`comments`" , "`loan_account`.`createdBy`" ,"`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`amountPaid`" , "`interestRate`" , "`staffNames`" ,"`loan_products`.`id` loanProductId", "`disbursedAmount`*(`interestRate`/100) `interest`" );
+		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`memberId`", "`productName`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "`requestedAmount`", "`disbursedAmount`", "`applicationDate`", "`applicationDate`", "`offSetPeriod`", "`gracePeriod`" , "`amountApproved`" , "`approvalNotes`" , "`comments`" , "`loan_account`.`createdBy`" ,"`loan_account`.`repaymentsFrequency`" , "`loan_account`.`repaymentsMadeEvery`" , "`installments`" , "`amountPaid`" , "`interestRate`" , "`staffNames`" ,"`loan_products`.`id` loanProductId", "`disbursedAmount`*(`interestRate`/100) `interest`" );
 		
 		$table = self::$table_name." JOIN (".self::$member_sql.") `clients` ON `clients`.`id` = `memberId` LEFT JOIN (".self::$saccogroup_sql2.") `sacco_loan_acc_group` ON `sacco_loan_acc_group`.`id`=`groupLoanAccountId` JOIN `loan_products` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN ". self::$loan_payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId`".self::$staff_sql;
 	
