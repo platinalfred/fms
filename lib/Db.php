@@ -162,7 +162,7 @@ class Db{
 					
 				}
 				$this->setSessions("access_levels", $levels);
-				$this->setSessions("user_id", $results['id']);
+				$this->setSessions("staffId", $results['id']);
 				return $_SESSION;
 			}  
 			
