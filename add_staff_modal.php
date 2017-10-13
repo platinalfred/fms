@@ -28,8 +28,8 @@
 					</div>
 					<div class="ibox-content">
 						<form id="form" action="" method="post" name="registration"  class="wizard-big">
-							<input type="hidden" name="registered_by" value="<?php echo $_SESSION['user_id'];?>">
-							<input type="hidden" name="added_by" value="<?php echo $_SESSION['user_id'];?>">
+							<input type="hidden" name="registered_by" value="<?php echo $_SESSION['StaffId'];?>">
+							<input type="hidden" name="added_by" value="<?php echo $_SESSION['StaffId'];?>">
 							<input type="hidden" name="date_registered" value="<?php echo time();?>">
 							<input type="hidden" name="person_type" value="1">
 							<input type="hidden" name="tbl" value="add_staff">

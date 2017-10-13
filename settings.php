@@ -608,8 +608,8 @@ require_once("lib/Libraries.php");
 																<input name="id"  type="hidden">
 																<input type="hidden" name="dateCreated" value="<?php echo time(); ?>">
 																<input type="hidden" name="dateModified" value="<?php echo time(); ?>">				
-																<input type="hidden" name="createdBy" value="<?php echo $_SESSION['user_id']; ?>">
-																<input type="hidden" name="modifiedBy" value="<?php echo $_SESSION['user_id']; ?>">
+																<input type="hidden" name="createdBy" value="<?php echo $_SESSION['staffId']; ?>">
+																<input type="hidden" name="modifiedBy" value="<?php echo $_SESSION['staffId']; ?>">
 																<div class="form-group"><label class="col-lg-2 control-label">Title</label>
 
 																	<div class="col-lg-10"><input name="typeName" type="text" placeholder="Name" class="form-control"> 
@@ -679,8 +679,8 @@ require_once("lib/Libraries.php");
 																<input type="hidden" name="tbl" value="penality_calculation">
 																<input type="hidden" name="dateCreated" value="<?php echo time(); ?>">
 																<input type="hidden" name="dateModified" value="<?php echo time(); ?>">				
-																<input type="hidden" name="createdBy" value="<?php echo $_SESSION['user_id']; ?>">
-																<input type="hidden" name="modifiedBy" value="<?php echo $_SESSION['user_id']; ?>">
+																<input type="hidden" name="createdBy" value="<?php echo $_SESSION['staffId']; ?>">
+																<input type="hidden" name="modifiedBy" value="<?php echo $_SESSION['staffId']; ?>">
 																<div class="form-group"><label class="col-lg-2 control-label">Title</label>
 
 																	<div class="col-lg-10"><input name="methodDescription" type="text" placeholder="Penalty Title" class="form-control"> <span class="help-block m-b-none">Title of the penalty.</span>

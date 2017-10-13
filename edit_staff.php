@@ -34,7 +34,7 @@ if($staff_data){
 			
 		<form id="edit_staff" action="" method="post" name="edit_staff"  class="wizard-big">
 			<input type="hidden" name="member_id" value="<?php echo $_GET['id'];?>">
-			<input type="hidden" name="modified_by" value="<?php echo $_SESSION['user_id'];?>">
+			<input type="hidden" name="modified_by" value="<?php echo $_SESSION['staffId'];?>">
 			<input type="hidden" name="person_number" value="<?php echo $staff_data['person_number'];?>">
 			<input type="hidden" name="person_type" value="<?php echo $staff_data['person_type'];?>">
 			<input type="hidden" name="date_registered" value="<?php echo $staff_data['date_registered'];?>">
