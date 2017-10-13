@@ -2,7 +2,7 @@
 /* $show_table_js = false;
 require_once("lib/Shares.php"); */
 require_once("lib/Libraries.php");
-
+session_start();
 $start_date = isset($_POST['start_date'])?$_POST['start_date']:strtotime("-30 day");
 $end_date = isset($_POST['end_date'])?$_POST['end_date']:time();
 
@@ -357,7 +357,7 @@ if(isset($_POST['origin'])){
 						 $where .= " AND `requestedAmount` < 1000001";
 					 }else
 					 if(isset($_SESSION['management_credit'])&& $_SESSION['management_credit']){
-						$where .= " AND `requestedAmount` BETWEEN 1000000 AND 5000000";
+						$where .= " AND (`requestedAmount` BETWEEN 1000000 AND 5000000)";
 					}else
 					if(isset($_SESSION['executive_board'])&&$_SESSION['executive_board']){
 						$where .= " AND `requestedAmount` > 5000000";

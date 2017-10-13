@@ -1,4 +1,5 @@
 <?php 
+session_start();
 require_once("lib/Db.php");
 require_once("lib/DatatablesJSON.php");
 
