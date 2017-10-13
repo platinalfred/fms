@@ -350,17 +350,19 @@ if(isset($_POST['origin'])){
 				$where .= " AND `groupLoanAccountId`=".$_POST['grpLId'];
 			}
 			if($_POST['status']==4||$_POST['status']==5){
-				 if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['admin'])&&$_SESSION['admin'])&&$_POST['status']==4){
-					 $where .= " AND `requestedAmount` < 1000001";
-				 }else
-				 if(isset($_SESSION['management_credit'])&& $_SESSION['management_credit']&&$_POST['status']==4){
-					$where .= " AND `requestedAmount` BETWEEN 1000000 AND 5000000";
-				}else
-				if(isset($_SESSION['executive_board'])&&$_SESSION['executive_board']&&$_POST['status']==4){
-					$where .= " AND `requestedAmount` > 5000000";
-				}
 				$output['data'] = $loanAccount->getApprovedLoans($where);
 			}else{
+				if(isset($_POST['status']) && $_POST['status']==3){
+					if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['admin'])&&$_SESSION['admin'])){
+						 $where .= " AND `requestedAmount` < 1000001";
+					 }else
+					 if(isset($_SESSION['management_credit'])&& $_SESSION['management_credit']){
+						$where .= " AND `requestedAmount` BETWEEN 1000000 AND 5000000";
+					}else
+					if(isset($_SESSION['executive_board'])&&$_SESSION['executive_board']){
+						$where .= " AND `requestedAmount` > 5000000";
+					}
+				}
 				$output['data'] = $loanAccount->getApplications($where);
 			}
 			

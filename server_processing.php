@@ -32,7 +32,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "loan_accounts" ) {
 	}
 	if(isset($_POST['status']) && is_numeric($_POST['status'])){
 		$where = ($where?$where." AND ":"")."`loan_account`.`status`=".$_POST['status'];
-		if($_POST['status']==4){
+		if($_POST['status']==3){
 			if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['admin'])&&$_SESSION['admin'])){
 				 $where .= " AND `requestedAmount` < 1000001";
 			 }else
