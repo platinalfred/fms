@@ -212,7 +212,7 @@
 										<tr>
 											<td data-bind='with: guarantor'>
 												<input type="hidden" data-bind="value:id, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+']guarantors['+$index()+'][memberId]'}">
-												<span data-bind='text: clientNames' > </span>
+												<span data-bind='text: memberNames' > </span>
 											</td>
 											<td class='phone' data-bind='text: phone'>
 											</td>
@@ -229,16 +229,16 @@
 										<!--ko foreach: $parent.selectedGuarantors-->
 										<tr>
 											<td>
-												<select data-bind="options: $parentContext.$parent.filteredGuarantors, optionsText: 'clientNames', optionsValue, 'id', optionsCaption: 'Select guarantor...', attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+']guarantors['+($index()+(typeof($parent.guarantors)!='undefined'?$parent.guarantors.length:0))+'][memberId]'}" class="form-control"> </select>
+												<select data-bind="options: $parentContext.$parent.filteredGuarantors, optionsText: 'memberNames', optionsAfterRender: $root.setOptionValue('id'), optionsCaption: 'Select guarantor...', value:guarantor, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+']guarantors['+($index()+(typeof($parent.guarantors)!='undefined'?$parent.guarantors.length:0))+'][memberId]'}" class="form-control"> </select>
 											</td>
 											<td class='phone' data-bind='with: guarantor'>
 												<span data-bind='text: phone' > </span>
 											</td>
 											<td class='shares' data-bind='with: guarantor'>
-												<span data-bind='text: shares'> </span>
+												<span data-bind='text: curr_format(shares)'> </span>
 											</td>
 											<td class='savings' data-bind='with: guarantor'>
-												<span data-bind='text: savings'> </span>
+												<span data-bind='text: curr_format(savings)'> </span>
 											</td>
 											<td>
 												<span title="Remove item" class="btn text-danger" data-bind='click: $parent.removeGuarantor'><i class="fa fa-minus"></i></span>
@@ -251,8 +251,8 @@
 							<div class="col-sm-3">
 							<a data-bind='click: $parent.addGuarantor, enable: $parent.selectedGuarantors().length < minGuarantors' class="btn btn-info btn-sm"><i class="fa fa-plus"></i>Add Guarantor</a></div>
 							<div class="col-sm-3">Minimum: <span data-bind='text: minGuarantors'> </span></div>
-							<div class="col-sm-3">Total shares: <span data-bind='text: $parent.totalShares()'> </span></div>
-							<div class="col-sm-3">Total savings: <span data-bind='text: $parent.totalSavings()'> </span></div>
+							<div class="col-sm-3">Total shares: <span data-bind='text: curr_format($parent.totalShares())'> </span></div>
+							<div class="col-sm-3">Total savings: <span data-bind='text: curr_format($parent.totalSavings())'> </span></div>
 						</div>
 					</fieldset>
 					<!-- /ko -->
