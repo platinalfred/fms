@@ -26,9 +26,10 @@
 		var self = this;
 		self.guarantor = ko.observable();
 	};
-	var LoanAccount = function() {
+	var LoanAccount = function(clientType) {
 		var self = this;
 		//application form details
+		self.clientId = ko.observable();
 		self.requestedAmount2 = ko.observable(0);
 		self.interestRate2 = ko.observable(0);
 		self.offSetPeriod2 = ko.observable(0);
@@ -44,11 +45,9 @@
 		
 		//filter the guarantors based on the user type and selected client
 		self.filteredGuarantors = ko.computed(function() {
-			if(self.clientType){
-				var clientType = parseInt(self.clientType);
-				var clientId = parseInt(self.id);
+			if(self.clientId()){
 				return ko.utils.arrayFilter(guarantors, function(guarantor) {
-					return (clientId != parseInt(guarantor.id) && parseInt(clientType)==1);
+					return (parseInt(self.clientId()) != parseInt(guarantor.id) && parseInt(clientType)==1);
 				});
 			}
 			else{
@@ -207,14 +206,18 @@
 		self.filteredGroupMembers = ko.computed(function() {
 			if(self.client()){
 				if(parseInt(self.client().clientType)==1){
-					return [$.extend(self.client(),new LoanAccount())];
+					var loan_account = new LoanAccount(1);
+					loan_account.clientId(self.client().id); 
+					return [$.extend(self.client(),loan_account)];
 				}
 				if(parseInt(self.client().clientType)==2){
 					var thisGroupMembers = [];
 					ko.utils.arrayForEach(ko.utils.arrayFilter(self.groupMembers(), function(groupMember) {
 						return (parseInt(self.client().id)==parseInt(groupMember.groupId));
 					}), function(item) {
-						thisGroupMembers.push($.extend(item, new LoanAccount()));
+						var loan_account = new LoanAccount(2);
+						loan_account.clientId(item.memberId); 
+						thisGroupMembers.push($.extend(item, loan_account));
 					});
 					return thisGroupMembers;
 				}
@@ -226,8 +229,9 @@
 			if(self.account_details()){
 				if(!self.account_details().groupId||self.account_details().groupId==0){
 					if(self.account_details().status<4||self.account_details().status==11){
-						var loan_account = new LoanAccount();
+						var loan_account = new LoanAccount(1);
 						
+						loan_account.clientId(self.account_details().memberId); 
 						loan_account.requestedAmount2(self.account_details().requestedAmount); 
 						loan_account.interestRate2(self.account_details().interestRate); 
 						loan_account.offSetPeriod2(self.account_details().offSetPeriod); 
@@ -244,8 +248,9 @@
 					ko.utils.arrayForEach(ko.utils.arrayFilter(self.groupLoanAccounts(), function(item) {
 						return (parseInt(item.status)<4||parseInt(item.status)==11);
 					}), function(groupLoanAccount) {
-						var loan_account = new LoanAccount();
+						var loan_account = new LoanAccount(2);
 						
+						loan_account.clientId(self.account_details().memberId); 
 						loan_account.requestedAmount2(groupLoanAccount.requestedAmount); 
 						loan_account.interestRate2(groupLoanAccount.interestRate); 
 						loan_account.offSetPeriod2(groupLoanAccount.offSetPeriod); 
