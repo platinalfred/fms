@@ -20,7 +20,7 @@ require_once("lib/Libraries.php");
 					<!--<li class=""><a data-toggle="tab" href="#tab-2" href="#">Account Types</a></li>-->
 					<li class=""><a data-toggle="tab" href="#tab-3" >Branches</a></li>
 					<li class=""><a data-toggle="tab" href="#tab-5" >Access Levels</a></li>
-					<li class=""><a data-toggle="tab" href="#tab-6" >Id Card Types</a></li>
+					<li class=""><a data-toggle="tab" href="#tab-17" href="#">Positions</a></li>
 					
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">More <b class="caret"></b></a>
@@ -32,8 +32,9 @@ require_once("lib/Libraries.php");
 							
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-14" href="#">Relationhip Types </a></li>
 							<!--<li class=""><a data-toggle="tab" role="tab" href="#tab-15" href="#">Repayment Duration</a></li> -->
+							<li class=""><a role="tab" data-toggle="tab" href="#tab-6" >Id Card Types</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-16" href="#">Security Types</a></li>
-							<li class=""><a data-toggle="tab" role="tab" href="#tab-17" href="#">Positions</a></li>
+							
 							<!--<li class=""><a data-toggle="tab" role="tab" href="#tab-18" href="#">Address Type</a></li>-->
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-19" href="#">Marital Status</a></li>
 							<li class=""><a data-toggle="tab" role="tab" href="#tab-22" href="#">Expense Type</a></li>

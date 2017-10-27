@@ -145,7 +145,7 @@ if(!isset($_SESSION['Logged'])){
                              </span> <span class="text-muted text-xs block"><?php echo $person->findPersonsPosition($_SESSION['personId']); ?><b class="caret"></b></span> </span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a href="">Profile</a></li>
+                                <li><a href="profile.php">Profile</a></li>
                                 <li class="divider"></li>
                                 <li><a href="logout.php">Logout</a></li>
                             </ul>

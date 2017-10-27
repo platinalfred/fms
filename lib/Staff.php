@@ -70,6 +70,14 @@ class Staff extends Db {
 		}
 		return false;
 	}
+	public function updatePassword($data){
+		$id = $data['id'];
+		unset($data['id']);
+		if($this->update(self::$table_name, array("password"), array("password"=>$data['password']), "id=".$id)){
+			return true;
+		}
+		return false;
+	}
 	public function deleteStaff($id){
 		if($this->update(self::$table_name, array("status"), array("status"=>0), "id=".$id)){
 			return true;
