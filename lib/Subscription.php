@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Subscription extends Db {
 	protected static $table_name  = "subscription";
-	protected static $db_fields = array("id", "amount", "memberId", "subscriptionYear", "receivedBy", "datePaid", "modifiedBy");
+	protected static $db_fields = array("id", "receipt_no","amount", "memberId", "subscriptionYear", "receivedBy", "datePaid", "modifiedBy");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");

@@ -158,7 +158,7 @@ Class Reports{
 						<thead>
 							<tr class="headings">
 								<?php 
-								$header_keys = array("Date Subscribed", "Year", "Amount");
+								$header_keys = array("Date Subscribed", "Receipt No","Year", "Amount");
 								foreach($header_keys as $key){ ?>
 									<th><?php echo $key; ?></th>
 									<?php
@@ -174,7 +174,8 @@ Class Reports{
 								foreach($all_client_subscriptions as $single){ 
 									?>
 									<tr class="even pointer " >
-										<td class="a-right a-right "><?php echo date("j F, Y",$single['datePaid']); ?></td>
+										<td class="a-right a-right "><?php  if($single['datePaid'] == "1970-01-01" || $single['datePaid'] == "0000-00-00"){ echo "No date specified"; }else{ echo date("j F, Y", strtotime($single['datePaid'])); } ?></td>
+										<td class=" "><?php echo $single['receipt_no']; ?> </td>
 										<td class=" "><?php echo $single['subscriptionYear']; ?> </td>
 										<td class=" "><?php $subscription_sum += $single['amount']; echo number_format($single['amount'],2,".",","); ?></td>
 									</tr>
