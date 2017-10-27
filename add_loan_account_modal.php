@@ -20,72 +20,61 @@
                                     <h3>Loan Account <small>Account Information</small></h3>
                                     <div class="row">
                                         <fieldset>
-                                            <?php if(!isset($client)):?>
-                                                <div class="form-group">
-                                                    <div class="col-md-6">
-                                                        <label class="control-label">Client Type</label>
-                                                        <select class="form-control" name="clientType" data-bind='options: clientTypes, optionsText: "client_type", optionsCaption: "Select client type...", optionsAfterRender: $root.setOptionValue("type_id"), value: clientType' data-msg-required="Client type is required" required>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6" data-bind="with: clientType">
-                                                        <!--ko if:type_id==1-->
-                                                        <label class="control-label">Customer</label>
-                                                        <select data-placeholder="Select customer..." name="memberId" class="form-control chosen-select" data-bind='options: $root.clients, optionsText: "clientNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Client name is required" required>
-                                                        </select>
-                                                        <!--/ko-->
-                                                        <!--ko if:type_id==2-->
-                                                        <label class="control-label">Member Groups</label>
-                                                        <select data-placeholder="Select group..." name="groupId" class="form-control chosen-select" data-bind='options: $root.groups, optionsText: "clientNames", optionsCaption: "Select group...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Please select a group" required>
-                                                        </select>
-                                                        <!--/ko-->
-                                                    </div>
-                                                </div>
-                                                <?php else:?>
-                                                    <input type="hidden" name="clientType" value="<?php echo $client['clientType'];?>" />
-                                                    <?php 
-										endif;
-										?>
-                                                        <div class="form-group">
-                                                            <div class="col-md-6" data-bind='with: $root.client'>
-                                                                <label class="control-label">Product</label>
-                                                                <select class="form-control" id="loanProductId" name="loanProductId" data-bind='options: $root.filteredLoanProducts, optionsText: "productName", optionsCaption: "Select product...", optionsAfterRender: $root.setOptionValue("id"), value: $root.loanProduct' data-msg-required="Loan product is required" required>
-                                                                </select>
-                                                                <span class="help-block m-b-none" data-bind="with: $root.loanProduct">
-												<small data-bind="text: description">Product description goes here.</small>
-												</span>
-                                                            </div>
-                                                            <div class="col-md-4" data-bind="with: $root.loanProduct">
-                                                                <label class="control-label">Application Date</label>
-                                                                <div class="input-group date" data-provide="datepicker" data-date-format="dd-mm-yyyy" data-date-end-date="<?php echo date('d-m-Y');?>">
-                                                                    <input type="text" class="form-control" name="applicationDate" data-bind="attr:{value:$parent.applicationDate}" required>
-                                                                    <div class="input-group-addon">
-                                                                        <span class="fa fa-calendar"></span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group" data-bind='with: loanProduct'>
-                                                            <div class="col-lg-12">
-                                                                <h3>Please fill in the loan application details for the client<span data-bind="text: ($root.filteredGroupMembers().length>1)?'s':''"></span> below</h3>
-                                                            </div>
-                                                        </div>
+											<div class="form-group">
+												<!--div class="col-md-6">
+													<label class="control-label">Client Type</label>
+													<select class="form-control" name="clientType" data-bind='options: clientTypes, optionsText: "client_type", optionsCaption: "Select client type...", optionsAfterRender: $root.setOptionValue("type_id"), value: clientType' data-msg-required="Client type is required" required>
+													</select>
+												</div-->
+												<div class="col-md-4" data-bind="with: clientType">
+													<label class="control-label">Customer</label>
+													<select data-placeholder="Select customer..." name="memberId" class="form-control chosen-select" data-bind='options: $root.clients, optionsText: "clientNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Client name is required" required>
+													</select>
+													<input type="hidden" name="clientType" value="<?php echo $client['clientType'];?>" />
+												</div>
+												<div class="col-md-4"<?php if(!isset($_GET['grpLId'])){?> data-bind='with: $root.client'<?php }?>>
+												<?php if(!isset($_GET['grpLId'])): //if it is a group loan we already know the product ?>
+													<label class="control-label">Product</label>
+													<select class="form-control" id="loanProductId" name="loanAccount[loanProductId]" data-bind='options: $root.loanProducts, optionsText: "productName", optionsCaption: "Select product...", optionsAfterRender: $root.setOptionValue("id"), value: $root.loanProduct' data-msg-required="Loan product is required" required>
+													</select>
+												<?php else: ?>
+													<span data-bind="with: $root.loanProduct">
+														<input type="hidden" id="loanProductId" name="loanAccount[loanProductId]" data-bind="attr:{value:id}"/>
+														<label class="control-label" data-bind="text: productName">Product</label>
+													</span>
+												<?php endif; ?>
+													<span class="help-block m-b-none" data-bind="with: $root.loanProduct">
+														<small data-bind="text: description">Product description goes here.</small>
+													</span>
+												</div>
+												<div class="col-md-4" data-bind="with: $root.loanProduct">
+													<label class="control-label">Application Date</label>
+													<div class="input-group date" data-provide="datepicker" data-date-format="dd-mm-yyyy" data-date-end-date="<?php echo date('d-m-Y');?>">
+														<input type="text" class="form-control" name="applicationDate" data-bind="attr:{value:$parent.applicationDate}" required>
+														<div class="input-group-addon">
+															<span class="fa fa-calendar"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!--div class="form-group" data-bind='with: loanProduct'>
+												<div class="col-lg-12">
+													<h3>Please fill in the loan application details for the client<span data-bind="text: ($root.filteredGroupMembers().length>1)?'s':''"></span> below</h3>
+												</div>
+											</div-->
                                         </fieldset>
                                         <!--ko with:clientType-->
                                         <!--ko if:(typeof($root.client())!='undefined'&&typeof($root.loanProduct())!='undefined')-->
                                         <div class="hr-line-dashed"></div>
-                                        <div data-bind='foreach: $root.filteredGroupMembers'>
+                                        <div data-bind='with: $root.loanAccount'>
                                             <div class="ibox float-e-margins">
                                                 <div class="ibox-title">
                                                     <h5 data-bind='text: clientNames'>member</h5>
                                                     <div class="ibox-tools">
-                                                        <a class="collapse-link">
-					<i data-bind="css:{'fa':1,'fa-chevron-down':$index()>0,'fa-chevron-up':$index()==0}"></i>
-				</a>
-                                                        <input type='hidden' data-bind="value:((typeof(memberId)!='undefined')?memberId:id), attr:{'name':'loanAccount['+$index()+'][memberId]'}" />
-                                                        <!--input type='hidden' data-bind="value:id, attr:{'name':'loanAccount['+$index()+'][groupMemberId]'}"/-->
-                                                        <a class="close-link">
-                                                            <i class="fa fa-times"></i>
-                                                        </a>
+                                                        <input type='hidden' data-bind="value:((typeof(memberId)!='undefined')?memberId:id), attr:{'name':'loanAccount[memberId]'}" />
+														<?php if(isset($_GET['grpLId'])):?>
+														<input type='hidden' value="<?php echo $_GET['grpLId']; ?>" name="loanAccount[groupLoanAccountId]'}"/>
+														<?php endif;?>
                                                     </div>
                                                 </div>
                                                 <div class="ibox-content">
@@ -93,13 +82,13 @@
                                                         <div data-bind="with: $root.loanProduct">
                                                             <div class="hr-line-dashed"></div>
                                                             <!-- Settings adapted from the product -->
-                                                            <input type='hidden' data-bind="value:initialAccountState, attr:{'name':'loanAccount['+$parentContext.$index()+'][status]'}" />
-                                                            <input type='hidden' data-bind="value:repaymentsFrequency, attr:{'name':'loanAccount['+$parentContext.$index()+'][repaymentsFrequency]'}" />
-                                                            <input type='hidden' data-bind="value:repaymentsMadeEvery, attr:{'name':'loanAccount['+$parentContext.$index()+'][repaymentsMadeEvery]'}" />
+                                                            <input type='hidden' data-bind="value:initialAccountState, attr:{'name':'loanAccount[status]'}" />
+                                                            <input type='hidden' data-bind="value:repaymentsFrequency, attr:{'name':'loanAccount[repaymentsFrequency]'}" />
+                                                            <input type='hidden' data-bind="value:repaymentsMadeEvery, attr:{'name':'loanAccount[repaymentsMadeEvery]'}" />
                                                             <div class="form-group">
                                                                 <label class="col-md-3 control-label">Loan Amount</label>
                                                                 <div class="col-md-3">
-                                                                    <input type="number" class="form-control input-sm" data-bind='textInput: $parent.requestedAmount2, attr: {"data-rule-min":((parseFloat(minAmount)>0&&$root.clientType==1)?minAmount:null), "data-rule-max": ((parseFloat(maxAmount)>0&&$root.clientType==1)?maxAmount:null), "data-msg-min":"Loan amount is less than "+curr_format(parseInt(minAmount)), "data-msg-max":"Loan amount is more than "+curr_format(parseInt(maxAmount)),"name":"loanAccount["+$parentContext.$index()+"][requestedAmount]"}' />
+                                                                    <input type="number" class="form-control input-sm" data-bind='textInput: $parent.requestedAmount2, attr: {"data-rule-min":((parseFloat(minAmount)>0&&$root.clientType==1)?minAmount:null), "data-rule-max": ((parseFloat(maxAmount)>0&&$root.clientType==1)?maxAmount:null), "data-msg-min":"Loan amount is less than "+curr_format(parseInt(minAmount)), "data-msg-max":"Loan amount is more than "+curr_format(parseInt(maxAmount)),"name":"loanAccount[requestedAmount]"}' />
                                                                     <div>
                                                                         <label class="col-sm-2" data-bind="visible: (parseFloat(minAmount)>0&&$root.clientType==1)">Min</label>
                                                                         <label class="col-sm-4" data-bind="visible: (parseFloat(minAmount)>0&&$root.clientType==1), text: curr_format(parseInt(minAmount))"></label>
@@ -109,7 +98,7 @@
                                                                 </div>
                                                                 <label class="col-md-3 control-label">Interest Rate</label>
                                                                 <div class="col-md-3">
-                                                                    <input type="number" class="form-control input-sm" data-bind='textInput: $parent.interestRate2, attr: {"data-rule-min":(parseFloat(minInterest)>0?minInterest:null), "data-rule-max": (parseFloat(maxInterest)>0?maxInterest:null), "data-msg-min":"Interest Rate is less than "+minInterest, "data-msg-max":"Interest Rate is more than "+maxInterest, value:defInterest,"name":"loanAccount["+$parentContext.$index()+"][interestRate]"}' />
+                                                                    <input type="number" class="form-control input-sm" data-bind='textInput: $parent.interestRate2, attr: {"data-rule-min":(parseFloat(minInterest)>0?minInterest:null), "data-rule-max": (parseFloat(maxInterest)>0?maxInterest:null), "data-msg-min":"Interest Rate is less than "+minInterest, "data-msg-max":"Interest Rate is more than "+maxInterest, value:defInterest,"name":"loanAccount[interestRate]"}' />
                                                                     <div>
                                                                         <label class="col-sm-2" data-bind="visible: parseFloat(minInterest)>0">Min</label>
                                                                         <label class="col-sm-4" data-bind="visible: parseFloat(minInterest)>0, text: minInterest + '%'"></label>
@@ -125,7 +114,7 @@
                                                             <div class="form-group">
                                                                 <label class="col-md-3 control-label">First installment Offset Period <sup data-toggle="tooltip" title="Period of time before which a client can start paying up the loan amount" data-placement="right"><i class="fa fa-question-circle"></i></sup></label>
                                                                 <div class="col-md-3">
-                                                                    <input type="number" class="form-control input-sm" data-bind='attr: {"data-rule-min":(parseFloat(minOffSet)>0?minOffSet:null), "data-rule-max": (parseFloat(maxOffSet)>0?maxOffSet:null), "data-msg-min":"Offset period is less than "+minOffSet, "data-msg-max":"Offset period is more than "+maxOffSet,"name":"loanAccount["+$parentContext.$index()+"][offSetPeriod]", value:defOffSet}'>
+                                                                    <input type="number" class="form-control input-sm" data-bind='attr: {"data-rule-min":(parseFloat(minOffSet)>0?minOffSet:null), "data-rule-max": (parseFloat(maxOffSet)>0?maxOffSet:null), "data-msg-min":"Offset period is less than "+minOffSet, "data-msg-max":"Offset period is more than "+maxOffSet,"name":"loanAccount[offSetPeriod]", value:defOffSet}'>
                                                                     <div>
                                                                         <label class="col-sm-2" data-bind="visible: parseFloat(minOffSet)>0">Min</label>
                                                                         <label class="col-sm-4" data-bind="visible: parseFloat(minOffSet)>0, text: minOffSet"></label>
@@ -135,7 +124,7 @@
                                                                 </div>
                                                                 <label class="col-md-3 control-label">Grace Period <sup data-toggle="tooltip" class="" title="Number of days the client is given to pay up upon default of the payment contract" data-placement="right"><i class="fa fa-question-circle"></i></sup></label>
                                                                 <div class="col-md-3">
-                                                                    <input type="number" class="form-control input-sm" data-bind='attr: {"data-rule-min":(parseFloat(minGracePeriod)>0?minGracePeriod:null), "data-rule-max": (parseFloat(maxGracePeriod)>0?maxGracePeriod:null), "data-msg-min":"Grace Period is less than "+minGracePeriod, "data-msg-max":"Grace Period is more than "+maxGracePeriod,"name":"loanAccount["+$parentContext.$index()+"][gracePeriod]", value:defGracePeriod}'>
+                                                                    <input type="number" class="form-control input-sm" data-bind='attr: {"data-rule-min":(parseFloat(minGracePeriod)>0?minGracePeriod:null), "data-rule-max": (parseFloat(maxGracePeriod)>0?maxGracePeriod:null), "data-msg-min":"Grace Period is less than "+minGracePeriod, "data-msg-max":"Grace Period is more than "+maxGracePeriod,"name":"loanAccount[gracePeriod]", value:defGracePeriod}'>
                                                                     <div>
                                                                         <label class="col-sm-2" data-bind="visible: parseFloat(minGracePeriod)>0">Min</label>
                                                                         <label class="col-sm-4" data-bind="visible: parseFloat(minGracePeriod)>0, text: minGracePeriod"></label>
@@ -148,7 +137,7 @@
                                                             <div class="form-group">
                                                                 <label class="col-md-3 control-label">Repayment Installments</label>
                                                                 <div class="col-md-3">
-                                                                    <input type="number" class="form-control input-sm" data-bind='attr: {"data-rule-min":(parseFloat(minRepaymentInstallments)>0?minRepaymentInstallments:null), "data-rule-max": (parseFloat(maxRepaymentInstallments)>0?maxRepaymentInstallments:null), "data-msg-min":"Repayment Installments less than "+minRepaymentInstallments, "data-msg-max":"Repayment Installments more than "+maxRepaymentInstallments, value:defRepaymentInstallments,"name":"loanAccount["+$parentContext.$index()+"][installments]"}' required />
+                                                                    <input type="number" class="form-control input-sm" data-bind='attr: {"data-rule-min":(parseFloat(minRepaymentInstallments)>0?minRepaymentInstallments:null), "data-rule-max": (parseFloat(maxRepaymentInstallments)>0?maxRepaymentInstallments:null), "data-msg-min":"Repayment Installments less than "+minRepaymentInstallments, "data-msg-max":"Repayment Installments more than "+maxRepaymentInstallments, value:defRepaymentInstallments,"name":"loanAccount[installments]"}' required />
                                                                     <div>
                                                                         <label class="col-sm-2" data-bind="visible: parseFloat(minRepaymentInstallments)>0">Min</label>
                                                                         <label class="col-sm-4" data-bind="visible: parseFloat(minRepaymentInstallments)>0, text: minRepaymentInstallments"></label>
@@ -179,13 +168,13 @@
                                                                             <tbody data-bind="foreach: $root.filteredLoanProductFees">
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <input class="icheckbox_square-green" style="position: relative;" name="fee" type="checkbox" data-bind="checkedValue: $data, checked: $parentContext.$parent.loanAccountFees, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+$index()+'][loanProductFeenId]', 'value':$data.id}" />
+                                                                                        <input class="icheckbox_square-green" style="position: relative;" name="fee" type="checkbox" data-bind="checkedValue: $data, checked: $parentContext.$parent.loanAccountFees, attr:{'name':'loanAccount[loanFees]['+$index()+'][loanProductFeenId]', 'value':$data.id}" />
                                                                                     </td>
                                                                                     <td data-bind='text: feeName'></td>
                                                                                     <td data-bind='text: curr_format(amount)'></td>
                                                                                     <td data-bind='text: getDescription(5, $data.amountCalculatedAs)'></td>
                                                                                     <td>
-                                                                                        <input type="hidden" data-bind="attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanFees]['+$index()+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)}" /><span data-bind='text: curr_format(getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs))'></span></td>
+                                                                                        <input type="hidden" data-bind="attr:{'name':'loanAccount[loanFees]['+$index()+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)}" /><span data-bind='text: curr_format(getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs))'></span></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -193,7 +182,7 @@
                                                                 </div>
                                                             </fieldset>
                                                             <!-- /ko -->
-                                                            <!--ko if: ($parent.filteredGuarantors().length>0) -->
+                                                            <!--ko if: (($parent.filteredGuarantors().length>0)&&$root.clientType().type_id==1) -->
                                                             <h3>Guarantors <small>Choose Guarantors</small></h3>
                                                             <fieldset>
                                                                 <div class="form-group">
@@ -211,7 +200,7 @@
                                                                             <tbody data-bind='foreach: $parent.selectedGuarantors'>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <select data-bind="options: $parentContext.$parent.filteredGuarantors, optionsText: 'memberNames', optionsValue, optionsAfterRender: $root.setOptionValue('id'), optionsCaption: 'Select guarantor...', value:guarantor, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+']guarantors['+$index()+'][memberId]'}" class="form-control"> </select>
+                                                                                        <select data-bind="options: $parentContext.$parent.filteredGuarantors, optionsText: 'memberNames', optionsValue, optionsAfterRender: $root.setOptionValue('id'), optionsCaption: 'Select guarantor...', value:guarantor, attr:{'name':'loanAccountguarantors['+$index()+'][memberId]'}" class="form-control"> </select>
                                                                                     </td>
                                                                                     <td class='phone' data-bind='with: guarantor'>
                                                                                         <span data-bind='text: phone'> </span>
@@ -238,7 +227,7 @@
                                                                 </div>
                                                             </fieldset>
                                                             <!-- /ko -->
-                                                            <!--ko if: (parseInt($root.client().clientType)==1) -->
+                                                            <!--ko if: (parseInt($root.clientType().type_id)==1) -->
                                                             <h3>Collateral <small>Add Collateral</small></h3>
                                                             <fieldset>
                                                                 <div class="hr-line-dashed"></div>
@@ -265,17 +254,17 @@
                                                                             <tbody data-bind="foreach: $parent.addedCollateral">
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <input class="form-control input-sm" data-bind="value: itemName, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+$index()+'][itemName]'}" data-msg-required="Item name is required" required/>
+                                                                                        <input class="form-control input-sm" data-bind="value: itemName, attr:{'name':'loanAccount[loanCollateral]['+$index()+'][itemName]'}" data-msg-required="Item name is required" required/>
                                                                                     </td>
                                                                                     <td>
-                                                                                        <textarea class="form-control input-sm" data-bind="value: description, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+$index()+'][description]'}" data-msg-required="Item description is required" required></textarea>
+                                                                                        <textarea class="form-control input-sm" data-bind="value: description, attr:{'name':'loanAccount[loanCollateral]['+$index()+'][description]'}" data-msg-required="Item description is required" required></textarea>
                                                                                     </td>
                                                                                     <td>
-                                                                                        <input class="form-control input-sm" type="number" data-bind="textInput: itemValue, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+$index()+'][itemValue]'}" required/>
+                                                                                        <input class="form-control input-sm" type="number" data-bind="textInput: itemValue, attr:{'name':'loanAccount[loanCollateral]['+$index()+'][itemValue]'}" required/>
                                                                                         <i><span data-bind="text: getWords(itemValue())+' Uganda shillings only'"></span></i>
                                                                                     </td>
                                                                                     <td>
-                                                                                        <input class="input-sm" type="file" data-bind="value: attachmentUrl, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][loanCollateral]['+$index()+'][attachmentUrl]'}" />
+                                                                                        <input class="input-sm" type="file" data-bind="value: attachmentUrl, attr:{'name':'loanAccount[loanCollateral]['+$index()+'][attachmentUrl]'}" />
                                                                                     </td>
                                                                                     <td><span title="Remove item" class="btn text-danger" data-bind='click: $parentContext.$parent.removeCollateral'><i class="fa fa-minus"></i></span></td>
                                                                                 </tr>
@@ -292,37 +281,50 @@
                                                             <!-- /ko -->
                                                             <h3>Businesses <small>Add Businesses</small></h3>
                                                             <fieldset>
+																<div class="row">
+																	<div class="col-lg-2">
+																		<label>Name of Business</label>
+																	</div>
+																	<div class="col-lg-3">
+																		<label>Business Location</label>
+																	</div>
+																	<div class="col-lg-2">
+																		<label>Number Of Employees</label>
+																	</div>
+																	<div class="col-lg-2">
+																		<label>Business Worth</label>
+																	</div>
+																	<div class="col-lg-2">
+																		<label>URSB Number</label>
+																	</div>
+																	<div class="col-lg-1">
+																	</div>
+																</div>
                                                                 <div class="row" data-bind="foreach: $parent.member_business">
                                                                     <h3 data-bind="text:'Business '+($index()+1)"></h3>
-                                                                    <div class="col-lg-6">
+                                                                    <div class="col-lg-2">
                                                                         <div class="form-group">
-                                                                            <label>Name of Business</label>
-                                                                            <textarea data-bind="value: businessName, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][clientBusinesses]['+$index()+'][businessName]'}" required class="form-control"></textarea>
-                                                                        </div>
-
-                                                                    </div>
-                                                                    <div class="col-lg-6">
-                                                                        <div class="form-group">
-                                                                            <label>Business Location</label>
-                                                                            <textarea data-bind="value: businessLocation, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][clientBusinesses]['+$index()+'][businessLocation]'}" required class="form-control "></textarea>
+                                                                            <textarea data-bind="value: businessName, attr:{'name':'loanAccount[clientBusinesses]['+$index()+'][businessName]'}" required class="form-control"></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-3">
                                                                         <div class="form-group">
-                                                                            <label>Number Of Employees</label>
-                                                                            <input data-bind="value: numberOfEmployees, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][clientBusinesses]['+$index()+'][numberOfEmployees]'}" required type="number" class="form-control ">
+                                                                            <textarea data-bind="value: businessLocation, attr:{'name':'loanAccount[clientBusinesses]['+$index()+'][businessLocation]'}" required class="form-control "></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-2">
                                                                         <div class="form-group">
-                                                                            <label>Business Worth</label>
-                                                                            <input data-bind="textInput: businessWorth, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][clientBusinesses]['+$index()+'][businessWorth]'}" type="text" class="form-control">
+                                                                            <input data-bind="value: numberOfEmployees, attr:{'name':'loanAccount[clientBusinesses]['+$index()+'][numberOfEmployees]'}" required type="number" class="form-control ">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-2">
                                                                         <div class="form-group">
-                                                                            <label>URSB Number</label>
-                                                                            <input data-bind="value: ursbNumber, attr:{'name':'loanAccount['+($parentContext.$parentContext.$index())+'][clientBusinesses]['+$index()+'][ursbNumber]'}" type="text" class="form-control ">
+                                                                            <input data-bind="textInput: businessWorth, attr:{'name':'loanAccount[clientBusinesses]['+$index()+'][businessWorth]'}" type="text" class="form-control">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-2">
+                                                                        <div class="form-group">
+                                                                            <input data-bind="value: ursbNumber, attr:{'name':'loanAccount[clientBusinesses]['+$index()+'][ursbNumber]'}" type="text" class="form-control ">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-1"><span title="Remove Business" class="btn text-danger btn-lg" data-bind='click: $parentContext.$parent.removeBusiness'><i class="fa fa-minus"></i></span></div>
@@ -331,7 +333,6 @@
                                                                 <div class="row">
                                                                     <div class="clearboth"></div>
                                                                     <div class="col-lg-12">
-                                                                        
 																		<div class="form-group"> 
 																			<span class="btn btn-info btn-sm pull-right" data-bind='click: $parent.addBusinnes'><i class="fa fa-plus"></i> Add more</span>
 																		</div>
@@ -342,7 +343,7 @@
                                                                 <div class="clearboth"></div>
                                                                 <div class="col-lg-12">
                                                                     <label class="control-label">Comment</label>
-                                                                    <textarea class="form-control" data-bind='attr: {"name":"loanAccount["+$parentContext.$index()+"][comments]"}'></textarea>
+                                                                    <textarea class="form-control" data-bind='attr: {"name":"loanAccount[comments]"}'></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>

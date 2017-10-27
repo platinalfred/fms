@@ -286,12 +286,14 @@ if(isset($_POST['origin'])){
 			$loanProductObj = new LoanProduct();
 			$productFeeObj = new LoanProductFeen();
 			$guarantorObj = new Guarantor();
-			$saccoGroupObj = new SaccoGroup();
+			//$saccoGroupObj = new SaccoGroup();
 			$memberObj = new Member();
 			
-			$data['products'] = $loanProductObj->findAll();
+			if(!isset($_POST['grpLId'])){
+				$availableTo = "`availableTo` IN ".((isset($_POST['groupId'])&&is_numeric($_POST['groupId']))?"(2,3)":"(1,3)");
+				$data['products'] = $loanProductObj->findAll($availableTo);
+			}
 			$data['productFees'] = $productFeeObj->findAllLPFDetails();
-			$data['guarantors'] = $guarantorObj->getLoanGuarantors();
 			if(isset($_POST['loanAccountId'])&&is_numeric($_POST['loanAccountId'])){
 				$loanAccountObj = new LoanAccount();
 				$collateralObj = new LoanCollateral();
@@ -303,10 +305,21 @@ if(isset($_POST['origin'])){
 				$data['account_details']['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$_POST['loanAccountId']);
 				$data['account_details']['loan_account_fees'] = $loanAccountFeeObj->findAllDetailsByLoanAccountId($_POST['loanAccountId']);
 			}else{
-				$data['clients'] = $memberObj->findSelectList();
+				$where = "";
+				if((isset($_POST['groupId'])&&is_numeric($_POST['groupId']))&&(isset($_POST['grpLId'])&&is_numeric($_POST['grpLId']))){
+					$where = "`member`.`id` IN (SELECT `memberId` FROM `group_members` WHERE `groupId` = {$_POST['groupId']}) AND `member`.`id` NOT IN (SELECT `memberId` FROM `loan_account` WHERE `groupLoanAccountId` = {$_POST['grpLId']})";
+					
+					//get the loan product for this group loan
+					$loan_product = $loanProductObj->getGroupLoanProduct($_POST['grpLId']);
+					$data['product'] = $loanProductObj->findById($loan_product['loanProductId']);
+				}
+				else{
+					$data['guarantors'] = $guarantorObj->getLoanGuarantors();
+				}
+				$data['clients'] = $memberObj->findSelectList($where);
 			}
-			$data['groups'] = $saccoGroupObj->findSelectList();
-			$data['groupMembers'] = $saccoGroupObj->findGroupMembers();
+			//$data['groups'] = $saccoGroupObj->findSelectList();
+			//$data['groupMembers'] = $saccoGroupObj->findGroupMembers();
 			
 			echo json_encode($data);
 		break;
@@ -334,8 +347,11 @@ if(isset($_POST['origin'])){
 			}
 		break;
 		case 'loan_accounts':
-			$loanAccount = new LoanAccount();
-			$where = "`status`=".$_POST['status'];
+			$oanAccountObj = new LoanAccount();
+			$where = "1";
+			if(isset($_POST['status']) && is_numeric($_POST['status'])){
+				$where = "`status`=".$_POST['status'];
+			}
 			if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 				$action_date = (in_array($_POST['status'],array(5,13,14,15,16)))?"disbursementDate":((in_array($_POST['status'],array(3,4)))?"approvalDate":"applicationDate");
 				$where .= " AND (`".($action_date)."` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
@@ -346,11 +362,11 @@ if(isset($_POST['origin'])){
 			if(isset($_POST['groupId'])&&is_numeric($_POST['groupId'])){
 				$where .= " AND `groupId`=".$_POST['groupId'];
 			}
-			if(isset($_POST['grpLId'])&&is_numeric($_POST['grpLId'])){//this caters for the display of loans taken in groups 
+			if(isset($_POST['grpLId'])&&is_numeric($_POST['grpLId'])){//this caters for the display of loans taken in groups
 				$where .= " AND `groupLoanAccountId`=".$_POST['grpLId'];
 			}
-			if($_POST['status']==4||$_POST['status']==5){
-				$output['data'] = $loanAccount->getApprovedLoans($where);
+			if(isset($_POST['status']) && ($_POST['status']==4||$_POST['status']==5)){
+				$output['data'] = $oanAccountObj->getApprovedLoans($where);
 			}else{
 				if(isset($_POST['status']) && $_POST['status']==3){
 					if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['admin'])&&$_SESSION['admin'])){
@@ -363,9 +379,26 @@ if(isset($_POST['origin'])){
 						$where .= " AND `requestedAmount` > 5000000";
 					}
 				}
-				$output['data'] = $loanAccount->getApplications($where);
+				$output['data'] = $oanAccountObj->getApplications($where);
 			}
-			
+			echo json_encode($output);
+		break;
+		case 'group_loan_accounts':
+				$loanAccountObj = new LoanAccount();
+				$where = "";
+				if(isset($_POST['groupId'])){
+					$where = "`saccoGroupId` = {$_POST['groupId']}";
+				}
+				$output['data'] = $loanAccountObj->getGroupLoanAccounts($where);
+			echo json_encode($output);
+		break;
+		case 'group_loan_ref_accounts': //loan accounts of a particular ref id
+				$loanAccountObj = new LoanAccount();
+				$where = "";
+				if(isset($_POST['grpLId'])){
+					$where = "`groupLoanAccountId` = {$_POST['grpLId']}";
+				}
+				$output = $loanAccountObj->getApplications($where);
 			echo json_encode($output);
 		break;
 		case 'loan_application_details':
@@ -374,17 +407,15 @@ if(isset($_POST['origin'])){
 				$memberId = $_POST['memberId'];
 				$data = array();
 				//is this a group loan, then retrieve all the other member loans for approval purposes
-				if(isset($_POST['groupLoanAccountId'])&&is_numeric($_POST['groupLoanAccountId'])&&($_POST['groupLoanAccountId']>0)&&isset($_POST['status'])&&is_numeric($_POST['status'])&&(in_array($_POST['status'],array(1,2,3,4)))){
+				/* if(isset($_POST['groupLoanAccountId'])&&is_numeric($_POST['groupLoanAccountId'])&&($_POST['groupLoanAccountId']>0)&&isset($_POST['status'])&&is_numeric($_POST['status'])&&(in_array($_POST['status'],array(1,2,3,4)))){
 					$loan_account_obj = new LoanAccount();
 					$data = $loan_account_obj->getApplications("`groupLoanAccountId`=".$_POST['groupLoanAccountId']);
 					foreach($data as $key=>$loanAccount){
 						$guarantorObj = new Guarantor();
-						//$collateralObj = new LoanCollateral();
 						$data[$key]['guarantors'] = $guarantorObj->getLoanGuarantors($loanAccount['id']);
-						//$data[$key]['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$loanAccount['id']);
 						
 						//is the loan disbursed, if so show any payments that have been made
-						if(in_array($loanAccount['status'],array(5,6))){
+						if(isset($_POST['status'])&&is_numeric($_POST['status'])&&in_array($loanAccount['status'],array(5,6))){
 							$loan_account_transaction_obj = new LoanRepayment();
 							$data[$key]['transactionHistory'] = $loan_account_transaction_obj->getTransactionHistory($loanAccount['id']);
 						}
@@ -404,9 +435,7 @@ if(isset($_POST['origin'])){
 						$data[$key]['loan_account_fees'] = $loanAccountFeeObj->findAllDetailsByLoanAccountId($loanAccount['id']);
 						$data[$key]['memberBusinesses'] = $personObj->findMemberBusiness($memberData['personId']);
 					}
-				}else{
-					$guarantorObj = new Guarantor();
-					$collateralObj = new LoanCollateral();
+				}else{ */
 					$loanAccountFeeObj = new LoanAccountFee();
 					$personObj = new Person();
 					$memberObj = new Member();
@@ -414,14 +443,19 @@ if(isset($_POST['origin'])){
 					$loan_account_approvals_obj = new LoanAccountApproval();
 					
 					$data = $loanAccountObj->findById($loanAccountId);
-					$data['guarantors'] = $guarantorObj->getLoanGuarantors($loanAccountId);
-					$data['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$loanAccountId);
+					
+					if(( isset($_POST['groupLoanAccountId']) && !is_numeric($_POST['groupLoanAccountId']) )||!isset($_POST['groupLoanAccountId'])){
+						$guarantorObj = new Guarantor();
+						$collateralObj = new LoanCollateral();
+						$data['guarantors'] = $guarantorObj->getLoanGuarantors($loanAccountId);
+						$data['collateral_items'] = $collateralObj->findAll("`loanAccountId`=".$loanAccountId);
+					}
 					
 					//any approvals/forwarding
 					$data['approvals'] = $loan_account_approvals_obj->getLoanAccountApprovals("`loanAccountId`=".$loanAccountId);
 					
 					//is the loan disbursed, if so show any payments that have been made
-					if(isset($_POST['status'])&&is_numeric($_POST['status'])&&$_POST['status']==5){
+					if(isset($_POST['status'])&&is_numeric($_POST['status'])&&in_array($_POST['status'],array(5,6))){
 						$loan_account_transaction_obj = new LoanRepayment();
 						$data['transactionHistory'] = $loan_account_transaction_obj->getTransactionHistory($_POST['id']);
 					}
@@ -432,7 +466,7 @@ if(isset($_POST['origin'])){
 					$data['relatives'] = $personObj->findPersonRelatives($memberData['personId']);
 					$data['employmentHistory'] = $personObj->findPersonEmploymentHistory($memberData['personId']);
 					$data['memberBusinesses'] = $personObj->findMemberBusiness($memberData['personId']);
-				}
+				//}
 				echo json_encode($data);
 			}
 		break;

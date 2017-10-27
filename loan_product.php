@@ -12,9 +12,9 @@
                         <div class="ibox-content">
                             <form id="loanProductForm" class="form-horizontal">
                                 <div class="form-group">
-									<label class="col-sm-1 control-label" for="productName">Product Name</label>
+									<label class="col-sm-2 control-label" for="productName">Product Name</label>
                                     <div class="col-sm-4"><input type="text" class="form-control input-sm" name="productName" id="productName" data-bind="value: productName" data-msg-required="Product name is required" required></div>
-									<label class="control-label col-sm-2">Description</label>
+									<label class="control-label col-sm-1">Description</label>
                                     <div class="col-sm-5">
                                         <textarea id="description" name="description" class="form-control required" data-msg-required="Product description is required" data-bind="value: description"> </textarea>
 									</div>
@@ -36,12 +36,12 @@
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-										<label class="control-label col-sm-1">Product State</label>
+										<label class="control-label col-sm-2">Product State</label>
                                     <div class="col-sm-2">
 										<div><label title="Select if this product should be made active"> <input type="checkbox" data-bind="checked: active" value="1"> <i></i> Active </label></div>
                                     </div>
 									<label class="control-label col-sm-3">Initial Account State</label>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-5">
 										<select class="form-control required" id="initialAccountState" name="initialAccountState" data-bind='options: initialAccountStateOptions, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: initialAccountState' data-msg-required="Initial Account State is required">
 										</select>
                                     </div>
@@ -75,14 +75,14 @@
                                 <div class="hr-line-dashed"></div>
 								<div><h3><i>Repayment scheduling</i></h3></div>
                                 <div class="form-group">
-									<div class="col-md-4">
+									<div class="col-md-3">
 										<p>Payment Interval Method: <strong>Interval</strong></p>
 									</div>
-									<div class="col-md-8">
-											<label class="col-sm-6 control-label">Repayments are made every <sup data-toggle="tooltip" title='Suppose you want the repayments to be made every two weeks.Enter the number (2 in this example) > select "weeks" from the dropdown list. This will define the period between repayments.' data-placement='right' ><i class="fa fa-question-circle"></i></sup></label>
-											<div class="col-sm-2"><input type="number" class="form-control input-sm" name="repaymentsFrequency" id="repaymentsFrequency" data-bind="value: repaymentsFrequency"></div>
+									<div class="col-md-9">
+											<label class="col-sm-5 control-label">Repayments are made every <sup data-toggle="tooltip" title='Suppose you want the repayments to be made every two weeks.Enter the number (2 in this example) > select "weeks" from the dropdown list. This will define the period between repayments.' data-placement='right' ><i class="fa fa-question-circle"></i></sup></label>
+											<div class="col-sm-3"><input type="number" class="form-control input-sm" name="repaymentsFrequency" id="repaymentsFrequency" data-bind="value: repaymentsFrequency"data-msg-required="Required field" required /></div>
 											<div class="col-sm-4">
-											<select class="form-control" id="repaymentsMadeEvery" name="repaymentsMadeEvery" data-bind='css: {required: repaymentsFrequency()}, optionsAfterRender: setOptionValue("id"), options: repaymentsMadeEveryOptions, optionsText: "desc", optionsCaption: "Select...", value: repaymentsMadeEvery' data-msg-required="Time unit is required">
+											<select class="form-control" id="repaymentsMadeEvery" name="repaymentsMadeEvery" data-bind='css: {required: repaymentsFrequency()}, optionsAfterRender: setOptionValue("id"), options: repaymentsMadeEveryOptions, optionsText: "desc", optionsCaption: "Select...", value: repaymentsMadeEvery' data-msg-required="Time unit is required" required >
 											</select>
 									</div>
                                 </div>
@@ -150,13 +150,13 @@
                                 <div class="form-group" data-bind="visible: penCalcMethId">
                                     <div class="col-md-6">
 										<label class="col-sm-6">Penalty Tolerance Period</label>
-										<div class="col-sm-5"><input type="number" class="form-control input-sm" name="penaltyTolerancePeriod" id="penaltyTolerancePeriod" data-bind="value: penaltyTolerancePeriod"></div><label class="col-sm-1">Days</label>
+										<div class="col-sm-5"><input type="number" class="form-control input-sm" name="penaltyTolerancePeriod" id="penaltyTolerancePeriod" data-bind="value: penaltyTolerancePeriod" data-msg-required="Field is required" required /></div><label class="col-sm-1">Days</label>
                                     </div>
                                     <div class="col-md-6">
 										<label class="col-sm-5">How is the penalty rate charged</label>
 										<label class="col-sm-3">% per</label>
 										<div class="col-sm-4">
-											<select class="form-control" id="penaltyRateChargedPer" name="penaltyRateChargedPer" data-bind='css: {required: penaltyTolerancePeriod()}, options: penaltyChargeRate, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: penaltyRateChargedPer'>
+											<select class="form-control" id="penaltyRateChargedPer" name="penaltyRateChargedPer" data-bind='css: {required: penaltyTolerancePeriod()}, options: penaltyChargeRate, optionsText: "desc", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: penaltyRateChargedPer' data-msg-required="Period is required" required >
 										</select>
 										</div>
                                     </div>
@@ -164,15 +164,15 @@
                                 <div class="form-group" data-bind="visible: penCalcMethId">
                                     <div class="col-md-4">
 										<label class="control-label">Default Penalty Rate</label>
-										<div class="col-sm-9"><input type="text" class="form-control input-sm" name="defPenaltyRate" id="defPenaltyRate" data-bind="value: defPenaltyRate" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1">%</label>
+										<div class="col-sm-9"><input type="text" class="form-control input-sm" name="defPenaltyRate" id="defPenaltyRate" data-bind="value: defPenaltyRate" data-rule-min="0" data-rule-max="100" required /></div><label class="col-sm-1">%</label>
                                     </div>
                                     <div class="col-md-4">
 										<label class="control-label">Min Penalty Rate</label>
-										<div class="col-sm-9"><input type="text" class="form-control input-sm" id="minPenaltyRate" name="minPenaltyRate" data-bind="value: minPenaltyRate" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1">%</label>
+										<div class="col-sm-9"><input type="text" class="form-control input-sm" id="minPenaltyRate" name="minPenaltyRate" data-bind="value: minPenaltyRate" data-rule-min="0" data-rule-max="100"/></div><label class="col-sm-1">%</label>
                                     </div>
                                     <div class="col-md-4">
 										<label class="control-label">Max Penalty Rate</label>
-										<div class="col-sm-9"><input type="text" class="form-control input-sm" name="maxPenaltyRate" id="maxPenaltyRate" data-bind="value: maxPenaltyRate" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1">%</label>
+										<div class="col-sm-9"><input type="text" class="form-control input-sm" name="maxPenaltyRate" id="maxPenaltyRate" data-bind="value: maxPenaltyRate" data-rule-min="0" data-rule-max="100"/></div><label class="col-sm-1">%</label>
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>

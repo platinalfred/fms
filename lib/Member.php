@@ -68,10 +68,10 @@ class Member extends Db {
 		return $result_array;
 	}
 	//list of the members for special kinds of select lists
-	public function findSelectList(){
+	public function findSelectList($where = 1){
 		$table = self::$table_name. " JOIN `person` ON `member`.`personId` = `person`.`id`";
 		$fields = "`member`.`id`, CONCAT(`lastname`,' ',`firstname`,' ',`othername`) `clientNames`, 1 `clientType`";
-		$result_array = $this->getfarray($table, $fields, "", "", "");
+		$result_array = $this->getfarray($table, $fields, $where, "", "");
 		return $result_array;
 	}
 	public function findAll(){

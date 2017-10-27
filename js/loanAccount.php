@@ -26,7 +26,7 @@
 		var self = this;
 		self.guarantor = ko.observable();
 	};
-	var LoanAccount = function(clientType) {
+	var LoanAccount = function() {
 		var self = this;
 		//application form details
 		self.clientId = ko.observable();
@@ -47,7 +47,7 @@
 		self.filteredGuarantors = ko.computed(function() {
 			if(self.clientId()){
 				return ko.utils.arrayFilter(guarantors, function(guarantor) {
-					return (parseInt(self.clientId()) != parseInt(guarantor.id) && parseInt(clientType)==1);
+					return (parseInt(self.clientId()) != parseInt(guarantor.id));
 				});
 			}
 			else{
@@ -120,22 +120,17 @@
 		self.applicationDate = ko.observable('<?php echo date('d-m-Y');?>');
 		self.loanProduct = ko.observable();
 		self.loanProduct2 = ko.observable();
-		self.client = ko.observable(<?php if(isset($client)) echo json_encode($client);?>);
+		self.client = ko.observable(<?php // if(isset($client)) echo json_encode($client);?>);
 		
 		//all members
-		<?php if(!isset($client)):?>
-		self.clients = ko.observableArray([{"id":1,"clientNames":"Allan James Kintu"}]); 
-		self.groups = ko.observableArray([{"groupId":1,"groupNames":"Kiwatule Womens Savings Group"}]); 
-		self.clientTypes = ko.observableArray([{"type_id":1,"client_type":"Member"},{"type_id":2,"client_type":"Group Members"}]); 
-		<?php endif;?>
-		self.groupMembers = ko.observableArray([{"id":1,"groupId":1,"memberNames":"Allan James Kintu"}]);
-		self.clientType = ko.observable(<?php if(isset($client)) echo $client['clientType']?>);
-		// Stores an array of all the Data for viewing on the page
+		self.clients = ko.observableArray([{"id":1,"clientNames":"Allan James Kintu"}]);
+		self.clientType = ko.observable(<?php if(isset($_GET['groupId'])) echo '{"type_id":2,"client_type":"Group Member"}'; else echo '{"type_id":1,"client_type":"Member"}';?>);
+		//An array of all the products for viewing on the page
 		self.loanProducts = ko.observableArray([{"id":1,"productName":"Group Savings Loan","description":"Suitable for group savings", "availableTo":"2"}]);
 		
 		self.productFees = ko.observableArray();
 		
-		//these are required as the datatable is being loaded
+		//these are required as the datatable is loaded
 		self.transactionHistory = ko.observableArray(); //for the account transacation history display
 		self.account_details = ko.observable();
 		
@@ -184,82 +179,41 @@
 				}
 			}
 		};
-		
-		//filter the loan products based on the client type
-		self.filteredLoanProducts = ko.computed(function() {
-			var clientType = (self.client()?parseInt(self.client().clientType):(self.account_details()?((self.account_details().groupId&&self.account_details().groupId>0)?2:1):3));
-			return ko.utils.arrayFilter(self.loanProducts(), function(loanProduct) {
-				return (clientType == parseInt(loanProduct.availableTo) || parseInt(loanProduct.availableTo)==3);
-			});
-		});
-		//pick out loan product based on the product id of the account selected in the table
+		//pick out loan product based on the product id of the account selected in the datatable
 		self.getLoanProduct = function(loanProductId) {
-			return ko.utils.arrayFirst(self.filteredLoanProducts(), function(loanProduct) {
+			return ko.utils.arrayFirst(self.loanProducts(), function(loanProduct) {
 				return (loanProductId == parseInt(loanProduct.id));
 			});
 		};
 		/** when the user selects a particular group, only the members in that group should be returned,
-		//when an individual client has been selected, then we return that client object as the only array element
-		//There can be 1 or more loan accounts created, depending on the client type selected
-		//so we join the join each of the member objects with that of the loan account
+		* when an individual client has been selected, then we return that client object as the only array element
+		* There can be 1 or more loan accounts created, depending on the client type selected
+		* so we join each of the member objects with the loan account
 		**/
-		self.filteredGroupMembers = ko.computed(function() {
+		self.loanAccount = ko.computed(function() {
 			if(self.client()){
-				if(parseInt(self.client().clientType)==1){
-					var loan_account = new LoanAccount(1);
-					loan_account.clientId(self.client().id); 
-					return [$.extend(self.client(),loan_account)];
-				}
-				if(parseInt(self.client().clientType)==2){
-					var thisGroupMembers = [];
-					ko.utils.arrayForEach(ko.utils.arrayFilter(self.groupMembers(), function(groupMember) {
-						return (parseInt(self.client().id)==parseInt(groupMember.groupId));
-					}), function(item) {
-						var loan_account = new LoanAccount(2);
-						loan_account.clientId(item.memberId); 
-						thisGroupMembers.push($.extend(item, loan_account));
-					});
-					return thisGroupMembers;
-				}
+				var loan_account = new LoanAccount();
+				loan_account.clientId(self.client().id); 
+				return $.extend(self.client(),loan_account);
 			}
-			
 		});
-		//this array mainly applies to the loan application details page
-		self.filteredGroupMembers2 = ko.computed(function() {
+		//this array mainly applies to the loan application editing page
+		self.loanAccount2 = ko.computed(function() {
 			if(self.account_details()){
-				if(!self.account_details().groupId||self.account_details().groupId==0){
-					if(self.account_details().status<4||self.account_details().status==11){
-						var loan_account = new LoanAccount(1);
-						
-						loan_account.clientId(self.account_details().memberId); 
-						loan_account.requestedAmount2(self.account_details().requestedAmount); 
-						loan_account.interestRate2(self.account_details().interestRate); 
-						loan_account.offSetPeriod2(self.account_details().offSetPeriod); 
-						loan_account.installments2(self.account_details().installments); 
-						loan_account.gracePeriod2(self.account_details().gracePeriod);
-						loan_account.collateral_items(self.account_details().collateral_items);
-						loan_account.guarantors(self.account_details().guarantors);
-						var group_member = $.extend(self.account_details(),loan_account);
-						return [group_member];
+				if(self.account_details().status<4||self.account_details().status==11){
+					var loan_account = new LoanAccount();
+					
+					loan_account.clientId(self.account_details().memberId); 
+					loan_account.requestedAmount2(self.account_details().requestedAmount); 
+					loan_account.interestRate2(self.account_details().interestRate); 
+					loan_account.offSetPeriod2(self.account_details().offSetPeriod); 
+					loan_account.installments2(self.account_details().installments); 
+					loan_account.gracePeriod2(self.account_details().gracePeriod);
+					if(!self.account_details().groupId||self.account_details().groupId==0){
+							loan_account.collateral_items(self.account_details().collateral_items);
+							loan_account.guarantors(self.account_details().guarantors);
 					}
-				}
-				else{
-					var thisGroupMembers = [];
-					ko.utils.arrayForEach(ko.utils.arrayFilter(self.groupLoanAccounts(), function(item) {
-						return (parseInt(item.status)<4||parseInt(item.status)==11);
-					}), function(groupLoanAccount) {
-						var loan_account = new LoanAccount(2);
-						
-						loan_account.clientId(self.account_details().memberId); 
-						loan_account.requestedAmount2(groupLoanAccount.requestedAmount); 
-						loan_account.interestRate2(groupLoanAccount.interestRate); 
-						loan_account.offSetPeriod2(groupLoanAccount.offSetPeriod); 
-						loan_account.installments2(groupLoanAccount.installments); 
-						loan_account.gracePeriod2(groupLoanAccount.gracePeriod); 
-						//loan_account.collateral_items(groupLoanAccount.collateral_items);
-						thisGroupMembers.push($.extend(groupLoanAccount, loan_account));
-					});
-					return thisGroupMembers;
+					return $.extend(self.account_details(),loan_account);
 				}
 			}
 			
@@ -281,10 +235,10 @@
 			$("#loanAccountForm")[0].reset();
 			self.loanProduct(null);
 			self.client(null);
-			self.clientType(null);
 		
 			endDate = moment().format('X'); //get the current time
 			handleDateRangePicker(startDate, endDate);
+			self.getServerData();
 			//dTable['applications'].ajax.reload(null,false);
 		};		
 		//Retrieve page data from the server
@@ -292,16 +246,23 @@
 			$.ajax({
 				type: "post",
 				dataType: "json",
-				data:{origin:"loan_account"<?php if(isset($_GET['loanId'])):?>, loanAccountId:<?php echo (int)$_GET['loanId'];?> <?php endif;?>},
+				data:{origin:"loan_account"
+				<?php if(isset($_GET['loanId'])):?>, loanAccountId:<?php echo (int)$_GET['loanId'];?> <?php endif;?>
+				<?php if(isset($_GET['groupId'])){?>, groupId:<?php echo $_GET['groupId']; } ?>
+				<?php if(isset($_GET['grpLId'])){?>, grpLId:<?php echo $_GET['grpLId']; } ?>},
 				url: "ajax_data.php",
 				success: function(response){
-					self.loanProducts(response.products);
+					<?php if(isset($_GET['grpLId'])){ ?>
+						self.loanProduct(response.product);
+						self.loanProduct2(response.product);
+					<?php } else { ?>
+						self.loanProducts(response.products);
+					<?php } ?>
 					self.productFees(response.productFees);
+					self.clients(response.clients);
+					<?php if(!isset($_GET['groupId'])):?>
 					guarantors=response.guarantors;
-					<?php if(!isset($client)):?>
-					self.clients(response.clients); self.groups(response.groups); self.groupMembers(response.groupMembers); 
 					<?php endif;?>
-					<?php if(isset($client)&&$client['clientType']==2):?>self.groupMembers(response.groupMembers);<?php endif;?>
 					<?php if(isset($_GET['loanId'])){?>
 						var client_data = <?php echo json_encode($client);?>;
 						self.account_details($.extend(client_data, response.account_details, {memberBusinesses: <?php echo json_encode($member_business);?>}, {employmentHistory: <?php echo json_encode($member_employment_history);?>}, {relatives: <?php echo json_encode($member_relatives2);?>}));
@@ -326,9 +287,15 @@
 					var result = parseInt(response)||0;
 					if(result){
 							showStatusMessage("Data successfully saved" ,"success");
-							setTimeout(function(){
-								self.resetForm();
-							}, 3000);
+							if(frmdata.get('origin') == 'newGroupLoanAccount'){
+								$("#newGroupLoanForm")[0].reset();
+								window.location.replace('/fms/group_details.php?groupId='+frmdata.get('saccoGroupId')+'&view=loan_accs&grpLId='+result);
+							}
+							else{
+								setTimeout(function(){
+									self.resetForm();
+								}, 3000);
+							}
 					}else{
 						showStatusMessage("Error encountered while saving data, try again: \n"+response ,"failed");
 					}
@@ -350,7 +317,7 @@
 				url: "lib/AddData.php",
 				success: function(response){
 					var result = parseInt(response)||0;
-					if(result){/*  */
+					if(result){
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
 							$("#loanPaymentForm")[0].reset();
@@ -439,31 +406,16 @@
 				url: "ajax_data.php",
 				success: function(response){
 					if(response){
-						if(edit){
-							self.loanAccountId(response.loan_account_details.id);
-							self.client({id:self.account_details().memberId, clientNames:self.account_details().clientNames, clientType:1});
-							self.loanProduct(response.loan_product);
-							self.selectedGuarantors(response.guarantors);
-							//self.addedCollateral(response.collateral_items);
-							self.requestedAmount(response.loan_account_details.requestedAmount);
-							self.interestRate(response.loan_account_details.interestRate);
-							self.offSetPeriod(response.loan_account_details.offSetPeriod);
-							self.gracePeriod(response.loan_account_details.gracePeriod);
-							self.installments(response.loan_account_details.installments);
-							self.applicationDate(moment(response.loan_account_details.applicationDate,'X').format('DD-MM-YYYY'));
-						}
-						else{
+						<?php if(!isset($_GET['grpLId'])){?>
 							self.loanProduct2(self.getLoanProduct(self.account_details().loanProductId));
-							if(typeof(self.account_details().groupLoanAccountId)!='undefined'&&(self.account_details().groupLoanAccountId>0)){
+							<?php } ?>/*if(typeof(self.account_details().groupLoanAccountId)!='undefined'&&(self.account_details().groupLoanAccountId>0)){
 								self.groupLoanAccounts(response);
 								self.account_details(self.groupLoanAccounts()[self.curIndex()-1]);
 							}
-							else{
+							else{*/
 								self.account_details($.extend(self.account_details(),response));
-							}
-							self.loanAccountStatus(null);//
-							//$("#loanProductId2").val(self.account_details().loanProductId);
-						}
+							//}
+							self.loanAccountStatus(null);
 					}
 				}
 			});
@@ -471,13 +423,16 @@
 	};
 
 	var viewModel = new ViewModel();
+	<?php if((isset($_GET['task'])&&$_GET['task']=='loan.add')||(!isset($_GET['groupId'])||isset($_GET['grpLId']))): ?>
 	viewModel.getServerData();// get data to be populated on the page
+	<?php endif;?>
 	ko.applyBindings(viewModel, $("#loan_account_details")[0]);
 	$("#loanAccountForm").validate({submitHandler: viewModel.save});
 	$("#editLoanAccountForm").validate({submitHandler: viewModel.save});
 	$("#loanPaymentForm").validate({submitHandler: viewModel.makePayment});
 	$("#loanAccountApprovalForm").validate({submitHandler: viewModel.approveLoan});
 	$("#loanDisbursementForm").validate({submitHandler: viewModel.disburseLoan});
+	$("#newGroupLoanForm").validate({submitHandler: viewModel.save});
 	
 	
 <!-- Datatables -->
@@ -485,12 +440,34 @@
 	var user_props = <?php echo json_encode($_SESSION); ?>;
 	$(document).ready(function() {
 		  var post_data = new Object();
-		  <?php if(isset($client)):?>post_data = <?php echo json_encode($client);?>; <?php endif;?>
+		  //<?php if(isset($client)):?>post_data = <?php echo json_encode($client);?>; <?php endif;?>
+		  
 	var handleDataTableButtons = function() {
 		viewModel.account_details(null);
 		viewModel.groupLoanAccounts([]);
 		var loan_status = parseInt($('#loan_types').val());
-			
+		var buttons = [
+					{
+					  extend: "copy",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "csv",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "excel",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "pdfHtml5",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "print",
+					  className: "btn-sm"
+					}
+				  ];
 		post_data.origin = 'loan_accounts';
 		post_data.status = loan_status; // status of pending loan applications;
 		<?php if(!isset($_GET['grpLId'])):?> //shouldn't query dates if referring to a group loan
@@ -617,28 +594,7 @@
 							return ((parseInt(data)==1||parseInt(data)==11)?'<a href="#edit_loan_account-modal" class="btn  btn-info btn-sm edit_loan" data-toggle="modal"><i class="fa fa-edit"></i> Update</a>':'')+
 							'<a href="#approve_loan-modal" class="btn  btn-warning btn-sm edit_loan" data-toggle="modal"><i class="fa fa-list"></i> Details </a>';}}
 						] ,
-				  buttons: [
-					{
-					  extend: "copy",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "csv",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "excel",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "pdfHtml5",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "print",
-					  className: "btn-sm"
-					},
-				  ],
+				  buttons: buttons,
 				  responsive: true/*, */
 				  
 				});	
@@ -680,28 +636,7 @@
 						{ data: 'amountApproved', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
 						{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(data)) + ' ' + getDescription(4,data);}}
 						] ,
-				  buttons: [
-					{
-					  extend: "copy",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "csv",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "excel",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "pdfHtml5",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "print",
-					  className: "btn-sm"
-					},
-				  ],
+				  buttons: buttons,
 				  responsive: false/*, */
 				  
 				});
@@ -763,28 +698,7 @@
 						{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)+parseInt(full.interest));}},
 						{ data: 'amountPaid', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(data)):0;}}
 						] ,
-				  buttons: [
-					{
-					  extend: "copy",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "csv",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "excel",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "pdfHtml5",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "print",
-					  className: "btn-sm"
-					},
-				  ],
+				  buttons: buttons,
 				  responsive: true/*, */
 				  
 				});
@@ -829,31 +743,11 @@
 		var data = dt.row(this).data();
 		viewModel.account_details(data);
 		viewModel.amountApproved(parseInt(data.requestedAmount));
-		/*if(((data.groupLoanAccountId||data.groupLoanAccountId>0)&&viewModel.groupLoanAccounts().length==0)||(!data.groupLoanAccountId||data.groupLoanAccountId==0)){
-			console.log('Group Loan Account Id '+data.groupLoanAccountId);
-		}*/
 		viewModel.getLoanAccountDetails(0);
 	});
 	 function handleDateRangePicker(start_date, end_date){
 		 startDate = start_date;
 		 endDate = end_date;
 		 TableManageButtons.init();
-		/*  var loan_status = parseInt($('#loan_types').val());
-		if(loan_status==1||loan_status==2||loan_status==11||loan_status==12){//applications pending approval/rejected
-			dTable['applications'].ajax.reload(null,true);
-			$(".table#applications tbody>tr:first").trigger('click');
-		}
-		if(loan_status == 16){//rejected applications
-			dTable['rejected'].ajax.reload(null,true);
-				$(".table#rejected tbody>tr:first").trigger('click');
-		}
-		if(loan_status == 3){//approved applications
-				dTable['approved'].ajax.reload(null,true);
-				$(".table#approved tbody>tr:first").trigger('click');
-		}
-		if(loan_status==4||loan_status==5||loan_status==13||loan_status==14||loan_status==15){ //disbursed loans
-				dTable['disbursed'].ajax.reload(null,true);
-				$(".table#disbursed tbody>tr:first").trigger('click');
-		} */
 	 }
 </script>

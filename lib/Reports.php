@@ -3,8 +3,8 @@ require_once("lib/Libraries.php");
 Class Reports{
 	public function __construct($task, $item_view=1, $data=false){
 	   $this->task = $task;
-	   $this->data = $data;
 	   $this->item_view = $item_view;
+	   $this->data = $data;
 	  
 	   $this->displayOption();
 	   

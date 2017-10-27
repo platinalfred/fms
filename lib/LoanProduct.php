@@ -13,8 +13,8 @@ class LoanProduct extends Db {
 		return !empty($result) ? $result:false;
 	}
 	
-	public function findAll(){
-		$result_array = $this->getarray(self::$table_name, "", "", "");
+	public function findAll($filter = ""){
+		$result_array = $this->getarray(self::$table_name, $filter, "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	
@@ -25,6 +25,12 @@ class LoanProduct extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	
+	public function getGroupLoanProduct($grpLId = 1){
+		$fields = "`group_loan_account`.`id`, `loanProductId`, `saccoGroupId`";
+		
+		$result_array = $this->getfrec("`group_loan_account`", $fields, "id=".$grpLId, "", "");
+		return !empty($result_array) ? $result_array : false;
+	}
 	
 	public function addLoanProduct($data){
 		$fields = array_slice(self::$table_fields, 1);

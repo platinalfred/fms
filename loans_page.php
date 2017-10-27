@@ -6,7 +6,19 @@
 					<?php 
 					if(isset($_SESSION['loans_officer'])  || isset($_SESSION['admin'])){ ?>
 						 <div class="pull-right">
-							<a href="#add_loan_account-modal" class="btn btn-sm btn-info" data-toggle="modal"><i class="fa fa-edit"></i> New Loan Application</a>
+							<?php
+							$loan_application_link = "#add_loan_account-modal"; //the href value of the anchor
+							$anchor_text = "New Loan Account"; //the anchor text for display to the user
+							if(isset($_GET['groupId'])&&!isset($_GET['grpLId'])){ //when viewing group loans
+								$loan_application_link = "?groupId=". $_GET['groupId'] . "&task=loan.add";
+								$anchor_text = "New group Loan";
+							}
+							$data_toggle_text = "";
+							if(!isset($_GET['groupId'])||isset($_GET['grpLId'])){ //when viewing loan accounts
+								$data_toggle_text = "data-toggle=\"modal\"";
+							}
+							?>
+							<a href="<?php echo $loan_application_link; ?>" class="btn btn-sm btn-info" <?php echo $data_toggle_text;?>><i class="fa fa-edit"></i> <?php echo $anchor_text; ?> </a>
 						</div>
 						<?php
 					}
@@ -14,6 +26,7 @@
 				</div>
 				<div class="ibox-content m-b-sm border-bottom">
 					<div class="row">
+						<?php if(!(isset($_GET['view'])&&isset($_GET['groupId']))||isset($_GET['grpLId'])):?>
 						<div class="col-md-4">
 							<div class="form-group">
 								<select id="loan_types" class="form-control">
@@ -43,25 +56,22 @@
 								</select >
 							</div>
 						</div>
+						<?php endif; ?>
+						<?php if(!isset($_GET['grpLId'])):?>
 						<div class="col-md-5">
-							<?php if(!isset($_GET['grpLId'])):?>
 							<div class="form-group">
 								<div id="reportrange" style="background: #fff; cursor:pointer; padding: 5px 5px; border: 1px solid #ccc">
 								  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 								  <span>December 30, 2016 - January 28, 2017</span> <b class="caret"></b>
 								</div>
 							</div>
-							<?php endif; ?>
 						</div>
-						<div class="col-md-3">
-							<!-- a  class="btn btn-sm btn-success" style="vertical-align:middle;" ><i class="fa fa-folder-open-o"></i> Show results</a-->
-						</div>
+						<?php endif; ?>
 					</div>
-
 				</div>
 				<div class="ibox-content">
-					
 					<div class="tab-content">
+					<?php if(!(isset($_GET['view'])&&isset($_GET['groupId']))||isset($_GET['grpLId'])):?>
 						<div id="tab-1" class="tab-pane">
 							<div class="full-height-scroll">
 								<div class="table-responsive">
@@ -176,11 +186,49 @@
 								</div>
 							</div>
 						</div>
+					<?php else: ?>
+						<div id="tab-5" class="tab-pane active">
+							<div class="full-height-scroll">
+								<div class="table-responsive">
+									<table id="groupLoans" class="table table-striped table-bordered dt-responsive nowrap">
+										<thead>
+											<tr>
+												<?php 
+												if(!isset($_GET['grpLId'])){$header_keys[] = "Group Loan Ref";}
+												$header_keys[] = "Date applied";
+												$header_keys[] = "Loan Product";
+												$header_keys[] = "Max Possible Amount";
+												$header_keys[] = "Amount Requested";
+												$header_keys[] = "Members";
+												$header_keys[] = "Action";
+												foreach($header_keys as $key){ ?>
+													<th><?php echo $key; ?></th>
+													<?php
+												}
+												?>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+										<tfoot>
+											<tr>
+												<th>Total (UGX)</th>
+												<th colspan="3">&nbsp;</th>
+												<th>&nbsp;</th>
+												<th colspan="2">&nbsp;</th>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</div>
+						</div>
+					<?php endif; ?>
 					</div>
 				</div>  
 			</div>
 		</div>
 		<div class="col-lg-4" id="loan_account_details">
+		<?php if(!(isset($_GET['view'])&&isset($_GET['groupId']))||isset($_GET['grpLId'])) :?>
 			<div class="ibox " data-bind="with: account_details">
 				<div class="ibox-title">
 					<h5 data-bind="text:  'Account Details'+' ('+ loanNo + ')'"></h5>
@@ -205,9 +253,9 @@
 									<?php include_once('loan_actions_section.php')?>
 								</li>
 							</ul>
-							<div class="row m-b-lg" data-bind="if: status==2">
+							<div class="row m-b-lg">
 								<strong>Comments</strong>
-								<p data-bind="text: approvalNotes"></p>
+								<p data-bind="text: comments"></p>
 							</div>
 							<div class="row m-b-lg" data-bind="if: typeof(transactionHistory)!='undefined'">
 								<div class="table-responsive">
@@ -244,10 +292,64 @@
 					</div>
 				</div>
 			</div>
+		<?php else: //End Loan account details section ?>
+			<div class="ibox " data-bind="with: group_loan_account_details">
+				<div class="ibox-title">
+					<h5 data-bind="text:  'Group Loan Ref#'+' ('+ id + ')'"></h5>
+				</div>
+				<div class="ibox-content">
+					<div>
+						<div class="full-height-scroll">
+							<ul class="list-group clear-list">
+								<li class="list-group-item fist-item">
+									<span class="pull-right" data-bind="text: productName">Loan Product </span>
+									<strong>Loan Product</strong>
+								</li>
+								<li class="list-group-item">
+									<span class="pull-right" data-bind="text: maxAmount"> Product limit </span>
+									<strong>Product limit</strong>
+								</li>
+								<li class="list-group-item">
+									<span class="pull-right" data-bind="text: loanAmount"> Amount Borrowed </span>
+									<strong>Amount Borrowed</strong>
+								</li>
+							</ul>
+							<div class="row m-b-lg" data-bind="if: typeof(memberAccounts)!='undefined'">
+								<div class="table-responsive">
+									<table class="table table-condensed table-striped">
+										<caption>Members</caption>
+										<thead>
+											<tr>
+												<th>Names</th>
+												<th>Amount Requested</th>
+											</tr>
+										</thead>
+										<tbody data-bind="foreach: memberAccounts">
+											<tr>
+												<td data-bind="text: memberNames"></td>
+												<td data-bind="text: curr_format(parseFloat(requestedAmount))"></td>
+											</tr>
+										</tbody>
+										<tfoot>
+											<tr>
+												<th>Total (UGX)</th>
+												<th data-bind="text: curr_format(parseFloat(array_total($parent.memberAccounts(),1)))">&nbsp;</th>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<?php endif; //End Group Loan account details section ?>
+		<?php if(!(isset($_GET['view'])&&isset($_GET['groupId']))||isset($_GET['grpLId'])) :?>
 		<?php include_once("edit_loan_account_modal.php"); ?>
 		<?php include_once("add_loan_account_modal.php"); ?>
 		<?php include_once("make_payment_modal.php"); ?>
 		<?php include_once("loan_approval_modal.php"); ?>
 		<?php include_once("disburse_loan_modal.php"); //?>
+		<?php endif; ?>
 		</div>
 	</div>	
