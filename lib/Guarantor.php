@@ -42,8 +42,8 @@ class Guarantor extends Db {
 		}
 		
 		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`memberNames`", "");
-		//return !empty($result_array) ? $result_array : false;
-		return $result_array;
+		return !empty($result_array) ? $result_array : false;
+		//return $result_array;
 	}
 	
 	public function addGuarantor($data){

@@ -75,6 +75,15 @@ class LoanAccount extends Db {
 		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
 		return !empty($result_array) ? $result_array : false;
 	}
+	
+	public function getGroupLoanAccounts($where = 1){
+		$fields = "`group_loan_account`.`id`, `group_loan_account`.`dateCreated` `appnDate`, `saccoGroupId`, `productName`, COALESCE(`maxAmount`,0) `maxAmount`, COALESCE(`noMembers`,0) `noMembers`, COALESCE(`loanAmount`,0)`loanAmount`";
+		
+		$table = "`group_loan_account` JOIN `loan_products` ON `loan_products`.`id` = `loanProductId` LEFT JOIN (SELECT `id`, `groupLoanAccountId`, COUNT(`id`) `noMembers`, SUM(`loan_account`.`requestedAmount`) `loanAmount` FROM `loan_account` WHERE `groupLoanAccountId` > 0 GROUP BY `groupLoanAccountId`) `loanAccount` ON `loanAccount`.`groupLoanAccountId` = `group_loan_account`.`id`";
+	
+		$result_array = $this->getfarray($table, $fields, $where, "", "");
+		return !empty($result_array) ? $result_array : false;
+	}
 	public function getReport($start_date, $end_date, $client_type = 0, $category = 1){
 		$between = "BETWEEN FROM_UNIXTIME($start_date) AND FROM_UNIXTIME($end_date)";
 		$due_date = "GetDueDate(FROM_UNIXTIME(`disbursementDate`),`installments`,`repaymentsMadeEvery`,`repaymentsFrequency`,FROM_UNIXTIME($start_date),FROM_UNIXTIME($end_date))";

@@ -231,44 +231,53 @@ if(isset($_POST['origin'])){
 			}
 			
 		break;
+		case "newGroupLoanAccount":
+			//create loan account for group
+			unset($data['origin']);
+			$data['dateCreated'] = time();
+			$data['modifiedBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
+			$data['createdBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
+			$saccoGroupLoanAccount = new SaccoGroupLoanAccount();
+			$output = $saccoGroupLoanAccountId = $saccoGroupLoanAccount->addSaccoGroupLoanAccount($data);
+			if(is_numeric($saccoGroupLoanAccountId))
+				header("content: ../group_details.php?groupId={$data['saccoGroupId']}&grpLoanRef=$saccoGroupLoanAccountId");
+			unset($data);
+		break;
 		case "loan_account":
 			$loan_account_obj = new LoanAccount();
-			$saccoGroupLoanAccountId = "";
-			foreach($data['loanAccount'] as $key=>$loanAccount){
-				//loop through all the accounts sent from the form
-				$loanAccount['modifiedBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
+			$loanAccount = $data['loanAccount'];
+			
+			$loanAccount['modifiedBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
+			$loanAccountId = 0;
+			
+			$date = date("ymdis");
+			$loanAccount['loanNo'] = "L".$date;
+			$applicationDate = DateTime::createFromFormat('d-m-Y', $data['applicationDate']);
+			$loanAccount['applicationDate'] = $applicationDate->getTimestamp();
+			$loanAccount['createdBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
+			
+			//if the id is among the post variables, then we are supposed to update the loan account record
+			if(isset($loanAccount['id'])&&is_numeric($loanAccount['id'])){
+				if($loanAccount['status']==11){$loanAccount['status'] == 1;}
+				$loan_account_obj->updateLoanAccount($loanAccount);
 				
-				if(!isset($loanAccount['id'])&&(integer)$data['clientType']==2&&$key==0){
-					//create loan account for group
-					$clientData['saccoGroupId'] = $data['groupId'] ;
-					$clientData['dateCreated'] = time();
-					$clientData['modifiedBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
-					$clientData['createdBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
-					$saccoGroupLoanAccount = new SaccoGroupLoanAccount();
-					$saccoGroupLoanAccountId = $saccoGroupLoanAccount->addSaccoGroupLoanAccount($clientData);
-					unset($clientData);
+				//first delete all the existing loan account collateral
+				$loan_collateral_obj = new LoanCollateral();
+				$directory = "../img/loanAccounts/".$loanAccount['loanNo']."/collateral/";
+				$loan_collateral_obj->deleteLoanCollateral($loanAccount['id']);
+				foreach(glob("{$directory}/*") as $file)
+				{
+					if(is_file($file)) {
+						unlink($file);
+					}
 				}
-				if(!isset($loanAccount['id'])&&(integer)$data['clientType']==2){
-					$loanAccount['groupLoanAccountId'] = $saccoGroupLoanAccountId;
-				}
-				
-				$date = date("ymdis");
-				$loanAccount['loanNo'] = "L".$date;
-				$loanAccount['loanProductId'] = $data['loanProductId'];
-				$applicationDate = DateTime::createFromFormat('d-m-Y', $data['applicationDate']);
-				$loanAccount['applicationDate'] = $applicationDate->getTimestamp();
-				$loanAccount['createdBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
-				
-				//if the id is among the post variables, then we are supposed to update the loan account record
-				if(isset($loanAccount['id'])&&is_numeric($loanAccount['id'])){
-					if($loanAccount['status']==11){$loanAccount['status'] == 1;}
-					$loan_account_obj->updateLoanAccount($loanAccount);
-				}else{
-					$loanAccount['dateCreated'] = time();
-					$loanAccount['branch_id'] = isset($_SESSION['branch_id'])?$_SESSION['branch_id']:1;
-					$output .= $loanAccountId = $loan_account_obj->addLoanAccount($loanAccount);
-				}
-				
+				rmdir($directory);
+			}else{
+				$loanAccount['dateCreated'] = time();
+				$loanAccount['branch_id'] = isset($_SESSION['branch_id'])?$_SESSION['branch_id']:1;
+				$output .= $loanAccountId = $loan_account_obj->addLoanAccount($loanAccount);
+			}
+			if( $loanAccountId > 0 ){ //perform the updating only when the loan account exists
 				//then add the guarantors					
 				if(isset($loanAccount['guarantors'])){
 					if($loanAccount['guarantors'] !== "false"){
@@ -303,7 +312,6 @@ if(isset($_POST['origin'])){
 				}
 				
 				//insert the account fees since we now have
-				
 				if(isset($loanAccount['loanFees'])){
 					if($loanAccount['loanFees'] !== "false"){
 						$loan_account_fee_obj = new LoanAccountFee();
@@ -311,7 +319,7 @@ if(isset($_POST['origin'])){
 						//then insert new ones afresh, these might include the old ones as well
 						foreach($loanAccount['loanFees'] as $feeDataItem){
 							$feeDataItem['loanAccountId'] = $loanAccountId;
-							//$feeDataItem['feeAmount'] = ($feeDataItem['amountCalculatedAs'] == 2?(($feeDataItem['amount']/100)*$data['requestedAmount'][$key]):$feeDataItem['amount']);
+							//$feeDataItem['feeAmount'] = ($feeDataItem['amountCalculatedAs'] == 2?(($feeDataItem['amount']/100)*$data['requestedAmount']):$feeDataItem['amount']);
 							$feeDataItem['dateCreated'] = time();
 							$feeDataItem['createdBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
 							$feeDataItem['dateModified'] = time();
@@ -320,49 +328,32 @@ if(isset($_POST['origin'])){
 						}
 					}
 				}
-				//insert the collateral items if any
-				//but first we check if there was a request to update the loan account
-				if(isset($loanAccount['id'])&&is_numeric($loanAccount['id'])){
-					$loan_collateral_obj = new LoanCollateral();
-					$directory = "../img/loanAccounts/".$loanAccount['loanNo']."/collateral/";
-					$loan_collateral_obj->deleteLoanCollateral($loanAccountId);
-					foreach(glob("{$directory}/*") as $file)
-					{
-						if(is_file($file)) {
-							unlink($file);
-						}
-					}
-					rmdir($directory);
-				}
 				if(isset($loanAccount['loanCollateral'])){
 					$loan_collateral_obj = new LoanCollateral();
-					//first delete all the existing loan account collateral
 					foreach($loanAccount['loanCollateral'] as $lc_key=>$collateralItem){
 						if($collateralItem['itemName']!='undefined'){
 							//upload any file that came with this data
-							if ($_FILES['loanAccount']['error'][$key]['loanCollateral'][$lc_key]['attachmentUrl'] == UPLOAD_ERR_OK) {
+							if ($_FILES['loanAccount']['error']['loanCollateral'][$lc_key]['attachmentUrl'] == UPLOAD_ERR_OK) {
 								$allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "PNG", "GIF", "pdf", "doc", "docx");
-								$extension = end(explode(".", $_FILES['loanAccount']["name"][$key]['loanCollateral'][$lc_key]['attachmentUrl']));
-								if(($_FILES['loanAccount']["size"][$key]['loanCollateral'][$lc_key]['attachmentUrl'] < 200000000) && in_array($extension, $allowedExts)){ 							
-									if($_FILES['loanAccount']['error'][$key]['loanCollateral'][$lc_key]['attachmentUrl'] > 0){
-										$output .=  "Return Code: " . $_FILES['loanAccount']['error'][$key]['loanCollateral'][$lc_key]['attachmentUrl'] . "<br>";
+								$extension = end(explode(".", $_FILES['loanAccount']["name"]['loanCollateral'][$lc_key]['attachmentUrl']));
+								if(($_FILES['loanAccount']["size"]['loanCollateral'][$lc_key]['attachmentUrl'] < 200000000) && in_array($extension, $allowedExts)){ 							
+									if($_FILES['loanAccount']['error']['loanCollateral'][$lc_key]['attachmentUrl'] > 0){
+										$output .=  "Return Code: " . $_FILES['loanAccount']['error']['loanCollateral'][$lc_key]['attachmentUrl'] . "<br>";
 									}else{
 										$files_dir = "../img/loanAccounts/".$loanAccount['loanNo']."/collateral/";
-										$collateralItem['attachmentUrl'] = substr($files_dir,3).$_FILES['loanAccount']['name'][$key]['loanCollateral'][$lc_key]['attachmentUrl'];
-										//$images->load($_FILES['loanAccount']['tmp_name'][$key]['loanCollateral'][$lc_key]['attachmentUrl']);
+										$collateralItem['attachmentUrl'] = substr($files_dir,3).$_FILES['loanAccount']['name']['loanCollateral'][$lc_key]['attachmentUrl'];
+										//$images->load($_FILES['loanAccount']['tmp_name']['loanCollateral'][$lc_key]['attachmentUrl']);
 										//$images->resize(240, 120); 
-										//$images->output($_FILES['loanAccount']["type"][$key]['loanCollateral'][$lc_key]['attachmentUrl']);
+										//$images->output($_FILES['loanAccount']["type"]['loanCollateral'][$lc_key]['attachmentUrl']);
 										
 										if(!file_exists($files_dir)){
 											mkdir($files_dir, 0777, true);
 										}
-										move_uploaded_file($_FILES['loanAccount']['tmp_name'][$key]['loanCollateral'][$lc_key]['attachmentUrl'], "../".$collateralItem['attachmentUrl']);
+										move_uploaded_file($_FILES['loanAccount']['tmp_name']['loanCollateral'][$lc_key]['attachmentUrl'], "../".$collateralItem['attachmentUrl']);
 										//$images->save($collateralItem['attachmentUrl']);
 									}
 								} 
-							} /* else {
-								$output .=  "Error: " . $_FILES['loanAccount']['error'][$key]['loanCollateral'][$lc_key]['attachmentUrl'] . "<br />";
-							} */	
+							} 	
 							//insert the collateral
 							$collateralItem['loanAccountId'] = $loanAccountId;
 							$collateralItem['dateCreated'] = time();

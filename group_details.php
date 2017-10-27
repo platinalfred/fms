@@ -39,10 +39,10 @@ p{
 				</div>
 				<div class="ibox-content" style="padding-top:3px;">
 					<div class="col-lg-12">
-						<div class="ibox<?php if(isset($_GET['view'])):?> collapsed<?php endif;?>" style="margin-bottom:0px;     margin-top: 0px;">
+						<div class="ibox<?php if(isset($_GET['view'])||isset($_GET['task'])):?> collapsed<?php endif;?>" style="margin-bottom:0px;     margin-top: 0px;">
 							<div class="ibox-title" style="border-top:none;">
-								<div class="col-lg-2">
-									<h5>Group Members</h5>
+								<div class="col-lg-3">
+									<h5>Group Members (<?php echo count($data['group_members']); ?>)</h5>
 									<div class="ibox-tools">
 										<a class="collapse-link">
 											<i class="fa fa-chevron-<?php if(isset($_GET['view'])):?>up<?php else:?>down<?php endif;?>" style="color:#23C6C8;"></i>
@@ -68,7 +68,7 @@ p{
 											foreach($data['group_members'] as $single){ ?>
 												<div class="col-md-12 col-sm-12 col-xs-12" style="padding-top:10px;">
 													<div class="col-lg-3">
-														<a href="member_details.php?id=<?php echo $single['memberId']; ?>"><?php echo $single['clientNames']; ?></a>
+														<a href="member_details.php?id=<?php echo $single['memberId']; ?>"><?php echo $single['memberNames']; ?></a>
 													</div>
 													<div class="col-lg-3"><?php echo $single['person_number']; ?>
 													</div>
@@ -98,6 +98,7 @@ p{
 					<div class="clearboth"></div>
 					<?php 
 					if(isset($_GET['task'])){
+						include('lib/Forms.php');
 						$task = $_GET['task']; 
 						$forms = new Forms($task);
 					}elseif(isset($_GET['view'])){
@@ -123,12 +124,20 @@ p{
   if(isset($_GET['view'])){
 	  switch($_GET['view']){
 		case 'loan_accs':
-			include("js/loanAccount.php");
+			$include_file = "js/loanAccount.php";
+			if(isset($_GET['groupId'])&&!isset($_GET['grpLId'])){
+				$include_file = "js/groupLoanAccs.php";
+			}
+			include($include_file);
 		break;
 		case 'savings_accs':
 			include("js/depositAccount.php");
 		break;
-		case 'default':
+	  }
+  }
+  if(isset($_GET['task'])){
+	  switch($_GET['task']){
+		case 'loan.add':
 			include("js/loanAccount.php");
 		break;
 	  }
