@@ -298,14 +298,14 @@ if(isset($_POST['origin'])){
 					$person_obj = new Person();
 					$member_obj = new Member();
 					$member_details = $member_obj->findById($loanAccount['memberId']);
-					$person_id = $member_details['staffId'];
+					$person_id = $member_details['personId'];
 					//lets first delete all the existing businesss
 					$person_obj->deleteBusiness($person_id);
 					
 					foreach($loanAccount['clientBusinesses'] as $clientBusiness){
 						if($clientBusiness['businessName']!='undefined'){
 							$clientBusiness['dateAdded'] = time();
-							$clientBusiness['staffId'] = $person_id;
+							$clientBusiness['personId'] = $person_id;
 							$person_obj->addPersonBusiness($clientBusiness);
 						}
 					}

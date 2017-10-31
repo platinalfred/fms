@@ -1,0 +1,5 @@
+//In addData there was an error as a result of declaring staffId as opposed to personId
+//When you send a loan to the previous state it dissapears
+/Check attachment for the collateral, if its pdf/word give link
+//On Loan details page,Approval tab it shows approved by as a number instead of a name
+//There is an error on the groups page

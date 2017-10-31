@@ -170,6 +170,12 @@ if(!isset($_SESSION['Logged'])){
 					<li>
 						<a href="view_loans.php"><i class="fa fa-calculator"></i> <span class="nav-label">Loans</span>  </a>
 					</li>
+					<li>
+						<a href="members.php"><i class="fa fa-group"></i> <span class="nav-label">Members</span>  </a>
+					</li>
+					<li>
+						<a href="groups.php"><i class="fa fa-group"></i> <span class="nav-label">Groups</span>  </a>
+					</li>
 					<?php 
 					if(!isset($_SESSION['executive_board']) && !isset($_SESSION['branch_credit'])&& !isset($_SESSION['management_credit'])){
 						
@@ -180,12 +186,7 @@ if(!isset($_SESSION['Logged'])){
 							<li>
 								<a href="miscellanous_income.php"><i class="fa fa-dollar"></i> <span class="nav-label">Other Income</span>  </a>
 							</li>
-							<li>
-								<a href="members.php"><i class="fa fa-group"></i> <span class="nav-label">Members</span>  </a>
-							</li>
-							<li>
-								<a href="groups.php"><i class="fa fa-group"></i> <span class="nav-label">Groups</span>  </a>
-							</li>
+							
 							<li>
 								<a href="expenses.php"><i class="fa fa-flask"></i> <span class="nav-label">Expenses</span></a>
 							</li>
