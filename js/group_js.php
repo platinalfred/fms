@@ -18,7 +18,11 @@ $(document).ready(function(){
 				  "data":  function(d){
 						d.page = 'view_groups';
 					}
-			  },"columnDefs": [ {
+			  },
+			  "initComplete": function(settings, json) {
+					$(".table#groupTable tbody>tr:first").trigger('click');
+			  },
+			  "columnDefs": [ {
 				  "targets": [0],
 				  "orderable": false,
 				  "searchable": false
@@ -137,12 +141,10 @@ $(document).ready(function(){
 			url: "find_group_details.php?id="+id,
 			type: 'GET',
 			dataType: 'json',
-			success: function (data) {
-				if(data.group_members != "false"){
-					groupModel.all_group_members(data.group_members);
+			success: function (response) {
+				if(response.group_members != "false" || response.group_members.length > 0){
+					groupModel.all_group_members(response.group_members);
 				}
-				
-				
 			}
 		});
 	}

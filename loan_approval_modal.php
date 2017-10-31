@@ -87,7 +87,14 @@
 															<td data-bind="text: itemName"></td>
 															<td data-bind="text: description"></td>
 															<td data-bind="text: curr_format(parseInt(itemValue))"></td>
-															<td><img style="width:100px;" data-bind="attr:{src:attachmentUrl}" /></td>
+															<td>
+																<!--ko if:(/(.jpg|.png|.gif|.jpeg)$/).test(attachmentUrl)-->
+																<img style="width:100px;" data-bind="attr:{src:attachmentUrl}" />
+																<!--/ko-->
+																<!--ko if:!(/(.jpg|.png|.gif|.jpeg)$/).test(attachmentUrl)-->
+																<a data-bind="attr:{href:attachmentUrl}, text:attachmentUrl" target="_blank"></a>
+																<!--/ko-->
+															</td>
 														</tr>
 													</tbody>
 													<tfoot>
