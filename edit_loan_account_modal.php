@@ -275,13 +275,15 @@
 										<!--ko if: typeof($parent.collateral_items())!='undefined'&&$parent.collateral_items()-->
 										<!--ko foreach: $parent.collateral_items()-->
 										<tr>
-											<td><input class="form-control input-sm" data-bind="value: itemName, attr:{'name':'loanAccount[loanCollateral]['+$index()+'][itemName]'}" data-msg-required="Item name is required" required/></td>
+											<td><input class="form-control input-sm" data-bind="value: itemName, attr:{'name':'loanAccount[loanCollateral]['+$index()+'][itemName]'}" data-msg-required="Item name is required" required /></td>
 											<td><textarea class="form-control input-sm" data-bind="value: description, attr:{'name':'loanAccount[loanCollateral]['+$index()+'][description]'}" data-msg-required="Item description is required" required></textarea></td>
 											<td><input class="form-control input-sm" type="number" data-bind="textInput: itemValue, attr:{'name':'loanAccount[loanCollateral]['+$index()+'][itemValue]'}" required/>
 											<i><span data-bind="text: getWords(parseInt(itemValue))+' Uganda shillings only'"></span></i>
 											</td>
-											<td><input class="input-sm" type="file" data-bind="attr:{'name':'loanAccount[loanCollateral]['+$index()+'][attachmentUrl]'}"/></td>
-											<td><span title="Remove item" class="btn text-danger" data-bind='click: function(){$element.parent().parent().remove();}'><i class="fa fa-minus"></i></span></td>
+											<td>
+												<input class="input-sm" type="file" data-bind="attr:{'name':'loanAccount[loanCollateral]['+$index()+'][attachmentUrl]'}"/>
+											</td>
+											<td><span title="Remove item" class="btn text-danger" data-bind='click: function(){$($element).parent().parent().remove();}'><i class="fa fa-minus"></i></span></td>
 										</tr>
 										<!--/ko-->
 										<!--/ko-->
@@ -357,7 +359,7 @@
 								</div>
 							</div>
 							<div class="col-lg-1">
-								<span title="Remove Business" class="btn text-danger btn-lg"  data-bind='click: function(){$element.parent().parent().remove();}'><i class="fa fa-minus"></i></span></div>
+								<span title="Remove Business" class="btn text-danger btn-lg"  data-bind='click: function(){$($element).parent().parent().remove();}'><i class="fa fa-minus"></i></span></div>
 							<div class="clearboth"></div>
 						</div>
 						<!--/ko-->

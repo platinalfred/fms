@@ -16,7 +16,7 @@
 											<tr> <th>Loan Account No. </th> <td data-bind="text: loanNo"></td> </tr>
 											<tr> <th>Requested Amount</th> <td data-bind="text: curr_format(parseInt(requestedAmount))"></td> </tr>
 											<tr> <th>Application Date </th> <td data-bind="text: moment(applicationDate,'X').format('DD, MMM YYYY')"></td> </tr>
-											<tr> <th>Received by </th> <td data-bind="text: createdBy"></td> </tr>
+											<tr> <th>Received by </th> <td data-bind="text: staffNames"></td> </tr>
 											<tr> <th>Interest Rate</th> <td data-bind="text: interestRate +'%'"></td> </tr>
 											<tr> <th>Duration</th> <td data-bind="text: ((repaymentsFrequency)*parseInt(installments)) + ' ' + getDescription(4,repaymentsMadeEvery)"></td> </tr>
 											<tr> <th>Comments</th> <td data-bind="text: comments"></td> </tr>
@@ -39,7 +39,7 @@
 											<tr> <th>Approved Amount</th> <td data-bind="text: curr_format(parseInt(amountApproved))"></td> </tr>
 											<tr> <th>Date approved</th> <td data-bind="text: moment(approvalDate,'X').format('DD, MMM YYYY')"></td> </tr>
 											<tr> <th>Approval Notes</th> <td data-bind="text: approvalNotes"></td> </tr>
-											<tr> <th>Approved by</th> <td data-bind="text: approvedBy"></td> </tr>
+											<tr> <th>Approved by</th> <td data-bind="text: staffNamesApproved"></td> </tr>
 										</tbody>
 									</table>
 								</div>

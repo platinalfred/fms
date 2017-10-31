@@ -34,7 +34,7 @@ if(isset($_POST['origin'])){
 				$approval_data['justification'] = $data['approvalNotes'];
 				//let's check if the status is -1 implies there is a request to revert to the previous status
 				//so we gotta find the previous status, which was not the rejected status
-				if($data['status']==-1){
+				if($data['status'] == -1){
 					$loan_account_approvals = $loan_account_approvals_obj->findAll("`loanAccountId`=".$approval_data['loanAccountId']);
 					if($loan_account_approvals){
 						foreach($loan_account_approvals as $key=>$loan_account_approval){
@@ -46,7 +46,7 @@ if(isset($_POST['origin'])){
 						}
 					}
 					//since we did not find an appropriate status from the for loop, then we are supposed to revert to rejected status (of the loan)
-					if($data['status']==-1){$data['status'] == 11;}
+					if($data['status']==-1){$data['status'] = 11;}
 				}
 				$approval_data['status'] = $data['status'];
 				$approval_data['dateCreated'] = time();
