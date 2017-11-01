@@ -134,7 +134,8 @@ $(document).ready(function(){
 		var data = dTable.row(this).data();
 		groupModel.group_details(data);
 		//ajax to retrieve other member details
-		findGroupDetails(data.id);
+		console.log(data);
+		//findGroupDetails(data.id);
 	});
 	function findGroupDetails(id){
 		$.ajax({

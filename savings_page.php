@@ -42,7 +42,7 @@
 		<div class="col-lg-4" id="deposit_account_details">
 			<div class="ibox " data-bind="with: account_details">
 				<div class="ibox-title">
-					<h5 data-bind="text:  'Account Details'+' ('+(productName+'-'+id).replace(/\s/g,'') + ')'"></h5>
+					<h5 >Account Details</h5>
 				</div>
 				<div class="ibox-content">
 					<div class="tab-content">
@@ -53,7 +53,7 @@
 									<label>Client Names</label>
 								</li>
 								<li class="list-group-item">
-									<span class="pull-right" data-bind="text: (productName+'-'+id).replace(/\s/g,'')"> 0439374938 </span>
+									<span class="pull-right" data-bind="text: (id).pad(11)"> 0439374938 </span>
 									<label>Account No.</label>
 								</li>
 								<li class="list-group-item">

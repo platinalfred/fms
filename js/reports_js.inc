@@ -53,7 +53,7 @@ $(document).ready(function(){
 					  if(full.clientType==2){
 						  page = "group_details.php?id=";
 					  }
-					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a> <?php } ?>'; }},
+					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details"> L' +full.id+ '</a> <?php } ?>'; }},
 				  { data: 'clientNames'},
 				  { data: 'disbursementDate', render: function(data, type, full, meta) {return moment(data,'X').format('DD-MMM-YYYY');} },
 				  { data: 'disbursedAmount', render: function(data, type, full, meta) {return (data?curr_format(Number(Math.round(parseFloat(data)+'e2')+'e-2')):0);}},

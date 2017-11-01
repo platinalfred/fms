@@ -1,6 +1,11 @@
 <script>//format numbers with thousands separator
 	/*PICK DATA FOR DATA TABLE  */
 
+Number.prototype.pad = function(size){
+	var s = String(this);
+	while (s.length < (size || 2)){ s = "0" + s;}
+	return s;
+}
 $('input.athousand_separator').keyup(function(event) {
   // skip for arrow keys
   if(event.which >= 37 && event.which <= 40){
