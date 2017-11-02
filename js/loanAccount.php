@@ -120,10 +120,12 @@
 		self.applicationDate = ko.observable('<?php echo date('d-m-Y');?>');
 		self.loanProduct = ko.observable();
 		self.loanProduct2 = ko.observable();
-		self.client = ko.observable(<?php // if(isset($client)) echo json_encode($client);?>);
+		self.client = ko.observable(<?php if(isset($client)&&isset($_GET['memberId'])) echo json_encode($client);?>);
 		
 		//all members
+		<?php if(!isset($_GET['memberId'])):?>
 		self.clients = ko.observableArray([{"id":1,"clientNames":"Allan James Kintu"}]);
+		<?php endif;?>
 		self.clientType = ko.observable(<?php if(isset($_GET['groupId'])) echo '{"type_id":2,"client_type":"Group Member"}'; else echo '{"type_id":1,"client_type":"Member"}';?>);
 		//An array of all the products for viewing on the page
 		self.loanProducts = ko.observableArray([{"id":1,"productName":"Group Savings Loan","description":"Suitable for group savings", "availableTo":"2"}]);
@@ -249,6 +251,7 @@
 				data:{origin:"loan_account"
 				<?php if(isset($_GET['loanId'])):?>, loanAccountId:<?php echo (int)$_GET['loanId'];?> <?php endif;?>
 				<?php if(isset($_GET['groupId'])){?>, groupId:<?php echo $_GET['groupId']; } ?>
+				<?php if(isset($_GET['memberId'])){?>, memberId:<?php echo $_GET['memberId']; } ?>
 				<?php if(isset($_GET['grpLId'])){?>, grpLId:<?php echo $_GET['grpLId']; } ?>},
 				url: "ajax_data.php",
 				success: function(response){
@@ -259,7 +262,9 @@
 						self.loanProducts(response.products);
 					<?php } ?>
 					self.productFees(response.productFees);
+					<?php if(!isset($_GET['memberId'])):?>
 					self.clients(response.clients);
+					<?php endif;?>
 					<?php if(!isset($_GET['groupId'])):?>
 					guarantors=response.guarantors;
 					<?php endif;?>

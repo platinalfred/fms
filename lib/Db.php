@@ -503,11 +503,9 @@ class Db{
 			//echo $ins;
 		 $inse = $this->conn->query($ins);
 		if($inse){
-			
 			return mysqli_insert_id($this->conn);
 		} 
 		return false; 
-		
 	}
 	function addSpecial($table, $data){
 		$fields = $values = "";

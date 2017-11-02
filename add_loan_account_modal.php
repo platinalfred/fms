@@ -26,12 +26,14 @@
 													<select class="form-control" name="clientType" data-bind='options: clientTypes, optionsText: "client_type", optionsCaption: "Select client type...", optionsAfterRender: $root.setOptionValue("type_id"), value: clientType' data-msg-required="Client type is required" required>
 													</select>
 												</div-->
+												<?php if(!isset($_GET['memberId'])):?>
 												<div class="col-md-4" data-bind="with: clientType">
 													<label class="control-label">Customer</label>
 													<select data-placeholder="Select customer..." name="memberId" class="form-control chosen-select" data-bind='options: $root.clients, optionsText: "clientNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client' data-msg-required="Client name is required" required>
 													</select>
 													<input type="hidden" name="clientType" value="<?php echo $client['clientType'];?>" />
 												</div>
+												<?php endif;?>
 												<div class="col-md-4"<?php if(!isset($_GET['grpLId'])){?> data-bind='with: $root.client'<?php }?>>
 												<?php if(!isset($_GET['grpLId'])): //if it is a group loan we already know the product ?>
 													<label class="control-label">Product</label>
