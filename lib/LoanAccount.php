@@ -88,37 +88,31 @@ class LoanAccount extends Db {
 	public function getReport($start_date, $end_date, $client_type = 0, $category = 1){
 		$between = "BETWEEN FROM_UNIXTIME($start_date) AND FROM_UNIXTIME($end_date)";
 		$due_date = "GetDueDate(FROM_UNIXTIME(`disbursementDate`),`installments`,`repaymentsMadeEvery`,`repaymentsFrequency`,FROM_UNIXTIME($start_date),FROM_UNIXTIME($end_date))";
+		$immediate_date = "ImmediateDueDate(FROM_UNIXTIME(`disbursementDate`),`installments`,`repaymentsMadeEvery`,`repaymentsFrequency`,FROM_UNIXTIME($end_date))";
+		$timestamp_diff_sql = "(CASE `repaymentsMadeEvery`
+			WHEN 1 THEN TIMESTAMPDIFF(DAY,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
+			WHEN 2 THEN TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
+			WHEN 3 THEN TIMESTAMPDIFF(MONTH,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
+			END)";
 		
-		$fields = array( "`loan_account`.`id`", "`loanNo`", "`status`", "`clientNames`", "`memberId`", "`disbursementDate`","`disbursedAmount`", "`installments`" , "COALESCE(`paidInstallments`, 0) paidInstallments" , "(`installments`-COALESCE(`paidInstallments`, 0))`balInstallments`" , "`feesPaid`" , "`amountPaid`" , " (`disbursedAmount`*(`interestRate`/100)/`installments`) `interest`" , " ((`disbursedAmount`*(`interestRate`/100)/`installments`)*COALESCE(`paidInstallments`, 0)) `interestPaid`",  " `disbursedAmount`*(`interestRate`/100) `expInterest`", "COALESCE((`disbursedAmount`/`installments`),0)`principle`", "(COALESCE((`disbursedAmount`/`installments`),0)*COALESCE(`paidInstallments`, 0)) `paidPrinciple`", "`groupLoanAccountId`", "`groupId`", "`groupName`", "$due_date `due_date`" );
+		$fields = array( "`loan_account`.`id`, `loanNo`, `status`, `clientNames`, `memberId`, `disbursementDate`, `disbursedAmount`, `installments`, COALESCE(`paidInstallments`, 0) `paidInstallments`, (`installments`-COALESCE(`paidInstallments`, 0))`balInstallments`, `feesPaid`, `amountPaid`, (`disbursedAmount`*(`interestRate`/100)/`installments`) `interest`,  ((`disbursedAmount`*(`interestRate`/100)/`installments`)*COALESCE(`paidInstallments`, 0)) `interestPaid`,  `disbursedAmount`*(`interestRate`/100) `expInterest`, COALESCE((`disbursedAmount`/`installments`),0)`principle`, (COALESCE((`disbursedAmount`/`installments`),0)*COALESCE(`paidInstallments`, 0)) `paidPrinciple`, `groupLoanAccountId`, `groupId`, `groupName`, $due_date `due_date`" );
 		$where = ""; $payments_sql = self::$loan_payments_sql;
 		//specification of the category of loans to be returned
 		switch($category){
 			case 1: //active loans
-				$where .= "`status`=4";
+				$where .= "`status`=5";
 			break;
 			case 2: //performing loans
-				$immediate_date = "ImmediateDueDate(FROM_UNIXTIME(`disbursementDate`),`installments`,`repaymentsMadeEvery`,`repaymentsFrequency`,FROM_UNIXTIME($end_date))";
-				$timestamp_diff_sql = "(CASE `repaymentsMadeEvery`
-					WHEN 1 THEN TIMESTAMPDIFF(DAY,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
-					WHEN 2 THEN TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
-					WHEN 3 THEN TIMESTAMPDIFF(MONTH,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
-					END)";
 				
 				$payments_sql = "(SELECT `loanAccountId`, COUNT(`id`)`paidInstallments`, COALESCE(SUM(amount),0) `amountPaid`  FROM `loan_repayment` WHERE `transactionDate` <= $end_date GROUP BY `loanAccountId`) `loan_payments`";
 				
-				$where .= "`status`=4 AND $immediate_date IS NOT NULL AND ((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql<=`amountPaid`";
+				$where .= "`status`=5 AND $immediate_date IS NOT NULL AND (((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql)<=`amountPaid`";
 			break;
 			case 3: //non performing loans
-				$immediate_date = "ImmediateDueDate(FROM_UNIXTIME(`disbursementDate`),`installments`,`repaymentsMadeEvery`,`repaymentsFrequency`,FROM_UNIXTIME($end_date))";
-				$timestamp_diff_sql = "(CASE `repaymentsMadeEvery`
-					WHEN 1 THEN TIMESTAMPDIFF(DAY,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
-					WHEN 2 THEN TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
-					WHEN 3 THEN TIMESTAMPDIFF(MONTH,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
-					END)";
 				
 				$payments_sql = "(SELECT `loanAccountId`, COUNT(`id`)`paidInstallments`, COALESCE(SUM(amount),0) `amountPaid`  FROM `loan_repayment` WHERE `transactionDate` <= $end_date GROUP BY `loanAccountId`) `loan_payments`";
 				
-				$where .= "(`status`=4 OR `status`=5) AND $immediate_date IS NOT NULL AND ((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql>`amountPaid`";
+				$where .= "`status` IN (5,6) AND $immediate_date IS NOT NULL AND (((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql)>`amountPaid`";
 			break;
 			case 4: //due loans
 				$timestamp_diff_sql = "(CASE `repaymentsMadeEvery`
@@ -126,10 +120,10 @@ class LoanAccount extends Db {
 					WHEN 2 THEN TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(`disbursementDate`),$due_date)
 					WHEN 3 THEN TIMESTAMPDIFF(MONTH,FROM_UNIXTIME(`disbursementDate`),$due_date)
 					END)";
-				$where .= "(`status`=4 OR `status`=5) AND $due_date IS NOT NULL AND ((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql>`amountPaid`";
+				$where .= "`status` IN (5,6) AND $due_date IS NOT NULL AND (((`disbursedAmount`*(`interestRate`/100)/`installments`)+COALESCE((`disbursedAmount`/`installments`),0))*$timestamp_diff_sql)>`amountPaid`";
 			break;
 			default;
-			$where .= "`status` IN (4,5)";
+			$where .= "`status` IN (5,6) ";
 		}
 		
 		$saccogroups_sql = "JOIN (".self::$saccogroup_sql2.") `sacco_loan_acc_group` ON `sacco_loan_acc_group`.`id`=`groupLoanAccountId`"; //this will  be the case when we have to view only member loans
@@ -142,7 +136,7 @@ class LoanAccount extends Db {
 		
 		$table = self::$table_name." JOIN (".self::$member_sql.") `clients` ON `clients`.`id` = `memberId` $saccogroups_sql LEFT JOIN ". $payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId` LEFT JOIN ". self::$loan_fees_sql. " ON `loan_account`.`id` = `loan_fees`.`loanAccountId`";
 		
-		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
+		$result_array = $this->getfarray($table, $fields, $where, "`clientNames`", "");
 		return $result_array;
 	}
 	

@@ -176,7 +176,7 @@ if(isset($_POST['origin'])){
 						unset($data['feePostData']);
 						//insert account fees
 						foreach($feePostData as $feeDataItem){
-							$feeDataItem['depositAccountID'] = $data['depositAccountId'];
+							$feeDataItem['depositAccountId'] = $data['depositAccountId'];
 							$feeDataItem['dateCreated'] = time();
 							$feeDataItem['createdBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
 							$feeDataItem['dateModified'] = time();
@@ -189,12 +189,11 @@ if(isset($_POST['origin'])){
 			else{
 				$data['dateModified'] = time();
 				$data['modifiedBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
-				
 				$data['createdBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
 				
-				$output = $depositAccount->addDepositAccount($data);
+				$data['depositAccountId'] = $output = $depositAccount->addDepositAccount($data);
+				//echo $data['depositAccountId'];
 				
-				$data['depositAccountId'] = $output ;
 				unset($data['openingBalance']);
 				unset($data['termLength']);
 				unset($data['interestRate']);
@@ -219,7 +218,9 @@ if(isset($_POST['origin'])){
 						//insert account fees
 						$depositAccountFee = new DepositAccountFee();
 						foreach($feePostData as $feeDataItem){
-							$feeDataItem['depositAccountID'] = $data['depositAccountId'];
+							$feeDataItem['depositAccountId'] = $data['depositAccountId'];
+							$feeDataItem['depositProductFeeId'] = $feeDataItem['id'];
+							unset($feeDataItem['id']);
 							$feeDataItem['dateCreated'] = time();
 							$feeDataItem['createdBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
 							$feeDataItem['dateModified'] = time();

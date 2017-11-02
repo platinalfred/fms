@@ -15,7 +15,7 @@ $(document).ready(function() {
 			  "type": "POST",
 			  "data":  function(d){
 					d.page = 'deposit_accounts';
-					<?php if(isset($client)):?> d.clientId=<?php echo isset($client['memberId'])?$client['memberId']:(isset($client['groupId'])?$client['groupId']:"");?>; <?php endif;?>
+					<?php if(isset($client)):?> d.clientId=<?php echo isset($client['id'])?$client['id']:"undefined";?>; <?php endif;?>
 					d.clientType = <?php echo isset($client['clientType'])?"'{$client['clientType']}'":0; ?>; //specify the type of the client (group/member) here;
 					d.start_date = startDate;
 					d.end_date = endDate;
@@ -175,11 +175,12 @@ $(document).ready(function() {
 		//reset the whole form
 		self.resetForm = function() {
 			$("#depAccountForm")[0].reset();
-			self.depositProduct(undefined);
+			self.depositProduct(null);
 			self.openingBal(0);
 			self.termLength(0);
 			self.interestRate(0);
-			dTable.ajax.reload();
+			endDate = moment().format('X'); //get the current time
+			handleDateRangePicker(startDate, endDate);
 		};
 		
 		//Retrieve page data from the server
@@ -297,10 +298,11 @@ $(document).ready(function() {
 					feePostData:self.productFees(),
 					origin : "deposit_account"
 				},
+				//dataType:'json',
 				url: "lib/AddData.php",
 				success: function(response){
 					var result = parseInt(response)||0;
-					if(result){
+					if(result>0){
 						showStatusMessage("Data successfully saved" ,"success");
 						setTimeout(function(){
 							self.resetForm();

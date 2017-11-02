@@ -287,7 +287,6 @@ if(isset($_POST['origin'])){
 			$productFeeObj = new LoanProductFeen();
 			$guarantorObj = new Guarantor();
 			//$saccoGroupObj = new SaccoGroup();
-			$memberObj = new Member();
 			
 			if(!isset($_POST['grpLId'])){
 				$availableTo = "`availableTo` IN ".((isset($_POST['groupId'])&&is_numeric($_POST['groupId']))?"(2,3)":"(1,3)");
@@ -316,7 +315,10 @@ if(isset($_POST['origin'])){
 				else{
 					$data['guarantors'] = $guarantorObj->getLoanGuarantors();
 				}
-				$data['clients'] = $memberObj->findSelectList($where);
+				if(!isset($_POST['memberId'])){
+					$memberObj = new Member();
+					$data['clients'] = $memberObj->findSelectList($where);
+				}
 			}
 			//$data['groups'] = $saccoGroupObj->findSelectList();
 			//$data['groupMembers'] = $saccoGroupObj->findGroupMembers();
