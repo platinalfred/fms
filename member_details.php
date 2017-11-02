@@ -37,7 +37,6 @@ $client['clientType'] = 1;
 $client['clientNames'] = $names;
 $client['id'] = $_GET['memberId'];
 if(!$member_data){
-	
 	echo "<p>No member details found</p>";
 	return;
 }

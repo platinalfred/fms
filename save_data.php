@@ -205,7 +205,7 @@ if(isset($_POST['tbl'])){
 			$person = new Person();
 			
 			if(empty($_FILES["id_specimen"]["tmp_name"])){
-				$data['id_specimen'] = $data["existing_specimen"];	
+				$data['id_specimen'] = @$data["existing_specimen"];	
 			}
 			if($person->updatePerson($data)){
 				if(!empty($data['relative'])){

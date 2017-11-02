@@ -101,13 +101,13 @@ class Member extends Db {
 		return false;
 	}
 	public function deActicateMember($data){
-		if($this->update_single(self::$table_name, $data['field'], $data['value'], "id=".$data['primary'])){
+		if($this->update(self::$table_name, $data['field'], $data['value'], "id=".$data['primary'])){
 			return true;
 		}
 		return false;
 	}
 	public function deleteMember($id){
-		if($this->update_single(self::$table_name, "active", 0, "id=".$id)){
+		if($this->del(self::$table_name, "id=".$id)){
 			return true;
 		}else{
 			return false;

@@ -26,7 +26,7 @@ $(document).ready(function(){
 								url: "delete.php?tbl=member&id="+id,
 								type: 'GET',
 								success: function (response) {
-									if($.trim(response) == "success"){
+									if(response == "success"){
 										showStatusMessage("Member has been deleted." ,"success");
 										setTimeout(function(){
 											window.location = "members.php";
