@@ -18,7 +18,7 @@
 									$rate = $shares->findShareRate();
 									?>
 									<input name ="recordedBy" type="hidden" value="<?php echo $_SESSION['personId']; ?>">
-									<input name ="memberId" type="hidden" value="<?php echo $_GET['id']; ?>">
+									<input name ="memberId" type="hidden" value="<?php echo $_GET['memberId']; ?>">
 									<input name ="datePaid" type="hidden" value="<?php echo time(); ?>">
 									<input name ="share_rate" type="hidden" value="<?php echo $rate['id']; ?>">
 									<input type="hidden" id="rate_amount" name="" value="<?php echo $rate['amount']; ?>">

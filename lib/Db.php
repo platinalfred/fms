@@ -541,7 +541,7 @@ class Db{
 	function update_single($table, $field, $value, $where) {
 		$value = $this->escape_value($value);
 		$upd = "UPDATE ".$table. " SET ".$field." = '".$value."' WHERE ".$where;
-		echo $upd;
+		//echo $upd;
 		return $this->conn->query($upd);
 	}
 	function update($table, $fields, $values, $where){

@@ -231,7 +231,7 @@
 		<?php if(!(isset($_GET['view'])&&isset($_GET['groupId']))||isset($_GET['grpLId'])) :?>
 			<div class="ibox " data-bind="with: account_details">
 				<div class="ibox-title">
-					<h5 data-bind="text:  'Account Details'+' ('+ loanNo + ')'"></h5>
+					<h5 >Account Details</h5>
 				</div>
 				<div class="ibox-content">
 					<div>
@@ -242,7 +242,7 @@
 									<strong>Client</strong>
 								</li>
 								<li class="list-group-item">
-									<span class="pull-right" data-bind="text: loanNo"> Account No </span>
+									<span class="pull-right" data-bind="text: 'L'+parseInt(id).pad(11)"> Account No </span>
 									<strong>Account No.</strong>
 								</li>
 								<li class="list-group-item">

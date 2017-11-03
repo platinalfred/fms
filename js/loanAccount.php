@@ -687,7 +687,7 @@
 						$(api.column(val).footer()).html( curr_format(Math.round(total)) );
 					});
 				  },columns:[ { data: 'id', render: function ( data, type, full, meta ) {
-				  return '<?php if(isset($_SESSION['loans_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?memberId='+full.memberId+'&view=loan_accs&loanId='+data+'" title="View details">L'+data+'</a> <?php } ?>'; }},
+				  return '<?php if(isset($_SESSION['loans_officer'])){ ?> '+data+' <?php }else{ ?> <a href="member_details.php?memberId='+full.memberId+'&view=loan_accs&loanId='+data+'" title="View details">L'+(data).pad(11)+'</a> <?php } ?>'; }},
 						{ data: 'clientNames'},
 						{ data: 'groupName', render: function( data, type, full, meta ){return full.groupId?('<a href="group_details.php?id='+full.groupId+'&view=loan_accs&loanId='+full.id+'" title="View details">'+data+'</a>'):'';}},
 						{ data: 'productName'},
