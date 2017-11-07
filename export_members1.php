@@ -29,58 +29,55 @@ if(isset($_POST['submit'])){
 			if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $data[2])){
 				continue;
 			}else{
-				if(($data[3] != "" && $data[1] != "" )){
+				if(($data[3] != "" || $data[4] != "") && $data[1] != "" ){
 					$exp_date = explode("/",  $data[1]);
-					if($exp_date[1] > 12){
-						$exp_date[0] = $exp_date[1];
-						$exp_date[1] = $exp_date[0];
-					}
 					$date_d = $exp_date[2]."-".$exp_date[1]."-".$exp_date[0];
 					$add['date_registered'] = $date_d; //date("Y-m-d", strtotime($data[1]));
 					$add['dateAdded'] =  strtotime($date_d);
-					
 					$add['addedBy'] = 1;
 					$add['modifiedBy'] =  1;
 					$name = explode(" ",  $data[2]);
 					$add['firstname'] = $name[1];
-					$add['lastname'] = $name[0];
-					//echo $add["dateAdded"]." -  ".$date_d." - ".$name[1]."<br/>";
-					//continue;
+					$add['lastname'] = $name[0];				
+					if(count($name) >  2){
+						$add['othername'] = $name[2]; 
+					}
+					
 					$add['photograph'] = "";
 					$add['branch_id'] = 1;
 					$add['branchId'] = 1;
 					$add['active']=1;
 					$add['person_type']=1;
-					$add['memberType']=2;
-					if($add['dateAdded'] != "" || $add['dateAdded'] ="1979-01-01"){
-						$add['comment']="This member data was exported from an excel";
-						$person_id = $person->addPerson($add);
-						if($person_id){
-							$add['personId'] = $person_id;
-							$person->updatePersonNumber($person_id);
-							$add["personId"] = $person_id;
-							$member_id = $member->addMember($add);
-							$add['memberId'] = $member_id;
-							if($data[3] != ""){
-								$add['amount'] = $data[3];
-								$add['receipt_no'] = $data[0];
-								$add['subscriptionYear'] = $exp_date[2];
-								$add['datePaid'] = $date_d;
-								$subscribe->addSubscription($add);
-							}
-							/* if(!empty($data[4])){
-								$add['noShares'] = $data[5];
-								$add['amount'] = $data[4];
-								$add['recordedBy'] = 1;
-								$add['paid_by'] = 1;
-								$shares->addShares($add);
-							} */
+					if($data[4] !=""){
+						$add['memberType']=1;
+					}
+					
+					$add['comment']="This data was exported from an excel";
+					$person_id = $person->addPerson($add);
+					if($person_id){
+						$add['personId'] = $person_id;
+						$person->updatePersonNumber($person_id);
+						$add["personId"] = $person_id;
+						$member_id = $member->addMember($add);
+						$add['memberId'] = $member_id;
+						if($data[3] != ""){
+							$add['amount'] = $data[3];
 							
-						} 
-					}else{
-						echo $add['firstname']." - ".$add['lastname']."<br/>";
-					}	
-				}
+							$add['receipt_no'] = $data[0];
+							$add['subscriptionYear'] = $exp_date[2];
+							$add['datePaid'] = $date_d;
+							$subscribe->addSubscription($add);
+						}
+						if(!empty($data[4])){
+							$add['noShares'] = $data[5];
+							$add['amount'] = $data[4];
+							$add['recordedBy'] = 1;
+							$add['paid_by'] = 1;
+							$shares->addShares($add);
+						}
+						
+					} 
+				}		 
 			}	
 			//echo "mma". $a++;
 		}   
