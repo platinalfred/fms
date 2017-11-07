@@ -165,7 +165,14 @@ if(isset($_POST['origin'])){
 				$output = $depositAccount->updateDepositAccount($data);
 				
 				$data['depositAccountId'] = $data['id'];
-				unset($data['id'],$data['openingBalance'],$data['termLength'],$data['interestRate']);
+				//make a deposit transaction into the client's account
+				/* 	$depositAccountTransaction = new DepositAccountTransaction();
+					$data['transactionType'] = 1;
+					$data['transactedBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
+					$output = $depositAccountTransaction->addDepositAccountTransaction($data);
+				 */
+				
+				unset($data['id'],$data['openingBalance'],$data['termLength'],$data['transactionType'],$data['transactedBy'],$data['interestRate']);
 					
 				if(isset($data['feePostData'])){
 					if($data['feePostData'] != "false"){

@@ -21,6 +21,8 @@ class LoanAccountFee extends Db {
 		$fields = "`loanProductId`,`loanProductFeenId` `id`, `amount`, `amountCalculatedAs`, `requiredFee`";
 		$table = self::$table_name. " JOIN ".$table_product_fees. " ON ".self::$table_name.".`loanProductFeenId`=`productFees`.`id`";
 		$result_array = $this->getfarray($table, $fields, "`loanAccountId`=".$loanAccountId, "", "");
+		
+		$actual_sql = "SELECT `loanProductId`,`loanProductFeenId` `id`, `amount`, `amountCalculatedAs`, `requiredFee` FROM `loan_account_fee` JOIN (SELECT `loan_product_feen`.`id`, `feeName`, `loanProductId`, `amountCalculatedAs`, `requiredFee`, `amount` FROM `loan_product_feen` JOIN `loan_product_fee` ON `loan_product_feen`.`loanProductFeeId` = `loan_product_fee`.`id`) `productFees` ON `loan_account_fee`.`loanProductFeenId`=`productFees`.`id` WHERE `loanAccountId`=1";
 		return !empty($result_array) ? $result_array : false;
 	}
 	
