@@ -30,9 +30,32 @@
 	 <!-- Sweet alert -->
     <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
 	
-	<?php if(in_array("knockout", $needed_files)){ ?>
+	<?php
+	if(in_array("select2", $needed_files)){ ?>
+		 <!-- Select2 -->
+		<script src="js/plugins/select2/select2.full.min.js"></script>
+	<?php 
+	} if(in_array("knockout", $needed_files)){ ?>
 		<!-- Knockout js -->
 		<script src="js/knockout/knockout-min.js"></script>
+		<script type="text/javascript">
+		ko.bindingHandlers.select2 = {
+			init: function(element, valueAccessor, allBindingsAccessor) {
+				$(element).select2(valueAccessor());
+
+				ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+					$(element).select2('destroy');
+				});
+			},
+			update: function(element, valueAccessor, allBindingsAccessor) {
+				var allBindings = allBindingsAccessor(),
+					value = ko.utils.unwrapObservable(allBindings.value || allBindings.selectedOptions);
+				if (value) {
+					$(element).trigger('change');
+				}
+			}
+		}
+		</script>
 	<?php 
 	}
 	if(in_array("dataTables", $needed_files)){
@@ -235,11 +258,6 @@
 				<?php include_once("./js/daterangepicker.inc"); //daterangepicker function?>
 			});
 		</script>
-	<?php 
-	}
-	if(in_array("select2", $needed_files)){ ?>
-		 <!-- Select2 -->
-		<script src="js/plugins/select2/select2.full.min.js"></script>
 	<?php 
 	}
 	if(in_array("touchspin", $needed_files)){ ?>
