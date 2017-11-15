@@ -35,6 +35,7 @@ class Dashboard extends Db {
 	}
 	
 	public function getCountOfSubscriptions($where = 1){
+		 $where = "";
 		$result = $this->getfrec("subscription", "count(`id`) subsCount ", $where, "", "");
 		return !empty($result) ? (($result['subsCount']!=NULL)?$result['subsCount']:0) : 0;
 	}

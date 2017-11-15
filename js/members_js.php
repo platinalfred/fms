@@ -26,7 +26,7 @@ $(document).ready(function(){
 								url: "delete.php?tbl=member&id="+id,
 								type: 'GET',
 								success: function (response) {
-									if(response == "success"){
+									if(response.trim() == "success"){
 										showStatusMessage("Member has been deleted." ,"success");
 										setTimeout(function(){
 											window.location = "members.php";
@@ -238,7 +238,8 @@ $(document).ready(function(){
 					{ data: 'Name', render: function ( data, type, full, meta ) {return full.lastname + ' ' + full.othername + ' ' + full.firstname ; }},
 					{ data: 'phone'},
 					{ data: 'id_number'},
-					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}}<?php 
+					{ data: 'dateofbirth', render: function ( data, type, full, meta ) {return moment(data, "YYYY-MM-DD").format('LL');}},
+					{ data: 'dateAdded', render: function ( data, type, full, meta ) {return moment(data, "X").format('DD-MMM-YYYY'); }}<?php 
 					if(!isset($_SESSION['loan_officer'])){ ?>,
 					{ data: 'id', render: function ( data, type, full, meta ) {  return '  <a href="member_details.php?memberId='+data+'" class="btn btn-warning btn-sm"><i class="fa fa-list"></i> Details</a> ';}} <?php } ?> 
 					] ,
@@ -309,7 +310,7 @@ $(document).ready(function(){
 					setTimeout(function(){
 						memberModel.resetForm();
 						<?php if(!isset($_GET['view'])):?>
-						dTable.ajax.reload();
+							dTable.ajax.reload();
 						
 						<?php endif;?>
 					}, 2000);

@@ -3,3 +3,6 @@
 /Check attachment for the collateral, if its pdf/word give link
 //On Loan details page,Approval tab it shows approved by as a number instead of a name
 //There is an error on the groups page
+
+After adding a member, the table does not reload
+//Remove deactivated members from the members dropdown list

@@ -84,6 +84,7 @@ class DataTable extends Db{
 			$sOrder.
 			" ".
 			$sLimit;
+			//echo $sQuery;
 		//prepare the statement
 		$preparedStatement = $this->prepareStatement($sQuery);
 		if($preparedStatement){

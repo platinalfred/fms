@@ -331,6 +331,7 @@ require_once("lib/Libraries.php");
 														<div class="ibox-content">
 															<form class="form-horizontal" method="post" id="tblAccessLevel">
 																<input type="hidden" name="tbl" value="access_level">
+																<input type="hidden" name="id" value="">
 																<div class="form-group"><label class="col-lg-2 control-label">Name</label>
 
 																	<div class="col-lg-10"><input name="name" type="text" placeholder="Name" class="form-control"> <span class="help-block m-b-none">Access Level name (e.g Administrator).</span>

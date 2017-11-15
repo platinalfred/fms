@@ -1,5 +1,5 @@
 			</div>
-			<div class="footer">
+			<div class="footer hidden-print">
                 <div class="pull-right">
                     Developed by <a href="http://www.connectsoftz.com" target="_blank"><img style="width:40%;" src="img/cs_logo.png"></a>
                 </div>

@@ -1,9 +1,9 @@
 <?php
 $curdir = dirname(__FILE__);
-require_once($curdir.'/Db.php');
+require_once($curdir.'/Db.php');//
 class Person extends Db {
 	protected static $table_name  = "person";
-	protected static $db_fields = array("id","person_number","person_type","id_specimen", "title","marital_status", "firstname", "lastname", "othername","gender", "dateofbirth", "phone", "email","district","county","subcounty","parish","village","id_type", "id_number","physical_address","postal_address", "occupation", "photograph", "comment", "date_registered", "registered_by", "children_no", "dependants_no");
+	protected static $db_fields = array("id","person_number","person_type","id_specimen", "title","marital_status", "firstname", "lastname", "othername","gender", "dateofbirth", "phone", "phone2", "email","district","county","subcounty","parish","village","id_type", "id_number","physical_address","postal_address", "occupation", "photograph", "comment", "date_registered", "registered_by", "children_no", "dependants_no");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "", "");

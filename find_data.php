@@ -30,7 +30,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_groups" ) {
 if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 	
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
-		$where = "(`dateAdded` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
+		$where = "(`dateAdded` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].") AND active=1";
 	}	
 	
 	//members, person, person relative, person employment, account,

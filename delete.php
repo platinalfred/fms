@@ -21,8 +21,11 @@ if(isset($_GET['tbl'])){
 		case "member":
 			require_once("lib/Member.php");
 			$member = new Member();
-			if($member->deleteMember($_GET['id'])){
-				$msg =  "Success";
+			$data['field'] = "active";
+			$data['value'] = 0;
+			$data['primary'] = $_GET['id'];
+			if($member->deActicateMember($data)){
+				$msg =  "success";
 			}
 		break;
 		case "account_type":

@@ -141,7 +141,7 @@ Class Reports{
 			  <div class="ibox-title">
 				<h2> <small>Subscriptions </small></h2>
 				<?php
-				if(in_array(1, $_SESSION['access_levels'])||in_array(7, $_SESSION['access_levels'])){ ?>
+				if(in_array(7, $_SESSION['access_levels'])){ ?>
 					<div class="ibox-tools">
 						<a data-toggle="modal" class="btn btn-sm btn-primary" href="#add_subscription"><i class="fa fa-plus"></i> Subscribe</a>
 					</div>
@@ -174,7 +174,7 @@ Class Reports{
 								foreach($all_client_subscriptions as $single){ 
 									?>
 									<tr class="even pointer " >
-										<td class="a-right a-right "><?php  if($single['datePaid'] == "1970-01-01" || $single['datePaid'] == "0000-00-00"){ echo "No date specified"; }else{ echo date("j F, Y", strtotime($single['datePaid'])); } ?></td>
+										<td class="a-right a-right "><?php  if($single['datePaid'] == ""){ echo "No date specified"; }else{ echo date("j F, Y",$single['datePaid']); } ?></td>
 										<td class=" "><?php echo $single['receipt_no']; ?> </td>
 										<td class=" "><?php echo $single['subscriptionYear']; ?> </td>
 										<td class=" "><?php $subscription_sum += $single['amount']; echo number_format($single['amount'],2,".",","); ?></td>

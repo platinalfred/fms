@@ -33,15 +33,15 @@ if(isset($_POST['origin'])){
 			//1 in this period
 			$figures['total_shares'] = $dashboard->getSumOfShares("(`datePaid` BETWEEN ".$start_date." AND ".$end_date.")");
 			//before this period
-			$total_shares_b4 = $dashboard->getCountOfShares("(`datePaid` < ".$start_date.")");
+			$total_shares_b4 = $dashboard->getSumOfShares("(`datePaid` < ".$start_date.")");
 			//percentage increase/decrease
 			$percents['shares_percent'] = ($total_shares_b4>0&&$figures['total_shares']>0)?round(($figures['total_shares']/$total_shares_b4)*100,2):($figures['total_shares']>0?100:0);
 
 			//Total amount of paid subscriptions
 			//1 in this period
-			$figures['total_scptions'] = $dashboard->getCountOfSubscriptions("(`datePaid` BETWEEN ".$start_date." AND ".$end_date.")");
+			$figures['total_scptions'] = $dashboard->getSumOfSubscriptions("(`datePaid` BETWEEN ".$start_date." AND ".$end_date.")");
 			//before this period
-			$total_scptions_b4 = $dashboard->getCountOfSubscriptions("(`datePaid` < ".$start_date.")");
+			$total_scptions_b4 = $dashboard->getSumOfSubscriptions("(`datePaid` < ".$start_date.")");
 			//percentage increase/decrease
 			$percents['scptions_percent'] = ($total_scptions_b4>0&&$figures['total_scptions']>0)?round(($figures['total_scptions']/$total_scptions_b4)*100,2):($figures['total_scptions']>0?100:0);
 
@@ -355,7 +355,8 @@ if(isset($_POST['origin'])){
 				$where = "`status`=".$_POST['status'];
 			}
 			if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
-				$action_date = (in_array($_POST['status'],array(5,13,14,15,16)))?"disbursementDate":((in_array($_POST['status'],array(3,4)))?"approvalDate":"applicationDate");
+				$action_date = (in_array($_POST['status'],array(5,13,14,15,16)))?"disbursementDate":((in_array($_POST['status'],array(4)))?"approvalDate":"applicationDate");
+				
 				$where .= " AND (`".($action_date)."` BETWEEN ".$_POST['start_date']." AND ".$_POST['end_date'].")";
 			}
 			if(isset($_POST['memberId'])){
@@ -371,16 +372,17 @@ if(isset($_POST['origin'])){
 				$output['data'] = $oanAccountObj->getApprovedLoans($where);
 			}else{
 				if(isset($_POST['status']) && $_POST['status']==3){
-					if((isset($_SESSION['branch_credit'])&&$_SESSION['branch_credit'])||(isset($_SESSION['admin'])&&$_SESSION['admin'])){
-						 $where .= " AND `requestedAmount` < 1000001";
-					 }else
-					 if(isset($_SESSION['management_credit'])&& $_SESSION['management_credit']){
-						$where .= " AND (`requestedAmount` BETWEEN 1000000 AND 5000001)";
-					}else
-					if(isset($_SESSION['executive_board'])&&$_SESSION['executive_board']){
-						$where .= " AND `requestedAmount` > 5000000";
+					if(!isset($_SESSION['admin'])){
+						if(isset($_SESSION['branch_credit']) && $_SESSION['branch_credit']){
+							 $where .= " AND `requestedAmount` < 1000001";
+						 }else if(isset($_SESSION['management_credit'])&& $_SESSION['management_credit']){
+							$where .= " AND (`requestedAmount` BETWEEN 1000000 AND 5000001)";
+						}elseif(isset($_SESSION['executive_board'])&& $_SESSION['executive_board']){
+							$where .= " AND `requestedAmount` > 5000000";
+						}
 					}
 				}
+				//echo $where;
 				$output['data'] = $oanAccountObj->getApplications($where);
 			}
 			echo json_encode($output);
@@ -550,16 +552,18 @@ function getGraphData($start_date, $end_date){
 			$weeks[$index]['start'] = $end_date;
 		}
 		/* print_r($weeks); */
-		foreach($loan_products as $product){
-			$datasets = array();
-			$datasets['name'] = $product['productName'];
-			
-			foreach($weeks as $week){
-				$between = "BETWEEN ".$week['start']." AND ".$week['end'].")";
-				$datasets['data'][] = $dashboard->getSumOfLoans("`disbursementDate` <= ".$week['end']." AND `loanProductId`=".$product['id']);
-				$data_points[] = /**/date('j/M', $week['start'])."-".date('j/M', $week['end']);
+		if($loan_products){
+			foreach($loan_products as $product){
+				$datasets = array();
+				$datasets['name'] = $product['productName'];
+				
+				foreach($weeks as $week){
+					$between = "BETWEEN ".$week['start']." AND ".$week['end'].")";
+					$datasets['data'][] = $dashboard->getSumOfLoans("`disbursementDate` <= ".$week['end']." AND `loanProductId`=".$product['id']);
+					$data_points[] = /**/date('j/M', $week['start'])."-".date('j/M', $week['end']);
+				}
+				$graph_data['datasets'][] = $datasets;
 			}
-			$graph_data['datasets'][] = $datasets;
 		}
 		
 	}
@@ -587,16 +591,18 @@ function getGraphData($start_date, $end_date){
 			$months[$index]['start'] = $end_date;
 			$months[$index]['end'] = $end_date;
 		}
-		foreach($loan_products as $product){
-			$datasets = array();
-			$datasets['name'] = $product['productName'];
-			
-			foreach($months as $month){
-				$between = "BETWEEN ".$month['start']." AND ".$month['end'].")";
-				$datasets['data'][] = $dashboard->getSumOfLoans($between." AND  `loanProductId`=".$product['id']);
-				$data_points[] = /*date('M/Y', $week['start'])."-".*/date('M/Y', $month['end']);
+		if($loan_products){
+			foreach($loan_products as $product){
+				$datasets = array();
+				$datasets['name'] = $product['productName'];
+				
+				foreach($months as $month){
+					$between = "BETWEEN ".$month['start']." AND ".$month['end'].")";
+					$datasets['data'][] = $dashboard->getSumOfLoans($between." AND  `loanProductId`=".$product['id']);
+					$data_points[] = /*date('M/Y', $week['start'])."-".*/date('M/Y', $month['end']);
+				}
+				$graph_data['datasets'][] = $datasets;
 			}
-			$graph_data['datasets'][] = $datasets;
 		}
 	}
 	if(!empty($graph_data)){
@@ -616,12 +622,14 @@ function getPieChartData($start_date, $end_date){
 	
 	$between = "BETWEEN ".$start_date." AND ".$end_date.")";
 	$pie_chart_data['series']['name'] = 'Loan Products';
-	foreach($loan_products as $product){
-		$products_sum += $total_amount = $dashboard->getSumOfLoans("(`disbursementDate` ".$between." AND `loanProductId`=".$product['id']);
-		$pie_chart_data['series']['data'][] = array('name'=>$product['productName'],'y'=>$total_amount);
-	}//
-	$pie_chart_data['title']['text'] = "Total product sales ".date('j M, y',$start_date)." - ".date('j M, y',$end_date);
-	
+	if($loan_products){
+		foreach($loan_products as $product){
+			$products_sum += $total_amount = $dashboard->getSumOfLoans("(`disbursementDate` ".$between." AND `loanProductId`=".$product['id']);
+			$pie_chart_data['series']['data'][] = array('name'=>$product['productName'],'y'=>$total_amount);
+		}//
+		
+		$pie_chart_data['title']['text'] = "Total product sales ".date('j M, y',$start_date)." - ".date('j M, y',$end_date);
+	}
 	if($loan_products){
 		$pie_chart = array('total_product_sales'=>$products_sum,'chart_data'=>$pie_chart_data);
 		return $pie_chart;

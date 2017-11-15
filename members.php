@@ -30,6 +30,7 @@ $member = new Member();
 								<th>Phone</th>
 								<th>Id Number</th>
 								<th>Date of Birth</th>
+								<th>Date Registered</th>
 								<?php 
 								if(!isset($_SESSION['loan_officer'])){ ?>
 									<th>Details</th>
@@ -49,6 +50,7 @@ $member = new Member();
 								<th>Phone</th>
 								<th>Id Number</th>
 								<th>Date of Birth</th>
+								<th>Date Registered</th>
 								<?php 
 								if(!isset($_SESSION['loan_officer'])){ ?>
 									<th>Details</th>

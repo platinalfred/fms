@@ -65,7 +65,7 @@
 								<!--Found at https://support.mambu.com/customer/en/portal/articles/1162103-setting-up-new-loan-products -->
                                 <div class="form-group">
 									<div class="col-md-12">
-										<div><label class="control-label">Interest Rate Constraints(%)</label>
+										<div><label class="control-label">Interest Rate Constraints(% p.a)</label>
 										</div>
 										<div>
 											<label class="col-sm-1 control-label">Default</label><div class="col-sm-3"><input  type="number" class="form-control input-sm" name="defInterest" id="defInterest" data-bind="value: defInterest" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1 control-label">Min</label><div class="col-sm-3"><input type="number" class="form-control input-sm" id="minInterest" name="minInterest" data-bind="value: minInterest" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1 control-label">Max</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="maxInterest" id="maxInterest" data-bind="value: maxInterest" data-rule-min="0" data-rule-max="100"></div>

@@ -61,8 +61,8 @@ p{
 				<div class="ibox-title">
 					<h5><?php echo $names; ?> <small> - <?php echo $member->findPersonNumber($member_data['personId']);?> </small></h5>
 					<?php 
-					if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>
-						<div class="ibox-tools">
+					if(isset($_SESSION['admin'])){ ?>
+						<div class="ibox-tools hidden-print">
 							<a  data-toggle="modal" href="#update_member" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Edit </a>
 							<a id="<?php echo $_GET['memberId']; ?>" class="btn btn-danger btn-sm delete_member" style="color:#fff;"><i class="fa fa-trash"></i> Delete</a>
 						</div>
@@ -73,7 +73,7 @@ p{
 				<div class="ibox-content" style="padding-top:3px;">
 					<div class="col-lg-12">
 						<div class="ibox<?php if(isset($_GET['view'])):?> collapsed<?php endif;?>" style="margin-bottom:0px;     margin-top: 0px;">
-							<div class="ibox-title" style="border-top:none;">
+							<div class="ibox-title hidden-print" style="border-top:none;">
 								<div class="col-lg-2">
 									<h5>Member Details</h5>
 									<div class="ibox-tools">
@@ -85,7 +85,7 @@ p{
 							</div>
 							<div class="ibox-content">
 								<div class="row">
-									<div class="col-lg-2">
+									<div class="col-lg-2 hidden-print">
 									<?php
 										if($member_data['photograph'] !="" && file_exists($member_data['photograph'])){?> 
 											<img style="width:100%;"  src="<?php echo $member_data['photograph']; ?>" > 
@@ -187,7 +187,7 @@ p{
 											}
 											?>
 										</div>
-										<div class="col-md-12 col-sm-12 col-xs-12 details">
+										<div class="col-md-12 col-sm-12 col-xs-12 details hidden-print">
 										<?php
 										$member_deposit_account_obj = new MemberDepositAccount();
 										$deposit_account_obj = new DepositAccount();
@@ -237,7 +237,7 @@ p{
 						</div>
 					</div>
 					<div class="clearboth"></div>
-					<div class="col-md-12 col-sm-12 col-xs-12 " style="border-top:1px solid #09A; padding-top:10px;">
+					<div class="col-md-12 col-sm-12 col-xs-12 hidden-print" style="border-top:1px solid #09A; padding-top:10px;">
 						<p>
 							<a  href="?memberId=<?php echo  $_GET['memberId']; ?>&view=loan_accs" class="btn btn-sm btn-info" class="btn btn-info btn-sm"> <i class="fa fa-money"></i> Loan Accounts</a>
 							<a  href="?memberId=<?php echo  $_GET['memberId']; ?>&view=savings_accs" class="btn btn-info btn-sm"> <i class="fa fa-dollar"></i> Saving Accounts</a>

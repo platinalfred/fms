@@ -98,7 +98,7 @@
                                                                         <label class="col-sm-4" data-bind="visible: (parseFloat(maxAmount)>0&&$root.clientType==1), text: curr_format(parseInt(maxAmount))"></label>
                                                                     </div>
                                                                 </div>
-                                                                <label class="col-md-3 control-label">Interest Rate</label>
+                                                                <label class="col-md-3 control-label">Interest Rate(% p.a)</label>
                                                                 <div class="col-md-3">
                                                                     <input type="number" class="form-control input-sm" data-bind='textInput: $parent.interestRate2, attr: {"data-rule-min":(parseFloat(minInterest)>0?minInterest:null), "data-rule-max": (parseFloat(maxInterest)>0?maxInterest:null), "data-msg-min":"Interest Rate is less than "+minInterest, "data-msg-max":"Interest Rate is more than "+maxInterest, value:defInterest,"name":"loanAccount[interestRate]"}' />
                                                                     <div>

@@ -1,6 +1,6 @@
 	
-	<div id="deposit_account_details" class="row">
-		<div class="col-lg-6 pull-right">
+	<div id="deposit_account_details" class="row ">
+		<div class="col-lg-6 pull-right hidden-print">
 			<div class="col-lg-5 ">
 				<button type="button" class="btn btn-sm btn-default">Excel</button>
 				<button type="button" class="btn btn-sm btn-default">PDF</button>
@@ -34,13 +34,13 @@
 						<div class="clearboth"></div>
 						<div class="row"><div class="col-sm-7"><b>Opening Date</b></div><div class="col-sm-5" data-bind="text: moment(dateCreated,'X').format('DD-MMM-YYYY')"></div></div>
 						<div class="clearboth"></div>
-						<div class="row" data-bind="if: interestRate>0"><div class="col-sm-7"><b>Interest Rate</b></div><div class="col-sm-5" data-bind="text: interestRate +'%'"></div></div>
+						<div class="row hidden-print" data-bind="if: interestRate>0"><div class="col-sm-7"><b>Interest Rate</b></div><div class="col-sm-5" data-bind="text: interestRate +'%'"></div></div>
 						<div class="clearboth"></div>
-						<div class="row" data-bind="if: recomDepositAmount>0" ><div class="col-sm-7"><b>Recommended Deposit</b></div><div class="col-sm-5" data-bind="text: curr_format(parseInt(recomDepositAmount))"></div></div>
+						<div class="row hidden-print" data-bind="if: recomDepositAmount>0" ><div class="col-sm-7"><b>Recommended Deposit</b></div><div class="col-sm-5" data-bind="text: curr_format(parseInt(recomDepositAmount))"></div></div>
 						<div class="clearboth"></div>
-						<div class="row" data-bind="if: maxWithdrawalAmount > 0" ><div class="col-sm-7"><b>Maximum Withdraw Limit</b></div><div class="col-sm-5" data-bind="text:curr_format(parseInt(maxWithdrawalAmount))"></div></div>
+						<div class="row hidden-print" data-bind="if: maxWithdrawalAmount > 0" ><div class="col-sm-7"><b>Maximum Withdraw Limit</b></div><div class="col-sm-5" data-bind="text:curr_format(parseInt(maxWithdrawalAmount))"></div></div>
 						<div class="clearboth"></div>
-						<div class="row" data-bind="if: termLength"><div class="col-sm-7"><b>Term Length Rate </b><sup data-toggle="tooltip" title="Period of time before which a client starts withdrawing from the account" data-placement="right"><i class="fa fa-question-circle"></i><sup></sup></sup></div><div class="col-sm-5" data-bind="text: termLength+' days'"></div></div>
+						<div class="row hidden-print" data-bind="if: termLength"><div class="col-sm-7"><b>Term Length Rate </b><sup data-toggle="tooltip" title="Period of time before which a client starts withdrawing from the account" data-placement="right"><i class="fa fa-question-circle"></i><sup></sup></sup></div><div class="col-sm-5" data-bind="text: termLength+' days'"></div></div>
 					</div>
 				
 				</div>
@@ -63,12 +63,14 @@
 								<td data-bind="text: ((transactionType==2)?curr_format(parseInt(amount)):'-')"></td>
 							</tr>
 						</tbody>
-						<tr>
-							<th>Total (UGX)</th>
-							<th>&nbsp;</th>
-							<th data-bind="text: curr_format(parseInt(sumUpAmount(statement,1)))">&nbsp;</th>
-							<th data-bind="text: curr_format(parseInt(sumUpAmount(statement,2)))">&nbsp;</th>
-						</tr>
+						<tfoot>
+							<tr>
+								<th>Total (UGX)</th>
+								<th>&nbsp;</th>
+								<th style="text-align:right;" data-bind="text: curr_format(parseInt(sumUpAmount(statement,1)))">&nbsp;</th>
+								<th style="text-align:right;" data-bind="text: curr_format(parseInt(sumUpAmount(statement,2)))">&nbsp;</th>
+							</tr>
+						</tfoot>
 					</table>
 				</div><!-- /table-responsive -->
 			</div>

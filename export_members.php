@@ -22,13 +22,15 @@ if(isset($_POST['submit'])){
      $filename=$_POST['filename'];
 
      $handle = fopen("$filename", "r");
+	 $run = 0;
      while (($data = fgetcsv($handle, 90048576, ",")) !== FALSE){
-		 
+		 $run++;
 		$data = $member->sanitizeAttributes($data);
 		if($data[1] != ""){
-			if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $data[2])){
+			/* if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $data[2])){
+				print_r($data); echo "<br/>";
 				continue;
-			}else{
+			}else{ */
 				if(($data[3] != "" && $data[1] != "" )){
 					$exp_date = explode("/",  $data[1]);
 					if($exp_date[1] > 12){
@@ -42,8 +44,11 @@ if(isset($_POST['submit'])){
 					$add['addedBy'] = 1;
 					$add['modifiedBy'] =  1;
 					$name = explode(" ",  $data[2]);
-					$add['firstname'] = $name[1];
+					$add['firstname'] = @$name[1];
 					$add['lastname'] = $name[0];
+					$add['othername'] = @$name[2];
+					$add['phone'] = @$data[4];
+					$add['phone2'] = @$data[5];
 					//echo $add["dateAdded"]." -  ".$date_d." - ".$name[1]."<br/>";
 					//continue;
 					$add['photograph'] = "";
@@ -51,8 +56,8 @@ if(isset($_POST['submit'])){
 					$add['branchId'] = 1;
 					$add['active']=1;
 					$add['person_type']=1;
-					$add['memberType']=2;
-					if($add['dateAdded'] != "" || $add['dateAdded'] ="1979-01-01"){
+					$add['memberType']=1;
+					if($add['dateAdded'] != ""){
 						$add['comment']="This member data was exported from an excel";
 						$person_id = $person->addPerson($add);
 						if($person_id){
@@ -65,7 +70,7 @@ if(isset($_POST['submit'])){
 								$add['amount'] = $data[3];
 								$add['receipt_no'] = $data[0];
 								$add['subscriptionYear'] = $exp_date[2];
-								$add['datePaid'] = $date_d;
+								$add['datePaid'] = strtotime($date_d);
 								$subscribe->addSubscription($add);
 							}
 							/* if(!empty($data[4])){
@@ -80,12 +85,18 @@ if(isset($_POST['submit'])){
 					}else{
 						echo $add['firstname']." - ".$add['lastname']."<br/>";
 					}	
+				}else{
+					echo "No date";
+					print_r($data); echo "<br/>";
 				}
-			}	
+			//}	
 			//echo "mma". $a++;
-		}   
+		}else{
+			print_r($data); echo "<br/>";
+		}  
 		
 	}
+	echo $run;
 	/* $import= "INSERT into  members(InvoiceID, InvoiceType, CustID, dtInvoice, OrigDocID, dtDue, cySaleOnly) values('$data[0]','$data[1]','$data[2]','$data[3]','$data[4]','$data[5]','$data[6]')";		
        mysql_query($import) or die(mysql_error());
      }

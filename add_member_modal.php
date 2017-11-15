@@ -205,12 +205,18 @@
 												
 											</div>
 										</div>
-										<div class="col-lg-4">
+										<div class="col-sm-12 ">
 											<div class="form-group">
-												<label>Telephone <span class="req">*</span></label>
-												<input id="phone" type="text" class="form-control" data-mask="(999) 999-9999" placeholder="" name="phone" required ><span class="help-block">(073) 000-0000</span>
+												<div class="col-sm-3 no_padding">
+													<label>Telephone <span class="req">*</span></label>
+												</div>
+												<div class="col-sm-9 input-group">
+													<input id="phone" style="width:48%;" type="text" class="form-control" data-mask="(999) 999-9999" placeholder="(073) 000-0000" name="phone" required >
+													<input id="phone"style="width:48%; margin-left:10px;" type="text" class="form-control" data-mask="(999) 999-9999" placeholder="(073) 000-0000" name="phone2" required ><span class="help-block"></span>
+												</div>
 											</div>
 										</div>
+										
 										
 										<div class="col-lg-4">
 											<div class="form-group">

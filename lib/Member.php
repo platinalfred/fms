@@ -101,7 +101,7 @@ class Member extends Db {
 		return false;
 	}
 	public function deActicateMember($data){
-		if($this->update(self::$table_name, $data['field'], $data['value'], "id=".$data['primary'])){
+		if($this->update(self::$table_name, array($data['field']), array($data['field']=>$data['value']), "id=".$data['primary'])){
 			return true;
 		}
 		return false;
