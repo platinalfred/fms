@@ -51,7 +51,7 @@
 				var allBindings = allBindingsAccessor(),
 					value = ko.utils.unwrapObservable(allBindings.value || allBindings.selectedOptions);
 				if (value) {
-					$(element).select2('val', value);
+					$(element).trigger('change');
 				}
 			}
 		}
