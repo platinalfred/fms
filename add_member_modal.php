@@ -212,7 +212,7 @@
 												</div>
 												<div class="col-sm-9 input-group">
 													<input id="phone" style="width:48%;" type="text" class="form-control" data-mask="(999) 999-9999" placeholder="(073) 000-0000" name="phone" required >
-													<input id="phone"style="width:48%; margin-left:10px;" type="text" class="form-control" data-mask="(999) 999-9999" placeholder="(073) 000-0000" name="phone2" required ><span class="help-block"></span>
+													<input id="phone"style="width:48%; margin-left:10px;" type="text" class="form-control" data-mask="(999) 999-9999" placeholder="(073) 000-0000" name="phone2"  ><span class="help-block"></span>
 												</div>
 											</div>
 										</div>

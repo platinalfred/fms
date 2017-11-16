@@ -19,7 +19,7 @@
 										<?php if(!isset($client)):?>
 										<div class="col-sm-6">
 											<label class="control-label">Customer/Member Group</label>
-												<select data-placeholder="Select customer/member group..." class="form-control chosen-select" data-bind='options: customers, optionsText: "clientNames", optionsCaption: "Select customer/member group...", optionsAfterRender: setOptionValue("id"), value: client' data-msg-required="Client name is required" required>
+												<select data-placeholder="Select customer/member group..." class="form-control chosen-select" data-bind='options: customers, optionsText: "clientNames", optionsCaption: "Select customer/member group...", optionsAfterRender: setOptionValue("id"), value: client, select2: {dropdownParent:"#add_deposit_account" }' style="width: 250px" data-msg-required="Client name is required" required>
 												</select>
 										</div>
 										<?php endif;?>

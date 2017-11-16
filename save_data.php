@@ -181,7 +181,7 @@ if(isset($_POST['tbl'])){
 								$data['id_specimen'] = $normal;
 								$data['id'] = $person_id;
 								$images->load($_FILES['id_specimen']['tmp_name']);
-								$images->resize(131, 120); 
+								//$images->resize(131, 120); 
 								$images->output($_FILES["id_specimen"]["type"]);
 								$images->save('img/ids/'.$_FILES['id_specimen']['name']);
 								if($person->updateSpecimen($data)){					
@@ -260,7 +260,7 @@ if(isset($_POST['tbl'])){
 									$data['id_specimen'] = $normal;
 									$data['id'] = $data['personId'];
 									$images->load($_FILES['id_specimen']['tmp_name']);
-									$images->resize(131, 120); 
+									//$images->resize(131, 120); 
 									$images->output($_FILES["id_specimen"]["type"]);
 									$images->save('img/ids/'.$_FILES['id_specimen']['name']);
 									if($person->updateSpecimen($data)){					
