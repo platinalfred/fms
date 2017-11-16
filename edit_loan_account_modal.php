@@ -159,7 +159,7 @@
 									</thead>
 									<tbody>
 										<!-- ko if: typeof($parent.loan_account_fees)!='undefined' -->
-										<!-- ko foreach: $root.loan_account_fees -->
+										<!-- ko foreach: $parent.loan_account_fees -->
 										<tr>
 											<td><input class="icheckbox_square-green" style="position: relative;" name="fee" type="checkbox" checked data-bind=" attr:{'name':'loanAccount[loanFees]['+$index()+'][loanProductFeenId]', 'value':id}" /></td>
 											<td data-bind='text: feeName'></td>
