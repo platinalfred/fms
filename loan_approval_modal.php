@@ -224,7 +224,7 @@
 															</tr>
 															<tr>
 																<th>Interest: UGX </th>
-																<td data-bind="text: curr_format(parseInt(interest)) +' (at '+interestRate+'% pa)'"></td>
+																<td data-bind="text: curr_format(parseInt(interest)/(getDescription(6, repaymentsMadeEvery)/parseInt(installments)))"></td>
 															</tr>
 															<tr>
 																<th>Periodic Principle: UGX </th>
@@ -232,7 +232,7 @@
 															</tr>
 															<tr>
 																<th>Periodic Interest: UGX </th>
-																<td data-bind="text: curr_format(Math.round(parseInt(interest)/parseInt(installments)))+' paid per ' +repaymentsFrequency +' '+ getDescription(4, repaymentsMadeEvery)"></td>
+																<td data-bind="text: curr_format(Math.round(parseInt(interest)/getDescription(6, repaymentsMadeEvery))) +' ('+(parseFloat(interestRate)/getDescription(6, repaymentsMadeEvery))+'%)'+' paid per ' +repaymentsFrequency +' '+ getDescription(4, repaymentsMadeEvery)"></td>
 															</tr>
 														</tbody>
 													</table>

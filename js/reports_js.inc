@@ -22,18 +22,27 @@ $(document).ready(function(){
 			  "footerCallback": function (tfoot, data, start, end, display ) {
 				  //
 				var api = this.api(), cols = [3,4,7,10,11,13];
+	 
+				// Total over this page
+				var pageTotal;
 				$.each(cols, function(key, val){
+					pageTotal = api.column( val, { page: 'current'} ).data().sum();
 					var total = api.column(val).data().sum();
-					$(api.column(val).footer()).html( curr_format(Number(Math.round(parseFloat(total)+'e2')+'e-2')) );
+					$(api.column(val).footer()).html( curr_format(Number(Math.round(parseFloat(pageTotal)+'e2')+'e-2') + " (" +Number(Math.round(parseFloat(total)+'e2')+'e-2') + ")") );
 				});
+				
 				//outstanding principle
+				pageTotal = api.column( 3, { page: 'current'} ).data().sum() - api.column( 10, { page: 'current'} ).data().sum();
 				var outstanding_principle = api.column(3).data().sum() - api.column(10).data().sum();
-				$(api.column(12).footer()).html( curr_format( Number(Math.round(parseFloat((outstanding_principle))+'e2')+'e-2') ) );
+				$(api.column(12).footer()).html( curr_format( Number(Math.round(parseFloat((pageTotal))+'e2')+'e-2') )+' ('+curr_format( Number(Math.round(parseFloat((outstanding_principle))+'e2')+'e-2')+')') );
+				
 				//outstanding interest
 				var outstanding_interest = api.column(6).data().sum() - api.column(11).data().sum();
 				$(api.column(13).footer()).html( curr_format( Number(Math.round(parseFloat((outstanding_interest))+'e2')+'e-2') ) );
+				
 				//total outstanding loan amount
 				$(api.column(14).footer()).html( curr_format( Number(Math.round(parseFloat((outstanding_principle + outstanding_interest))+'e2')+'e-2') ) );
+				
 				//total miscellaneous income//
 				
 				var paid_amount = (api.column(16).data().sum());
@@ -54,29 +63,67 @@ $(document).ready(function(){
 						  page = "group_details.php?id=";
 					  }
 					  return '<?php if(isset($_SESSION['loan_officer'])){ ?> '+data+' <?php }else{ ?> <a href="'+page+full.clientId+'&view=loan_accs&loanId='+full.id+'" title="View details"> L' +full.id+ '</a> <?php } ?>'; }},
+				  
 				  { data: 'clientNames'},
+				  
 				  { data: 'disbursementDate', render: function(data, type, full, meta) {return moment(data,'X').format('DD-MMM-YYYY');} },
+				  
 				  { data: 'disbursedAmount', render: function(data, type, full, meta) {return (data?curr_format(Number(Math.round(parseFloat(data)+'e2')+'e-2')):0);}},
+				  
 				  { data: 'principle', render: function(data, type, full, meta) {return (data?curr_format(Number(Math.round(parseFloat(data)+'e2')+'e-2')):0);}},
 
-				  { data: 'interest', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
-				  { data: 'expInterest', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
+				  { data: 'interest', render: function(data, type, full, meta) {return curr_format(parseInt(data)/(getDescription(6, full.repaymentsMadeEvery)/parseInt(full.installments)));}},
+				  
+				  { data: 'interest', render: function(data, type, full, meta) {return curr_format(parseInt(data)/(getDescription(6, full.repaymentsMadeEvery)));}},
+				  
 				  { data: 'feesPaid', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
+				  
 				  { data: 'paidInstallments', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
+				  
 				  { data: 'balInstallments'},
+				  
+				  //principal paid
 				  { data: 'paidPrinciple', render: function(data, type, full, meta) {return (data?curr_format(Number(Math.round(parseFloat(data)+'e2')+'e-2')):0);}},
-				  { data: 'interestPaid', render: function(data, type, full, meta) {return (data?curr_format(Number(Math.round(parseFloat(data)+'e2')+'e-2')):0);}},
+				  
+				  //interest paid
+				  { data: 'paidInstallments', render: function(data, type, full, meta) {
+					  return data?curr_format(Number(Math.round(parseFloat((parseInt(full.interest)/(getDescription(6, full.repaymentsMadeEvery)))*parseInt(data)+'e2')+'e-2'))):0;}},
+				  
 				  { data: 'paidPrinciple', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(full.disbursedAmount)-parseInt(data)):0;}},
-				  { data: 'interestPaid', render: function ( data, type, full, meta ) {
-					   return data?curr_format(parseInt(full.expInterest)-(data?parseInt(data):0)):0;}},
-				  { data: 'paidPrinciple', render: function ( data, type, full, meta ) {return data?curr_format((parseInt(full.disbursedAmount)-parseInt(data))+(parseInt(full.expInterest)-(full.interestPaid?parseInt(full.interestPaid):0))):0;}},
-				  { data: 'amountPaid', render: function(data, type, full, meta) {
+				  
+				  { data: 'paidInstallments', render: function ( data, type, full, meta ) {
+					  var balInterest = 0;
+					  if(data){
+						  var periodicInterest = (parseFloat(full.interest)/(getDescription(6, full.repaymentsMadeEvery)));
+						  var totalInterest = periodicInterest*parseInt(full.installments);
+						  balInterest = totalInterest - (periodicInterest*parseInt(data));
+					  }
+					   return curr_format(balInterest);
+					}
+				  },
+				  { data: 'paidPrinciple', render: function ( data, type, full, meta ) {
+					  var balPrinciple = 0, balInterest = 0;
+					  
+					  if(full.paidInstallments){
+						  var periodicInterest = (parseFloat(full.interest)/(getDescription(6, full.repaymentsMadeEvery)));
+						  var totalInterest = periodicInterest*parseInt(full.installments);
+						  balInterest = totalInterest - (periodicInterest*parseInt(full.paidInstallments));
+					  }
+					  
+					  balPrinciple = parseInt(full.disbursedAmount)-(data?parseInt(data):0);
+					  
+					  return curr_format(balPrinciple+balInterest);
+					}
+					},
+				 
+				 { data: 'amountPaid', render: function(data, type, full, meta) {
 						var paid_amount = (data?parseInt(data):0);
 						var loan_amount = (full.disbursedAmount?parseInt(full.disbursedAmount):0)+(full.expInterest?parseInt(full.expInterest):0);
 						return (paid_amount>loan_amount)?curr_format((paid_amount-loan_amount)):0;
-					  }
-				  },
-				  { data: 'amountPaid'}
+					}
+				  }/* ,
+				  
+				  { data: 'amountPaid'} */
 					
 					] ,
 			  buttons: [

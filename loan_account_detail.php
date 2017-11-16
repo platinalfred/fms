@@ -17,7 +17,7 @@
 											<tr> <th>Requested Amount</th> <td data-bind="text: curr_format(parseInt(requestedAmount))"></td> </tr>
 											<tr> <th>Application Date </th> <td data-bind="text: moment(applicationDate,'X').format('DD, MMM YYYY')"></td> </tr>
 											<tr> <th>Received by </th> <td data-bind="text: staffNames"></td> </tr>
-											<tr> <th>Interest Rate</th> <td data-bind="text: interestRate +'%'"></td> </tr>
+											<tr> <th>Interest Rate</th> <td data-bind="text: (parseFloat(interestRate)/getDescription(6, repaymentsMadeEvery)) +'%'"></td> </tr>
 											<tr> <th>Duration</th> <td data-bind="text: ((repaymentsFrequency)*parseInt(installments)) + ' ' + getDescription(4,repaymentsMadeEvery)"></td> </tr>
 											<tr> <th>Comments</th> <td data-bind="text: comments"></td> </tr>
 										</tbody>

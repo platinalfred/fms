@@ -28,9 +28,9 @@
 						<div class="clearboth"></div>
 						<div class="row"><div class="col-sm-7"><b>Account No.</b></div><div class="col-sm-5" data-bind="text: (productName+'-'+id).replace(/\s/g,'')"></div></div>
 						<div class="clearboth"></div>
-						<div class="row"><div class="col-sm-7"><b>Current Balance</b></div><div class="col-sm-5" data-bind="text: curr_format(parseInt(sumUpAmount(statement,1))+parseInt(openingBalance)-parseInt(sumUpAmount(statement,2)))"></div></div>
+						<div class="row"><div class="col-sm-7"><b>Current Balance</b></div><div class="col-sm-5" data-bind="text: curr_format(parseFloat(sumUpAmount(statement,1))+parseFloat(openingBalance)-parseFloat(sumUpAmount(statement,2)))"></div></div>
 						<div class="clearboth"></div>
-						<div class="row"><div class="col-sm-7"><b>Opening Balance</b></div><div class="col-sm-5" data-bind="text: curr_format(parseInt(openingBalance))"></div></div>
+						<div class="row"><div class="col-sm-7"><b>Opening Balance</b></div><div class="col-sm-5" data-bind="text: curr_format(parseFloat(openingBalance))"></div></div>
 						<div class="clearboth"></div>
 						<div class="row"><div class="col-sm-7"><b>Opening Date</b></div><div class="col-sm-5" data-bind="text: moment(dateCreated,'X').format('DD-MMM-YYYY')"></div></div>
 						<div class="clearboth"></div>
@@ -55,19 +55,27 @@
 								<th>Dr</th>
 							</tr> 
 						</thead>
-						<tbody data-bind="foreach: statement">
+						<tbody>
+							<tr>
+								<td data-bind="text: moment(dateCreated,'X').format('DD-MMM-YYYY')"></td>
+								<td style="text-align:left;">Opening Balance</td>
+								<td data-bind="text: (openingBalance?curr_format(parseFloat(openingBalance)):'-')"></td>
+								<td>0</td>
+							</tr>
+							<!--ko foreach: statement-->
 							<tr>
 								<td data-bind="text: moment(dateCreated, 'X').format('DD-MMM-YYYY')"></td>
 								<td style="text-align:left;" data-bind="text: comment"></td>
 								<td data-bind="text: ((transactionType==1)?curr_format(parseInt(amount)):'-')"></td>
 								<td data-bind="text: ((transactionType==2)?curr_format(parseInt(amount)):'-')"></td>
 							</tr>
+							<!--/ko-->
 						</tbody>
 						<tfoot>
 							<tr>
 								<th>Total (UGX)</th>
 								<th>&nbsp;</th>
-								<th style="text-align:right;" data-bind="text: curr_format(parseInt(sumUpAmount(statement,1)))">&nbsp;</th>
+								<th style="text-align:right;" data-bind="text: curr_format(parseInt(sumUpAmount(statement,1))+(openingBalance?parseFloat(openingBalance):0))">&nbsp;</th>
 								<th style="text-align:right;" data-bind="text: curr_format(parseInt(sumUpAmount(statement,2)))">&nbsp;</th>
 							</tr>
 						</tfoot>

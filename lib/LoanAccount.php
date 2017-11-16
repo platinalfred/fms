@@ -95,7 +95,7 @@ class LoanAccount extends Db {
 			WHEN 3 THEN TIMESTAMPDIFF(MONTH,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
 			END)";
 		
-		$fields = array( "`loan_account`.`id`, `loanNo`, `status`, `clientNames`, `memberId`, `disbursementDate`, `disbursedAmount`, `installments`, COALESCE(`paidInstallments`, 0) `paidInstallments`, (`installments`-COALESCE(`paidInstallments`, 0))`balInstallments`, `feesPaid`, `amountPaid`, (`disbursedAmount`*(`interestRate`/100)/`installments`) `interest`,  ((`disbursedAmount`*(`interestRate`/100)/`installments`)*COALESCE(`paidInstallments`, 0)) `interestPaid`,  `disbursedAmount`*(`interestRate`/100) `expInterest`, COALESCE((`disbursedAmount`/`installments`),0)`principle`, (COALESCE((`disbursedAmount`/`installments`),0)*COALESCE(`paidInstallments`, 0)) `paidPrinciple`, `groupLoanAccountId`, `groupId`, `groupName`, $due_date `due_date`" );
+		$fields = array( "`loan_account`.`id`, `loanNo`, `status`, `clientNames`, `memberId`, `disbursementDate`, `disbursedAmount`, `installments`, COALESCE(`paidInstallments`, 0) `paidInstallments`, (`installments`-COALESCE(`paidInstallments`, 0))`balInstallments`, `feesPaid`, `amountPaid`, (`disbursedAmount`*(`interestRate`/100)) `interest`, `repaymentsMadeEvery`, ((`disbursedAmount`*(`interestRate`/100)/`installments`)*COALESCE(`paidInstallments`, 0)) `interestPaid`, COALESCE((`disbursedAmount`/`installments`),0)`principle`, (COALESCE((`disbursedAmount`/`installments`),0)*COALESCE(`paidInstallments`, 0)) `paidPrinciple`, `groupLoanAccountId`, `groupId`, `groupName`, $due_date `due_date`" );
 		$where = ""; $payments_sql = self::$loan_payments_sql;
 		//specification of the category of loans to be returned
 		switch($category){
@@ -136,7 +136,7 @@ class LoanAccount extends Db {
 		
 		$table = self::$table_name." JOIN (".self::$member_sql.") `clients` ON `clients`.`id` = `memberId` $saccogroups_sql LEFT JOIN ". $payments_sql. " ON `loan_account`.`id` = `loan_payments`.`loanAccountId` LEFT JOIN ". self::$loan_fees_sql. " ON `loan_account`.`id` = `loan_fees`.`loanAccountId`";
 		
-		$result_array = $this->getfarray($table, $fields, $where, "`clientNames`", "");
+		$result_array = $this->getfarray($table, implode(",",$fields), $where, "`clientNames`", "");
 		return $result_array;
 	}
 	

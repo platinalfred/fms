@@ -230,7 +230,8 @@ function showStatusMessage(message='', display_type='success'){
 			[{id:1,desc:'Manual'},{id:2,desc:'Monthly Fee'}],
 			[{id:1,desc:'Monthly from Activation'},{id:2,desc:'Monthly from Start of Month'}],
 			[{id:1,desc:'day(s)'},{id:2,desc:'week(s)'},{id:3,desc:'month(s)'}],
-			[{id:1,desc:'Flat amount'},{id:2,desc:'% of Disbursement Amount'}]
+			[{id:1,desc:'Flat amount'},{id:2,desc:'% of Disbursement Amount'}],
+			[{id:1,desc:365},{id:2,desc:54},{id:3,desc:12}]
 		];
 		var description = "";
 		$.each(arrays[array_index], function(k, v) {
