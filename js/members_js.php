@@ -113,7 +113,8 @@ $(document).ready(function(){
 		return false;
 	});
 });
-<?php $relationshipTypeObj = new RelationshipType();
+<?php 
+$relationshipTypeObj = new RelationshipType();
 ?>
 	var relationships = <?php echo json_encode($relationshipTypeObj->findAll());?>;
 	
@@ -443,7 +444,7 @@ $(document).ready(function(){
     // in the "action" attribute of the form when valid
     submitHandler: function(form, event) {
 		event.preventDefault();
-		
+		enableDisableButton(form, true);
 		var frmdata = new FormData($(form)[0]);
 		//var frmdata = form.serialize();
 		$.ajax({
@@ -455,17 +456,18 @@ $(document).ready(function(){
 			contentType: false,
 			processData: false,
 			success: function (response) {
-				
 				if($.trim(response) == "success"){
-					
 					showStatusMessage("Successfully added new record" ,"success");
 					$("form#form1")[0].reset();
 					$('input[type="radio"]').removeAttr('checked').iCheck('update');
-					  <?php if(!isset($_GET['view'])):?>
+					  <?php 
+					  if(!isset($_GET['view'])):?>
 						dTable.ajax.reload();	
 						<?php endif;?>
+					enableDisableButton(form, false);	
 				}else{
 					showStatusMessage(response, "fail");
+					enableDisableButton(form, false);
 				}
 				
 			}

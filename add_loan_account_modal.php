@@ -203,7 +203,7 @@
                                                                             <tbody data-bind='foreach: $parent.selectedGuarantors'>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <select data-bind="options: $parentContext.$parent.filteredGuarantors, optionsText: 'memberNames', optionsValue, optionsAfterRender: $root.setOptionValue('id'), optionsCaption: 'Select guarantor...', value:guarantor, attr:{'name':'loanAccountguarantors['+$index()+'][memberId]'}" class="form-control"> </select>
+                                                                                        <select data-bind="options: $parentContext.$parent.filteredGuarantors, optionsText: 'memberNames', optionsValue, optionsAfterRender: $root.setOptionValue('id'), optionsCaption: 'Select guarantor...', value:guarantor, attr:{'name':'loanAccountguarantors['+$index()+'][memberId]'}, select2:{dropdownParent:'#add_loan_account-modal' }" style="width: 250px"  class="form-control"> </select>
                                                                                     </td>
                                                                                     <td class='phone' data-bind='with: guarantor'>
                                                                                         <span data-bind='text: phone'> </span>

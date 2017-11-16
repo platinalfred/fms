@@ -205,6 +205,7 @@ $(document).ready(function(){
 		// in the "action" attribute of the form when valid
 		submitHandler: function(form, event) {
 			event.preventDefault();
+			enableDisableButton(form, true);
 			/* if(){
 				
 			}else{ */
@@ -224,7 +225,7 @@ $(document).ready(function(){
 						}else{
 							showStatusMessage(response, "fail");
 						}
-						
+						enableDisableButton(form, false);
 					}
 				});
 			//}

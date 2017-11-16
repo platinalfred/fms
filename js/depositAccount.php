@@ -206,6 +206,7 @@ $(document).ready(function() {
 		};
 		
 		self.addDeposit = function(){
+			enableDisableButton($("#enterDepositForm"), true);
 			$.ajax({
 				type: "post",
 				dataType: "json",
@@ -237,14 +238,17 @@ $(document).ready(function() {
 							<?php endif; ?>
 							
 						}, 3000);
+						enableDisableButton($("#enterDepositForm"), false);
 					}else{
 						showStatusMessage("Error encountered while saving data: \n"+response ,"failed");
+						enableDisableButton($("#enterDepositForm"), false);
 					}
 				}
 			});
 		};
 		
 		self.addWithdraw = function(){
+			enableDisableButton($("#enterWithdrawForm"), true);
 			$.ajax({
 				type: "post",
 				dataType: "json",
@@ -275,15 +279,17 @@ $(document).ready(function() {
 								//After reloading the data table there is need to 
 								
 						}, 4000);
+						enableDisableButton($("#enterWithdrawForm"), false);
 					}else{
-						showStatusMessage("Error encountered while saving data: \n"+response ,"failed");
+						showStatusMessage("Error encountered while saving data: \n"+response ,"failed");enableDisableButton($("#enterWithdrawForm"), false);
 					}
 				}
 			});
 		};
 		
 		//send the items to the server for saving
-		self.save = function(form) {			
+		self.save = function(form) {	
+			enableDisableButton(form, true);
 			$.ajax({
 				type: "post",
 				data:{
@@ -313,7 +319,7 @@ $(document).ready(function() {
 							self.resetForm();
 						}, 3000);
 					}
-										
+					enableDisableButton(form, false);					
 				}
 			});
 			

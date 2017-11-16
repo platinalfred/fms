@@ -114,6 +114,7 @@ $(document).ready(function(){
     // in the "action" attribute of the form when valid
     submitHandler: function(form, event) {
 		event.preventDefault();
+		enableDisableButton(form, true);
 		var form =  $("form[name='registration']");
 		var frmdata = form.serialize();
 		$.ajax({
@@ -129,7 +130,7 @@ $(document).ready(function(){
 				}else{
 					showStatusMessage(response, "fail");
 				}
-				
+				enableDisableButton(form, false);
 			}
 		});
     }

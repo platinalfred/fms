@@ -91,7 +91,7 @@ p{
 											<img style="width:100%;"  src="<?php echo $member_data['photograph']; ?>" > 
 											<?php 
 											if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>
-												<a  href="" type="button"  data-toggle="modal" data-target=".add_photo"><i class="fa fa-edit"></i> Change photo</a>
+												<a  href="" type="button"  data-toggle="modal" data-target=".add_photo"><i class="fa fa-edit"></i> Change Passport photo</a>
 											<?php 
 											}
 										}else{?>
@@ -99,18 +99,18 @@ p{
 											<?php 
 											if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>
 												<a  href="" type="button"  data-toggle="modal" data-target=".add_photo">
-												<i class="fa fa-edit"></i> Add a photo</a>
+												<i class="fa fa-edit"></i> Add Add Passport photo</a>
 												<?php 
 											}
 										} ?>
 										<div class="modal fade add_photo" tabindex="-1" role="dialog" aria-hidden="true">
-											<div class="modal-dialog modal-sm">
+											<div class="modal-dialog modal-xl">
 											  <div class="modal-content">
 													<form method="post" action="photo_upload.php" id="photograph">
 														<div class="modal-header">
 														  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
 														  </button>
-														  <h4 class="modal-title" id="myModalLabel2">Add member photograph</h4>
+														  <h4 class="modal-title" id="myModalLabel2">Add Passport photo</h4>
 														</div>
 														<div class="modal-body">
 															<input type="hidden" name="photo_upload" >
@@ -119,7 +119,7 @@ p{
 														</div>
 														<div class="modal-footer">
 														  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-														  <button type="submit" class="btn btn-info photo_upload">Upload a Photo</button>
+														  <button type="submit" class="btn btn-info photo_upload">Upload a Passport Photo</button>
 														</div>
 													</form>
 													
@@ -127,7 +127,7 @@ p{
 											</div>
 										</div>
 									</div>
-									<div class="col-md-10 col-sm-12 col-xs-12 ">
+									<div class="col-md-8 col-sm-12 col-xs-12 ">
 										<div class="col-md-12 col-sm-12 col-xs-12 details">
 											<div class="col-md-3 col-sm-12 col-xs-12 ">
 												<p class="lead">Phone</p>
@@ -142,15 +142,15 @@ p{
 												<p class="p"><?php echo $member_data["physical_address"]; ?></p>
 											</div>
 											<div class="col-md-3 col-sm-12 col-xs-12 ">
-												<p class="lead">Postal Address</p>
-												<p class="p"><?php echo $member_data["postal_address"]; ?></p>
+												<p class="lead" style="">ID Number</p>
+												<p class="p"><?php  echo $member_data['id_number']; ?></p>
 											</div>
 											
 										</div>
 										<div class="col-md-12 col-sm-12 col-xs-12 details">
 											<div class="col-md-3 col-sm-12 col-xs-12 form-group " >
-												<p class="lead" style="">ID Number</p>
-												<p class="p"><?php  echo $member_data['id_number']; ?></p>
+												<p class="lead">Occupation</p>
+												<p class="p"><?php echo $member_data["occupation"]; ?></p>
 											</div>
 											<div class="col-md-3 col-sm-12 col-xs-12 form-group " >
 												<p class="lead">Gender</p>
@@ -231,7 +231,23 @@ p{
 										<?php }?>												
 										</div>
 									</div>
-									
+									<div class="col-lg-2 hidden-print">
+									<?php
+										if($member_data['id_specimen'] !="" && file_exists($member_data['id_specimen'])){?> 
+											<img class="img-thumbnail img-responsive" style="max-width:100%;"  src="<?php echo $member_data['id_specimen']; ?>" > 
+											<br/>
+											<a  href="" type="button"  data-toggle="modal" data-target=".id_specimen"><i class="fa fa-expand"></i> View</a>
+										<?php } ?>
+										<div class="modal fade id_specimen" tabindex="-1" role="dialog" aria-hidden="true">
+											<div class="modal-dialog modal-xl">
+											  <div class="modal-content">
+													<div class="col-lg-12" style="text-align:center;">
+													<img class="img-thumbnail img-responsive" style=" max-width:100%; margin:0 auto; padding:10px;"  src="<?php echo $member_data['id_specimen']; ?>" >
+													</div>
+											  </div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>

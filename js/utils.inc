@@ -22,6 +22,9 @@ function numberWithCommas(x) {
 	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	return parts.join(".");
 }
+function enableDisableButton(frm, status){
+	$(frm).find(":input[type=submit], :button[type=submit]").prop("disabled", status);
+}
 function curr_format(n) {
 	var formatted = "";
 	/* if(n<0){

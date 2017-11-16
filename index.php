@@ -43,7 +43,7 @@
 					<h1 style="text-align:center;"><i class="fa fa-unlock-alt"></i>&nbsp;&nbsp;&nbsp; Login </h1>
                     <form class="m-t" role="form" id="login_form" method="post" action="">
 						<?php
-						
+						session_start();
 						require_once("lib/Db.php");
 						$db = new Db();
 						$msg = "";
