@@ -20,13 +20,14 @@
 									<label class="col-md-8" data-bind="text: loanNo"></label>
 								  </div>
 								  <div class="form-group">
-									<label class="control-label col-md-4">Minimum required</label>
-									<label class="col-md-8" data-bind="text: 'UGX ' + curr_format(parseInt((parseInt(interest)+parseInt(disbursedAmount))/installments))"></label>
+									<label class="control-label col-md-4">Required PayBack Amount</label>
+									<label class="col-md-8" data-bind="text: 'UGX ' + curr_format(parseInt(((parseInt(interest)/getDescription(6, repaymentsMadeEvery))+parseInt(disbursedAmount))/installments))"></label>
 								  </div>
 								  <div class="form-group">
 									<label class="control-label col-md-4" for="payment_amount">Amount paid<span class="required">*</span></label>
 									<div class="col-md-8">
-									  <input type="number"  id="payment_amount" name="amount" class="form-control col-md-7 col-xs-12" data-bind='textInput: $parent.payment_amount, attr: {"data-rule-min":(parseInt((parseInt(interest)/parseInt(installments))+parseInt(disbursedAmount)/parseInt(installments))), "data-msg-min":"Amount is less than required minimum "+(parseInt((parseInt(interest)/parseInt(installments))+parseInt(disbursedAmount)/parseInt(installments)))}' data-msg-required="Amount is required" required>
+									  <input type="number"  id="payment_amount" name="amount" class="form-control col-md-7 col-xs-12" data-bind='textInput: $parent.payment_amount' data-msg-required="Amount is required" required>
+									  <!--input type="number"  id="payment_amount" name="amount" class="form-control col-md-7 col-xs-12" data-bind='textInput: $parent.payment_amount, attr: {"data-rule-min":(parseInt((parseInt(interest)/parseInt(installments))+parseInt(disbursedAmount)/parseInt(installments))), "data-msg-min":"Amount is less than required minimum "+(parseInt((parseInt(interest)/parseInt(installments))+parseInt(disbursedAmount)/parseInt(installments)))}' data-msg-required="Amount is required" required -->
 									</div>
 								  </div>
 								  <div class="form-group">
@@ -44,7 +45,8 @@
 								  <div class="form-group">
 									<div class="col-md-8 col-md-offset-4">
 									  <button type="reset" class="btn btn-white">Cancel</button>
-									  <button type="submit" class="btn btn-primary" data-bind="enable:$parent.payment_amount()>=(parseInt((parseInt(interest)/parseInt(installments))+parseInt(disbursedAmount)/parseInt(installments)))">Submit</button>
+									  <button type="submit" class="btn btn-primary" >Submit</button>
+									  <!--button type="submit" class="btn btn-primary" data-bind="enable:$parent.payment_amount()>=(parseInt((parseInt(interest)/parseInt(installments))+parseInt(disbursedAmount)/parseInt(installments)))">Submit</button !-->
 									</div>
 								  </div>
 								</form>

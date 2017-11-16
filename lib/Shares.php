@@ -35,7 +35,8 @@ class Shares extends Db {
 		return !empty($result)? $result : false;
 	}
 	public function addShareRate($data){
-		$fields = array("amount", "date_added", "added_by");
+		$data['datePaid'] = strtotime($data['datePaid']);
+		$fields = array("amount", "datePaid", "added_by");
 		$data['amount'] = $this->stripCommasOnNumber($data['amount']);
 		if($this->add("share_rate", $fields, $this->generateAddFields($fields, $data))){
 			return true;
@@ -43,6 +44,7 @@ class Shares extends Db {
 		return false;
 	}
 	public function addShares($data){
+		$data['datePaid'] = strtotime($data['datePaid']);
 		$fields = array_slice(self::$db_fields, 1);
 		if($this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data))){
 			return true;

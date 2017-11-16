@@ -19,13 +19,21 @@
 									?>
 									<input name ="recordedBy" type="hidden" value="<?php echo $_SESSION['personId']; ?>">
 									<input name ="memberId" type="hidden" value="<?php echo $_GET['memberId']; ?>">
-									<input name ="datePaid" type="hidden" value="<?php echo time(); ?>">
 									<input name ="share_rate" type="hidden" value="<?php echo $rate['id']; ?>">
 									<input type="hidden" id="rate_amount" name="" value="<?php echo $rate['amount']; ?>">
 									<input name ="tbl" type="hidden" value="add_share">
 									<fieldset>
 										<div class="row">
 											<div class="col-lg-8">
+												<div class="form-group">
+													<label class="control-label">Application Date</label>
+													<div class="input-group date" data-provide="datepicker" data-date-format="dd-mm-yyyy" data-date-end-date="<?php echo date('d-m-Y'); ?>">
+														<input type="text" class="form-control" name="datePaid"  required>
+														<div class="input-group-addon">
+															<span class="fa fa-calendar"></span>
+														</div>
+													</div>
+												</div>
 												<div class="form-group">
 													<label  for="amount">Number of Shares<span class="required">*</span></label>
 													<input type="number"  name="noShares" id="no_of_shares"  required="required" class="form-control">
