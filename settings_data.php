@@ -73,11 +73,11 @@ if(isset($_POST['tbl'])){
 		break;
 		case "loan_product":
 			$loan_product = new LoanProduct();
-			$output['data'] = $loan_product->getDtData();
+			$output['data'] = $loan_product->findAll();
 		break;
 		case "deposit_product":
 			$deposit_product = new DepositProduct();
-			$output['data'] = $deposit_product->getDtData();
+			$output['data'] = $deposit_product->findAll();
 		break;
 		case "security_types":
 			$security_type = new SecurityType();

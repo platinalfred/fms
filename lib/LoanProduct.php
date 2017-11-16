@@ -4,7 +4,7 @@ require_once($curdir.'/Db.php');
 class LoanProduct extends Db {
 	protected static $table_name  = "loan_products";
 	
-	protected static $table_fields = array("id", "productName", "description", "productType", "active", "availableTo", "defAmount", "minAmount", "maxAmount", "maxTranches", "defInterest", "minInterest", "maxInterest", "repaymentsFrequency", "repaymentsMadeEvery", "defRepaymentInstallments", "minRepaymentInstallments", "maxRepaymentInstallments", "daysOfYear", "initialAccountState", "defGracePeriod", "minGracePeriod", "maxGracePeriod", "minCollateral", "minGuarantors", "defOffSet", "minOffSet", "maxOffSet", "penaltyCalculationMethodId", "penaltyTolerancePeriod", "penaltyRateChargedPer", "defPenaltyRate", "minPenaltyRate", "maxPenaltyRate", "taxRateSource", "taxCalculationMethod", "linkToDepositAccount", "createdBy", "dateCreated",  "modifiedBy");
+	protected static $table_fields = array("`loan_products`.`id`", "productName", "`loan_products`.`description`", "productType", "active", "availableTo", "defAmount", "minAmount", "maxAmount", "maxTranches", "defInterest", "minInterest", "maxInterest", "repaymentsFrequency", "repaymentsMadeEvery", "defRepaymentInstallments", "minRepaymentInstallments", "maxRepaymentInstallments", "daysOfYear", "initialAccountState", "defGracePeriod", "minGracePeriod", "maxGracePeriod", "minCollateral", "minGuarantors", "defOffSet", "minOffSet", "maxOffSet", "penaltyCalculationMethodId", "penaltyTolerancePeriod", "penaltyRateChargedPer", "defPenaltyRate", "minPenaltyRate", "maxPenaltyRate", "taxRateSource", "taxCalculationMethod", "linkToDepositAccount", "`loan_products`.`createdBy`", "`loan_products`.`dateCreated`",  "`loan_products`.`modifiedBy`");
 	
 	//"penaltyApplicable", 
 	
@@ -13,8 +13,11 @@ class LoanProduct extends Db {
 		return !empty($result) ? $result:false;
 	}
 	
-	public function findAll($filter = ""){
-		$result_array = $this->getarray(self::$table_name, $filter, "", "");
+	public function findAll($where = ""){
+		$fields = self::$table_fields;
+		array_push($fields, "`typeName`");
+		$table2 = " LEFT JOIN `loan_product_type` ON `loan_product_type`.`id` = `loan_products`.`productType` ";
+		$result_array = $this->getfarray(self::$table_name.$table2, implode(",",$fields), $where, "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	

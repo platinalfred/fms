@@ -48,7 +48,7 @@
 		self.defInterest = ko.observable();
 		self.minInterest = ko.observable();
 		self.maxInterest = ko.observable();
-		self.repaymentsFrequency = ko.observable();
+		self.repaymentsFrequency = ko.observable(1);
 		self.repaymentsMadeEvery = ko.observable();
 		self.defRepaymentInstallments = ko.observable();
 		self.minRepaymentInstallments = ko.observable();

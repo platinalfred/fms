@@ -297,7 +297,7 @@ function showStatusMessage(message='', display_type='success'){
 	function edit_data(data_array, form){
 		$.each(data_array, function(key, val){
 			$.map($('#'+form+' [name="'+key+'"]'), function(named_item){
-				$(named_item).val(val);
+				$(named_item).val(val).trigger('change');
 			});
 		});		
 	}

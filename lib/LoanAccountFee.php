@@ -18,7 +18,7 @@ class LoanAccountFee extends Db {
 	public function findAllDetailsByLoanAccountId($loanAccountId){
 		$table_product_fees = "(SELECT `loan_product_feen`.`id`, `feeName`, `loanProductId`, `amountCalculatedAs`, `requiredFee`, `amount` FROM `loan_product_feen` JOIN `loan_product_fee` ON `loan_product_feen`.`loanProductFeeId` = `loan_product_fee`.`id`) `productFees`";
 		
-		$fields = "`loanProductId`,`loanProductFeenId` `id`, `amount`, `amountCalculatedAs`, `requiredFee`";
+		$fields = "`loanProductId`,`loanProductFeenId` `id`, `feeName`, `amount`, `amountCalculatedAs`, `requiredFee`";
 		$table = self::$table_name. " JOIN ".$table_product_fees. " ON ".self::$table_name.".`loanProductFeenId`=`productFees`.`id`";
 		$result_array = $this->getfarray($table, $fields, "`loanAccountId`=".$loanAccountId, "", "");
 		
