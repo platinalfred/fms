@@ -92,13 +92,14 @@
 						</div>
 						<label class="col-md-3 control-label">Interest Rate</label>
 						<div class="col-md-3">
-							<input type="number" class="form-control input-sm" data-bind='textInput: $parent.interestRate2, attr: {"data-rule-min":(parseFloat(minInterest)>0?minInterest:null), "data-rule-max": (parseFloat(maxInterest)>0?maxInterest:null), "data-msg-min":"Interest Rate is less than "+minInterest, "data-msg-max":"Interest Rate is more than "+maxInterest, value:defInterest,"name":"loanAccount[interestRate]"}'/>
+							<input type="number" class="form-control input-sm" data-bind='textInput: $parent.interestRate2, attr: { value:defInterest,"name":"loanAccount[interestRate]"}'/>
+							<!--input type="number" class="form-control input-sm" data-bind='textInput: $parent.interestRate2, attr: {"data-rule-min":(parseFloat(minInterest)>0?minInterest:null), "data-rule-max": (parseFloat(maxInterest)>0?maxInterest:null), "data-msg-min":"Interest Rate is less than "+minInterest, "data-msg-max":"Interest Rate is more than "+maxInterest, value:defInterest,"name":"loanAccount[interestRate]"}'/>
 							<div>
 								<label class="col-sm-2" data-bind="visible: parseFloat(minInterest)>0">Min</label>
 								<label class="col-sm-4" data-bind="visible: parseFloat(minInterest)>0, text: minInterest + '%'"></label>
 								<label class="col-sm-2" data-bind='visible: parseFloat(maxInterest)>0'>Max</label>
 								<label class="col-sm-4" data-bind="visible: parseFloat(maxInterest)>0, text: maxInterest + '%'"></label>
-							</div>
+							</div-->
 						</div>
 						<div class="col-md-6">
 							<i><span data-bind="text: getWords((parseFloat($parent.requestedAmount2()))+' Uganda shillings only'"></span></i>
