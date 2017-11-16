@@ -222,15 +222,18 @@
 		});
 		//filter the loan product fees based on the currently selected product id
 		self.filteredLoanProductFees = ko.computed(function() {
+			var productFees = self.productFees();
 			if(self.loanProduct()){
-				var loanProductId = parseInt(self.loanProduct().id);
 				return ko.utils.arrayFilter(self.productFees(), function(productFee) {
-					return (loanProductId == parseInt(productFee.loanProductId));
+					return (parseInt(self.loanProduct().id) == parseInt(productFee.loanProductId));
 				});
 			}
-			else{
-				return self.productFees();
+			if(self.loanProduct2()){
+				return ko.utils.arrayFilter(self.productFees(), function(productFee) {
+					return (parseInt(self.loanProduct2().id) == parseInt(productFee.loanProductId));
+				});
 			}
+			return productFees;
 		});
 		//reset the whole form after saving data in the database
 		self.resetForm = function() {
@@ -388,6 +391,11 @@
 							$('#disburse_loan-modal').modal('hide');
 							endDate = moment().format('X'); //get the current time
 							dTable['approved'].ajax.reload(null,true);
+							<?php if(isset($_GET['loanId'])):?>
+								self.getServerData();
+							<?php else:?>
+								dTable['approved'].ajax.reload(null,true);
+							<?php endif;?>
 						}, 3000);
 					}else{
 						showStatusMessage("Error encountered while approving: \n"+response ,"fail");
@@ -639,7 +647,7 @@
 						{ data: 'requestedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
 						{ data: 'approvalDate',  render: function ( data, type, full, meta ) {if ( type === 'display' || type === 'filter' ) {return moment(data, 'X').format('DD-MMM-YYYY');}else return data;}},
 						{ data: 'amountApproved', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
-						{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(data)) + ' ' + getDescription(4,data);}}
+						{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)) + ' ' + getDescription(4,data);}}
 						] ,
 				  buttons: buttons,
 				  responsive: false/*, */
@@ -694,7 +702,7 @@
 						{ data: 'disbursementDate',  render: function ( data, type, full, meta ) {if ( type === 'display' || type === 'filter' ) {return moment(data, 'X').format('DD-MMM-YYYY');}else return data;}},
 						{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
 						{ data: 'installments', render: function ( data, type, full, meta ) {return curr_format(parseInt(data));}},
-						{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)*parseInt(full.installments)) + ' ' + getDescription(4,data);}},
+						{ data: 'repaymentsMadeEvery', render: function ( data, type, full, meta ) {return ((full.repaymentsFrequency)) + ' ' + getDescription(4,data);}}, //*parseInt(full.installments)
 						{ data: 'interestRate'},
 						{ data: 'disbursedAmount', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)/parseInt(full.installments));}},
 						{ data: 'interest', render: function ( data, type, full, meta ) {return curr_format(parseInt(data)/parseInt(full.installments));}},
