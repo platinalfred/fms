@@ -171,7 +171,7 @@
                                                                             <tbody data-bind="foreach: $root.filteredLoanProductFees">
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <input class="icheckbox_square-green" style="position: relative;" name="fee" type="checkbox" data-bind="checkedValue: $data, checked: $parentContext.$parent.loanAccountFees, attr:{'name':'loanAccount[loanFees]['+$index()+'][loanProductFeenId]', 'value':$data.id}" />
+                                                                                        <input class="icheckbox_square-green" style="position: relative;" name="fee" type="checkbox" data-bind="checked: requiredFee, attr:{'name':'loanAccount[loanFees]['+$index()+'][loanProductFeenId]', 'value':$data.id}" />
                                                                                     </td>
                                                                                     <td data-bind='text: feeName'></td>
                                                                                     <td data-bind='text: curr_format(amount)'></td>

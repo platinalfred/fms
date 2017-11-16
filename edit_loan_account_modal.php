@@ -170,6 +170,7 @@
 										<!--/ko-->
 										<!--/ko-->
 										<!-- ko foreach: $root.filteredLoanProductFees() -->
+										<!-- ko if: ((typeof($parentContext.$parent.loan_account_fees)!='undefined')&&!$root.itemExists('id', $data, $parentContext.$parent.loan_account_fees)) -->
 										<tr>
 											<td><input class="icheckbox_square-green" style="position: relative;" name="fee" type="checkbox" data-bind="checkedValue: $data, checked: $parentContext.$parent.loanAccountFees, attr:{'name':'loanAccount[loanFees]['+(typeof($parent.loan_account_fees)!='undefined'?$parent.loan_account_fees.length:0)+'][loanProductFeenId]', 'value':$data.id}" /></td>
 											<td data-bind='text: feeName'></td>
@@ -177,6 +178,7 @@
 											<td data-bind='text: getDescription(5, $data.amountCalculatedAs)'></td>
 											<td><input type="hidden" data-bind="attr:{'name':'loanAccount[loanFees]['+($index()+(typeof($parent.loan_account_fees)!='undefined'?$parent.loan_account_fees.length:0)+'][feeAmount]','value':getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs)}"/><span data-bind='text: curr_format(getFeeAmount($parentContext.$parent.requestedAmount2(), amount, $data.amountCalculatedAs))'></span></td>
 										</tr>
+										<!--/ko-->
 										<!--/ko-->
 									</tbody>
 								</table>
