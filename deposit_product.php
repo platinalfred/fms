@@ -11,6 +11,7 @@
                         </div>
                         <div class="ibox-content">
                             <form id="depProductForm" class="form-horizontal">
+								<input type="hidden" name="id" />
                                 <div class="form-group">
 									<label class="col-sm-2 control-label" for="productName">Product Name</label>
                                     <div class="col-sm-3"><input type="text" class="form-control input-sm" name="productName" id="productName" data-bind="value: productName" data-msg-required="Product name is required" required></div>

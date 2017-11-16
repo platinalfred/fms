@@ -1111,8 +1111,6 @@ $(document).ready(function(){
 				  "type": "POST",
 				  "data":  function(d){
 						d.tbl = 'loan_product';
-						//d.start_date = getStartDate();
-						//d.end_date = getEndDate();
 					}
 			  },"columnDefs": [ {
 				  "targets": [3],
@@ -1126,7 +1124,7 @@ $(document).ready(function(){
 			  columns:[ { data: 'productName'},
 				  { data: 'description'},
 				  { data: 'typeName'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_loan_product" class="btn btn-white btn-xs"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-loan_product-loanProductForm" class="btn btn-danger btn-xs delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#loan_products" id="'+data+'-loan_product-loanProductForm" class="btn btn-white btn-xs edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-loan_product-loanProductForm" class="btn btn-danger btn-xs delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [
@@ -1158,7 +1156,7 @@ $(document).ready(function(){
 		/*End Loan Product- --*/
 		/* Deposit Product */
 		if ($("#deposit-product").length) {
-			  dTable['tblDepositProduct'] = $('#deposit-product').DataTable({
+			  dTable['depProductForm'] = $('#deposit-product').DataTable({
 			  dom: "lfrtipB",
 			  "processing": true,
 			  "ajax": {
@@ -1182,7 +1180,7 @@ $(document).ready(function(){
 			  columns:[ { data: 'productName'},
 			  { data: 'description'},
 				  { data: 'typeName'},
-					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#edit_deposit_product" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-deposit_product-tblDepositProduct" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
+					{ data: 'id', render: function ( data, type, full, meta ) {return '<a data-toggle="modal" href="#deposit_product" id="'+data+'-tblDepositProduct-depProductForm" class="btn btn-white btn-sm edit_me"><i class="fa fa-pencil"></i> Edit </a><span id="'+data+'-tblDepositProduct-depProductForm" class="btn btn-danger btn-sm delete_me"><i class="fa fa-trash-o"></i> Deleted</span>';}}
 					
 					] ,
 			  buttons: [

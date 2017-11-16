@@ -11,6 +11,7 @@
                         </div>
                         <div class="ibox-content">
                             <form id="loanProductForm" class="form-horizontal">
+								<input type="hidden" name="id" />
                                 <div class="form-group">
 									<label class="col-sm-2 control-label" for="productName">Product Name</label>
                                     <div class="col-sm-4"><input type="text" class="form-control input-sm" name="productName" id="productName" data-bind="value: productName" data-msg-required="Product name is required" required></div>
@@ -52,7 +53,7 @@
 										<div><label class="control-label">Loan Amount Constraints</label>
 										</div>
 										<div>
-											<label class="col-sm-1 control-label">Default</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="defLoanAmount" id="defLoanAmount" data-bind="value: defLoanAmount"></div><label class="col-sm-1 control-label">Min</label><div class="col-sm-3"><input type="number" class="form-control input-sm" id="minLoanAmount" name="minLoanAmount" data-bind="value: minLoanAmount"></div><label class="col-sm-1 control-label">Max</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="maxLoanAmount" id="maxLoanAmount" data-bind="value: maxLoanAmount"></div>
+											<label class="col-sm-1 control-label">Default</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="defAmount" id="defAmount" data-bind="value: defLoanAmount"></div><label class="col-sm-1 control-label">Min</label><div class="col-sm-3"><input type="number" class="form-control input-sm" id="minAmount" name="minAmount" data-bind="value: minLoanAmount"></div><label class="col-sm-1 control-label">Max</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="maxAmount" id="maxAmount" data-bind="value: maxLoanAmount"></div>
 										</div>
 									</div>
                                 </div>
@@ -68,7 +69,7 @@
 										<div><label class="control-label">Interest Rate Constraints(% p.a)</label>
 										</div>
 										<div>
-											<label class="col-sm-1 control-label">Default</label><div class="col-sm-3"><input  type="number" class="form-control input-sm" name="defInterest" id="defInterest" data-bind="value: defInterest" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1 control-label">Min</label><div class="col-sm-3"><input type="number" class="form-control input-sm" id="minInterest" name="minInterest" data-bind="value: minInterest" data-rule-min="0" data-rule-max="100"></div><label class="col-sm-1 control-label">Max</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="maxInterest" id="maxInterest" data-bind="value: maxInterest" data-rule-min="0" data-rule-max="100"></div>
+											<label class="col-sm-1 control-label">Default</label><div class="col-sm-3"><input  type="number" class="form-control input-sm" name="defInterest" id="defInterest" data-bind="value: defInterest" data-rule-min="0" data-rule-max="999"></div><label class="col-sm-1 control-label">Min</label><div class="col-sm-3"><input type="number" class="form-control input-sm" id="minInterest" name="minInterest" data-bind="value: minInterest" data-rule-min="0" data-rule-max="999"></div><label class="col-sm-1 control-label">Max</label><div class="col-sm-3"><input type="number" class="form-control input-sm" name="maxInterest" id="maxInterest" data-bind="value: maxInterest" data-rule-min="0" data-rule-max="999"></div>
 										</div>
 									</div>
                                 </div>
@@ -80,7 +81,7 @@
 									</div>
 									<div class="col-md-9">
 											<label class="col-sm-5 control-label">Repayments are made every <sup data-toggle="tooltip" title='Suppose you want the repayments to be made every two weeks.Enter the number (2 in this example) > select "weeks" from the dropdown list. This will define the period between repayments.' data-placement='right' ><i class="fa fa-question-circle"></i></sup></label>
-											<div class="col-sm-3"><input type="number" class="form-control input-sm" name="repaymentsFrequency" id="repaymentsFrequency" data-bind="value: repaymentsFrequency"data-msg-required="Required field" required /></div>
+											<div class="col-sm-3"><input type="number" class="form-control input-sm" name="repaymentsFrequency" id="repaymentsFrequency" data-bind="value: repaymentsFrequency"data-msg-min="Number must be greater than 0" data-rule-min="1" data-msg-required="Enter a number" required /></div>
 											<div class="col-sm-4">
 											<select class="form-control" id="repaymentsMadeEvery" name="repaymentsMadeEvery" data-bind='css: {required: repaymentsFrequency()}, optionsAfterRender: setOptionValue("id"), options: repaymentsMadeEveryOptions, optionsText: "desc", optionsCaption: "Select...", value: repaymentsMadeEvery' data-msg-required="Time unit is required" required >
 											</select>
@@ -140,7 +141,7 @@
                                     <div class="col-md-12">
 										<label class="control-label col-sm-4">Penalty Calculation Method</label>
 										<div class="col-sm-6">
-											<select class="form-control required" id="penaltyCalculationMethod" name="penaltyCalculationMethod" data-bind='options: penaltyCalculationMethodOptions, optionsText: "methodDescription", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: penaltyCalculationMethod' data-msg-required="Penalty Calculation Method is required">
+											<select class="form-control required" id="penaltyCalculationMethodId" name="penaltyCalculationMethodId" data-bind='options: penaltyCalculationMethodOptions, optionsText: "methodDescription", optionsCaption: "Select...", optionsAfterRender: setOptionValue("id"), value: penaltyCalculationMethod' data-msg-required="Penalty Calculation Method is required">
 										</select>
 										</div>
 										<div class="col-sm-2">
