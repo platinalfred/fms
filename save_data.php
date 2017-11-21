@@ -192,8 +192,7 @@ if(isset($_POST['tbl'])){
 								
 							}
 						}
-					} 
-					
+					}
 				}
 			}else{ 
 				$output = "Member details could not be added. Please try again!";
@@ -574,7 +573,6 @@ if(isset($_POST['tbl'])){
 				}else{
 					echo "Could not add an expense";
 				}
-					
 			}
 		break;
 		default:
