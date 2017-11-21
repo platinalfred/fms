@@ -72,9 +72,9 @@ $(document).ready(function(){
 				  
 				  { data: 'principle', render: function(data, type, full, meta) {return (data?curr_format(Number(Math.round(parseFloat(data)+'e2')+'e-2')):0);}},
 
-				  { data: 'interest', render: function(data, type, full, meta) {return curr_format(parseInt(data)/(getDescription(6, full.repaymentsMadeEvery)/parseInt(full.installments)));}},
+				  { data: 'interest', render: function(data, type, full, meta) {return curr_format(parseInt(data)*parseInt(full.installments));}},
 				  
-				  { data: 'interest', render: function(data, type, full, meta) {return curr_format(parseInt(data)/(getDescription(6, full.repaymentsMadeEvery)));}},
+				  { data: 'interest', render: function(data, type, full, meta) {return curr_format(parseInt(data));}},
 				  
 				  { data: 'feesPaid', render: function(data, type, full, meta) {return data?curr_format(parseInt(data)):0;}},
 				  
@@ -87,14 +87,14 @@ $(document).ready(function(){
 				  
 				  //interest paid
 				  { data: 'paidInstallments', render: function(data, type, full, meta) {
-					  return data?curr_format(Number(Math.round(parseFloat((parseInt(full.interest)/(getDescription(6, full.repaymentsMadeEvery)))*parseInt(data)+'e2')+'e-2'))):0;}},
+					  return data?curr_format(Number(Math.round(parseFloat((parseInt(full.interest))*parseInt(data)+'e2')+'e-2'))):0;}},
 				  
 				  { data: 'paidPrinciple', render: function ( data, type, full, meta ) {return data?curr_format(parseInt(full.disbursedAmount)-parseInt(data)):0;}},
 				  
 				  { data: 'paidInstallments', render: function ( data, type, full, meta ) {
 					  var balInterest = 0;
 					  if(data){
-						  var periodicInterest = (parseFloat(full.interest)/(getDescription(6, full.repaymentsMadeEvery)));
+						  var periodicInterest = (parseFloat(full.interest));
 						  var totalInterest = periodicInterest*parseInt(full.installments);
 						  balInterest = totalInterest - (periodicInterest*parseInt(data));
 					  }
@@ -105,7 +105,7 @@ $(document).ready(function(){
 					  var balPrinciple = 0, balInterest = 0;
 					  
 					  if(full.paidInstallments){
-						  var periodicInterest = (parseFloat(full.interest)/(getDescription(6, full.repaymentsMadeEvery)));
+						  var periodicInterest = (parseFloat(full.interest));
 						  var totalInterest = periodicInterest*parseInt(full.installments);
 						  balInterest = totalInterest - (periodicInterest*parseInt(full.paidInstallments));
 					  }

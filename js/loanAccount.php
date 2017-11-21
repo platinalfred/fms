@@ -229,12 +229,21 @@
 				});
 			}
 			if(self.loanProduct2()){
+				//only return those which haven't been added already
 				return ko.utils.arrayFilter(self.productFees(), function(productFee) {
 					return (parseInt(self.loanProduct2().id) == parseInt(productFee.loanProductId));
 				});
 			}
 			return productFees;
 		});
+		self.itemExists = function(dataKey, dataArray, searchArray){
+			var exists = false;
+			ko.utils.arrayForEach(searchArray, function(item){
+				if(dataArray[dataKey] == item[dataKey])
+					exists = true;
+			});
+			return exists;
+		}
 		//reset the whole form after saving data in the database
 		self.resetForm = function() {
 			$("#loanAccountForm")[0].reset();

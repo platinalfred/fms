@@ -318,7 +318,7 @@ include("include/header.php");
 												<td data-bind="text: $index()+1">1</td>
 												<td data-bind="text: clientNames"></td>
 												<td data-bind="text: productName"></td>
-												<td data-bind="text: curr_format(parseInt(sumDeposited))"></td>
+												<td data-bind="text: curr_format(parseFloat(sumDeposited)+parseFloat(openingBalance))"></td>
 												<td data-bind="text: curr_format(parseInt(sumWithdrawn))"></td>
 												<td data-bind="text: curr_format(parseInt(sumDeposited) -(parseInt(sumWithdrawn)))"></td>
 												
@@ -329,9 +329,9 @@ include("include/header.php");
 												<th scope='row'>Total</th>
 												<th>&nbsp;</th>
 												<th>&nbsp;</th>
-												<th data-bind="text: curr_format(array_total(tables.savings,5))"></th>
+												<th data-bind="text: curr_format(array_total(tables.savings,5)+array_total(tables.savings,8))"></th>
 												<th data-bind="text: curr_format(array_total(tables.savings,7))"></th>
-												<th data-bind="text: curr_format(array_total(tables.savings,5) - array_total(tables.savings,7))"></th>
+												<th data-bind="text: curr_format(array_total(tables.savings,8) - array_total(tables.savings,7))"></th>
 											</tr>
 										</tfoot>
 									</table>

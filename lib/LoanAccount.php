@@ -26,7 +26,7 @@ class LoanAccount extends Db {
 		}else{
 			$limit  = "";
 		}
-		$products_sql = "SELECT `productName`, COALESCE(SUM(`disbursedAmount`),0) `loan_amount`, SUM(`disbursedAmount`*`interestRate`/100) `interest`, COALESCE(`paidAmount`,0)  `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN (SELECT SUM(`amount`) `paidAmount`, `loanAccountId` FROM `loan_repayment` WHERE `transactionDate` <= ".$end_date." GROUP BY `loanAccountId`) `payments` ON `loan_account`.`id`=`payments`.`loanAccountId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=5 GROUP BY `productName` ORDER BY `productName`".$limit;
+		$products_sql = "SELECT `productName`, COALESCE(SUM(`disbursedAmount`),0) `loan_amount`, SUM(((`disbursedAmount`*(`interestRate`/100))*`installments`)/getPeriodAspect(`loan_account`.`repaymentsMadeEvery`)) `interest`, COALESCE(`paidAmount`,0)  `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN (SELECT SUM(`amount`) `paidAmount`, `loanAccountId` FROM `loan_repayment` WHERE `transactionDate` <= ".$end_date." GROUP BY `loanAccountId`) `payments` ON `loan_account`.`id`=`payments`.`loanAccountId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=5 GROUP BY `productName` ORDER BY `productName`".$limit;
 		$result_array = $this->queryData($products_sql);
 		return $result_array;
 	}
@@ -95,7 +95,7 @@ class LoanAccount extends Db {
 			WHEN 3 THEN TIMESTAMPDIFF(MONTH,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
 			END)";
 		
-		$fields = array( "`loan_account`.`id`, `loanNo`, `status`, `clientNames`, `memberId`, `disbursementDate`, `disbursedAmount`, `installments`, COALESCE(`paidInstallments`, 0) `paidInstallments`, (`installments`-COALESCE(`paidInstallments`, 0))`balInstallments`, `feesPaid`, `amountPaid`, (`disbursedAmount`*(`interestRate`/100)) `interest`, `repaymentsMadeEvery`, ((`disbursedAmount`*(`interestRate`/100)/`installments`)*COALESCE(`paidInstallments`, 0)) `interestPaid`, COALESCE((`disbursedAmount`/`installments`),0)`principle`, (COALESCE((`disbursedAmount`/`installments`),0)*COALESCE(`paidInstallments`, 0)) `paidPrinciple`, `groupLoanAccountId`, `groupId`, `groupName`, $due_date `due_date`" );
+		$fields = array( "`loan_account`.`id`, `loanNo`, `status`, `clientNames`, `memberId`, `disbursementDate`, `disbursedAmount`, `installments`, COALESCE(`paidInstallments`, 0) `paidInstallments`, (`installments`-COALESCE(`paidInstallments`, 0))`balInstallments`, `feesPaid`, `amountPaid`, (((`disbursedAmount`*(`interestRate`/100))*`installments`)/getPeriodAspect(`repaymentsMadeEvery`)) `interest`, `repaymentsMadeEvery`, COALESCE((`disbursedAmount`/`installments`),0)`principle`, (COALESCE((`disbursedAmount`/`installments`),0)*COALESCE(`paidInstallments`, 0)) `paidPrinciple`, `groupLoanAccountId`, `groupId`, `groupName`, $due_date `due_date`" );
 		$where = ""; $payments_sql = self::$loan_payments_sql;
 		//specification of the category of loans to be returned
 		switch($category){

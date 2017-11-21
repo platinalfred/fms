@@ -45,7 +45,7 @@
 											</div>
 											<div class="col-md-5"> </div>
 										</div>
-										<div class="hr-line-dashed" data-bind="visible: parseInt(interestPaid)"></div>
+										<!--div class="hr-line-dashed" data-bind="visible: parseInt(interestPaid)"></div>
 										<div class="form-group" data-bind="visible: parseInt(interestPaid)">
 											<label class="col-md-3 control-label">Interest Rate <sup data-toggle="tooltip" title="The percentage of interest the account earns on the balance" data-placement="right"><i class="fa fa-question-circle"></i></sup></label>
 											<div class="col-md-4">
@@ -75,7 +75,7 @@
 											</div>
 											<label class="col-md-1" data-bind='text: $root.getDescription(4, termTimeUnit)'></label>
 											<div class="col-md-5"></div>
-										</div>
+										</div-->
 										<div class="hr-line-dashed"></div>
 										<div class="form-group" data-bind="visible: $root.productFees().length > 0">
 											<div class="panel-body">
