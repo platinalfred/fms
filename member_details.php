@@ -97,11 +97,11 @@ p{
 										}else{?>
 											<img style="width:100%;"  src="img/user.png" >
 											<?php 
-											if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>
+											//if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>
 												<a  href="" type="button"  data-toggle="modal" data-target=".add_photo">
 												<i class="fa fa-edit"></i> Add Add Passport photo</a>
 												<?php 
-											}
+											//}
 										} ?>
 										<div class="modal fade add_photo" tabindex="-1" role="dialog" aria-hidden="true">
 											<div class="modal-dialog modal-xl">
