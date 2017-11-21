@@ -1,4 +1,4 @@
-<div id="add_group" class="modal  fade" aria-hidden="true" >
+<div id="add_group" class="modal fade" aria-hidden="true" >
 	<div class="modal-dialog modal-lg" style="width: 900px !important;">
 		<div class="modal-content">
 			<div class="modal-body">
@@ -63,7 +63,7 @@
 															<tbody data-bind='foreach: $root.group_members'>
 																<tr>
 																	<td>
-																		<select data-bind='attr:{name:"members["+$index()+"][memberId]"}, options: $root.sacco_members, optionsText: "memberNames", optionsCaption: "Select member...", optionsAfterRender: $root.setOptionValue("id")' class="form-control" required> </select>
+																		<select data-bind='attr:{name:"members["+$index()+"][memberId]"}, options: $root.sacco_members, optionsText: "memberNames", optionsCaption: "Select member...", optionsAfterRender: $root.setOptionValue("id"), select2: {dropdownParent:"#add_group" }' class="select2 form-control"  style="width: 250px" required> </select>
 																	</td>
 																	
 																	<td>

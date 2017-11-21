@@ -1,5 +1,5 @@
 <?php 
-$needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout");
+$needed_files = array("dataTables", "iCheck", "steps", "jasny", "moment", "knockout", "select2");
 $page_title = "Groups";
 include("include/header.php"); 
 require_once("lib/Libraries.php");
