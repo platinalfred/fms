@@ -95,7 +95,7 @@ class LoanAccount extends Db {
 			WHEN 3 THEN TIMESTAMPDIFF(MONTH,FROM_UNIXTIME(`disbursementDate`),$immediate_date)
 			END)";
 		
-		$fields = array( "`loan_account`.`id`, `loanNo`, `status`, `clientNames`, `memberId`, `disbursementDate`, `disbursedAmount`, `installments`, COALESCE(`paidInstallments`, 0) `paidInstallments`, (`installments`-COALESCE(`paidInstallments`, 0))`balInstallments`, `feesPaid`, `amountPaid`, (`disbursedAmount`*(`interestRate`/100)) `interest`, `repaymentsMadeEvery`, ((`disbursedAmount`*(`interestRate`/100)/`installments`)*COALESCE(`paidInstallments`, 0)) `interestPaid`, COALESCE((`disbursedAmount`/`installments`),0)`principle`, (COALESCE((`disbursedAmount`/`installments`),0)*COALESCE(`paidInstallments`, 0)) `paidPrinciple`, `groupLoanAccountId`, `groupId`, `groupName`, $due_date `due_date`" );
+		$fields = array( "`loan_account`.`id`, `loanNo`, `status`, `clientNames`, `memberId`, `disbursementDate`, `disbursedAmount`, `installments`, COALESCE(`paidInstallments`, 0) `paidInstallments`, (`installments`-COALESCE(`paidInstallments`, 0))`balInstallments`, `feesPaid`, `amountPaid`, (((`disbursedAmount`*(`interestRate`/100))*`installments`)/getPeriodAspect(`repaymentsMadeEvery`)) `interest`, `repaymentsMadeEvery`, COALESCE((`disbursedAmount`/`installments`),0)`principle`, (COALESCE((`disbursedAmount`/`installments`),0)*COALESCE(`paidInstallments`, 0)) `paidPrinciple`, `groupLoanAccountId`, `groupId`, `groupName`, $due_date `due_date`" );
 		$where = ""; $payments_sql = self::$loan_payments_sql;
 		//specification of the category of loans to be returned
 		switch($category){
