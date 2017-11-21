@@ -338,7 +338,7 @@
 										<div class="col-lg-2">
 											<div class="form-group">
 												<label>Monthly Salary</label>
-												<input data-bind="attr: {name:'employment['+$index()+'][monthlySalary]'}"  type="number" class="form-control athousand_separator">
+												<input data-bind="attr: {name:'employment['+$index()+'][monthlySalary]'}"  type="text" class="form-control athousand_separator">
 											</div>
 										</div>
 										<div class="col-lg-1"><span title="Remove employer" class="btn text-danger btn-lg" data-bind='click: $root.removeEmployment'><i class="fa fa-minus"></i></span></div>
