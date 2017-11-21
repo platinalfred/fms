@@ -54,7 +54,7 @@ class DepositAccount extends Db {
 		
 		$table = "`deposit_account` JOIN ($member_group_union_sql) `clients` ON `clients`.`depositAccountId` = `deposit_account`.`id` JOIN `deposit_product` ON `deposit_account`.`depositProductId` = `deposit_product`.`id` LEFT JOIN ($deposits_sql) `deposits` ON `deposit_account`.`id` = `deposits`.`depositAccountId` LEFT JOIN ($withdraws_sql) `withdraws` ON `deposit_account`.`id` = `withdraws`.`depositAccountId` ";
 		
-		$columns = array( "`deposit_account`.`id`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`deposit_account`.`maxWithdrawalAmount`", "`deposit_account`.`recomDepositAmount`", "COALESCE(`sumWithdrawn`, 0) sumWithdrawn", "COALESCE(`sumDeposited`, 0) sumDeposited", "`deposit_account`.`dateCreated`" );
+		$columns = array( "`deposit_account`.`id`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`deposit_account`.`openingBalance`", "`deposit_account`.`recomDepositAmount`", "COALESCE(`sumWithdrawn`, 0) sumWithdrawn", "COALESCE(`sumDeposited`, 0) sumDeposited", "`deposit_account`.`dateCreated`" );
 		//echo $table." - ".implode(",",$columns)."".$where;
 		$results = $this->getfarray($table, implode(",",$columns), $where, "", $limit);
 		return !empty($results) ? $results : false;

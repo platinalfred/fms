@@ -26,7 +26,7 @@ class LoanAccount extends Db {
 		}else{
 			$limit  = "";
 		}
-		$products_sql = "SELECT `productName`, COALESCE(SUM(`disbursedAmount`),0) `loan_amount`, SUM(`disbursedAmount`*`interestRate`/100) `interest`, COALESCE(`paidAmount`,0)  `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN (SELECT SUM(`amount`) `paidAmount`, `loanAccountId` FROM `loan_repayment` WHERE `transactionDate` <= ".$end_date." GROUP BY `loanAccountId`) `payments` ON `loan_account`.`id`=`payments`.`loanAccountId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=5 GROUP BY `productName` ORDER BY `productName`".$limit;
+		$products_sql = "SELECT `productName`, COALESCE(SUM(`disbursedAmount`),0) `loan_amount`, SUM(((`disbursedAmount`*(`interestRate`/100))*`installments`)/getPeriodAspect(`loan_account`.`repaymentsMadeEvery`)) `interest`, COALESCE(`paidAmount`,0)  `paidAmount` FROM `loan_products` LEFT JOIN `loan_account` ON `loan_account`.`loanProductId` = `loan_products`.`id` LEFT JOIN (SELECT SUM(`amount`) `paidAmount`, `loanAccountId` FROM `loan_repayment` WHERE `transactionDate` <= ".$end_date." GROUP BY `loanAccountId`) `payments` ON `loan_account`.`id`=`payments`.`loanAccountId` WHERE (`disbursementDate` BETWEEN ".$start_date." AND ".$end_date.") AND `status`=5 GROUP BY `productName` ORDER BY `productName`".$limit;
 		$result_array = $this->queryData($products_sql);
 		return $result_array;
 	}
