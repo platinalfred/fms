@@ -27,6 +27,7 @@ if(isset($_POST['submit'])){
 		 $run++;
 		$data = $member->sanitizeAttributes($data);
 		if($data[1] != ""){
+			
 			/* if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $data[2])){
 				print_r($data); echo "<br/>";
 				continue;
@@ -58,9 +59,11 @@ if(isset($_POST['submit'])){
 					$add['person_type']=1;
 					$add['memberType']=1;
 					if($add['dateAdded'] != ""){
+						
 						$add['comment']="This member data was exported from an excel";
 						$person_id = $person->addPerson($add);
 						if($person_id){
+							print_r($add);
 							$add['personId'] = $person_id;
 							$person->updatePersonNumber($person_id);
 							$add["personId"] = $person_id;

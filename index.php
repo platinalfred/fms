@@ -1,3 +1,28 @@
+<?php
+session_start();
+require_once("lib/Db.php");
+$db = new Db();
+$msg = "";
+if(isset($_POST['logon'])){
+	if($db->getLogin($_POST['username'], $_POST['password'])){ 
+		if(isset($_SESSION['loans_officer'])){
+			?>
+			<script>
+				window.location.href = "view_loans.php";
+			</script>
+			<?php
+		}else{?>
+			<script>
+				window.location.href = "dashboard.php";
+			</script>
+			<?php
+		}
+	}else{
+		$msg =  "Incorrect Username/Password."; 
+	}
+	
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,29 +68,7 @@
 					<h1 style="text-align:center;"><i class="fa fa-unlock-alt"></i>&nbsp;&nbsp;&nbsp; Login </h1>
                     <form class="m-t" role="form" id="login_form" method="post" action="">
 						<?php
-						session_start();
-						require_once("lib/Db.php");
-						$db = new Db();
-						$msg = "";
-						if(isset($_POST['logon'])){
-							if($db->getLogin($_POST['username'], $_POST['password'])){ 
-								if(isset($_SESSION['loans_officer'])){
-									?>
-									<script>
-										window.location = "view_loans.php";
-									</script>
-									<?php
-								}else{?>
-									<script>
-										window.location = "dashboard.php";
-									</script>
-									<?php
-								}
-							}else{
-								$msg =  "Incorrect Username/Password."; 
-							}
-							
-						}
+						
 						if($msg != ""){ ?>
 							<div class="alert alert-danger alert-dismissable">
                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>

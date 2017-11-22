@@ -1,9 +1,14 @@
 <?php 
-session_start();
+if(session_status() == PHP_SESSION_NONE){
+	session_start();
+}
 require_once("lib/Libraries.php"); 
 $person = new Person();
-if(!isset($_SESSION['Logged'])){
-	header("Location:logout.php");
+if(!isset($_SESSION['Logged'])){ ?>
+	<script>
+		window.location.href = "view_loans.php";
+	</script>
+	<?php
 }
 ?>
 <!DOCTYPE html>

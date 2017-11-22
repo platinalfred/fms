@@ -235,7 +235,7 @@ $relationshipTypeObj = new RelationshipType();
 			  }],
 			  columns:[  
 					{ data: 'id'},
-					{ data: 'person_number'},
+					/* { data: 'person_number'}, */
 					{ data: 'Name', render: function ( data, type, full, meta ) {return full.lastname + ' ' + full.othername + ' ' + full.firstname ; }},
 					{ data: 'phone'},
 					{ data: 'id_number'},

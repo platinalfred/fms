@@ -18,7 +18,7 @@
 									  <div class="form-group" data-bind="with: account_details">
 										<label class="control-label col-md-4" for="name">Account No.
 										</label>
-										<label class="col-md-8" data-bind="text: (productName+ '-' + id).replace(/\s/g,'')">
+										<label class="col-md-8" data-bind="text: account_no">
 										</label>
 									  </div>	
 									  <div class="form-group" data-bind="with: account_details">

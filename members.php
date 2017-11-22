@@ -25,7 +25,7 @@ $member = new Member();
 						<thead>
 							<tr>
 								<th>Id</th>
-								<th>Person Number</th>
+								<!--th>Person Number</th-->
 								<th>Name</th>
 								<th>Phone</th>
 								<th>Id Number</th>
@@ -45,7 +45,7 @@ $member = new Member();
 						<tfoot>
 							<tr>
 								<th>Id</th>
-								<th>Person Number</th>
+								<!--<th>Person Number</th>-->
 								<th>Name</th>
 								<th>Phone</th>
 								<th>Id Number</th>
@@ -77,9 +77,9 @@ $member = new Member();
 									</div>
 								</div>
 								<div class="col-lg-8">
-									<strong>
+									<!--<strong>
 										<span class="pno"><span data-bind="text: person_number">BFS00000027</span></a>
-									</strong>
+									</strong> -->
 									<p>
 										<div class="col-lg-6">Phone</div>
 										<div class="col-lg-6" class="phone"><span data-bind="text: phone">03890238029</span></div>

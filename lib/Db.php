@@ -95,8 +95,8 @@ class Db{
 		return $this->conn->query('SELECT FOUND_ROWS()')->fetch_array();
 	}
 	function destroySessions(){
-		if(!isset($_SESSION)) {
-		  session_start();
+		if(session_status() == PHP_SESSION_NONE){
+			session_start();
 		}
 		foreach($this->sessions as $to_unset => $value){
 			   unset($_SESSION[$to_unset]);
@@ -105,8 +105,8 @@ class Db{
 		Redirect("index.php");
 	}
 	function setSessions($name, $value){
-		if(!isset($_SESSION)) {
-		 session_start();
+		if(session_status() == PHP_SESSION_NONE){
+			session_start();
 		}
 		return $_SESSION[$name] = $value;
 	}
@@ -114,7 +114,7 @@ class Db{
 		session_destroy();
 	}
 	function  getLogin($username, $password){
-		if(!isset($_SESSION)) {
+		if(session_status() == PHP_SESSION_NONE){
 			session_start();
 		}
 		$to_add = array("id","username", "branch_id", "personId");

@@ -199,6 +199,7 @@ if(isset($_POST['origin'])){
 				$data['createdBy'] = isset($_SESSION['staffId'])?$_SESSION['staffId']:1;
 				
 				$data['depositAccountId'] = $output = $depositAccount->addDepositAccount($data);
+				$depositAccount->updateAccountNo($output);
 				//echo $data['depositAccountId'];
 				
 				unset($data['openingBalance']);
@@ -211,6 +212,7 @@ if(isset($_POST['origin'])){
 					unset($data['clientId']);
 					$memberDepositAccount = new MemberDepositAccount();
 					$memberDepositAccountId = $memberDepositAccount->addMemberDepositAccount($data);
+					
 				}else{
 					//create deposit account for group
 					$data['saccoGroupId'] = $data['clientId'] ;

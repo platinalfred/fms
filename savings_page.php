@@ -53,7 +53,7 @@
 									<label>Client Names</label>
 								</li>
 								<li class="list-group-item">
-									<span class="pull-right" data-bind="text: (id).pad(11)"> 0439374938 </span>
+									<span class="pull-right" data-bind="text: account_no"> 0439374938 </span>
 									<label>Account No.</label>
 								</li>
 								<li class="list-group-item">
