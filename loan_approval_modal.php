@@ -219,7 +219,7 @@
 																<td data-bind="text: 'UGX ' + curr_format(parseInt(requestedAmount))"></td>
 															</tr>
 															<tr>
-																<th>1 Installment paid per</th>
+																<th>1 Installment paid every</th>
 																<td data-bind="text: repaymentsFrequency +' '+ getDescription(4, repaymentsMadeEvery) +' (' + installments + ' in total)' "></td>
 															</tr>
 															<tr>

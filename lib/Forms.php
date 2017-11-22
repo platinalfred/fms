@@ -94,7 +94,7 @@ Class Forms{
 	}	
 	function addLoan(){
 		?>
-						<div class="ibox float-e-margins">
+						<div class="ibox float-e-margins" id="loan_account_details">
 							<div class="ibox-title">
 								<h5>New Group Loan Account <small>&nbsp;</small></h5>
 								<div class="ibox-tools">

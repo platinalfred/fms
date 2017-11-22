@@ -7,7 +7,7 @@ var GroupLoanAccountModel = function() {
 	self.group_loan_account_details = ko.observable();
 }
 groupLoanAccountModel = new GroupLoanAccountModel();
-ko.applyBindings(groupLoanAccountModel, $("#group_loan_account_details")[0]); //apply the knockout bindings
+ko.applyBindings(groupLoanAccountModel, $("#loan_account_details")[0]); //apply the knockout bindings
 
 $(document).ready(function() {
 	var handleDataTableButtons = function() {

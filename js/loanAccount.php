@@ -306,7 +306,7 @@
 							showStatusMessage("Data successfully saved" ,"success");
 							if(frmdata.get('origin') == 'newGroupLoanAccount'){
 								$("#newGroupLoanForm")[0].reset();
-								window.location.replace('/fms/group_details.php?groupId='+frmdata.get('saccoGroupId')+'&view=loan_accs&grpLId='+result);
+								window.location.replace('group_details.php?groupId='+frmdata.get('saccoGroupId')+'&view=loan_accs&grpLId='+result);
 							}
 							else{
 								setTimeout(function(){
