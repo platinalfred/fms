@@ -21,6 +21,7 @@ $(document).ready(function(){
 			  },
 			  "initComplete": function(settings, json) {
 					$(".table#groupTable tbody>tr:first").trigger('click');
+					ko.applyBindings(groupModel);
 			  },
 			  "columnDefs": [ {
 				  "targets": [0],
@@ -59,13 +60,7 @@ $(document).ready(function(){
 				  extend: "print",
 				  className: "btn-sm"
 				},
-			  ],
-			  
-			   "initComplete": function(settings, json) {
-				   
-					$(".table tbody>tr:first").trigger('click');
-					ko.applyBindings(groupModel);
-			  }
+			  ]
 			});
 			//$("#datatable-buttons").DataTable();
 		}
@@ -134,7 +129,7 @@ $(document).ready(function(){
 		var data = dTable.row(this).data();
 		groupModel.group_details(data);
 		//ajax to retrieve other member details
-		console.log(data);
+		//console.log(data);
 		//findGroupDetails(data.id);
 	});
 	function findGroupDetails(id){
@@ -220,7 +215,8 @@ $(document).ready(function(){
 							showStatusMessage("Successfully added new record" ,"success");
 							form[0].reset();
 							//groupModel.group_members(null);
-							dTable.ajax.reload();
+							if(typeof dTable != 'undefined')
+								dTable.ajax.reload();
 							
 						}else{
 							showStatusMessage(response, "fail");
@@ -241,11 +237,10 @@ var Group = function() {
 	self.sacco_members = ko.observableArray();
 	self.group_details = ko.observableArray();
 	self.all_group_members = ko.observableArray();
+	self.serverGroupMembers = ko.observableArray(<?=(!empty($data['group_members'])?json_encode($data['group_members']):'')?>);
 	self.group_members = ko.observableArray([new GroupMember()]);
 	self.addMember = function() { self.group_members.push(new GroupMember()) };
-	self.removeMember = function(selected_member) {
-		self.group_members.remove(selected_member);
-	};
+	self.removeMember = function(selected_member) { self.group_members.remove(selected_member); };
 	//Operations
 	//set options value afterwards
 	self.setOptionValue = function(propId) {
@@ -262,7 +257,7 @@ var Group = function() {
 		$.ajax({
 			url: "all_members.php",
 			type: 'POST',
-			data:{group:"view_members"},
+			data:{group:"view_members"<?php if(isset($_GET['groupId'])&&is_numeric($_GET['groupId'])){?>,groupId:<?=$_GET['groupId']?><?php }?>},
 			dataType: 'json',
 			success: function (data) {
 				groupModel.sacco_members(data.customers);			
@@ -272,5 +267,5 @@ var Group = function() {
 }
 var groupModel = new Group();
 groupModel.findMembers();
-//ko.applyBindings(groupModel, $("#form")[0]);
+<?php if(isset($_GET['groupId'])){?> ko.applyBindings(groupModel, $("#register_group")[0]) <?php } ?>;
 </script>

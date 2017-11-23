@@ -9,6 +9,13 @@ class Member extends Db {
 		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
 		return !empty($result) ? $result:false;
 	}
+	public function findAll($where = ""){
+		$fields = "`member`.`id`, `member`.`personId`, CONCAT(`lastname`, ' ', `firstname`, ' ', `othername`) `memberNames`, `firstname`, `lastname`, `othername`, `phone`, `email`, `postal_address`,`person_number`, `id_number`, `person`.`comment`,`physical_address`, `dateofbirth`, `gender`, `date_registered`, `photograph`, `memberType`, `dateAdded`, `branch_id`, `addedBy`";
+		$table_name = self::$table_name . " JOIN `person` ON `member`.`personId` = `person`.`id`";
+		
+		$result_array = $this->getfarray($table_name, $fields, $where, "", "");
+		return !empty($result_array) ? $result_array : false;
+	}
 	public function findByPersonId($pno){
 		$result = $this->getrec(self::$table_name, "personId=".$pno, "", "");
 		return !empty($result) ? $result:false;
@@ -73,10 +80,6 @@ class Member extends Db {
 		$fields = "`member`.`id`, CONCAT(`lastname`,' ',`firstname`,' ',`othername`) `clientNames`, 1 `clientType`";
 		$result_array = $this->getfarray($table, $fields, $where, "", "");
 		return $result_array;
-	}
-	public function findAll(){
-		$result_array = $this->queryData("SELECT `member`.`id`, `member`.`personId`, CONCAT(`lastname`, ' ', `firstname`, ' ', `othername`) `memberNames`, `firstname`, `lastname`, `othername`, `phone`, `email`, `postal_address`,`person_number`, `id_number`, `person`.`comment`,`physical_address`, `dateofbirth`, `gender`, `date_registered`, `photograph`, `memberType`, `dateAdded`, `branch_id`, `addedBy` FROM `member` JOIN `person` ON `member`.`personId` = `person`.`id`");
-		return !empty($result_array) ? $result_array : false;
 	}
 	public function findNamesByPersonNumber($pno){
 		$result = $this->getrec(self::$table_name." st, person p", "p.firstname, p.lastname, p.othername", "p.personId=".$pno." AND p.id = st.personId", "", "");

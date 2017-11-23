@@ -17,10 +17,10 @@
 						</div>
 					</div>
 					<div class="ibox-content">
-						<form id="form" name="update_group" class="wizard-big">
+						<form id="register_group" name="update_group" class="wizard-big">
 							<input name ="createdBy" type="hidden" value="<?php echo $_SESSION['personId']; ?>">
 							<input name ="modifiedBy" type="hidden" value="<?php echo $_SESSION['personId']; ?>">
-							<input name ="id" type="hidden" value="<?php echo $_GET['id']; ?>">
+							<input name ="id" type="hidden" value="<?php echo $_GET['groupId']; ?>">
 							<input name ="dateCreated" type="hidden" value="<?php echo time(); ?>">
 							<input name ="tbl" type="hidden" value="update_group">
 								
@@ -41,7 +41,6 @@
 
 							</fieldset>
 							<h1>Group members</h1>
-							<!--ko with: GroupMember -->
 								<fieldset>
 									<p>
 										Attach members to this group
@@ -59,7 +58,7 @@
 													<tbody data-bind='foreach: $root.group_members'>
 														<tr>
 															<td>
-																<select data-bind='attr:{name:"members["+$index()+"][memberId]"}, options: $root.sacco_members, optionsText: "memberNames", optionsCaption: "Select member...", optionsAfterRender: $root.setOptionValue("id")' class="form-control"> </select>
+																<select data-bind='attr:{name:"members["+$index()+"][memberId]"}, options: $root.sacco_members, optionsText: "memberNames", optionsCaption: "Select member...", optionsAfterRender: $root.setOptionValue("id"), select2: {dropdownParent:"#edit_group" }' class="select2 form-control"  style="width: 250px"> </select>
 															</td>
 															
 															<td>
@@ -74,10 +73,9 @@
 										</div>
 									</div>
 								</fieldset>
-							<!-- /ko -->
 							<div class="form-group">
 								<div class="col-sm-6 col-sm-offset-3">
-									<button class="btn btn-primary" type="submit">Update</button>
+									<button class="btn btn-primary" type="submit" data-bind="enable:$root.group_members().length > 0">Update</button>
 								</div>
 							</div>
 						</form>
