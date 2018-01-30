@@ -45,7 +45,7 @@ $(document).ready(function() {
 			  if(full.clientType==2){
 				  page = "group_details.php?id=";
 			  }
-			  return '<a href="'+page+full.clientId+'&view=savings_accs&depAcId='+data+'" title="View details">'+(full.productName + '-'+data).replace(/\s/g,'')+'</a>';}},
+			  return '<a href="'+page+full.clientId+'&view=savings_accs&depAcId='+data+'" title="View details">'+ full.account_no+'</a>';}},
 				{ data: 'clientNames'},
 				{ data: 'productName'},
 				{ data: 'dateCreated',  render: function ( data, type, full, meta ) {return moment(data, 'X').format('DD-MMM-YYYY');}},

@@ -130,7 +130,7 @@ if(isset($_POST['origin'])){
 			//Income
 			$tables['income'] = $income->findOtherIncome("`dateAdded` BETWEEN ".$start_date." AND ".$end_date, "amount DESC", 10);
 			//Savings
-			$tables['savings'] = $deposit_account->findRecentDeposits($start_date, $end_date, 3);
+			$tables['savings'] = $deposit_account->findRecentDeposits($start_date, $end_date, 10);
 			//$tables['savings'] = $depositAccount->findRecentDeposits($start_date, $end_date, 10);
 
 			//Expenses"
@@ -514,7 +514,7 @@ function getGraphData($start_date, $end_date){
 	$loan_products = $loanProduct->findAll();
 	
 	//if days are 7 or less
-	if($days == 0 || $days <8){
+	if($days == 0 || $days < 8 ){
 		foreach($loan_products as $product){
 			$datasets = array();
 			$datasets['name'] = $product['productName'];

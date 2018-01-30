@@ -26,7 +26,7 @@
 					<div class="col-sm-5 text-left">
 						<div class="row"><div class="col-sm-7"><b>Period</b></div><div class="col-sm-5"data-bind="text: moment($parent.startDate(),'X').format('DD-MMM-YYYY') +' To '+moment($parent.endDate(),'X').format('DD-MMM-YYYY') "></div></div>
 						<div class="clearboth"></div>
-						<div class="row"><div class="col-sm-7"><b>Account No.</b></div><div class="col-sm-5" data-bind="text: (productName+'-'+id).replace(/\s/g,'')"></div></div>
+						<div class="row"><div class="col-sm-7"><b>Account No.</b></div><div class="col-sm-5" data-bind="text: account_no"></div></div>
 						<div class="clearboth"></div>
 						<div class="row"><div class="col-sm-7"><b>Current Balance</b></div><div class="col-sm-5" data-bind="text: curr_format(parseFloat(sumUpAmount(statement,1))+parseFloat(openingBalance)-parseFloat(sumUpAmount(statement,2)))"></div></div>
 						<div class="clearboth"></div>

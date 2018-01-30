@@ -369,41 +369,7 @@ $relationshipTypeObj = new RelationshipType();
 
 		return false;
 	});
-	function showStatusMessage(message='', display_type='success'){
-		new PNotify({
-			  title: "Alert",
-			  text: message,
-			  type: display_type,
-			  styling: 'bootstrap3',
-			  sound: true,
-			  hide:true,
-			  buttons: {
-				closer_hover: false,
-			},
-			confirm: {
-				confirm: true,
-				buttons: [{
-					text: 'Ok',
-					addClass: 'btn-primary',
-					click: function(notice) {
-						notice.remove();
-					}
-				},
-				null]
-			},
-			animate: {
-				animate: true,
-				in_class: 'zoomInLeft',
-				out_class: 'zoomOutRight'
-			},
-			  nonblock: {
-				  nonblock: true
-			  }
-			  
-		  });
-		
-	}
-  // It has the name attribute "registration"
+// It has the name attribute "registration"
   $("form[name='registration']").validate({
     // Specify validation rules
     rules: {
