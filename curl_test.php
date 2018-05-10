@@ -16,10 +16,10 @@ function getUrlContent($url){
     'Host: localhost',
     'Referer: http://www.example.com/index.php', //Your referrer address
     'User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0',
-    'AUTHORIZATION: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0'
-    'TIMESTAMP: '.time();
-    'NONCE: '.$nonce;
-    'SIGNATURE_METHOD: SHA512'
+    'AUTHORIZATION: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0',
+    'TIMESTAMP: '.time(),
+    'NONCE: '.$nonce,
+    'SIGNATURE_METHOD: SHA512',
     'SIGNATURE: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0"'
 	];
 	

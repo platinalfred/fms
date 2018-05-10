@@ -157,7 +157,7 @@
 				type: "post",
 				dataType: "json",
 				data:{origin:"loan_account"<?php if(isset($_GET['loanId'])):?>, loanAccountId:<?php echo $_GET['loanId'];?> <?php endif;?>},
-				url: "ajax_data.php",
+				url: "ajax_requests/ajax_data.php",
 				success: function(response){
 					self.applicationForm().loanProducts(response.products);
 					self.applicationForm().productFees(response.productFees);
@@ -319,7 +319,7 @@
 					clientId: (self.account_details()?self.account_details().clientId:undefined),
 					clientType: (self.account_details()?self.account_details().clientType:undefined)
 				},
-				url: "ajax_data.php",
+				url: "ajax_requests/ajax_data.php",
 				success: function(response){
 					if(response){
 						if(edit){
@@ -368,14 +368,14 @@
 		  dom: "Bfrtip",
 		  "order": [ [3, 'desc' ]],
 		  "ajax": {
-			  "url":"ajax_data.php",
+			  "url":"ajax_requests/ajax_data.php",
 			  "type": "POST",
 			  "data":  post_data
 		  },
 		  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
 			  var page = "";
 			  if(full.clientType==1){
-				  page = "member_details.php?id=";
+				  page = "ajax_requests/member_details.php?id=";
 			  }
 			  if(full.clientType==2){
 				  page = "sacco_group_details.php?id=";
@@ -437,14 +437,14 @@
 		  dom: "Bfrtip",
 		  "order": [ [3, 'asc' ]],
 		  "ajax": {
-			  "url":"ajax_data.php",
+			  "url":"ajax_requests/ajax_data.php",
 			  "type": "POST",
 			  "data":  post_data
 		  },
 		  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
 			  var page = "";
 			  if(full.clientType==1){
-				  page = "member_details.php?id=";
+				  page = "ajax_requests/member_details.php?id=";
 			  }
 			  if(full.clientType==2){
 				  page = "sacco_group_details.php?id=";
@@ -489,14 +489,14 @@
 		  dom: "Bfrtip",
 		  "order": [ [3, 'asc' ]],
 		  "ajax": {
-			  "url":"ajax_data.php",
+			  "url":"ajax_requests/ajax_data.php",
 			  "type": "POST",
 			  "data":  post_data
 		  },
 		  columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
 			  var page = "";
 			  if(full.clientType==1){
-				  page = "member_details.php?id=";
+				  page = "ajax_requests/member_details.php?id=";
 			  }
 			  if(full.clientType==2){
 				  page = "sacco_group_details.php?id=";
@@ -569,7 +569,7 @@
 		  },columns:[ { data: 'loanNo', render: function ( data, type, full, meta ) {
 			  var page = "";
 			  if(full.clientType==1){
-				  page = "member_details.php?id=";
+				  page = "ajax_requests/member_details.php?id=";
 			  }
 			  if(full.clientType==2){
 				  page = "sacco_group_details.php?id=";
@@ -676,7 +676,7 @@
 	
 	 function getTransactionHistory(loanAccountId){
 		 $.ajax({
-			url: "ajax_data.php",
+			url: "ajax_requests/ajax_data.php",
 			data: {id:loanAccountId, origin:'loan_account_transactions'},
 			type: 'POST',
 			dataType: 'json',

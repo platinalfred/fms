@@ -23,7 +23,7 @@ $(document).ready(function(){
 						btnClass: 'btn-danger',
 						action: function(){
 							$.ajax({
-								url: "delete.php?tbl=member&id="+id,
+								url: "ajax_requests/delete.php?tbl=member&id="+id,
 								type: 'GET',
 								success: function (response) {
 									if(response.trim() == "success"){
@@ -220,7 +220,7 @@ $relationshipTypeObj = new RelationshipType();
 			  "deferRender": true,
 			  "order": [[ 1, 'desc' ]],
 			  "ajax": {
-				  "url":"find_data.php",
+				  "url":"ajax_requests/find_data.php",
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
@@ -302,7 +302,7 @@ $relationshipTypeObj = new RelationshipType();
 	$(".save").click(function(){
 		var frmdata = $(this).closest("form").serialize();
 		$.ajax({
-			url: "save_data.php",
+			url: "ajax_requests/save_data.php",
 			type: 'POST',
 			data: frmdata,
 			success: function (response) {
@@ -328,7 +328,7 @@ $relationshipTypeObj = new RelationshipType();
 	$(".subscribe").click(function(){
 		var frmdata = $(this).closest("form").serialize();
 		$.ajax({
-			url: "save_data.php",
+			url: "ajax_requests/save_data.php",
 			type: 'POST',
 			data: frmdata,
 			success: function (response) {
@@ -350,7 +350,7 @@ $relationshipTypeObj = new RelationshipType();
 	$(".add_share").click(function(){
 		var frmdata = $(this).closest("form").serialize();
 		$.ajax({
-			url: "save_data.php",
+			url: "ajax_requests/save_data.php",
 			type: 'POST',
 			data: frmdata,
 			success: function (response) {
@@ -448,7 +448,7 @@ $relationshipTypeObj = new RelationshipType();
 		var frmdata = new FormData($(form)[0]);
 		//var frmdata = form.serialize();
 		$.ajax({
-			url: "save_data.php",
+			url: "ajax_requests/save_data.php",
 			type: 'POST',
 			data: frmdata,
 			async: false,
@@ -500,7 +500,7 @@ $relationshipTypeObj = new RelationshipType();
 	
 	function findMemberDetails(id){
 		$.ajax({
-			url: "find_more_member_details.php?id="+id,
+			url: "ajax_requests/find_more_member_details.php?id="+id,
 			type: 'GET',
 			dataType: 'json',
 			success: function (data) {

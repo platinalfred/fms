@@ -10,7 +10,7 @@ $(document).ready(function(){
 				"deferRender": true,
 				"order": [[ 1, 'asc' ]],
 				"ajax": {
-				  "url":"find_data.php",
+				  "url":"ajax_requests/find_data.php",
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){

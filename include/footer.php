@@ -11,8 +11,7 @@
         </div>
     </div>
 
-    <!-- Mainly scripts -->
-    <script src="js/jquery-2.1.1.js"></script>
+    <!-- Main scripts -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
@@ -229,7 +228,18 @@
 	}
 	if(in_array("datepicker", $needed_files)){ ?>
 		 <!-- Date picker -->
-		<script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+		<script type="text/javascript" src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+                <script type="text/javascript">
+                    $('.datepicker').datepicker(/*{
+                                    format: 'yyyy-mm-dd',
+                                    autoclose: true
+                            }*/).on('hide',function(e){
+                                e.stopPropagation();
+                    });
+                    $(".modal").on("hide.bs.modal", function () {
+                        $('.datepicker').datepicker('clearDates');
+                    });
+                </script>
 	<?php 
 	}
 	if(in_array("ionRangeSlider", $needed_files)){ ?>

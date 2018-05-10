@@ -73,7 +73,7 @@ $(document).ready(function(){
 				"deferRender": true,
 				"order": [[ 1, 'asc' ]],
 				"ajax": {
-				  "url":"find_data.php",
+				  "url":"ajax_requests/find_data.php",
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
@@ -206,7 +206,7 @@ $(document).ready(function(){
 			var form =  $("form[name='receive_income']");
 			var frmdata = form.serialize();
 			$.ajax({
-				url: "save_data.php",
+				url: "ajax_requests/save_data.php",
 				type: 'POST',
 				data: frmdata,
 				success: function (response) {

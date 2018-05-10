@@ -9,7 +9,7 @@ $(document).ready(function(){
 			  dom: "lfrtipB",
 			  "processing": true,
 			  "ajax": {
-				  "url":"ajax_data.php",
+				  "url":"ajax_requests/ajax_data.ph",
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){ d.origin = 'loan_report', d.start_date = startDate,d.end_date=endDate,d.client_type = client_type,d.category = category}

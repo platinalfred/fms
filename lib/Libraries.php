@@ -37,6 +37,7 @@ require_once("RelationshipType.php");
 require_once("AddressType.php");
 require_once("MaritalStatus.php");
 require_once("DepositProductFee.php");
+require_once("DepositProductFeen.php");
 require_once("DepositProduct.php");
 require_once("DepositProductType.php");
 require_once("DepositAccount.php");
@@ -55,4 +56,3 @@ require_once("LoanAccountApproval.php");
 require_once("LoanAccountFee.php");
 require_once("SaccoGroupLoanAccount.php");
 require_once("MemberLoanAccount.php");
-?>

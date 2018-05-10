@@ -11,7 +11,7 @@ $(document).ready(function() {
 		  "serverSide": true,
 		  "deferRender": true,
 		  "ajax": {
-			  "url":"server_processing.php",
+			  "url":"ajax_requests/server_processing.php",
 			  "type": "POST",
 			  "data":  function(d){
 					d.page = 'deposit_accounts';
@@ -92,7 +92,7 @@ $(document).ready(function() {
 });
  function getTransactionHistory(depositAccountId){
 	 $.ajax({
-		url: "ajax_data.php",
+		url: "ajax_requests/ajax_data.php",
 		data: {id:depositAccountId, origin:'member_savings', start_date:startDate, end_date:endDate},
 		type: 'POST',
 		dataType: 'json',
@@ -189,7 +189,7 @@ $(document).ready(function() {
 				type: "post",
 				dataType: "json",
 				data:{origin:"deposit_account"<?php if(isset($_GET['depAcId'])):?>, depositAccountId:<?php echo $_GET['depAcId'];?>, start_date:self.startDate, end_date:self.endDate <?php endif;?>},
-				url: "ajax_data.php",
+				url: "ajax_requests/ajax_data.php",
 				success: function(response){
 					self.depositProducts(response.products);
 					self.productFees(response.productFees);

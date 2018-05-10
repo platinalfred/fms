@@ -265,7 +265,7 @@
 				<?php if(isset($_GET['groupId'])){?>, groupId:<?php echo $_GET['groupId']; } ?>
 				<?php if(isset($_GET['memberId'])){?>, memberId:<?php echo $_GET['memberId']; } ?>
 				<?php if(isset($_GET['grpLId'])){?>, grpLId:<?php echo $_GET['grpLId']; } ?>},
-				url: "ajax_data.php",
+				url: "ajax_requests/ajax_data.php",
 				success: function(response){
 					<?php if(isset($_GET['grpLId'])){ ?>
 						self.loanProduct(response.product);
@@ -510,10 +510,10 @@
 			}
 			else{
 				dTable['applications'] = $('#applications').DataTable({
-				  dom: "Bfrtip",
+				  dom: '<".col-md-7"B><".col-md-2"l><".col-md-3"f>rt<".col-md-7"i><".col-md-5"p>',
 				  "order": [ [5,'desc' ],[2,'desc'],[3,'desc']],
 				  "ajax": {
-					  "url":"ajax_data.php",
+					  "url":"ajax_requests/ajax_data.php",
 					  "type": "POST",
 					  "data": function(d){
 								return post_data;
@@ -588,10 +588,10 @@
 			}
 			else{
 				dTable['rejected'] = $('#rejected').DataTable({
-				  dom: "Bfrtip",
+				  dom: '<".col-md-7"B><".col-md-2"l><".col-md-3"f>rt<".col-md-7"i><".col-md-5"p>',
 				  "order": [ [4, 'asc' ]],
 				  "ajax": {
-					  "url":"ajax_data.php",
+					  "url":"ajax_requests/ajax_data.php",
 					  "type": "POST",
 					  "data": function(d){
 								return post_data;
@@ -631,10 +631,10 @@
 			}
 			else{
 				dTable['approved'] = $('#approved').DataTable({
-				  dom: "Bfrtip",
+				  dom: '<".col-md-7"B><".col-md-2"l><".col-md-3"f>rt<".col-md-7"i><".col-md-5"p>',
 				  "order": [ [4, 'asc' ]],
 				  "ajax": {
-					  "url":"ajax_data.php",
+					  "url":"ajax_requests/ajax_data.php",
 					  "type": "POST",
 					  "data": function(d){
 								return post_data;
@@ -673,7 +673,7 @@
 			}
 			else{
 				dTable['disbursed'] = $('#disbursed').DataTable({
-				  dom: "Bfrtip",
+				  dom: '<".col-md-7"B><".col-md-2"l><".col-md-3"f>rt<".col-md-9"i><".col-md-3"p>',
 				  <?php if(!isset($client)): ?>
 				  "order": [ [3, 'desc' ]],
 				  "processing": true,
@@ -681,7 +681,7 @@
 				  "deferRender": true,
 				  <?php endif; ?>
 				  "ajax": {
-					  "url":"<?php if(!isset($client)): ?>server_processing<?php else: ?>ajax_data<?php endif; ?>.php",
+					  "url":"<?php if(!isset($client)): ?>ajax_requests/server_processing<?php else: ?>ajax_requests/ajax_data<?php endif; ?>.php",
 					  "type": "POST",
 					  "data":  function(d){
 								d.<?php if(!isset($client)): ?>page<?php else: ?>origin<?php endif; ?> = 'loan_accounts';
@@ -747,7 +747,7 @@
 		if(confirmation){
 			$.ajax({ // create an AJAX call...
 				type: 'POST',
-				url: "delete.php",
+				url: "ajax_requests/delete.php",
 				data: {id:viewModel.account_details().id, tbl:'loan_account'}, // the file to call
 				success: function(response) { // on success..
 					showStatusMessage(response, "success");

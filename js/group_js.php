@@ -13,7 +13,7 @@ $(document).ready(function(){
 			  "order": [[ 0, 'DESC' ]],
 			  "ajax": {
 				  "url":"find_data.php",
-				  "dataType": "JSON",
+				  "ajax_requests/dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.page = 'view_groups';
@@ -87,7 +87,7 @@ $(document).ready(function(){
 		var confirmation = confirm("Are you sure you would like to delete this group?");
 		if(confirmation){
 			$.ajax({
-				url: "delete.php?tbl=saccogroup&id="+id,
+				url: "ajax_requests/delete.php?tbl=saccogroup&id="+id,
 				type: 'GET',
 				success: function (response) {
 					if($.trim(response) == "success"){
@@ -109,7 +109,7 @@ $(document).ready(function(){
 		var confirmation = confirm("Are you sure you would like to delete this group?");
 		if(confirmation){
 			$.ajax({
-				url: "delete.php?tbl=saccogroup&id="+id,
+				url: "ajax_requests/delete.php?tbl=saccogroup&id="+id,
 				type: 'GET',
 				success: function (response) {
 					if($.trim(response) == "success"){
@@ -134,7 +134,7 @@ $(document).ready(function(){
 	});
 	function findGroupDetails(id){
 		$.ajax({
-			url: "find_group_details.php?id="+id,
+			url: "ajax_requests/find_group_details.php?id="+id,
 			type: 'GET',
 			dataType: 'json',
 			success: function (response) {
@@ -207,7 +207,7 @@ $(document).ready(function(){
 				var form =  $("form[name='register_group']");
 				var frmdata = form.serialize();
 				$.ajax({
-					url: "save_data.php",
+					url: "ajax_requests/save_data.php",
 					type: 'POST',
 					data: frmdata,
 					success: function (response) {
@@ -255,7 +255,7 @@ var Group = function() {
 	//Retrieve page data from the server
 	self.findMembers = function() { 
 		$.ajax({
-			url: "all_members.php",
+			url: "ajax_requests/all_members.php",
 			type: 'POST',
 			data:{group:"view_members"<?php if(isset($_GET['groupId'])&&is_numeric($_GET['groupId'])){?>,groupId:<?=$_GET['groupId']?><?php }?>},
 			dataType: 'json',

@@ -109,8 +109,8 @@ h5 {
 .dropdown-menu > li > a {
   border-radius: 3px;
   color: inherit;
-  line-height: 25px;
-  margin: 4px;
+  /*line-height: 25px;*/
+  margin: 2px;
   text-align: left;
   font-weight: normal;
 }
@@ -3604,8 +3604,8 @@ body.body-small .footer.fixed {
 }
 .nav-tabs > li > a {
   color: #A7B1C2;
-  font-weight: 600;
-  padding: 10px 20px 10px 25px;
+  font-weight: 500;
+  padding: 3px 6px;
 }
 .nav-tabs > li > a:hover,
 .nav-tabs > li > a:focus {

@@ -14,7 +14,7 @@ $(document).ready(function(){
 	$(".save").click(function(){
 		var frmdata = $(this).closest("form").serialize();
 		$.ajax({
-			url: "save_data.php",
+			url: "ajax_requests/save_data.php",
 			type: 'POST',
 			data: frmdata,
 			success: function (response) {
@@ -118,7 +118,7 @@ $(document).ready(function(){
 		var form =  $("form[name='registration']");
 		var frmdata = form.serialize();
 		$.ajax({
-			url: "save_data.php",
+			url: "ajax_requests/save_data.php",
 			type: 'POST',
 			data: frmdata,
 			success: function (response) {
@@ -155,7 +155,7 @@ $(document).ready(function(){
 			  "deferRender": true,
 			  "order": [[ 1, 'asc' ]],
 			  "ajax": {
-				  "url":"find_data.php",
+				  "url":"ajax_requests/find_data.php",
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
@@ -270,7 +270,7 @@ $(document).ready(function(){
 					btnClass: 'btn-info',
 					action: function(){
 						$.ajax({ // create an AJAX call...
-							url: "delete.php?id="+id+"&tbl=staff&status=activate", // the file to call
+							url: "ajax_requests/delete.php?id="+id+"&tbl=staff&status=activate", // the file to call
 							success: function(response) { // on success..
 								if(response != "fail"){
 									showStatusMessage("Staff has been activated.", "success");
@@ -304,7 +304,7 @@ $(document).ready(function(){
 					btnClass: 'btn-danger',
 					action: function(){
 						$.ajax({ // create an AJAX call...
-							url: "delete.php?id="+id+"&tbl=staff", // the file to call
+							url: "ajax_requests/delete.php?id="+id+"&tbl=staff", // the file to call
 							success: function(response) { // on success..
 								if(response != "fail"){
 									showStatusMessage("Staff has been deleted.", "success");

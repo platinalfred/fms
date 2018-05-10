@@ -20,50 +20,50 @@
                                     <h3>Loan Account <small>Account Information</small></h3>
                                     <div class="row">
                                         <fieldset>
-											<div class="form-group">
-												<!--div class="col-md-6">
-													<label class="control-label">Client Type</label>
-													<select class="form-control" name="clientType" data-bind='options: clientTypes, optionsText: "client_type", optionsCaption: "Select client type...", optionsAfterRender: $root.setOptionValue("type_id"), value: clientType' data-msg-required="Client type is required" required>
-													</select>
-												</div-->
-												<?php if(!isset($_GET['memberId'])):?>
-												<div class="col-md-4" data-bind="with: clientType">
-													<label class="control-label">Customer</label>
-													<select data-placeholder="Select customer..." name="memberId" class="select2" data-bind='options: $root.clients, optionsText: "clientNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client, select2: {dropdownParent:"#add_loan_account-modal" }' style="width: 250px" data-msg-required="Customer not selected" required>
-													</select>
-													<input type="hidden" name="clientType" value="<?php echo isset($client)?$client['clientType']:1;?>" />
-												</div>
-												<?php endif;?>
-												<div class="col-md-4"<?php if(!isset($_GET['grpLId'])){?> data-bind='with: $root.client'<?php }?>>
-												<?php if(!isset($_GET['grpLId'])): //if it is a group loan we already know the product ?>
-													<label class="control-label">Product</label>
-													<select class="form-control" id="loanProductId" name="loanAccount[loanProductId]" data-bind='options: $root.loanProducts, optionsText: "productName", optionsCaption: "Select product...", optionsAfterRender: $root.setOptionValue("id"), value: $root.loanProduct' data-msg-required="Loan product is required" required>
-													</select>
-												<?php else: ?>
-													<span data-bind="with: $root.loanProduct">
-														<input type="hidden" id="loanProductId" name="loanAccount[loanProductId]" data-bind="attr:{value:id}"/>
-														<label class="control-label" data-bind="text: productName">Product</label>
-													</span>
-												<?php endif; ?>
-													<span class="help-block m-b-none" data-bind="with: $root.loanProduct">
-														<small data-bind="text: description">Product description goes here.</small>
-													</span>
-												</div>
-												<div class="col-md-4" data-bind="with: $root.loanProduct">
-													<label class="control-label">Application Date</label>
-													<div class="input-group date" data-provide="datepicker" data-date-format="dd-mm-yyyy" data-date-end-date="<?php echo date('d-m-Y');?>">
-														<input type="text" class="form-control" name="applicationDate" data-bind="attr:{value:$parent.applicationDate}" required>
-														<div class="input-group-addon">
-															<span class="fa fa-calendar"></span>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!--div class="form-group" data-bind='with: loanProduct'>
-												<div class="col-lg-12">
-													<h3>Please fill in the loan application details for the client<span data-bind="text: ($root.filteredGroupMembers().length>1)?'s':''"></span> below</h3>
-												</div>
-											</div-->
+                                            <div class="form-group">
+                                                <!--div class="col-md-6">
+                                                        <label class="control-label">Client Type</label>
+                                                        <select class="form-control" name="clientType" data-bind='options: clientTypes, optionsText: "client_type", optionsCaption: "Select client type...", optionsAfterRender: $root.setOptionValue("type_id"), value: clientType' data-msg-required="Client type is required" required>
+                                                        </select>
+                                                </div-->
+                                                <?php if (!isset($_GET['memberId'])): ?>
+                                                    <div class="col-md-4" data-bind="with: clientType">
+                                                        <label class="control-label">Customer</label>
+                                                        <select data-placeholder="Select customer..." name="memberId" class="select2" data-bind='options: $root.clients, optionsText: "clientNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client, select2: {dropdownParent:"#add_loan_account-modal" }' style="width: 250px" data-msg-required="Customer not selected" required>
+                                                        </select>
+                                                        <input type="hidden" name="clientType" value="<?php echo isset($client) ? $client['clientType'] : 1; ?>" />
+                                                    </div>
+                                                <?php endif; ?>
+                                                <div class="col-md-4"<?php if (!isset($_GET['grpLId'])) { ?> data-bind='with: $root.client'<?php } ?>>
+                                                    <?php if (!isset($_GET['grpLId'])): //if it is a group loan we already know the product ?>
+                                                        <label class="control-label">Product</label>
+                                                        <select class="form-control" id="loanProductId" name="loanAccount[loanProductId]" data-bind='options: $root.loanProducts, optionsText: "productName", optionsCaption: "Select product...", optionsAfterRender: $root.setOptionValue("id"), value: $root.loanProduct' data-msg-required="Loan product is required" required>
+                                                        </select>
+                                                    <?php else: ?>
+                                                        <span data-bind="with: $root.loanProduct">
+                                                            <input type="hidden" id="loanProductId" name="loanAccount[loanProductId]" data-bind="attr:{value:id}"/>
+                                                            <label class="control-label" data-bind="text: productName">Product</label>
+                                                        </span>
+                                                    <?php endif; ?>
+                                                    <span class="help-block m-b-none" data-bind="with: $root.loanProduct">
+                                                        <small data-bind="text: description">Product description goes here.</small>
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-4" data-bind="with: $root.loanProduct">
+                                                    <label class="control-label">Application Date</label>
+                                                    <div class="input-group date" data-provide="datepicker" data-date-format="dd-mm-yyyy" data-date-end-date="<?php echo date('d-m-Y'); ?>">
+                                                        <input type="text" class="form-control" name="applicationDate" data-bind="attr:{value:$parent.applicationDate}" required>
+                                                        <div class="input-group-addon">
+                                                            <span class="fa fa-calendar"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--div class="form-group" data-bind='with: loanProduct'>
+                                                    <div class="col-lg-12">
+                                                            <h3>Please fill in the loan application details for the client<span data-bind="text: ($root.filteredGroupMembers().length>1)?'s':''"></span> below</h3>
+                                                    </div>
+                                            </div-->
                                         </fieldset>
                                         <!--ko with:clientType-->
                                         <!--ko if:(typeof($root.client())!='undefined'&&typeof($root.loanProduct())!='undefined')-->
@@ -74,9 +74,9 @@
                                                     <h5 data-bind='text: clientNames'>member</h5>
                                                     <div class="ibox-tools">
                                                         <input type='hidden' data-bind="value:((typeof(memberId)!='undefined')?memberId:id), attr:{'name':'loanAccount[memberId]'}" />
-														<?php if(isset($_GET['grpLId'])):?>
-														<input type='hidden' value="<?php echo $_GET['grpLId']; ?>" name="loanAccount[groupLoanAccountId]'}"/>
-														<?php endif;?>
+                                                        <?php if (isset($_GET['grpLId'])): ?>
+                                                            <input type='hidden' value="<?php echo $_GET['grpLId']; ?>" name="loanAccount[groupLoanAccountId]'}"/>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                                 <div class="ibox-content">
@@ -226,7 +226,7 @@
                                                                     <div class="col-sm-4">Total savings: <span data-bind='text: curr_format($parent.totalSavings())'> </span></div>
                                                                     <div class="col-sm-2">
                                                                         <a data-bind='click: $parent.addGuarantor, enable: $parent.selectedGuarantors().length < minGuarantors' class="btn btn-info btn-sm"><i class="fa fa-plus"></i>Add Guarantor</a>
-																	</div>
+                                                                    </div>
                                                                 </div>
                                                             </fieldset>
                                                             <!-- /ko -->
@@ -284,25 +284,25 @@
                                                             <!-- /ko -->
                                                             <h3>Businesses <small>Add Businesses</small></h3>
                                                             <fieldset>
-																<div class="row">
-																	<div class="col-lg-2">
-																		<label>Name of Business</label>
-																	</div>
-																	<div class="col-lg-3">
-																		<label>Business Location</label>
-																	</div>
-																	<div class="col-lg-2">
-																		<label>Number Of Employees</label>
-																	</div>
-																	<div class="col-lg-2">
-																		<label>Business Worth</label>
-																	</div>
-																	<div class="col-lg-2">
-																		<label>URSB Number</label>
-																	</div>
-																	<div class="col-lg-1">
-																	</div>
-																</div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-2">
+                                                                        <label>Name of Business</label>
+                                                                    </div>
+                                                                    <div class="col-lg-3">
+                                                                        <label>Business Location</label>
+                                                                    </div>
+                                                                    <div class="col-lg-2">
+                                                                        <label>Number Of Employees</label>
+                                                                    </div>
+                                                                    <div class="col-lg-2">
+                                                                        <label>Business Worth</label>
+                                                                    </div>
+                                                                    <div class="col-lg-2">
+                                                                        <label>URSB Number</label>
+                                                                    </div>
+                                                                    <div class="col-lg-1">
+                                                                    </div>
+                                                                </div>
                                                                 <div class="row" data-bind="foreach: $parent.member_business">
                                                                     <h3 data-bind="text:'Business '+($index()+1)"></h3>
                                                                     <div class="col-lg-2">
@@ -336,9 +336,9 @@
                                                                 <div class="row">
                                                                     <div class="clearboth"></div>
                                                                     <div class="col-lg-12">
-																		<div class="form-group"> 
-																			<span class="btn btn-info btn-sm pull-right" data-bind='click: $parent.addBusinnes'><i class="fa fa-plus"></i> Add more</span>
-																		</div>
+                                                                        <div class="form-group"> 
+                                                                            <span class="btn btn-info btn-sm pull-right" data-bind='click: $parent.addBusinnes'><i class="fa fa-plus"></i> Add more</span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </fieldset>

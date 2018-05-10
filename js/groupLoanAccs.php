@@ -16,7 +16,7 @@ $(document).ready(function() {
 		  dom: "Bfrtip",
 		  "order": [ [1, 'asc' ]],
 		  "ajax": {
-			  "url":"ajax_data.php",
+			  "url":"ajax_requests/ajax_data.php",
 			  "type": "POST",
 			  "data":  function(d){
 					d.origin = 'group_loan_accounts';

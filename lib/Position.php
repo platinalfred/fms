@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Position extends Db {
 	protected static $table_name  = "position";
-	protected static $db_fields = array("id", "name", "access_level", "description");
+	protected static $db_fields = array("id", "name", "access_level_id", "description");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -15,7 +15,7 @@ class Position extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findPositionDetails(){
-		$result_array = $this->getfarray(self::$table_name." p, accesslevel a", "p.id, p.name,p.description, a.name as access_level, a.name as access_level_id", "p.access_level = a.id AND p.active=1 ",  "", "");
+		$result_array = $this->getfarray(self::$table_name." p, accesslevel a", "p.id, p.name,p.description, a.name as access_level, a.id as access_level_id", "p.access_level_id = a.id AND p.active=1 ",  "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findPositionName($id){

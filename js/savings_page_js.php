@@ -12,7 +12,7 @@ $(document).ready(function() {
 		  "serverSide": true,
 		  "deferRender": true,
 		  "ajax": {
-			  "url":"server_processing.php",
+			  "url":"ajax_requests/server_processing.php",
 			  "type": "POST",
 			  "data":  function(d){
 					d.page = 'deposit_accounts';
@@ -40,10 +40,10 @@ $(document).ready(function() {
 		  },columns:[ { data: 'id', render: function ( data, type, full, meta ) {
 			  var page = "";
 			  if(full.clientType==1){
-				  page = "member_details.php?memberId=";
+				  page = "ajax_requests/member_details.php?memberId=";
 			  }
 			  if(full.clientType==2){
-				  page = "group_details.php?id=";
+				  page = "ajax_requests/group_details.php?id=";
 			  }
 			  return '<a href="'+page+full.clientId+'&view=savings_accs&depAcId='+data+'" title="View details">'+(full.productName + '-'+data).replace(/\s/g,'')+'</a>';}},
 				{ data: 'clientNames'},
