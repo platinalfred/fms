@@ -59,7 +59,7 @@ p{
 
 			<div class="ibox">
 				<div class="ibox-title">
-					<h5><?php echo $names; ?> <small> - <?php echo $member->findPersonNumber($member_data['personId']);?> </small></h5>
+					<h5><?php echo $names; ?> <small>  <?php //echo $member->findPersonNumber($member_data['personId']);?> </small></h5>
 					<?php 
 					if(isset($_SESSION['admin'])){ ?>
 						<div class="ibox-tools hidden-print">

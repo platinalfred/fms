@@ -23,7 +23,7 @@ $(document).ready(function(){
 						btnClass: 'btn-danger',
 						action: function(){
 							$.ajax({
-								url: "ajax_requests/delete.php?tbl=member&id="+id,
+								url: "delete.php?tbl=member&id="+id,
 								type: 'GET',
 								success: function (response) {
 									if(response.trim() == "success"){
@@ -220,7 +220,7 @@ $relationshipTypeObj = new RelationshipType();
 			  "deferRender": true,
 			  "order": [[ 1, 'desc' ]],
 			  "ajax": {
-				  "url":"ajax_requests/find_data.php",
+				  "url":"find_data.php",
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
@@ -235,7 +235,7 @@ $relationshipTypeObj = new RelationshipType();
 			  }],
 			  columns:[  
 					{ data: 'id'},
-					{ data: 'person_number'},
+					/* { data: 'person_number'}, */
 					{ data: 'Name', render: function ( data, type, full, meta ) {return full.lastname + ' ' + full.othername + ' ' + full.firstname ; }},
 					{ data: 'phone'},
 					{ data: 'id_number'},
@@ -302,7 +302,7 @@ $relationshipTypeObj = new RelationshipType();
 	$(".save").click(function(){
 		var frmdata = $(this).closest("form").serialize();
 		$.ajax({
-			url: "ajax_requests/save_data.php",
+			url: "save_data.php",
 			type: 'POST',
 			data: frmdata,
 			success: function (response) {
@@ -328,7 +328,7 @@ $relationshipTypeObj = new RelationshipType();
 	$(".subscribe").click(function(){
 		var frmdata = $(this).closest("form").serialize();
 		$.ajax({
-			url: "ajax_requests/save_data.php",
+			url: "save_data.php",
 			type: 'POST',
 			data: frmdata,
 			success: function (response) {
@@ -350,7 +350,7 @@ $relationshipTypeObj = new RelationshipType();
 	$(".add_share").click(function(){
 		var frmdata = $(this).closest("form").serialize();
 		$.ajax({
-			url: "ajax_requests/save_data.php",
+			url: "save_data.php",
 			type: 'POST',
 			data: frmdata,
 			success: function (response) {
@@ -369,41 +369,7 @@ $relationshipTypeObj = new RelationshipType();
 
 		return false;
 	});
-	function showStatusMessage(message='', display_type='success'){
-		new PNotify({
-			  title: "Alert",
-			  text: message,
-			  type: display_type,
-			  styling: 'bootstrap3',
-			  sound: true,
-			  hide:true,
-			  buttons: {
-				closer_hover: false,
-			},
-			confirm: {
-				confirm: true,
-				buttons: [{
-					text: 'Ok',
-					addClass: 'btn-primary',
-					click: function(notice) {
-						notice.remove();
-					}
-				},
-				null]
-			},
-			animate: {
-				animate: true,
-				in_class: 'zoomInLeft',
-				out_class: 'zoomOutRight'
-			},
-			  nonblock: {
-				  nonblock: true
-			  }
-			  
-		  });
-		
-	}
-  // It has the name attribute "registration"
+// It has the name attribute "registration"
   $("form[name='registration']").validate({
     // Specify validation rules
     rules: {
@@ -448,7 +414,7 @@ $relationshipTypeObj = new RelationshipType();
 		var frmdata = new FormData($(form)[0]);
 		//var frmdata = form.serialize();
 		$.ajax({
-			url: "ajax_requests/save_data.php",
+			url: "save_data.php",
 			type: 'POST',
 			data: frmdata,
 			async: false,
@@ -500,7 +466,7 @@ $relationshipTypeObj = new RelationshipType();
 	
 	function findMemberDetails(id){
 		$.ajax({
-			url: "ajax_requests/find_more_member_details.php?id="+id,
+			url: "find_more_member_details.php?id="+id,
 			type: 'GET',
 			dataType: 'json',
 			success: function (data) {
