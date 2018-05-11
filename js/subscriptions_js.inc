@@ -8,7 +8,7 @@
                     dom: "lfrtipB",
                     "processing": true,
                     "ajax": {
-                        "url": "ajax_requests/ajax_data.ph",
+                        "url": "ajax_requests/ajax_data.php",
                         "dataType": "JSON",
                         "type": "POST",
                         "data": {origin: 'general_subscription'}
