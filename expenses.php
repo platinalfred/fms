@@ -86,7 +86,7 @@ $(document).ready(function(){
 				"deferRender": true,
 				"order": [[ 1, 'asc' ]],
 				"ajax": {
-				  "url":"find_data.php",
+				  "url":"ajax_requests/find_data.php",
 				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
@@ -200,7 +200,7 @@ $(document).ready(function(){
 					action: function(){
 						
 						$.ajax({
-							url: "delete.php?tbl=expense&id="+id,
+							url: "ajax_requests/delete.php?tbl=expense&id="+id,
 							type: 'GET',
 							success: function (response) {
 								if($.trim(response) == "success"){
@@ -290,7 +290,7 @@ $(document).ready(function(){
 			var form =  $("form[name='register_expense']");
 			var frmdata = form.serialize();
 			$.ajax({
-				url: "save_data.php",
+				url: "ajax_requests/save_data.php",
 				type: 'POST',
 				data: frmdata,
 				success: function (response) {
