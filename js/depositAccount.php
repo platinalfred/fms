@@ -216,7 +216,7 @@ $(document).ready(function() {
 					amount: self.deposit_amount(),
 					comment: self.comments()
 				},
-				url: "lib/AddData.php",
+				url: "ajax_requests/AddData.php",
 				success: function(response){
 					var result = parseInt(response)||0;
 					if(result){
@@ -258,7 +258,7 @@ $(document).ready(function() {
 					amount: self.deposit_amount(),
 					comment: self.comments()
 				},
-				url: "lib/AddData.php",
+				url: "ajax_requests/AddData.php",
 				success: function(response){
 					var result = parseInt(response)||0;
 					if(result){/*  */
@@ -305,7 +305,7 @@ $(document).ready(function() {
 					origin : "deposit_account"
 				},
 				//dataType:'json',
-				url: "lib/AddData.php",
+				url: "ajax_requests/AddData.php",
 				success: function(response){
 					var result = parseInt(response)||0;
 					if(result>0){
