@@ -134,6 +134,7 @@ if(!isset($_SESSION['Logged'])){ ?>
 	<link href="js/plugins/pnotify/dist/pnotify.css" rel="stylesheet">
 	<link href="js/plugins/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
 	<link href="js/plugins/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+        <script type="text/javascript" src="js/jquery-2.1.1.js"></script>
 	
 </head>
 <body>

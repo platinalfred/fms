@@ -136,11 +136,11 @@ class Db {
 
         if (count($results) > 0) {
             //stronger implementation of password hashing
-            if (password_verify($password, $results['password2'])) {
+            if (password_verify($password, $results['password'])) {
                 $hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
                 if (password_needs_rehash($hash, PASSWORD_DEFAULT, ['cost' => 12])) {
                     // Recompute the password_hash() and overwrite the one we had previously stored in db
-                    $this->update_single("tbl_user", "password2", $hash, "`id`=" . $results['id']);
+                    $this->update_single("tbl_user", "password", $hash, "`id`=" . $results['id']);
                 }
             } elseif ($results['password'] == md5($password)) {
                 /*
@@ -149,7 +149,7 @@ class Db {
                  * Then redirect the user to the dashboard
                  */
                 $hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
-                $this->update_single("staff", "password2", $hash, "`id`=" . $results['id']);
+                $this->update_single("staff", "password", $hash, "`id`=" . $results['id']);
             } else {
                 return false;
             }
