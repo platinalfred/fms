@@ -80,6 +80,7 @@ class LoanAccount extends Db {
 	public function getGroupLoanAccounts($where = 1){
 		$fields = "`group_loan_account`.`id`, `group_loan_account`.`dateCreated` `appnDate`, `saccoGroupId`, `productName`, COALESCE(`maxAmount`,0) `maxAmount`, COALESCE(`noMembers`,0) `noMembers`, COALESCE(`loanAmount`,0)`loanAmount`";
 		
+		//$table = "`group_loan_account` JOIN `loan_products` ON `loan_products`.`id` = `loanProductId` LEFT JOIN (SELECT MIN(`id`) `id`, MIN(`groupLoanAccountId`) `groupLoanAccountId`, COUNT(`id`) `noMembers`, SUM(`loan_account`.`requestedAmount`) `loanAmount` FROM `loan_account` WHERE `groupLoanAccountId` > 0 GROUP BY `groupLoanAccountId`) `loanAccount` ON `loanAccount`.`groupLoanAccountId` = `group_loan_account`.`id`";
 		$table = "`group_loan_account` JOIN `loan_products` ON `loan_products`.`id` = `loanProductId` LEFT JOIN (SELECT `id`, `groupLoanAccountId`, COUNT(`id`) `noMembers`, SUM(`loan_account`.`requestedAmount`) `loanAmount` FROM `loan_account` WHERE `groupLoanAccountId` > 0 GROUP BY `groupLoanAccountId`) `loanAccount` ON `loanAccount`.`groupLoanAccountId` = `group_loan_account`.`id`";
 	
 		$result_array = $this->getfarray($table, $fields, $where, "", "");
