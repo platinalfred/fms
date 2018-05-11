@@ -286,9 +286,9 @@ if (isset($_POST['origin'])) {
             echo json_encode($data);
             break;
         case 'loan_product_feens':
-            $productFeeObj = new LoanProductFeen();
+            $loanProductFeeObj = new LoanProductFeen();
             $where_clause = (isset($_POST['loanProductId']) && is_numeric($_POST['loanProductId']))?("`loanProductId`=".$_POST['loanProductId']):"";
-            $data['productFeens'] = $productFeeObj->findAllLPFDetails($where_clause);
+            $data['productFeens'] = $loanProductFeeObj->findAllLPFDetails($where_clause);
             echo json_encode($data);
             break;
         case 'deposit_product_feens':

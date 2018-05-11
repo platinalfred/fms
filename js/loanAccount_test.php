@@ -207,7 +207,7 @@
 					collateral:self.applicationForm().addedCollateral(), //the applicable fees
 					origin : "loan_account"
 				},
-				url: "lib/AddData.php",
+				url: "ajax_requests/AddData.php",
 				success: function(response){
 					// if it was an OK response, get the id of the inserted product and insert the product fees
 					var result = parseInt(response)||0;
@@ -235,7 +235,7 @@
 					amount: self.payment_amount(),
 					comments: self.comments()
 				},
-				url: "lib/AddData.php",
+				url: "ajax_requests/AddData.php",
 				success: function(response){
 					var result = parseInt(response)||0;
 					if(result){/*  */
@@ -263,7 +263,7 @@
 					approvalNotes: self.approvalNotes(),
 					status: self.applicationStatus()
 				},
-				url: "lib/AddData.php",
+				url: "ajax_requests/AddData.php",
 				success: function(response){
 					var result = parseInt(response)||0;
 					if(result){/*  */
@@ -291,7 +291,7 @@
 					disbursementNotes: self.disbursementNotes(),
 					status: 4
 				},
-				url: "lib/AddData.php",
+				url: "ajax_requests/AddData.php",
 				success: function(response){
 					var result = parseInt(response)||0;
 					if(result){/*  */
@@ -547,7 +547,7 @@
 		  "deferRender": true,
 		  <?php endif; ?>
 		  "ajax": {
-			  "url":"<?php if(!isset($client)): ?>server_processing<?php else: ?>ajax_data<?php endif; ?>.php",
+			  "url":"ajax_requests/<?php if(!isset($client)): ?>server_processing<?php else: ?>ajax_data<?php endif; ?>.php",
 			  "type": "POST",
 			  "data":  <?php if(!isset($client)): ?>function(d){
 				d.page = 'loan_accounts';
@@ -639,7 +639,7 @@
 			tbl = arr[1]; //This is the table to delete from 
 			 $.ajax({ // create an AJAX call...
 				type: 'POST',
-				url: "delete.php",
+				url: "ajax_requests/delete.php",
 				data: {id:id, tbl:tbl}, // the file to call
 				success: function(response) { // on success..
 					showStatusMessage(response, "success");

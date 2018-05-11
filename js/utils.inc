@@ -313,8 +313,11 @@
             if (typeof viewModal !== 'undefined' && typeof viewModel.edit_client !== 'undefined' ) {
                 viewModel.edit_client(0);
             }
-            if (typeof loanProductModel !== 'undefined' && typeof loanProductModel.addExistingLoanProductFees !== 'undefined' ) {
-                loanProductModel.addExistingLoanProductFees(null);
+            if (typeof loanProductModel !== 'undefined') {
+                loanProductModel.resetForm();
+            }
+            if (typeof depositProductModel !== 'undefined') {
+                depositProductModel.resetForm();
             }
         });
         /* Number inputs a thousandsSeparator separator */

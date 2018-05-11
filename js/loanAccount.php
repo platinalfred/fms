@@ -179,7 +179,7 @@
 				} else {
 					option.value = item[propId];
 				}
-			}
+			};
 		};
 		//pick out loan product based on the product id of the account selected in the datatable
 		self.getLoanProduct = function(loanProductId) {
@@ -294,7 +294,7 @@
 			var frmdata = new FormData($(form)[0]);
 			$.ajax({
 				type: "post",
-				url: "lib/AddData.php",
+				url: "ajax_requests/AddData.php",
 				data: frmdata,
 				async: false,
 				cache: false,
@@ -331,7 +331,7 @@
 					amount: self.payment_amount(),
 					comments: self.comments()
 				},
-				url: "lib/AddData.php",
+				url: "ajax_requests/AddData.php",
 				success: function(response){
 					var result = parseInt(response)||0;
 					if(result){
@@ -361,7 +361,7 @@
 					approvalNotes: self.approvalNotes(),
 					status: self.loanAccountStatus()
 				},
-				url: "lib/AddData.php",
+				url: "ajax_requests/AddData.php",
 				success: function(response){
 					var result = parseInt(response)||0;
 					if(result){
@@ -390,7 +390,7 @@
 					disbursementNotes: self.disbursementNotes(),
 					status: 5
 				},
-				url: "lib/AddData.php",
+				url: "ajax_requests/AddData.php",
 				success: function(response){
 					var result = parseInt(response)||0;
 					if(result){/*  */
@@ -425,7 +425,7 @@
 					status:(self.account_details()?self.account_details().status:undefined),
 					groupLoanAccountId:(self.account_details()?self.account_details().groupLoanAccountId:undefined)
 				},
-				url: "ajax_data.php",
+				url: "ajax_requests/ajax_data.php",
 				success: function(response){
 					if(response){
 						<?php if(!isset($_GET['grpLId'])){?>
@@ -681,7 +681,7 @@
 				  "deferRender": true,
 				  <?php endif; ?>
 				  "ajax": {
-					  "url":"<?php if(!isset($client)): ?>ajax_requests/server_processing<?php else: ?>ajax_requests/ajax_data<?php endif; ?>.php",
+					  "url":"ajax_requests/<?php if(!isset($client)): ?>server_processing<?php else: ?>ajax_data<?php endif; ?>.php",
 					  "type": "POST",
 					  "data":  function(d){
 								d.<?php if(!isset($client)): ?>page<?php else: ?>origin<?php endif; ?> = 'loan_accounts';

@@ -286,7 +286,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <!--ko foreach: $root.addExistingLoanProductFees -->
+                                <!--ko foreach: addExistingLoanProductFees -->
                                     <tr>
                                         <td>
                                             <span data-bind='text: feeName'> </span>
@@ -301,10 +301,11 @@
                                         <td title="Remove fee" class="btn text-danger" data-bind='click: $root.removeExistingFee'><i class="fa fa-minus"></i></td>
                                     </tr>
                                 <!--/ko-->
-                                <!--ko foreach: $root.newLoanProductFees -->
+                                <!--ko if: filteredExistingLoanProductFees().length -->
+                                <!--ko foreach: newLoanProductFees -->
                                     <tr>
                                         <td>
-                                            <select class="form-control" data-bind="options: $parent.existingLoanProductFees, optionsText: 'feeName', optionsAfterRender: setOptionValue('id'), optionsCaption: 'Select...', attr: {name:'newLoanProductFees['+$index()+'][loanProductFeeId]'}, value: productFee">
+                                            <select class="form-control" data-bind="options: $parent.filteredExistingLoanProductFees(), optionsText: 'feeName', optionsAfterRender: setOptionValue('id'), optionsCaption: 'Select...', attr: {name:'newLoanProductFees['+$index()+'][loanProductFeeId]'}, value: productFee">
                                             </select>
                                         </td>
                                         <td data-bind='with: productFee'>
@@ -316,6 +317,7 @@
                                         <td data-bind='with: productFee'><span data-bind='text: parseInt(requiredFee)===0?"No":"Yes"'></span></td>
                                         <td title="Remove fee" class="btn text-danger" data-bind='click: $root.removeNewFee'><i class="fa fa-minus"></i></td>
                                     </tr>
+                                <!--/ko-->
                                 <!--/ko-->
                                 </tbody>
                             </table>

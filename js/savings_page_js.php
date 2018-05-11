@@ -40,10 +40,10 @@ $(document).ready(function() {
 		  },columns:[ { data: 'id', render: function ( data, type, full, meta ) {
 			  var page = "";
 			  if(full.clientType==1){
-				  page = "ajax_requests/member_details.php?memberId=";
+				  page = "member_details.php?memberId=";
 			  }
 			  if(full.clientType==2){
-				  page = "ajax_requests/group_details.php?id=";
+				  page = "group_details.php?id=";
 			  }
 			  return '<a href="'+page+full.clientId+'&view=savings_accs&depAcId='+data+'" title="View details">'+(full.productName + '-'+data).replace(/\s/g,'')+'</a>';}},
 				{ data: 'clientNames'},

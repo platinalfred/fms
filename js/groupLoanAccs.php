@@ -89,7 +89,7 @@ $(document).ready(function() {
 });
  function getMemberAccounts(groupLoanAccountId){
 	 $.ajax({
-		url: "ajax_data.php",
+		url: "ajax_requests/fajax_data.php",
 		data: {grpLId:groupLoanAccountId, origin:'loan_accounts'},
 		type: 'POST',
 		dataType: 'json',

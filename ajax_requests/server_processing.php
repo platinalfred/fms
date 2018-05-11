@@ -1,7 +1,7 @@
 <?php 
 session_start();
-require_once("lib/Db.php");
-require_once("lib/DatatablesJSON.php");
+require_once("../lib/Db.php");
+require_once("../lib/DatatablesJSON.php");
 
 // Create instance of DataTable class
 $data_table = new DataTable();

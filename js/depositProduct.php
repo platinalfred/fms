@@ -40,6 +40,21 @@ $deposit_product_types = $depositProductType->findAll();
             }
             return required;
         });
+        //if editing a product, we have to exclude the fees that are already applicable to the product
+        self.filteredExistingDepositProductFees = ko.computed(function() {
+            if(self.addExistingDepositProductFees().length){
+                return ko.utils.arrayFilter(self.existingDepositProductFees(), function(existingDepositProductFee) {
+                    //run through all the existing deposit product fees
+                    var foundArray = ko.utils.arrayFirst(self.addExistingDepositProductFees(), function(addExistingDepositProductFee){
+                        return addExistingDepositProductFee.depositProductFeeId === existingDepositProductFee.id;
+                    });
+                    return (foundArray?false:true);
+                });
+            }
+            else{
+                return self.existingDepositProductFees();
+            }
+        });
         
         // Operations
         //1. Add a fee
@@ -50,8 +65,8 @@ $deposit_product_types = $depositProductType->findAll();
         
         //reset the form
         self.resetForm = function () {
-            $("#formDepositProduct")[0].reset();
-            self.newDepositProductFees.removeAll();
+            self.addExistingDepositProductFees.removeAll();
+            self.productType(null);
         };
         //whenever editing a deposit product, the fees for the particular product should be populated
         self.id.subscribe(function(newId){
@@ -84,7 +99,7 @@ $deposit_product_types = $depositProductType->findAll();
         };
     };
 
-    var depositProductModel = new DepositProduct();
+    depositProductModel = new DepositProduct();
     depositProductModel.updateDepositProductFees();
     ko.applyBindings(depositProductModel, $("#add_deposit_product-modal")[0]);
     ko.applyBindings(new DepositProductFee(), $("#add_deposit_product_fee-modal")[0]);

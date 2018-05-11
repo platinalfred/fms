@@ -190,7 +190,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <!--ko foreach: $root.addExistingDepositProductFees -->
+                                <!--ko foreach: addExistingDepositProductFees -->
                                     <tr>
                                         <td>
                                             <span data-bind='text: feeName'> </span>
@@ -204,17 +204,19 @@
                                         <td title="Remove fee" class="btn text-danger" data-bind='click: $parent.removeExistingFee'><i class="fa fa-minus"></i></td>
                                     </tr>
                                 <!--/ko-->
-                                <!--ko foreach: $root.newDepositProductFees -->
+                                <!--ko if: filteredExistingDepositProductFees().length -->
+                                <!--ko foreach: newDepositProductFees -->
                                     <tr>
                                         <td>
-                                            <select class="form-control" data-bind="options: $parent.existingDepositProductFees, optionsText: 'feeName', optionsAfterRender: setOptionValue('id'), optionsCaption: 'Select...', attr: {name:'newDepositProductFees['+$index()+'][depositProductFeeId]'}, value: productFee">
+                                            <select class="form-control" data-bind="options: $parent.filteredExistingDepositProductFees, optionsText: 'feeName', optionsAfterRender: setOptionValue('id'), optionsCaption: 'Select...', attr: {name:'newDepositProductFees['+$index()+'][depositProductFeeId]'}, value: productFee">
                                             </select>
                                         </td>
                                         <td data-bind='with: productFee'><span data-bind='text: getDescription(2, chargeTrigger)'></span></td>
                                         <td data-bind='with: productFee'><span data-bind="text: curr_format(amount)"></span></td>
-                                        <td data-bind='with: productFee'><span data-bind="text: dateApplicationMethod?getDescription(3, dateApplicationMethod)"></span></td>
+                                        <td data-bind='with: productFee'><span data-bind="text: dateApplicationMethod?getDescription(3, dateApplicationMethod):''"></span></td>
                                         <td title="Remove fee" class="btn text-danger" data-bind='click: $parent.removeNewFee'><i class="fa fa-minus"></i></td>
                                     </tr>
+                                <!--/ko-->
                                 <!--/ko-->
                                 </tbody>
                             </table>

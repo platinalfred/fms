@@ -1,5 +1,5 @@
 <script>
-    var dTable = {};
+    var dTable = loanProductModel = depositProductModel = {};
     $(document).ready(function () {
 <?php include("depositProduct.php"); ?>
 <?php include("loanProduct.php"); ?>

@@ -1,4 +1,4 @@
-   var LoanProductFee = function () {
+var LoanProductFee = function () {
         var self = this;
         self.productFee = ko.observable();
     };
@@ -14,7 +14,6 @@
         self.repaymentsMadeEveryOptions = [{id: 1, desc: 'Day(s)'}, {id: 2, desc: 'Week(s)'}, {id: 3, desc: 'Month(s)'}];
         self.penaltyChargeRate = [{id: 1, desc: 'Day'}, {id: 2, desc: 'Week'}, {id: 3, desc: 'Month'}];
         self.taxRateSourceOptions = [{id: 1, desc: 'URA'}, {id: 2, desc: 'GOVT'}, {id: 3, desc: 'District'}];
-
 
         self.existingLoanProductFees = ko.observableArray();
         self.addExistingLoanProductFees = ko.observableArray();
@@ -33,9 +32,24 @@
         self.taxCalculationMethod = ko.observable();*/
         self.penaltyCalculationMethod = ko.observable();
         self.penaltyTolerancePeriod = ko.observable();
-
-        // Operations
         
+        //if editing a product, we have to exclude the fees that are already applicable to the product
+        self.filteredExistingLoanProductFees = ko.computed(function() {
+            if(self.addExistingLoanProductFees().length){
+                return ko.utils.arrayFilter(self.existingLoanProductFees(), function(existingLoanProductFee) {
+                    //run through all the existing loan product fees
+                    var foundArray = ko.utils.arrayFirst(self.addExistingLoanProductFees(), function(addExistingLoanProductFee){
+                        return addExistingLoanProductFee.loanProductFeeId === existingLoanProductFee.id;
+                    });
+                    return (foundArray?false:true);
+                });
+            }
+            else{
+                return self.existingLoanProductFees();
+            }
+        });
+        
+        // Operations
         //Add a fee
         self.addNewFee = function () { self.newLoanProductFees.push(new LoanProductFee()); };
         //remove fee
@@ -43,11 +57,8 @@
         self.removeExistingFee = function (fee) { self.addExistingLoanProductFees.remove(fee); };
         //reset the form
         self.resetForm = function () {
-            /* if(self.newLoanProductFees())self.newLoanProductFees(null);*/
-            $("#loanProductForm")[0].reset();
-            self.newLoanProductFees.removeAll();
+            self.addExistingLoanProductFees.removeAll();
             self.productType(null);
-            //self.updateLoanProductTypes();
         };
         //Update the product types list
         self.updateLoanProductTypes = function () {
@@ -89,7 +100,7 @@
 
     };
 
-    var loanProductModel = new LoanProduct();
+    loanProductModel = new LoanProduct();
     ko.applyBindings(loanProductModel, $("#add_loan_product-modal")[0]);
     loanProductModel.updateLoanProductTypes();
     $("#loanProductForm").validate();

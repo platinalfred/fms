@@ -25,7 +25,7 @@ class LoanProductFeen extends Db {
         $loan_product_fees = "(SELECT `loan_product_fee`.`id`, `feeName`, `feeType`, `feeTypeName`, `amountCalculatedAs`, `requiredFee`, `amount`"
                 . "FROM`loan_product_fee` JOIN `fee_type` ON `loan_product_fee`.`feeType` = `fee_type`.`id`) `lpdt_fee`";
         $table = self::$table_name . " JOIN $loan_product_fees ON `loan_product_feen`.`loanProductFeeId` = `lpdt_fee`.`id`";
-        $fields = "`loan_product_feen`.`id`, `feeName`, `feeTypeName`, `loanProductId`, `amountCalculatedAs`, `requiredFee`, `amount`";
+        $fields = "`loan_product_feen`.`id`, `feeName`, `feeTypeName`, `loanProductId`, `loanProductFeeId`, `amountCalculatedAs`, `requiredFee`, `amount`";
         $result_array = $this->getfarray($table, $fields, $where_clause, "", "");
         return !empty($result_array) ? $result_array : false;
     }
