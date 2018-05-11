@@ -2,10 +2,10 @@
 		<div class="col-lg-8">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
-					<h5>Group Loan <small><?php if(isset($_GET['grpLId'])):?>(Ref#<?php echo $_GET['grpLId'];?>) member accounts<?php else:?>accounts list<?php endif; ?></small> </h5>
+					<h5><?php if(isset($_GET['grpLId'])){ ?>Group Loan <?php } else {?> Member <?php } ?> Loan <small><?php if(isset($_GET['grpLId'])):?>(Ref#<?php echo $_GET['grpLId'];?>) member accounts<?php else:?>accounts list<?php endif; ?></small> </h5>
 					<?php 
 					if(isset($_SESSION['loans_officer'])  || isset($_SESSION['admin'])){
-						if(!isset($_GET['groupId'])){ ?>
+						if(!isset($_GET['groupId']) && !isset($_GET['memberId'])){ ?>
 						 <div class="pull-left" style="margin-left:10%;"><a href="groups.php" class="btn btn-sm btn-info" ><i class="fa fa-edit"></i> New Group Loan </a></div>
 						 <?php 
 						}
@@ -14,7 +14,7 @@
 							<?php
 							$loan_application_link = "#add_loan_account-modal"; //the href value of the anchor
 							$anchor_text = "Add Individual Loan Account"; //the anchor text for display to the user
-							if(isset($_GET['groupId'])&&!isset($_GET['grpLId'])){ //when viewing group loans
+							if(isset($_GET['groupId'])&&!isset($_GET['grpLId']) && !isset($_GET['memberId'])){ //when viewing group loans
 								$loan_application_link = "?groupId=". $_GET['groupId'] . "&task=loan.add";
 								$anchor_text = "New group Loan";
 							}

@@ -36,7 +36,7 @@
                                                 <?php endif; ?>
                                                 <div class="col-md-4"<?php if (!isset($_GET['grpLId'])) { ?> data-bind='with: $root.client'<?php } ?>>
                                                     <?php if (!isset($_GET['grpLId'])): //if it is a group loan we already know the product ?>
-                                                        <label class="control-label">Product</label>
+                                                        <label class="control-label">Please select a loan product</label>
                                                         <select class="form-control" id="loanProductId" name="loanAccount[loanProductId]" data-bind='options: $root.loanProducts, optionsText: "productName", optionsCaption: "Select product...", optionsAfterRender: $root.setOptionValue("id"), value: $root.loanProduct' data-msg-required="Loan product is required" required>
                                                         </select>
                                                     <?php else: ?>

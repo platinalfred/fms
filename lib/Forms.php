@@ -108,7 +108,7 @@ Class Forms{
 								  <div class="form-group">
                                     <input type='hidden' name="origin" value="newGroupLoanAccount" />
                                     <input type='hidden' name="saccoGroupId" value="<?php echo isset($_GET['groupId'])?$_GET['groupId']:""; ?>" />
-									<label class="control-label col-md-2">Loan Product</label>
+									<label class="control-label col-md-2">Please choose a product</label>
 									<div class="col-md-4">
 										<select class="form-control" id="loanProductId" name="loanProductId" data-bind='options: $root.loanProducts, optionsText: "productName", optionsCaption: "Select product...", optionsAfterRender: $root.setOptionValue("id"), value: $root.loanProduct' data-msg-required="Loan product is required" required></select>
 									</div>
@@ -116,7 +116,7 @@ Class Forms{
 								  <div class="form-group">
 									<div class="col-md-4 col-md-offset-2">
 									  <button type="reset" class="btn btn-white">Cancel</button>
-									  <button type="submit" class="btn btn-primary">Submit</button>
+									  <button type="submit" class="btn btn-primary">Next</button>
 									</div>
 								  </div>
 								</form>
