@@ -1,7 +1,7 @@
 <?php
-require_once("lib/Db.php");
+require_once("../lib/Db.php");
 $db = new Db();
-
+print_r($_GET);
 if(isset($_GET['tbl'])){
 	$msg = "Could not delete item";
 	switch($_GET['tbl']){
@@ -30,6 +30,11 @@ if(isset($_GET['tbl'])){
 		break;
 		case "account_type":
 			if($db->turnOff("accounttype", "id=".$_GET['id'])){
+				$msg =  "Successfully deleted the account type";
+			}
+		break;
+		case "loanProduct":
+			if($db->turnOff("loan_products", "id=".$_GET['id'])){
 				$msg =  "Successfully deleted the account type";
 			}
 		break;
