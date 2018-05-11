@@ -18,7 +18,7 @@
                             <div class="ibox-content">
 
                                 <p>
-                                    Valid group should have atleast two registered members
+                                    Valid group should have at least two registered members
                                 </p>
 
                                 <form id="form" name="register_group" class="wizard-big">
@@ -74,7 +74,8 @@
                                                     </table>
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <a data-bind='click: $root.addMember' class="btn btn-info btn-sm"><i class="fa fa-plus"></i> Add another member</a></div>
+                                                    <a data-bind='click: $root.addMember' class="btn btn-info btn-sm"><i class="fa fa-plus"></i> Add another member</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </fieldset>

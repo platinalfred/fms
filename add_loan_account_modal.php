@@ -28,7 +28,7 @@
                                                 </div-->
                                                 <?php if (!isset($_GET['memberId'])): ?>
                                                     <div class="col-md-4" data-bind="with: clientType">
-                                                        <label class="control-label">Customer</label>
+                                                        <label class="control-label">Please select a group member</label>
                                                         <select data-placeholder="Select customer..." name="memberId" class="select2" data-bind='options: $root.clients, optionsText: "clientNames", optionsCaption: "Select customer...", optionsAfterRender: $root.setOptionValue("id"), value: $root.client, select2: {dropdownParent:"#add_loan_account-modal" }' style="width: 250px" data-msg-required="Customer not selected" required>
                                                         </select>
                                                         <input type="hidden" name="clientType" value="<?php echo isset($client) ? $client['clientType'] : 1; ?>" />
