@@ -12,8 +12,8 @@ $(document).ready(function(){
 			  "deferRender": true,
 			  "order": [[ 0, 'DESC' ]],
 			  "ajax": {
-				  "url":"find_data.php",
-				  "ajax_requests/dataType": "JSON",
+				  "url":"ajax_requests/find_data.php",
+				  "dataType": "JSON",
 				  "type": "POST",
 				  "data":  function(d){
 						d.page = 'view_groups';
