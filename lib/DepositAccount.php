@@ -102,7 +102,14 @@ class DepositAccount extends Db {
         }
         return false;
     }
-
+	public function updateAccountNo($id){
+		$account_no = "BFS". sprintf('%09d', $id); 
+		if($this->update_single(self::$table_name, "account_no", $account_no, "id=".$id)){
+			return true;
+		}else{
+			return false;
+		}
+	}
     public function deleteDepositAccount($id) {
         $this->delete(self::$table_name, "id=" . $id);
     }
