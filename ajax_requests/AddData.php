@@ -134,6 +134,7 @@ if (isset($_POST['origin'])) {
                 //echo $data['depositAccountId'];
                     echo "This is is the error\n";
                     echo mysqli_error($depositAccount->conn);
+                $depositAccount->updateAccountNo($data['depositAccountId']);
 
                 unset($data['openingBalance']);
                 unset($data['termLength']);

@@ -139,11 +139,10 @@ if ( isset($_POST['page']) && $_POST['page'] == "deposit_accounts" ) {
 	
 	$primary_key = "`deposit_account`.`id`";
 
-	$columns = array( "`deposit_account`.`id`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`deposit_account`.`maxWithdrawalAmount`", "`deposit_account`.`recomDepositAmount`", "COALESCE(`sumWithdrawn`,0) `sumWithdrawn`", "(COALESCE(`sumDeposited`,0)+`openingBalance`) `sumDeposited`", "CONCAT('dep_',`deposit_account`.`id`) `DT_RowId`", "`deposit_account`.`dateCreated`" );
+	$columns = array( "`deposit_account`.`id`", "`deposit_account`.`account_no`", "`clientNames`", "`clientType`", "`clientId`", "`productName`", "`deposit_account`.`maxWithdrawalAmount`", "`deposit_account`.`recomDepositAmount`", "COALESCE(`sumWithdrawn`,0) `sumWithdrawn`", "(COALESCE(`sumDeposited`,0)+`openingBalance`) `sumDeposited`", "CONCAT('dep_',`deposit_account`.`id`) `DT_RowId`", "`deposit_account`.`dateCreated`" );
 
 }
 if ( isset($_POST['page']) && strlen($_POST['page'])>0) {
 	// Get the data
 	$data_table->get($table, $primary_key, $columns, $where, $group_by);
 }
-?>
