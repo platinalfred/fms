@@ -34,12 +34,16 @@ p{
 					<h5>Group - <?php echo $names; ?> </h5>
 					<div class="ibox-tools">
 						<a  data-toggle="modal" href="#edit_group" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Edit </a>
-						<a id="<?php echo $_GET['groupId']; ?>" class="btn btn-danger btn-sm delete_me" style="color:#fff;"><i class="fa fa-trash"></i> Delete</a>
+                                                <?php $anchor_class = ($group_data['noMembers']?'turn_off':'delete_me');
+                                                      $itag_class = ($group_data['noMembers']?'power-off':'trash text-danger');
+                                                      $anchor_title = ($group_data['noMembers']?'Deactivate':'Delete');;
+                                                ?>
+                                                <a id="<?php echo $_GET['groupId']; ?>" class="btn btn-default btn-sm <?php echo $anchor_class ;?>" title="<?php echo $anchor_title ;?> group" style="color:#fff;"><i class="fa fa-trash<?php echo $itag_class;?>"></i> Delete</a>
 					</div>
 				</div>
 				<div class="ibox-content" style="padding-top:3px;">
 					<div class="col-lg-12">
-						<div class="ibox<?php if(isset($_GET['view'])||isset($_GET['task'])):?> collapsed<?php endif;?>" style="margin-bottom:0px;     margin-top: 0px;">
+						<div class="ibox<?php if(isset($_GET['view'])||isset($_GET['task'])):?> collapsed<?php endif;?>" style="margin-bottom:0px; margin-top: 0px;">
 							<div class="ibox-title" style="border-top:none;">
 								<div class="col-lg-3">
 									<h5>Group Members (<?php echo count($data['group_members']); ?>)</h5>
@@ -57,10 +61,8 @@ p{
 										//print_r($data['group_members']);
 										if($data['group_members']){ ?>
 											<div class="col-md-12 col-sm-12 col-xs-12" style="padding-top:10px;">
-												<div class="col-lg-3"><b>Name</b>
-												</div>
-												<div class="col-lg-3"><b>Person Number</b>
-												</div>
+												<div class="col-lg-3"><b>Name</b></div>
+												<div class="col-lg-3"><b>Person Number</b></div>
 												<div class="col-lg-3"><b>Phone</b></div>
 												<div class="col-lg-3"><b>Id Number</b></div>
 											</div>

@@ -18,7 +18,7 @@ class Db {
     public function __construct() {
         $this->server = "localhost";
         $this->user = "root";
-        $this->password = "admin2017#";
+        $this->password = "admin2016#";
         $this->database = "fms";
         //Connects to the database;
         /*
@@ -131,7 +131,7 @@ class Db {
         if (!isset($_SESSION)) {
             session_start();
         }
-        $to_add = array("id", "username", "branch_id", "personId", "password", "password2");
+        $to_add = array("id", "username", "branch_id", "personId", "password");
         $results = $this->getfrec("staff", implode(",", $to_add), "username=BINARY '$username' AND status=1", "", "");
 
         if (count($results) > 0) {
@@ -154,7 +154,7 @@ class Db {
                 return false;
             }
             $_SESSION['Logged'] = true;
-            unset($to_add['password'], $to_add['password2']);
+            unset($to_add['password']);
             foreach ($results as $key => $value) {
                 if (!is_numeric($key)) {
                     if (in_array($key, $to_add)) {

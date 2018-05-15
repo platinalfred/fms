@@ -10,6 +10,7 @@ class SaccoGroup extends Db {
     protected static $group_member_fields = array("id", "groupId", "memberId", "dateCreated", "createdBy", "modifiedBy");
 
     public function findById($id) {
+        $table = self::$table_name . " JOIN (SELECT `groupId`, COUNT(`memberId`)  `noMembers` FROM group_members GROUP BY groupId) groupmembers ON saccogroup.id = groupmembers.groupId";
         $result = $this->getrec(self::$table_name, "id=" . $id, "", "");
         return !empty($result) ? $result : false;
     }

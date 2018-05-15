@@ -79,10 +79,10 @@ $(document).ready(function(){
 	TableManageButtons.init();
 	//Delete Group
 	$('#groupTable').on('click', 'tr .delete_me', function () {
-                           de_lete_activate_group($(this).attr("id"), "delete_me", "le");
+                           de_lete_activate_group(this, "delete_me", "le");
                    });
 	$('#groupTable').on('click', 'tr .turn_off', function () {
-                           de_lete_activate_group($(this).attr("id"), "turn_off", "activa");
+                           de_lete_activate_group(this, "turn_off", "activa");
                    });
 	$('#groupTable').on('click', 'tr .edit_group', function () {
                             var id = $(this).attr("id");
@@ -96,24 +96,29 @@ $(document).ready(function(){
                         //ajax to retrieve other member details
                         //findGroupDetails(data.id);
 	});
-        function de_lete_activate_group(group_id, class_opt, msg){
-                            var confirmation = confirm("Are you sure you would like to de"+msg+"te this group?");
-                            if(confirmation){
-                                $.ajax({
-                                    url: "ajax_requests/delete.php?tbl=saccogroup&id="+group_id+"&class="+class_opt,
-                                    type: 'GET',
-                                    success: function (response) {
-                                        if($.trim(response) == "success"){
-                                            showStatusMessage("Successfully de"+msg+"ted group" ,"success");
-                                            setTimeout(function(){
-                                                dTable.ajax.reload();
-                                            }, 2000);
-                                        }else{
-                                            showStatusMessage(response, "fail");
-                                        }
-                                    }
-                                });
-                            }
+        function de_lete_activate_group(element, class_opt, msg){
+            group_id = $(element).attr("id");
+            var confirmation = confirm("Are you sure you would like to de"+msg+"te this group?");
+            if(confirmation){
+                $.ajax({
+                    url: "ajax_requests/delete.php?tbl=saccogroup&id="+group_id+"&class="+class_opt,
+                    type: 'GET',
+                    success: function (response) {
+                        if($.trim(response) == "success"){
+                            showStatusMessage("Successfully de"+msg+"ted group" ,"success");
+                            setTimeout(function(){
+                                if($(element).parents('tr').length){
+                                    dTable.ajax.reload();
+                                }else{
+                                    window.location = "groups.php";
+                                }
+                            }, 2000);
+                        }else{
+                            showStatusMessage(response, "fail");
+                        }
+                    }
+                });
+            }
         }
 	function findGroupDetails(id){
 		$.ajax({
