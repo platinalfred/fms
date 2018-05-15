@@ -279,7 +279,7 @@
                     $(named_item).val(val).trigger('change');
                     date_picker = $("#" + key).parent(".datepicker");
                     if (date_picker.length) {
-                        date_picker.datepicker('setDate', val)
+                        date_picker.datepicker('setDate', val);
                     }
                 }
             });

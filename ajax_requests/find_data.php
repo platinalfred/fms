@@ -20,11 +20,11 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
 	$columns = array( "income_sources.name as income_source", "amount","income.description", "dateAdded");
 }
 if ( isset($_POST['page']) && $_POST['page'] == "view_groups" ) {
-	//$where = "active=1";	
+	$where = "active=".$_POST['active'];	
 	//members, person, person relative, person employment, account,
-	$table = "saccogroup"; 
+	$table = "saccogroup JOIN (SELECT `groupId`, COUNT(`memberId`)  `noMembers` FROM group_members GROUP BY groupId) groupmembers ON saccogroup.id = groupmembers.groupId"; 
 	$primary_key = "`saccogroup`.`id`";
-	$columns = array("id", "groupName", "description", "dateCreated", "createdBy",  "modifiedBy");
+	$columns = array("id", "groupName", "description", "noMembers", "dateCreated", "createdBy",  "modifiedBy");
 	
 }
 if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
@@ -57,4 +57,3 @@ if ( isset($_POST['page']) && strlen($_POST['page'])>0) {
 	// Get the data
 	$data_table->get($table, $primary_key, $columns, $where, $group_by);
 }
-?>
