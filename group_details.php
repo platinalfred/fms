@@ -38,7 +38,7 @@ p{
                                                       $itag_class = ($group_data['noMembers']?'power-off':'trash text-danger');
                                                       $anchor_title = ($group_data['noMembers']?'Deactivate':'Delete');;
                                                 ?>
-                                                <a id="<?php echo $_GET['groupId']; ?>" class="btn btn-default btn-sm <?php echo $anchor_class ;?>" title="<?php echo $anchor_title ;?> group" style="color:#fff;"><i class="fa fa-trash<?php echo $itag_class;?>"></i> Delete</a>
+                                                <a id="<?php echo $_GET['groupId']; ?>" class="btn btn-danger btn-sm <?php echo $anchor_class ;?>" title="<?php echo $anchor_title ;?> group" style="color:#fff;"><i class="fa fa-<?php echo $itag_class;?>"></i> <?php echo $anchor_title ;?></a>
 					</div>
 				</div>
 				<div class="ibox-content" style="padding-top:3px;">

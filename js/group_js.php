@@ -1,7 +1,7 @@
 <script>
+    var  dTable;
 $(document).ready(function(){
     /* PICK DATA FOR DATA TABLE  */
-    var  dTable;
     var handleDataTableButtons = function() {
         if ($("#groupTable").length ) {
             dTable = $('#groupTable').DataTable({
@@ -42,7 +42,7 @@ $(document).ready(function(){
                             var anchor_title = (full.noMembers?'Deactivate':'Delete');
                             return ' <div class="btn-group">'
                             +'<a class="btn btn-xs btn-warning" href="group_details.php?groupId='+ data +'&view=loan_accs"><i class="fa fa-list"></i> Details</a>'
-                            +'<a style="margin-left:15px;"class="btn btn-xs btn-default '+anchor_class+'" id="'+data+'" title="'+anchor_title+' group"><i class="fa fa-'+itag_class+'"></i></a></button>'
+                            +'<a style="margin-left:15px;"class="btn btn-xs btn-danger  '+anchor_class+'" id="'+data+'" title="'+anchor_title+' group"><i class="fa fa-'+itag_class+'"></i></a></button>'
                             +'</div>';}
                     }
                  ] ,
@@ -77,11 +77,60 @@ $(document).ready(function(){
 	  };
 	}();
 	TableManageButtons.init();
+	// It has the name attribute "registration"
+	$("form[name='register_group']").validate({
+		// Specify validation rules
+		rules: {
+		  // The key name on the left side is the name attribute
+		  // of an input field. Validation rules are defined
+		  // on the right side
+		  groupName: "required"
+		},
+		errorPlacement: function(error, element) {
+			error.insertAfter(element);
+		  
+		},
+		// Specify validation error messages
+		messages: {
+		  groupName: "Please give this group a name",
+		},
+		// Make sure the form is submitted to the destination defined
+		// in the "action" attribute of the form when valid
+		submitHandler: function(form, event) {
+			event.preventDefault();
+			enableDisableButton(form, true);
+			/* if(){
+				
+			}else{ */
+				var form =  $("form[name='register_group']");
+				var frmdata = form.serialize();
+				$.ajax({
+					url: "ajax_requests/save_data.php",
+					type: 'POST',
+					data: frmdata,
+					success: function (response) {
+						if($.trim(response) == "success"){
+							showStatusMessage("Successfully added new record" ,"success");
+							form[0].reset();
+							//groupModel.group_members(null);
+							if(typeof dTable != 'undefined')
+								dTable.ajax.reload();
+							
+						}else{
+							showStatusMessage(response, "fail");
+						}
+						enableDisableButton(form, false);
+					}
+				});
+			//}
+		}
+	});
+});
 	//Delete Group
-	$('#groupTable').on('click', 'tr .delete_me', function () {
+	$('div.ibox-tools,table#groupTable').on('click', 'a.delete_me', function () {
                            de_lete_activate_group(this, "delete_me", "le");
                    });
-	$('#groupTable').on('click', 'tr .turn_off', function () {
+	$('div.ibox-tools,table#groupTable').on('click', 'a.turn_off', function () {
                            de_lete_activate_group(this, "turn_off", "activa");
                    });
 	$('#groupTable').on('click', 'tr .edit_group', function () {
@@ -167,55 +216,6 @@ $(document).ready(function(){
 		  });
 		
 	}
-	// It has the name attribute "registration"
-	$("form[name='register_group']").validate({
-		// Specify validation rules
-		rules: {
-		  // The key name on the left side is the name attribute
-		  // of an input field. Validation rules are defined
-		  // on the right side
-		  groupName: "required"
-		},
-		errorPlacement: function(error, element) {
-			error.insertAfter(element);
-		  
-		},
-		// Specify validation error messages
-		messages: {
-		  groupName: "Please give this group a name",
-		},
-		// Make sure the form is submitted to the destination defined
-		// in the "action" attribute of the form when valid
-		submitHandler: function(form, event) {
-			event.preventDefault();
-			enableDisableButton(form, true);
-			/* if(){
-				
-			}else{ */
-				var form =  $("form[name='register_group']");
-				var frmdata = form.serialize();
-				$.ajax({
-					url: "ajax_requests/save_data.php",
-					type: 'POST',
-					data: frmdata,
-					success: function (response) {
-						if($.trim(response) == "success"){
-							showStatusMessage("Successfully added new record" ,"success");
-							form[0].reset();
-							//groupModel.group_members(null);
-							if(typeof dTable != 'undefined')
-								dTable.ajax.reload();
-							
-						}else{
-							showStatusMessage(response, "fail");
-						}
-						enableDisableButton(form, false);
-					}
-				});
-			//}
-		}
-	});
-});
 	 
 var GroupMember = function() {
 	var self = this;
