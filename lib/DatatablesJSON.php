@@ -125,7 +125,7 @@ class DataTable extends Db {
             $iFilteredTotal = current($this->getFilteredTotal());
 
             // Get total number of rows in query
-            $sQuery1 = "SELECT COUNT(" . $index_column . ") cnt FROM " . $table . ( strlen($where) > 1 ? ("WHERE " . $where) : "");
+            $sQuery1 = "SELECT COUNT(" . $index_column . ") cnt FROM " . $table . ( strlen($where) > 1 ? (" WHERE " . $where) : "");
 
             $iTotal = $this->countCustom($sQuery1);
             // Output

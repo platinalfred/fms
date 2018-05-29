@@ -1,69 +1,72 @@
 <script>
+    var  dTable;
 $(document).ready(function(){
-	
-	/* PICK DATA FOR DATA TABLE  */
-	var  dTable;
-	var handleDataTableButtons = function() {
-		  if ($("#groupTable").length ) {
-			  dTable = $('#groupTable').DataTable({
-			  dom: "lfrtipB",
-				"processing": true,
-			  "serverSide": true,
-			  "deferRender": true,
-			  "order": [[ 0, 'DESC' ]],
-			  "ajax": {
-				  "url":"ajax_requests/find_data.php",
-				  "dataType": "JSON",
-				  "type": "POST",
-				  "data":  function(d){
-						d.page = 'view_groups';
-					}
-			  },
-			  "initComplete": function(settings, json) {
-					$(".table#groupTable tbody>tr:first").trigger('click');
-					ko.applyBindings(groupModel);
-			  },
-			  "columnDefs": [ {
-				  "targets": [0],
-				  "orderable": false,
-				  "searchable": false
-			  } , {
-				  "targets": [0],
-				  "orderable": false
-			  }],
-			  columns:[  
-					{ data: 'id'},
-					{ data: 'groupName'},
-					{ data: 'description'}<?php 
-					//if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>,
-					{ data: 'id', render: function ( data, type, full, meta ) {  return ' <div class="btn-group"><a class="btn btn-xs btn-warning" href="group_details.php?groupId='+ data +'&view=loan_accs"><i class="fa fa-list"></i> Details</a><a style="margin-left:15px;"class="btn btn-xs btn-default delete_me" id="'+data+'" ><i class="fa fa-trash" style="color:#ff0000"></i></a></button></div>  ';}} <?php //} ?> 
-
-					] ,
-			  buttons: [
-				{
-				  extend: "copy",
-				  className: "btn-sm"
-				},
-				/* {
-				  extend: "csv",
-				  className: "btn-sm"
-				}, */
-				{
-				  extend: "excel",
-				  className: "btn-sm"
-				},
-				{
-				  extend: "pdfHtml5",
-				  className: "btn-sm"
-				},
-				{
-				  extend: "print",
-				  className: "btn-sm"
-				},
-			  ]
-			});
-			//$("#datatable-buttons").DataTable();
-		}
+    /* PICK DATA FOR DATA TABLE  */
+    var handleDataTableButtons = function() {
+        if ($("#groupTable").length ) {
+            dTable = $('#groupTable').DataTable({
+                dom: "lfrtipB",
+                "processing": true,
+                "serverSide": true,
+                "deferRender": true,
+                "order": [[ 0, 'DESC' ]],
+                "ajax": {
+                    "url":"ajax_requests/find_data.php",
+                    "dataType": "JSON",
+                    "type": "POST",
+                    "data":  function(d){
+                        d.page = 'view_groups';
+                        d.active = 1;
+                    }
+                },
+                "initComplete": function(settings, json) {
+                    $(".table#groupTable tbody>tr:first").trigger('click');
+                    ko.applyBindings(groupModel);
+                },
+                "columnDefs": [ {
+                        "targets": [0],
+                        "orderable": false,
+                        "searchable": false
+                    } , {
+                        "targets": [0],
+                        "orderable": false
+                    }],
+                columns:[
+                    { data: 'id'},
+                    { data: 'groupName'},
+                    { data: 'description'}
+                    <?php  //if(isset($_SESSION['accountant']) || isset($_SESSION['admin'])){ ?>,
+                    { data: 'id', render: function ( data, type, full, meta ) {
+                            var anchor_class = (full.noMembers?'turn_off':'delete_me');
+                            var itag_class = (full.noMembers?'power-off':'trash text-danger');
+                            var anchor_title = (full.noMembers?'Deactivate':'Delete');
+                            return ' <div class="btn-group">'
+                            +'<a class="btn btn-xs btn-warning" href="group_details.php?groupId='+ data +'&view=loan_accs"><i class="fa fa-list"></i> Details</a>'
+                            +'<a style="margin-left:15px;"class="btn btn-xs btn-danger  '+anchor_class+'" id="'+data+'" title="'+anchor_title+' group"><i class="fa fa-'+itag_class+'"></i></a></button>'
+                            +'</div>';}
+                    }
+                 ] ,
+                 buttons: [
+                 {
+                    extend: "copy",
+                    className: "btn-sm"
+                 },
+                     {
+                         extend: "excel",
+                        className: "btn-sm"
+                     },
+                     {
+                         extend: "pdfHtml5",
+                         className: "btn-sm"
+                      },
+                      {
+                          extend: "print",
+                          className: "btn-sm"
+                      }
+                      ]
+                     });
+                     //$("#datatable-buttons").DataTable();
+                     }
 	};
 	TableManageButtons = function() {
 	  "use strict";
@@ -74,111 +77,6 @@ $(document).ready(function(){
 	  };
 	}();
 	TableManageButtons.init();
-	//Edit Group
-	$('#groupTable').on('click', 'tr .edit_group', function () {
-		var id = $(this).attr("id");
-		 $('#DescModal').removeData('bs.modal');
-        $('#DescModal').modal({remote: 'edit_group.php?id=' + id });
-        $('#DescModal').modal('show');
-	})
-	//Delete Group
-	$('#groupTable').on('click', 'tr .delete_me', function () {
-		var id = $(this).attr("id");
-		var confirmation = confirm("Are you sure you would like to delete this group?");
-		if(confirmation){
-			$.ajax({
-				url: "ajax_requests/delete.php?tbl=saccogroup&id="+id,
-				type: 'GET',
-				success: function (response) {
-					if($.trim(response) == "success"){
-						showStatusMessage("Successfully deleted group" ,"success");
-						setTimeout(function(){
-							dTable.ajax.reload();
-						}, 2000);
-					}else{
-						showStatusMessage(response, "fail");
-					}
-					
-				}
-			});
-		}
-	})
-	
-	$(".delete_me").click(function(){
-		var id = $(this).attr("id");
-		var confirmation = confirm("Are you sure you would like to delete this group?");
-		if(confirmation){
-			$.ajax({
-				url: "ajax_requests/delete.php?tbl=saccogroup&id="+id,
-				type: 'GET',
-				success: function (response) {
-					if($.trim(response) == "success"){
-						showStatusMessage("Successfully deleted group" ,"success");
-						setTimeout(function(){
-							window.location = "groups.php";
-						}, 2000);
-					}else{
-						showStatusMessage(response, "fail");
-					}
-					
-				}
-			});
-		}
-	})
-	$('#groupTable tbody').on('click', 'tr ', function () { 
-		var data = dTable.row(this).data();
-		groupModel.group_details(data);
-		//ajax to retrieve other member details
-		//console.log(data);
-		//findGroupDetails(data.id);
-	});
-	function findGroupDetails(id){
-		$.ajax({
-			url: "ajax_requests/find_group_details.php?id="+id,
-			type: 'GET',
-			dataType: 'json',
-			success: function (response) {
-				if(response.group_members != "false" || response.group_members.length > 0){
-					groupModel.all_group_members(response.group_members);
-				}
-			}
-		});
-	}
-	
-	function showStatusMessage(message='', display_type='success'){
-		new PNotify({
-			  title: "Alert",
-			  text: message,
-			  type: display_type,
-			  styling: 'bootstrap3',
-			  sound: true,
-			  hide:true,
-			  buttons: {
-				closer_hover: false,
-			},
-			confirm: {
-				confirm: true,
-				buttons: [{
-					text: 'Ok',
-					addClass: 'btn-primary',
-					click: function(notice) {
-						notice.remove();
-					}
-				},
-				null]
-			},
-			animate: {
-				animate: true,
-				in_class: 'zoomInLeft',
-				out_class: 'zoomOutRight'
-			},
-			  nonblock: {
-				  nonblock: true
-			  }
-			  
-		  });
-		
-	}
 	// It has the name attribute "registration"
 	$("form[name='register_group']").validate({
 		// Specify validation rules
@@ -228,6 +126,96 @@ $(document).ready(function(){
 		}
 	});
 });
+	//Delete Group
+	$('div.ibox-tools,table#groupTable').on('click', 'a.delete_me', function () {
+                           de_lete_activate_group(this, "delete_me", "le");
+                   });
+	$('div.ibox-tools,table#groupTable').on('click', 'a.turn_off', function () {
+                           de_lete_activate_group(this, "turn_off", "activa");
+                   });
+	$('#groupTable').on('click', 'tr .edit_group', function () {
+                            var id = $(this).attr("id");
+                            $('#DescModal').removeData('bs.modal');
+                            $('#DescModal').modal({remote: 'edit_group.php?id=' + id });
+                            $('#DescModal').modal('show');
+                   });
+	$('#groupTable').on('click', 'tr', function () {
+                        var data = dTable.row(this).data();
+                        groupModel.group_details(data);
+                        //ajax to retrieve other member details
+                        //findGroupDetails(data.id);
+	});
+        function de_lete_activate_group(element, class_opt, msg){
+            group_id = $(element).attr("id");
+            var confirmation = confirm("Are you sure you would like to de"+msg+"te this group?");
+            if(confirmation){
+                $.ajax({
+                    url: "ajax_requests/delete.php?tbl=saccogroup&id="+group_id+"&class="+class_opt,
+                    type: 'GET',
+                    success: function (response) {
+                        if($.trim(response) == "success"){
+                            showStatusMessage("Successfully de"+msg+"ted group" ,"success");
+                            setTimeout(function(){
+                                if($(element).parents('tr').length){
+                                    dTable.ajax.reload();
+                                }else{
+                                    window.location = "groups.php";
+                                }
+                            }, 2000);
+                        }else{
+                            showStatusMessage(response, "fail");
+                        }
+                    }
+                });
+            }
+        }
+	function findGroupDetails(id){
+		$.ajax({
+			url: "ajax_requests/find_group_details.php?id="+id,
+			type: 'GET',
+			dataType: 'json',
+			success: function (response) {
+				if(response.group_members != "false" || response.group_members.length > 0){
+					groupModel.all_group_members(response.group_members);
+				}
+			}
+		});
+	}
+	
+	function showStatusMessage(message='', display_type='success'){
+		new PNotify({
+			  title: "Alert",
+			  text: message,
+			  type: display_type,
+			  styling: 'bootstrap3',
+			  sound: true,
+			  hide:true,
+			  buttons: {
+				closer_hover: false,
+			},
+			confirm: {
+				confirm: true,
+				buttons: [{
+					text: 'Ok',
+					addClass: 'btn-primary',
+					click: function(notice) {
+						notice.remove();
+					}
+				},
+				null]
+			},
+			animate: {
+				animate: true,
+				in_class: 'zoomInLeft',
+				out_class: 'zoomOutRight'
+			},
+			  nonblock: {
+				  nonblock: true
+			  }
+			  
+		  });
+		
+	}
 	 
 var GroupMember = function() {
 	var self = this;

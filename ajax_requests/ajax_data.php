@@ -402,21 +402,21 @@ if (isset($_POST['origin'])) {
             echo json_encode($output);
             break;
         case 'group_loan_accounts':
-            $loanAccountObj = new LoanAccount();
+            $loan_account_obj = new LoanAccount();
             $where = "";
             if (isset($_POST['groupId'])) {
                 $where = "`saccoGroupId` = {$_POST['groupId']}";
             }
-            $output['data'] = $loanAccountObj->getGroupLoanAccounts($where);
+            $output['data'] = $loan_account_obj->getGroupLoanAccounts($where);
             echo json_encode($output);
             break;
         case 'group_loan_ref_accounts': //loan accounts of a particular ref id
-            $loanAccountObj = new LoanAccount();
+            $loan_account_obj = new LoanAccount();
             $where = "";
             if (isset($_POST['grpLId'])) {
                 $where = "`groupLoanAccountId` = {$_POST['grpLId']}";
             }
-            $output = $loanAccountObj->getApplications($where);
+            $output = $loan_account_obj->getApplications($where);
             echo json_encode($output);
             break;
         case 'loan_application_details':
