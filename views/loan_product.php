@@ -323,9 +323,11 @@
                             </table>
                         </div>
                     </div>
+					<!--ko if: filteredExistingLoanProductFees().length -->
                     <div class="form-group">
                         <span class="btn btn-info btn-sm pull-right" data-bind='click: addNewFee'><i class="fa fa-plus"></i> Add fee</span>
                     </div>
+                                <!--/ko-->
                     <!--/ko-->
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">

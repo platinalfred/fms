@@ -4,5 +4,5 @@
   "ide": "CodeLite",
   "type": "php"
  },
- "projects": ["fms.phprj"]
+ "projects": ["../../../Users/Platin/Dropbox (Realestateschool.org)/Website/aws/website/website.phprj", "/Users/Platin/Dropbox (Realestateschool.org)/Website/Realestate.phprj", "fms.phprj"]
 }
